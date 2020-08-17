@@ -11,9 +11,18 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 public class AccountServiceImpl implements AccountService {
 
+    // 注入转账的DAO的类
     private AccountDao accountDao;
-
+    // 注入事务管理的模板
     private TransactionTemplate transactionTemplate;
+
+    public void setAccountDao(AccountDao accountDao) {
+        this.accountDao = accountDao;
+    }
+
+    public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
+        this.transactionTemplate = transactionTemplate;
+    }
 
     @Override
     public void transfer(final String out, final String in, final Double money) {
@@ -26,13 +35,4 @@ public class AccountServiceImpl implements AccountService {
             }
         });
     }
-
-    public void setAccountDao(AccountDao accountDao) {
-        this.accountDao = accountDao;
-    }
-
-    public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
-        this.transactionTemplate = transactionTemplate;
-    }
-
 }

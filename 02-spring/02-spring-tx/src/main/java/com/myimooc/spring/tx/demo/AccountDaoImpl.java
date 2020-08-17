@@ -1,4 +1,4 @@
-package com.myimooc.spring.tx.demo1;
+package com.myimooc.spring.tx.demo;
 
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 

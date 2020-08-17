@@ -21,6 +21,7 @@ public class TransactionTest {
 
     @Test
     public void demo1() {
+        // aaa 向 bbb 转账200元
         accountService.transfer("aaa", "bbb", 200d);
     }
 }

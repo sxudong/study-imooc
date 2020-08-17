@@ -1,9 +1,9 @@
-package com.myimooc.spring.tx.demo3;
+package com.myimooc.spring.tx.demo;
 
 /**
- * 转账服务实现
+ * 账户服务实现
  *
- * @author zc  2017-02-16
+ * @author zc 2017-02-16
  */
 public class AccountServiceImpl implements AccountService {
 
@@ -15,7 +15,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void transfer(String out, String in, Double money) {
+    public void transfer(final String out, final String in, final Double money) {
         accountDao.outMoney(out, money);
         //int i = 1/0;
         accountDao.inMoney(in, money);

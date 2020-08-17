@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 
 /**
- * 转账服务测试
+ * 转账服务测试  声明式事务管理方式一
  *
  * @author zc 2017-02-16
  */
