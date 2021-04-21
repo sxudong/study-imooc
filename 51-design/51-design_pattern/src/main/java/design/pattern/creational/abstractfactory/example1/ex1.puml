@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract AbstractFactory {
++ Product createProduct();
+}
+class ConcreteFactory extends AbstractFactory{
+}
+
+abstract AbstractProduct {
+}
+class ConcreteProduct extends AbstractProduct{
+}
+
+AbstractFactory -right..> AbstractProduct
+@enduml

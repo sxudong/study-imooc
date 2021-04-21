@@ -1,0 +1,29 @@
+@startuml
+'https://plantuml.com/class-diagram
+class BigChar {
+- char charname;
+- String fontdata;
++ void print()
+}
+
+class BigString {
+- BigChar[] bigchars;
++ void print()
+}
+
+class BigCharFactory {
+- pool
+- singleton
+- BigCharFactory()
++ {static} BigCharFactory getInstance()
++ BigChar getBigChar(char charname)
+}
+
+class Main {
+}
+
+Main -left--> BigString
+BigString -up--> BigCharFactory :: Uses
+BigCharFactory -up--> BigChar :: Creates
+BigString o--> BigChar :: Uses
+@enduml

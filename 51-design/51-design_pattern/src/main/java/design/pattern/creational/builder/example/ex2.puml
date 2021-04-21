@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class Part {
+# String specs;
++ {abstract} String description();
+}
+
+class Brick extends Part {
+}
+class Gear extends Part {
+}
+class Plate extends Part {
+}
+class Tile extends Part {
+}
+
+interface Builder {
++ Builder buildBrick();
++ Builder buildPlate();
++ Builder buildTile();
++ Builder buildGear();
++ Lego build();
+}
+
+class ComplexBuilder implements Builder {
+}
+class SimpleBuilder implements Builder {
+}
+
+class Director {
++ Lego createSimple()
++ Lego createComplex()
+}
+note left: 导演类
+
+Director ..> SimpleBuilder
+Director ..> ComplexBuilder
+Director o-> Builder
+SimpleBuilder ..> Lego
+ComplexBuilder ..> Lego
+Lego *--> Part
+
+@enduml

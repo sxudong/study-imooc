@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+State -right..> Order
+Order -left..> State
+
+abstract class State {
+# Order order;
+# changeState(State state)
++ setOrder(Order order)
++ pay()
++ cancel()
++ send()
++ receive()
+}
+
+class Order {
+- State state;
++ setState(State state)
++ pay()
++ cancel()
++ send()
++ receive()
+}
+class WaitPayState extends State {
+}
+class WaitSendState extends State {
+}
+class WaitReceiveState extends State {
+}
+class FinishedState extends State {
+}
+
+@enduml

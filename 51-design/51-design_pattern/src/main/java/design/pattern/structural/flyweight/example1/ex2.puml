@@ -1,0 +1,45 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class User {
+- Long userId
+- String userName
+- String password
+- Integer role
+- List<Auth> auths
+}
+
+class Auth {
+- String name
+- String uri
+}
+
+User -right..> Auth
+UserService ..> Session
+UserService -right..> AuthFactory
+AuthFactory ..> AuthService
+
+note right of AuthFactory::"map"
+    权限工厂
+end note
+
+class UserService {
++ login() //登录
+}
+
+class AuthFactory {
+- ConcurrentMap<Integer, List<Auth>> map
+- AuthService authService
++ getByRole()
+ }
+
+class AuthService {
+ + getByRole() //获取角色权限
+ }
+
+class Session {
+- ConcurrentMap<String, User> MAP
++ put()
+}
+
+@enduml
