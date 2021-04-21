@@ -16,6 +16,7 @@
 
     <modules>
         <module>15-java-timer</module>
+        <module>15-webserver-tutorial</module>
     </modules>
 
     <properties>
