@@ -17,6 +17,7 @@
     <modules>
         <module>20-thread-daemon</module>
         <module>20-thread-ticket</module>
+        <module>20-concurrency</module>
     </modules>
 
     <properties>
