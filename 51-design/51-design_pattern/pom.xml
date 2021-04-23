@@ -325,8 +325,8 @@
             <artifactId>hutool-core</artifactId>
             <version>5.6.1</version>
         </dependency>
-
     </dependencies>
+
     <build>
         <finalName>design_pattern</finalName>
         <plugins>

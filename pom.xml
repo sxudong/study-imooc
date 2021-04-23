@@ -83,6 +83,11 @@
         <module>48-boot-mail</module>
         <module>49-kafka</module>
         <module>50-boot</module>
+        <module>51-design</module>
+        <module>52-vba</module>
+        <module>53-sql</module>
+        <module>54-linux</module>
+        <module>55-data-structures</module>
 
     </modules>
 
