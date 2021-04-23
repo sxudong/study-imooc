@@ -13,9 +13,9 @@ cd $basedir/..
    tar -jpc -f $backupfile $(basename $basedir)
 
 ftp -n "$host" > ${basedir}/../ftp.log 2>&1 <<EOF
-user $id $pw
-binary
-cd $remotedir
-put $backupfile
-bye
+      user $id $pw
+      binary
+      cd $remotedir
+      put $backupfile
+      bye
 EOF

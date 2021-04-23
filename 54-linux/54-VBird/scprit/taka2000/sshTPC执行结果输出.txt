@@ -1,0 +1,92 @@
+"md5sum /usr/xcal/run/firmware/* /usr/xcal/run/lib/*" 双引号里的命令会先执行
+
+[autopc@tesco taka2000]$ ./sshTPC.sh "md5sum /usr/xcal/run/firmware/* /usr/xcal/run/lib/*"
+ssh testpc@192.168.100.111 md5sum /usr/xcal/run/firmware/* /usr/xcal/run/lib/*
+350524ea3cca16b444f98ce2f3be4c2f  /usr/xcal/run/firmware/CCC_GXD4_HGST_1Wire.bit
+93456bba0a0882792574a1b0e0de717a  /usr/xcal/run/firmware/cellfw_HGSTSerial3DP.bix
+c5e35b6615c8c3af6e40e367195ddcd8  /usr/xcal/run/firmware/firmware_versions.txt
+cb8c3969f0c0a9d6bf409d1b48a0adc0  /usr/xcal/run/firmware/pcdfw.bix
+......
+[autopc@tesco taka2000]$ ./sshTPC.sh "cat /home/testpc/lts/system/jexe/*.csv | grep version"
+ssh testpc@192.168.100.111 cat /home/testpc/lts/system/jexe/*.csv | grep version
+ssh testpc@192.168.100.112 cat /home/testpc/lts/system/jexe/*.csv | grep version
+ssh testpc@192.168.100.113 cat /home/testpc/lts/system/jexe/*.csv | grep version
+ssh testpc@192.168.100.114 cat /home/testpc/lts/system/jexe/*.csv | grep version
+ssh testpc@192.168.100.115 cat /home/testpc/lts/system/jexe/*.csv | grep version 
+......
+
+[autopc@tesco taka2000]$ ./sshTPC.sh date
+ssh testpc@192.168.100.111 date
+Thu Oct 18 14:27:33 CST 2012
+ssh testpc@192.168.100.112 date
+Thu Oct 18 14:27:34 CST 2012
+ssh testpc@192.168.100.113 date
+......
+
+[autopc@tesco taka2000]$ ./sshTPC.sh "ps -A| grep autosf"
+ssh testpc@192.168.100.111 ps -A| grep autosf
+ 4785 pts/1    00:00:01 autosf
+13265 pts/1    00:00:01 autosf
+16479 pts/1    00:00:00 autosf
+ssh testpc@192.168.100.112 ps -A| grep autosf
+ 4761 pts/2    00:00:01 autosf
+13136 pts/2    00:00:01 autosf
+15992 pts/2    00:00:00 autosf
+ssh testpc@192.168.100.113 ps -A| grep autosf
+ 4778 pts/1    00:00:01 autosf
+12769 pts/1    00:00:01 autosf
+15320 pts/1    00:00:00 autosf
+......
+
+[autopc@tesco taka2000]$ ./sshTPC.sh "/usr/xcal/run/testcases/MultiGetData -v 1 24"
+ssh testpc@192.168.100.111 /usr/xcal/run/testcases/MultiGetData -v 1 24
+Cell_24: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_23: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_22: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_21: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_20: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_19: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_18: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_17: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_16: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_15: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_14: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_13: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_12: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_11: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_10: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_09: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_08: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_07: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_06: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_05: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_04: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_03: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_02: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_01: fw=v22.03 fpga=v20.00 mode=2C 
+ssh testpc@192.168.100.112 /usr/xcal/run/testcases/MultiGetData -v 1 24
+Cell_24: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_23: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_22: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_21: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_20: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_19: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_18: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_17: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_16: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_15: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_14: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_13: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_12: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_11: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_10: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_09: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_08: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_07: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_06: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_05: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_04: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_03: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_02: fw=v22.03 fpga=v20.00 mode=2C 
+Cell_01: fw=v22.03 fpga=v20.00 mode=2C 
+......

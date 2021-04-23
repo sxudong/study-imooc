@@ -1,0 +1,14 @@
+sshCommandInXcalTestPcs2.sh
+ssh ope@10.83.15.225 $1 $2 
+
+sshCommandInXcalTestPcs3.sh
+ssh ope@10.83.15.225 $1 $2 $3     
+
+// 该脚本调用上面两个脚本执行
+makeSshPathInXcalTestPcs.sh
+sh sshCommandInXcalTestPcs2.sh mkdir .ssh
+sh sshCommandInXcalTestPcs3.sh chmod 700 .ssh
+
+//执行远程文件复制
+cpsshkeyToXcalTestPcs.sh
+scp ~/.ssh/id_rsa.pub ope@10.83.15.225:~/.ssh/authorized_keys 
