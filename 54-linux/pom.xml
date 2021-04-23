@@ -11,13 +11,13 @@
     </parent>
 
     <groupId>com.myimooc</groupId>
-    <artifactId>51-design</artifactId>
+    <artifactId>54-linux</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
     <modules>
-        <module>51-design-pattern</module>
+        <module>54-VBird</module>
     </modules>
 
 </project>
