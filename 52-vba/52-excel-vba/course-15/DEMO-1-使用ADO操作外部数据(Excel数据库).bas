@@ -1,3 +1,6 @@
+'
+'data 是 Edata.xlsx 中的一张表名称
+'
 '使用前请确认是否勾选了Microsoft ActiveX Data Object  x.x  Library！！！
 Sub test()
     Dim conn As New ADODB.Connection

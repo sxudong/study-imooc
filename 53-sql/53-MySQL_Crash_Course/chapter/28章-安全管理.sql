@@ -1,0 +1,64 @@
+-- 第二十八章-安全管理
+
+-- 用户管理
+-- 1.切换数据库
+USE mysql;
+-- 2.查看当前所有用户 这里前一个user是列名 后一个user是表名
+SELECT user FROM user;
+
+-- 创建用户
+-- 1.创建一个用户的基本语法
+CREATE USER 用户名 IDENTIFIED by '密码';
+-- 2.对用户重命名
+rename user 旧用户名 to 新用户名;
+-- mysql5之前的版本需要使用update子句
+update user set user=新用户名 where user=旧用户名;
+
+CREATE USER bforta IDENTIFIED BY 'xuanfeng@123'
+
+
+
+-- 删除用户
+-- 删除用户基本语法
+DROP user 用户名;
+
+-- 设置用户权限
+-- 1.查看某个用户有的权限
+-- usage on *.*表示在任何数据库的任何表上都【没有任何权限】
+-- 用户 = 用户名@主机名，默认主机名为: "%"
+SHOW GRANTS FOR 用户名; -- grant usage on *.* to 用户名@主机名
+
+SHOW GRANTS FOR bforta;
+
+
+
+-- 授予用户权限
+-- 授予权限的基本语法
+GRANTS
+SELECT|INSERT|DELETE|UPDATE -- 要授予的权限，授予多个权限可用逗号隔开
+ON 数据库名.表名	        -- 给出权限的数据范围
+TO 用户名;					-- 给出授予哪个用户
+
+GRANT SELECT ON crashcourse.* TO bforta;
+
+-- 简化多次授权
+-- 可通过列出各权限并用逗号分隔，将多条GRANT语句串在一起，如下所示：
+GRANT SELECT, INSERT ON crashcourse.* TO bforta; 
+
+-- 撤销用户权限
+-- 撤销权限的基本语法
+REVOKE
+SELECT|INSERT|DELETE|UPDATE -- 给出要撤销的权限
+ON 数据库名.表名		    -- 给出权限的数据范围
+FROM 用户名;			    -- 给出授予哪个用户
+
+REVOKE SELECT ON crashcourse.* FROM bforta;
+
+
+-- 更改用户口令
+-- 基本语法
+set password for 用户名 = password('新密码');
+-- 不加 [for 用户名] 默认更改当前登录的用户的密码 也就是自己的密码
+set password = password('新密码');
+
+SET PASSWORD FOR bforta = Password('shenzheng@123')

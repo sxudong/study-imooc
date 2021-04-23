@@ -1,0 +1,49 @@
+-- 第九章-用正则表达式进行搜索
+
+-- 基本字符匹配
+SELECT prod_name FROM products WHERE prod_name REGEXP '1000' ORDER BY prod_name;
+
+SELECT prod_name FROM products WHERE prod_name REGEXP '.000' ORDER BY prod_name;
+
+-- LIKE 和 REGEXP 的差别
+SELECT prod_name FROM products WHERE prod_name LIKE '1000' ORDER BY prod_name;
+SELECT prod_name FROM products WHERE prod_name REGEXP '1000' ORDER BY prod_name;
+-- 发现第一条语句不反回数据,而第二条返回
+--（LIKE 不进行相等匹配,而是用通配符进行相似匹配）
+
+-- 匹配不区分大小写,为区分大小写,可使用 BINARY 关键字
+SELECT prod_name FROM products WHERE prod_name REGEXP BINARY 'JetPack .000' ORDER BY prod_name;
+
+-- 进行 OR 匹配
+SELECT prod_name FROM products WHERE prod_name REGEXP '1000|2000' ORDER BY prod_name;
+
+-- 两个以上的OR条件 可以给出两个以上的OR条件. 例如: '1000 | 2000 | 3000'将匹配1000或2000或3000.
+
+
+-- 匹配几个字符之一             
+-- []是另一种形式的OR语句
+SELECT prod_name FROM products WHERE prod_name REGEXP '[123] Ton' ORDER BY prod_name;
+SELECT prod_name FROM products WHERE prod_name REGEXP '[1|2|3] Ton' ORDER BY prod_name;
+-- [^123]却匹配除这些字符外的任何东西.
+SELECT prod_name FROM products WHERE prod_name REGEXP '[^123] Ton' ORDER BY prod_name; 
+
+-- 匹配范围
+SELECT prod_name FROM products WHERE prod_name REGEXP '[1-5] Ton';
+
+-- 匹配特殊字符
+SELECT vend_name FROM vendors WHERE vend_name REGEXP '\\.' ORDER BY vend_name;
+
+-- 匹配多个实例
+SELECT prod_name FROM products WHERE prod_name REGEXP '\\([0-9] sticks?\\)';
+SELECT prod_name FROM products WHERE prod_name REGEXP '[[:digit:]]{4}' ORDER BY prod_name;
+SELECT prod_name FROM products WHERE prod_name REGEXP '[0-9][0-9][0-9][0-9]';
+
+-- 定位符
+SELECT prod_name FROM products WHERE prod_name REGEXP '^[0-9\\.]' ORDER BY prod_name;
+
+-- 简单的正则表达式测试
+-- 可以在不使用数据库表的情况下用 SELECT 来测试正则表达式. REGEXP检查总是返回0 (没有匹配)
+-- 或1 (匹配) . 可以用带文字串的REGEXP来测试表达式,并试验它们. 相应的语法如下:
+-- 这个例子显然将返回0 (因为文本hello中没有数字).
+SELECT 'hello' REGEXP '[0-9]';
+SELECT 'hello' REGEXP '[A-Z]';
