@@ -1,11 +1,9 @@
 package design.pattern.behavioral.memento;
 
-import lombok.Data;
-
 /**
  * 手记
  */
-@Data
+//@Data
 public class Article {
     private String title;
     private String content;
@@ -35,5 +33,29 @@ public class Article {
                 ", content='" + content + '\'' +
                 ", imgs='" + imgs + '\'' +
                 '}';
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getImgs() {
+        return imgs;
+    }
+
+    public void setImgs(String imgs) {
+        this.imgs = imgs;
     }
 }

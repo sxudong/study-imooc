@@ -5,7 +5,6 @@ import design.pattern.creational.builder.example.part.impl.Gear;
 import design.pattern.creational.builder.example.part.Part;
 import design.pattern.creational.builder.example.part.impl.Plate;
 import design.pattern.creational.builder.example.part.impl.Tile;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 /**
  * 定义乐高套件，它由四种零件组成：
  */
-@Getter
+//@Getter
 public class Lego {
 	private List<Brick> bricks = new ArrayList<>();
 	private List<Plate> plates = new ArrayList<>();
@@ -34,5 +33,37 @@ public class Lego {
 		if (!parts.isEmpty()) {
 			System.out.println("(" + parts.get(0).description() + ")" + " x " + parts.size());
 		}
+	}
+
+	public List<Brick> getBricks() {
+		return bricks;
+	}
+
+	public void setBricks(List<Brick> bricks) {
+		this.bricks = bricks;
+	}
+
+	public List<Plate> getPlates() {
+		return plates;
+	}
+
+	public void setPlates(List<Plate> plates) {
+		this.plates = plates;
+	}
+
+	public List<Tile> getTiles() {
+		return tiles;
+	}
+
+	public void setTiles(List<Tile> tiles) {
+		this.tiles = tiles;
+	}
+
+	public List<Gear> getGears() {
+		return gears;
+	}
+
+	public void setGears(List<Gear> gears) {
+		this.gears = gears;
 	}
 }

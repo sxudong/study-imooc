@@ -3,12 +3,11 @@ package design.pattern.behavioral.mediator.exemple;
 import design.pattern.behavioral.mediator.exemple.colleague.impl.Purchase;
 import design.pattern.behavioral.mediator.exemple.colleague.impl.Sale;
 import design.pattern.behavioral.mediator.exemple.colleague.impl.Stock;
-import lombok.Setter;
 
 /**
  * 中介者类Mediator
  */
-@Setter
+//@Setter
 public class Mediator {
 	private Purchase purchase;
 	private Sale sale;
@@ -46,5 +45,29 @@ public class Mediator {
 		purchase.stop();
 		// 清仓处理，打折销售
 		sale.discountSell();
+	}
+
+	public Purchase getPurchase() {
+		return purchase;
+	}
+
+	public void setPurchase(Purchase purchase) {
+		this.purchase = purchase;
+	}
+
+	public Sale getSale() {
+		return sale;
+	}
+
+	public void setSale(Sale sale) {
+		this.sale = sale;
+	}
+
+	public Stock getStock() {
+		return stock;
+	}
+
+	public void setStock(Stock stock) {
+		this.stock = stock;
 	}
 }

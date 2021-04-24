@@ -1,12 +1,11 @@
 package design.pattern.behavioral.visitor.example2;
 
 import design.pattern.behavioral.visitor.example2.visitor.Visitor;
-import lombok.Getter;
 
 /**
  * 核心档案类
  */
-@Getter
+//@Getter
 public class Archive implements Visitable {
 	private String code;//档案号
 	private String name;//姓名
@@ -29,5 +28,61 @@ public class Archive implements Visitable {
 	@Override
 	public void accept(Visitor visitor) {
 		visitor.visit(this);
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public String getInDate() {
+		return inDate;
+	}
+
+	public void setInDate(String inDate) {
+		this.inDate = inDate;
+	}
+
+	public String getOutDate() {
+		return outDate;
+	}
+
+	public void setOutDate(String outDate) {
+		this.outDate = outDate;
+	}
+
+	public Boolean getImaged() {
+		return imaged;
+	}
+
+	public void setImaged(Boolean imaged) {
+		this.imaged = imaged;
 	}
 }

@@ -1,4 +1,4 @@
-package design.pattern.reactor.excemple;
+package design.pattern.reactor.excemple1;
  
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -8,29 +8,29 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
+
 /**
- * @author dingwei2
- *
+ * https://blog.csdn.net/prestigeding/article/details/55100075
  */
 public class NioClient {
- 
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+
 		SocketChannel clientClient;
 		Selector selector = null;
 		try {
 			clientClient = SocketChannel.open();
 			clientClient.configureBlocking(false);
-			
+
 			selector = Selector.open();
-			
+
 			clientClient.register(selector, SelectionKey.OP_CONNECT);
-			
+
 			clientClient.connect(new InetSocketAddress("127.0.0.1",9080));
-			
+
 			Set<SelectionKey> ops = null;
-			
+
 			while(true) {
 				try {
 					selector.select();
@@ -51,7 +51,7 @@ public class NioClient {
 								buffer.flip();
 								sc.write(buffer);
 							}
-							sc.register(selector, SelectionKey.OP_READ); 
+							sc.register(selector, SelectionKey.OP_READ);
 						} else if(key.isWritable()) {
 							System.out.println("客户端写");
 							SocketChannel sc = (SocketChannel)key.channel();
@@ -70,28 +70,21 @@ public class NioClient {
 								buffer.get(response);
 								System.out.println(new String(response));
 							}
-							
 						}
-						
 					}
-					
 				} catch(Throwable e) {
 					e.printStackTrace();
 				}
-				
 			}
-			
-			
-			
-			
-			
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
- 
 	}
- 
 }
+/* Output:
+client connect
+完成连接!
+客户端收到服务器的响应....
+Hello,Serverhello,服务器收到了你的信息。
+ */

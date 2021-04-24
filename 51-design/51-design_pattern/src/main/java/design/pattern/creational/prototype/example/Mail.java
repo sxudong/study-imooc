@@ -1,11 +1,10 @@
 package design.pattern.creational.prototype.example;
 
-import lombok.Setter;
 
 /**
  * 邮件类
  */
-@Setter
+//@Setter
 public class Mail implements Cloneable{
 	private String target;//目标邮箱
 	private String content;//邮件内容
@@ -28,5 +27,29 @@ public class Mail implements Cloneable{
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public String getTarget() {
+		return target;
+	}
+
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getTail() {
+		return tail;
+	}
+
+	public void setTail(String tail) {
+		this.tail = tail;
 	}
 }

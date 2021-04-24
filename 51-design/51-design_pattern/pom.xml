@@ -290,12 +290,6 @@
             <version>2.9.3</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.18</version>
-        </dependency>
-
         <!-- spring session 单点登录 -->
         <dependency>
             <groupId>org.springframework.session</groupId>
