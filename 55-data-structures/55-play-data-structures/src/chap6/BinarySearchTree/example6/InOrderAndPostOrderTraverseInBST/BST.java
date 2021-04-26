@@ -1,6 +1,5 @@
 package chap6.BinarySearchTree.example6.InOrderAndPostOrderTraverseInBST;
 
-import java.util.Stack;
 
 /**
  * 6-7 二分搜索树的中序遍历和后序遍历

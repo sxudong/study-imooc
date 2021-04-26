@@ -2,6 +2,10 @@ package chap5.Recursion.example2.TestYourLinkedListSolution;
 /// Leetcode 203. Remove Linked List Elements
 /// https://leetcode.com/problems/remove-linked-list-elements/description/
 
+/**
+ * Leetcode 203. 移除链表元素
+ * https://leetcode-cn.com/problems/remove-linked-list-elements/
+ */
 class Solution2 {
 
     public ListNode removeElements(ListNode head, int val) {

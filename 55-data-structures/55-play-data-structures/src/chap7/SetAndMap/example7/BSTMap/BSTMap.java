@@ -22,8 +22,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
         }
     }
 
-    private Node root;
-    private int size;
+    private Node root; //根节点
+    private int size;  //多少个元素
 
     public BSTMap(){
         root = null;
@@ -50,15 +50,17 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
     // 返回插入新节点后二分搜索树的根
     private Node add(Node node, K key, V value){
 
+        //1.求最基本的问题
         if(node == null){
             size ++;
             return new Node(key, value);
         }
 
+        //2.拆分成更小的问题
         if(key.compareTo(node.key) < 0)
-            node.left = add(node.left, key, value);
+            node.left = add(node.left, key, value); //左子树添加节点
         else if(key.compareTo(node.key) > 0)
-            node.right = add(node.right, key, value);
+            node.right = add(node.right, key, value); //右子树添加节点
         else // key.compareTo(node.key) == 0
             node.value = value; // 更新value，等于用户传来的value
 
@@ -67,16 +69,17 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
 
     // 返回以node为根节点的二分搜索树中，key所在的节点
     private Node getNode(Node node, K key){
-
+        //1.求最基本的问题
         if(node == null)
             return null;
 
+        //2.拆分成更小的问题
         if(key.equals(node.key))
             return node;
         else if(key.compareTo(node.key) < 0)
-            return getNode(node.left, key);
+            return getNode(node.left, key); //左子树寻找
         else // if(key.compareTo(node.key) > 0)
-            return getNode(node.right, key);
+            return getNode(node.right, key); //右子树寻找
     }
 
     @Override
@@ -86,7 +89,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
 
     @Override
     public V get(K key){
-
         Node node = getNode(root, key);
         return node == null ? null : node.value;
     }
@@ -125,7 +127,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
     // 从二分搜索树中删除键为key的节点
     @Override
     public V remove(K key){
-
         Node node = getNode(root, key);
         if(node != null){
             root = remove(root, key);
@@ -134,17 +135,20 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
         return null;
     }
 
+    // 删除掉以node为根的二分搜索树中键为key的节点，递归算法
+    // 返回删除节点后新的二分搜索树的根
     private Node remove(Node node, K key){
-
+        //1.求最基本的问题
         if( node == null )
             return null;
 
+        //2.拆分成更小的问题
         if( key.compareTo(node.key) < 0 ){
-            node.left = remove(node.left , key);
+            node.left = remove(node.left , key); //去左子树删除对应的节点
             return node;
         }
         else if(key.compareTo(node.key) > 0 ){
-            node.right = remove(node.right, key);
+            node.right = remove(node.right, key); //去右子树删除对应的节点
             return node;
         }
         else{   // key.compareTo(node.key) == 0

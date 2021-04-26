@@ -106,3 +106,31 @@ public class LoopQueue<E> implements Queue<E> {
         }
     }
 }
+/* Output:
+Queue: size = 1 , capacity = 5
+front [0] tail
+Queue: size = 2 , capacity = 5
+front [0, 1] tail
+Queue: size = 3 , capacity = 5
+front [0, 1, 2] tail
+Queue: size = 2 , capacity = 5
+front [1, 2] tail
+Queue: size = 3 , capacity = 5
+front [1, 2, 3] tail
+Queue: size = 4 , capacity = 5
+front [1, 2, 3, 4] tail
+Queue: size = 5 , capacity = 5
+front [1, 2, 3, 4, 5] tail
+Queue: size = 4 , capacity = 5
+front [2, 3, 4, 5] tail
+Queue: size = 5 , capacity = 5
+front [2, 3, 4, 5, 6] tail
+Queue: size = 6 , capacity = 10
+front [2, 3, 4, 5, 6, 7] tail
+Queue: size = 7 , capacity = 10
+front [2, 3, 4, 5, 6, 7, 8] tail
+Queue: size = 6 , capacity = 10
+front [3, 4, 5, 6, 7, 8] tail
+Queue: size = 7 , capacity = 10
+front [3, 4, 5, 6, 7, 8, 9] tail
+ */

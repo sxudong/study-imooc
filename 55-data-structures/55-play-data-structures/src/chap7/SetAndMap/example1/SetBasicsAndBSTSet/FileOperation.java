@@ -8,7 +8,9 @@ import java.io.File;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
-// 文件相关操作
+/**
+ * 7-1 集合基础和基于二分搜索树的集合实现  文件相关操作
+ */
 public class FileOperation {
 
     // 读取文件名称为filename中的内容，并将其中包含的所有词语放进words中

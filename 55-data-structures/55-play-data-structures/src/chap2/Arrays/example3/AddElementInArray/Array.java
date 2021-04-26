@@ -59,11 +59,11 @@ public class Array {
         if(index < 0 || index > size)
             throw new IllegalArgumentException("Add failed. Require index >= 0 and index <= size.");
 
-        // [0,1,2,3,4,5]
+        // [0,1,2,3,4,5] 从index处往后所所有元素向后移一个元素
         for(int i = size - 1; i >= index ; i --)
-            data[i + 1] = data[i]; // 最后一个元素等于前一个元素，认数组的容量capacity=10
+            data[i + 1] = data[i]; // 后一个元素等于前一个元素，数组元素向后移一个元素
 
-        data[index] = e;
+        data[index] = e; //覆盖index
 
         size ++;
     }

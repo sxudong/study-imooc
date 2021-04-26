@@ -70,3 +70,18 @@ public class ArrayQueue<E> implements Queue<E> {
         }
     }
 }
+/* Output:
+Queue: front [0] tail
+Queue: front [0, 1] tail
+Queue: front [0, 1, 2] tail
+Queue: front [1, 2] tail
+Queue: front [1, 2, 3] tail
+Queue: front [1, 2, 3, 4] tail
+Queue: front [1, 2, 3, 4, 5] tail
+Queue: front [2, 3, 4, 5] tail
+Queue: front [2, 3, 4, 5, 6] tail
+Queue: front [2, 3, 4, 5, 6, 7] tail
+Queue: front [2, 3, 4, 5, 6, 7, 8] tail
+Queue: front [3, 4, 5, 6, 7, 8] tail
+Queue: front [3, 4, 5, 6, 7, 8, 9] tail
+ */

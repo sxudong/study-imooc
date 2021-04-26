@@ -60,13 +60,14 @@ public class ArrayQueue<E> implements Queue<E> {
     }
 
     public static void main(String[] args) {
-
+        //  ArrayQueue: 数组队列
         ArrayQueue<Integer> queue = new ArrayQueue<>();
         for(int i = 0 ; i < 10 ; i ++){
             queue.enqueue(i); // 添加元素
             System.out.println(queue);
             if(i % 3 == 2){
-                queue.dequeue(); // 取出一个元素
+                // 每插入队列三个元素，就取出一个元素
+                queue.dequeue();
                 System.out.println(queue);
             }
         }

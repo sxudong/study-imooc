@@ -1,22 +1,22 @@
 package chap3.StacksAndQueues.example4.ArrayQueue;
+/// Leetcode 102. Binary Tree Level Order Traversal 二叉树的层序遍历
+/// https://leetcode.com/problems/binary-tree-level-order-traversal/description/
 
 import java.util.ArrayList;
 import java.util.List;
 import javafx.util.Pair;
 
-/// Leetcode 102. Binary Tree Level Order Traversal
-/// https://leetcode.com/problems/binary-tree-level-order-traversal/description/
-/// 二叉树的层序遍历
-///
-/// 二叉树的层序遍历是一个典型的可以借助队列解决的问题。
-/// 该代码主要用于使用Leetcode上的问题测试我们的ArrayQueue。
-/// 对于二叉树的层序遍历，这个课程后续会讲到。
-/// 届时，同学们也可以再回头看这个代码。
-/// 不过到时，大家应该已经学会自己编写二叉树的层序遍历啦：）
 
+/**
+ * Leetcode 102 二叉树的层序遍历
+ *   二叉树的层序遍历是一个典型的可以借助队列解决的问题。对于二叉树的层序遍历，这个课程后续会讲到。
+ *   届时，同学们也可以再回头看这个代码。不过到时，大家应该已经学会自己编写二叉树的层序遍历啦：）
+ *
+ *   https://leetcode-cn.com/problems/binary-tree-level-order-traversal/
+ */
 class Solution {
 
-    /// Definition for a binary tree node.
+    // Definition for a binary tree node. 定义二叉树节点。
     private class TreeNode {
         int val;
         TreeNode left;

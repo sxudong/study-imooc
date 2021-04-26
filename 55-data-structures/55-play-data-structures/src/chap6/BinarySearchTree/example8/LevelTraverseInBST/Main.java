@@ -1,5 +1,8 @@
 package chap6.BinarySearchTree.example8.LevelTraverseInBST;
 
+/**
+ * 6-10 二分搜索树的"层序遍历"
+ */
 public class Main {
 
     public static void main(String[] args) {
@@ -16,16 +19,16 @@ public class Main {
         //  / \    \   //
         // 2  4     8  //
         /////////////////
-        bst.preOrder();
+        bst.preOrder(); //前序遍历
         System.out.println();
 
-        bst.inOrder();
+        bst.inOrder(); //中序遍历
         System.out.println();
 
-        bst.postOrder();
+        bst.postOrder(); //非递归 使用Stack实现的遍历
         System.out.println();
 
-        bst.levelOrder();
+        bst.levelOrder(); //层序遍历 使用LinkList实现的遍历
         System.out.println();
     }
 }

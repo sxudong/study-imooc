@@ -1,6 +1,7 @@
 package chap5.Recursion.example4.LinkedListAndRecursion;
-/// Leetcode 203. Remove Linked List Elements
+/// Leetcode 203. Remove Linked List Elements 移除链表元素
 /// https://leetcode.com/problems/remove-linked-list-elements/description/
+/// https://leetcode-cn.com/problems/remove-linked-list-elements/
 
 /**
  *   head.next = removeElements(head.next, val);

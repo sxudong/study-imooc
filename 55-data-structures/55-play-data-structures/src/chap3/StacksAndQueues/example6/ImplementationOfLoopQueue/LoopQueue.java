@@ -33,6 +33,7 @@ public class LoopQueue<E> implements Queue<E> {
         return size;
     }
 
+    //入队操作（重点部分）
     @Override
     public void enqueue(E e){
 
@@ -45,9 +46,9 @@ public class LoopQueue<E> implements Queue<E> {
         size ++;
     }
 
+    //出队操作（重点部分）
     @Override
     public E dequeue(){
-
         if(isEmpty())
             throw new IllegalArgumentException("Cannot dequeue from an empty queue.");
 
@@ -68,8 +69,8 @@ public class LoopQueue<E> implements Queue<E> {
         return data[front];
     }
 
+    // resize这里也改变了，多看几遍自行体会
     private void resize(int newCapacity){
-
         E[] newData = (E[]) new Object[newCapacity + 1];
         for(int i = 0 ; i < size ; i ++)
             // 从原来队列的队首开始放入

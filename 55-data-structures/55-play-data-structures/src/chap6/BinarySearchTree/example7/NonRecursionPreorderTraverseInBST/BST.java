@@ -3,7 +3,7 @@ package chap6.BinarySearchTree.example7.NonRecursionPreorderTraverseInBST;
 import java.util.Stack;
 
 /**
- * 6-9 二分搜索树前序遍历的非递归实现
+ * 6-9 二分搜索树前序遍历的"非递归"实现
  * @param <E>
  */
 public class BST<E extends Comparable<E>> {
@@ -91,9 +91,10 @@ public class BST<E extends Comparable<E>> {
     }
 
     /**
-     * 二分搜索树的非递归前序遍历
+     * 二分搜索树的"非递归"前序遍历
      *
-     * 压入栈的顺序是先压右孩子再压左孩子，因为栈是后入先出的，所以要先压入后续访问的节点。
+     * 压入栈的顺序是先压右孩子再压左孩子，因为栈是后入先出的，
+     * 所以要先压入后续访问的节点。
      */
     public void preOrderNR() {
 

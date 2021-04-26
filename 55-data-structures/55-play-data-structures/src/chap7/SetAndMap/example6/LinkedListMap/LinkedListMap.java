@@ -9,6 +9,9 @@ import java.util.ArrayList;
  */
 public class LinkedListMap<K, V> implements Map<K, V> {
 
+    /**
+     * 节点内部类
+     */
     private class Node{
         public K key;
         public V value;
@@ -34,8 +37,8 @@ public class LinkedListMap<K, V> implements Map<K, V> {
         }
     }
 
-    private Node dummyHead;
-    private int size;
+    private Node dummyHead; //虚拟的头指针
+    private int size;       //多少个元素
 
     public LinkedListMap(){
         dummyHead = new Node();
@@ -59,10 +62,11 @@ public class LinkedListMap<K, V> implements Map<K, V> {
      */
     private Node getNode(K key){
         Node cur = dummyHead.next;
+        //遍历整个链表节点
         while(cur != null){
             if(cur.key.equals(key))
                 return cur;
-            cur = cur.next;
+            cur = cur.next; // 指向下一个节点
         }
         return null;
     }
@@ -82,10 +86,12 @@ public class LinkedListMap<K, V> implements Map<K, V> {
     public void add(K key, V value){
         Node node = getNode(key);
         if(node == null){
+            //在链表头添加元素
             dummyHead.next = new Node(key, value, dummyHead.next);
             size ++;
         } else {
-            node.value = value; // 更新这个值
+            // 更新这个值，等于用户传过来的值
+            node.value = value;
         }
     }
 
@@ -107,15 +113,15 @@ public class LinkedListMap<K, V> implements Map<K, V> {
 
         Node prev = dummyHead; // 虚拟头节点
         while(prev.next != null){
-            if(prev.next.key.equals(key)) // 要删除的节点
+            if(prev.next.key.equals(key)) // 等于要删除的节点key
                 break; // 跳出while循环
             prev = prev.next;
         }
 
-        // 删除要删除的节点
+        // 跑出while循环后，此时prev.next就是要删除的节点
         if(prev.next != null){
             Node delNode = prev.next;
-            prev.next = delNode.next;
+            prev.next = delNode.next; //指向它的下下个节点
             delNode.next = null;
             size --;
             return delNode.value;
@@ -126,8 +132,7 @@ public class LinkedListMap<K, V> implements Map<K, V> {
 
     /*
      * 测试前
-     *    在IDEA 右上角锤子图标边的下拉菜单中找到“Edit Configurations”
-     *    设置工作目录为“F:\07-慕课网\玩转算法系列--玩转数据结构\PlayDataStructures\src\G\SetAndMap”
+     *    在IDEA 右上角锤子图标边的下拉菜单中找到“Edit Configurations”设置工作目录
      */
     public static void main(String[] args){
 
@@ -143,14 +148,14 @@ public class LinkedListMap<K, V> implements Map<K, V> {
             LinkedListMap<String, Integer> map = new LinkedListMap<>();
             for (String word : words) {
                 if (map.contains(word))
-                    map.set(word, map.get(word) + 1); // 如果包含这个单词，频率加1
+                    map.set(word, map.get(word) + 1); // key=单词，value=频率加1
                 else
                     map.add(word, 1); // 初始频率为1
             }
 
             System.out.println("Total different words: " + map.getSize());
-            System.out.println("Frequency of PRIDE: " + map.get("pride"));
-            System.out.println("Frequency of PREJUDICE: " + map.get("prejudice"));
+            System.out.println("Frequency of PRIDE: " + map.get("pride")); //“pride”出现的词频
+            System.out.println("Frequency of PREJUDICE: " + map.get("prejudice"));//"prejudice"出现的词频
         }
 
         System.out.println();

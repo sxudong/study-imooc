@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * 7-8 映射的复杂度分析和更多映射相关问题
+ * 比较 二分树实现的Map VS 链表实现的Map
  */
 public class Main {
 

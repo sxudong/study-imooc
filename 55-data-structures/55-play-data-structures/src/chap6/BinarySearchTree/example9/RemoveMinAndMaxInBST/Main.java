@@ -3,6 +3,9 @@ package chap6.BinarySearchTree.example9.RemoveMinAndMaxInBST;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * 6-11 删除二分搜索树的最大元素和最小元素
+ */
 public class Main {
 
     public static void main(String[] args) {
@@ -21,7 +24,7 @@ public class Main {
             nums.add(bst.removeMin()); // 删除的最小元素添加到List中
         System.out.println(nums);
 
-        // 检查是否是从小到大
+        // 测试是否是从小到大排序？
         for(int i = 1 ; i < nums.size() ; i ++)
             if(nums.get(i - 1) > nums.get(i)) // 如果前一个比下一个大抛出异常
                 throw new IllegalArgumentException("Error!");
@@ -34,9 +37,10 @@ public class Main {
 
         nums = new ArrayList<>();
         while(!bst.isEmpty())
-            nums.add(bst.removeMax());
-
+            nums.add(bst.removeMax()); //从大到小remove加入到nums
         System.out.println(nums);
+
+        // 测试是否从大到小排列？
         for(int i = 1 ; i < nums.size() ; i ++)
             if(nums.get(i - 1) < nums.get(i))
                 throw new IllegalArgumentException("Error!");

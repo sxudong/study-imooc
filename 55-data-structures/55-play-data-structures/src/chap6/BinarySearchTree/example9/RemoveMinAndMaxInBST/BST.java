@@ -6,8 +6,6 @@ import java.util.Stack;
 
 /**
  * 6-11 删除二分搜索树的最大元素和最小元素
- *
- * @param <E>
  */
 public class BST<E extends Comparable<E>> {
 
@@ -263,7 +261,7 @@ public class BST<E extends Comparable<E>> {
             Node leftNode = node.left;
             node.left = null;
             size--;
-            return leftNode;
+            return leftNode; //返回给上一层的 node.right
         }
 
         node.right = removeMax(node.right);

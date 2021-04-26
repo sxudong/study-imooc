@@ -1,6 +1,7 @@
 package chap5.Recursion.example4.LinkedListAndRecursion;
 
-//Definition for singly-linked list.
+// Definition for singly-linked list.
+// 单链列表的定义。
 public class ListNode {
 
     public int val;

@@ -1,5 +1,9 @@
 package chap3.StacksAndQueues.example3.MoreAboutLeetcode;
 
+/**
+ * leetcode 20. 有效的括号
+ * https://leetcode-cn.com/problems/valid-parentheses/
+ */
 class Solution {
 
     public boolean isValid(String s) {

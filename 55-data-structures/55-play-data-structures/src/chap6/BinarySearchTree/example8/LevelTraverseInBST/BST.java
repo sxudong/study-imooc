@@ -5,7 +5,7 @@ import java.util.Queue;
 import java.util.LinkedList;
 
 /**
- * 6-10 二分搜索树的层序遍历
+ * 6-10 二分搜索树的"层序遍历"
  * @param <E>
  */
 public class BST<E extends Comparable<E>> {
@@ -153,12 +153,12 @@ public class BST<E extends Comparable<E>> {
         Queue<Node> q = new LinkedList<>();
         q.add(root); // 根节点加入队列
         while(!q.isEmpty()){
-            Node cur = q.remove(); // 出队
+            Node cur = q.remove(); // 出队列
             System.out.println(cur.e);
 
-            if(cur.left != null)  // 如果有左孩子，压入队
+            if(cur.left != null)  // 如果有左孩子，压入队列
                 q.add(cur.left);
-            if(cur.right != null) // 如果有右孩子，压入队
+            if(cur.right != null) // 如果有右孩子，压入队列
                 q.add(cur.right);
         }
     }

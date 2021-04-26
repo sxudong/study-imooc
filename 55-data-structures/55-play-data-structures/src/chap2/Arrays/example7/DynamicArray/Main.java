@@ -1,7 +1,6 @@
 package chap2.Arrays.example7.DynamicArray;
 
 public class Main {
-
     public static void main(String[] args) {
 
         Array<Integer> arr = new Array<>(); // 默认10
@@ -26,3 +25,17 @@ public class Main {
 
     }
 }
+/* Output:
+Array: size = 10 , capacity = 10
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+Array: size = 11 , capacity = 20
+[0, 100, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+Array: size = 12 , capacity = 20
+[-1, 0, 100, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+Array: size = 11 , capacity = 20
+[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+Array: size = 10 , capacity = 10
+[-1, 0, 1, 2, 3, 5, 6, 7, 8, 9]
+Array: size = 9 , capacity = 10
+[0, 1, 2, 3, 5, 6, 7, 8, 9]
+ */

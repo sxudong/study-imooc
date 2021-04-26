@@ -27,8 +27,7 @@ public class Main {
 
     /*
      * 测试前
-     *    在IDEA 右上角锤子图标边的下拉菜单中找到“Edit Configurations”
-     *    设置工作目录为“F:\07-慕课网\玩转算法系列--玩转数据结构\PlayDataStructures\src\G\SetAndMap”
+     *    在IDEA 右上角锤子图标边的下拉菜单中找到“Edit Configurations”设置工作目录
      */
     public static void main(String[] args) {
 

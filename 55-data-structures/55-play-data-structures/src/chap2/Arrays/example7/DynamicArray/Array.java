@@ -49,7 +49,7 @@ public class Array<E> {
             resize(2 * data.length);
 
         for(int i = size - 1; i >= index ; i --)
-            data[i + 1] = data[i]; // 最后一个元素等于前一个元素，认数组的容量capacity=10
+            data[i + 1] = data[i]; // 后一个元素等于前一个元素，数组元素向后移一个元素
 
         data[index] = e;
 

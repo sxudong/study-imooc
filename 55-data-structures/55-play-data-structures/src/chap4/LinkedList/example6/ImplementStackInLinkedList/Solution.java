@@ -1,7 +1,8 @@
 package chap4.LinkedList.example6.ImplementStackInLinkedList;
 
-/// Leetcode 20. Valid Parentheses
+/// Leetcode 20. Valid Parentheses 有效的括号
 /// https://leetcode.com/problems/valid-parentheses/description/
+/// https://leetcode-cn.com/problems/valid-parentheses/
 /// 括号匹配问题
 ///
 /// 使用LinkedListStack测试20号问题的代码在视频中没有提及

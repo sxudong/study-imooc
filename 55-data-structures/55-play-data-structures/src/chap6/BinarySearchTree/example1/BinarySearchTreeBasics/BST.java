@@ -32,4 +32,12 @@ public class BST<E extends Comparable<E>> {
     public boolean isEmpty(){
         return size == 0;
     }
+    public static void test2(int n) {
+        // O(n)
+        // 1 + 3n
+        for (int i = 0; i < n; i++) {
+            System.out.println("test");
+        }
+    }
+
 }
