@@ -25,10 +25,10 @@ public class BigCharFactory {
 
     // 生成（共享）BigChar类的实例
     public synchronized BigChar getBigChar(char charname) {
-        BigChar bc = (BigChar)pool.get("" + charname);
+        BigChar bc = (BigChar)pool.get(charname);
         if (bc == null) {
             bc = new BigChar(charname); // 生成BigChar的实例
-            pool.put("" + charname, bc);
+            pool.put(charname, bc);
         }
         return bc;
     }
