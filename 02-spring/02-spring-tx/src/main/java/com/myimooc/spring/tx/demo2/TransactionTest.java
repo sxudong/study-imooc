@@ -10,15 +10,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 
 /**
- * 账户服务测试
- *
- * @author zc 2017-02-16
+ * Spring的声明式事务管理的方式一的测试类
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext2.xml")
 public class TransactionTest {
 
-    // 注入代理对象
+    // 注入代理类：因为代理类进行增加的操作
     //@Resource(name = "accountServiceProxy")
     @Autowired
     @Qualifier("accountServiceProxy")
@@ -26,6 +24,7 @@ public class TransactionTest {
 
     @Test
     public void demo1() {
+        //进行转账操作
         accountService.transfer("aaa", "bbb", 200d);
     }
 }

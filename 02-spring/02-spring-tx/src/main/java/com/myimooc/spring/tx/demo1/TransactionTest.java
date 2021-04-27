@@ -8,9 +8,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 
 /**
- * 账户服务测试
- *
- * @author zc 2017-02-16
+ * 账户服务测试 -- 编程式的事务管理
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext1.xml")
@@ -21,6 +19,7 @@ public class TransactionTest {
 
     @Test
     public void demo1() {
+        //进行转账操作
         accountService.transfer("aaa", "bbb", 200d);
     }
 }

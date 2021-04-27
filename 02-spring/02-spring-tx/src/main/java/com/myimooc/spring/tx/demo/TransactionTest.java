@@ -10,10 +10,10 @@ import javax.annotation.Resource;
 /**
  * 账户服务测试
  *
- * @author zc 2017-02-16
+ * 配置文件：applicationContext.xml jdbc.properties
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:applicationContext0.xml")
+@ContextConfiguration("classpath:applicationContext.xml")
 public class TransactionTest {
 
     @Resource(name = "accountService")
@@ -21,6 +21,7 @@ public class TransactionTest {
 
     @Test
     public void demo1() {
+        //进行转账操作
         accountService.transfer("aaa", "bbb", 200d);
     }
 }

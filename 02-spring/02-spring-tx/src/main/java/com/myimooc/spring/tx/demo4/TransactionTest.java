@@ -8,9 +8,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 
 /**
- * 转账服务测试
- *
- * @author zc 2017-02-16
+ * Spring的声明式事务管理的方式二：基于注解的方式
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext4.xml")

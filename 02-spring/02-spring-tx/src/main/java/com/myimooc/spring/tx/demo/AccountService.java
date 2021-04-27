@@ -2,8 +2,6 @@ package com.myimooc.spring.tx.demo;
 
 /**
  * 账户服务
- *
- * @author zc 2017-02-16
  */
 public interface AccountService {
 
@@ -12,7 +10,7 @@ public interface AccountService {
      *
      * @param out   出账账户
      * @param in    入账账户
-     * @param money 金额
+     * @param money 转账金额
      */
     void transfer(String out, String in, Double money);
 }
