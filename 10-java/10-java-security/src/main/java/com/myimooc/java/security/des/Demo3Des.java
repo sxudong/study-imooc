@@ -14,6 +14,7 @@ import javax.crypto.spec.DESedeKeySpec;
 /**
  * 3DES对称加密演示
  *
+ * 《JAVA实现对称加密》：https://www.imooc.com/learn/287
  * @author zc 2017-04-11
  */
 public class Demo3Des {
@@ -23,11 +24,12 @@ public class Demo3Des {
     }
 
     /**
-     * 使用jdk实现3重DES加解密
+     * 使用 jdk 实现 3重DES加解密
      */
     private static void jdk3des() throws Exception {
-        // 生成KEY
+        // 生成秘钥KEY
         KeyGenerator keyGenerator = KeyGenerator.getInstance("DESede");
+        //keyGenerator.init(168);
         keyGenerator.init(new SecureRandom());
         SecretKey secretKey = keyGenerator.generateKey();
         byte[] byteKey = secretKey.getEncoded();
@@ -37,7 +39,7 @@ public class Demo3Des {
         SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("DESede");
         Key convertSecretKey = secretKeyFactory.generateSecret(desKeySpec);
 
-        // 加密
+        // 加密 (md笔记表格中的参数)
         Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, convertSecretKey);
 
@@ -51,5 +53,9 @@ public class Demo3Des {
         cipher.init(Cipher.DECRYPT_MODE, convertSecretKey);
         result = cipher.doFinal(result);
         System.out.println("jdk 3des decrypt:" + new String(result));
+    }
+
+    private static void bc3des() {
+        // TODO
     }
 }

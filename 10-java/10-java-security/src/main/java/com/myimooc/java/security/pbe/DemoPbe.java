@@ -13,6 +13,7 @@ import javax.crypto.spec.PBEParameterSpec;
 /**
  * PBE对称加密演示
  *
+ * 《JAVA实现对称加密》：https://www.imooc.com/learn/287
  * @author zc 2017-04-11
  */
 public class DemoPbe {
@@ -24,7 +25,7 @@ public class DemoPbe {
     }
 
     /**
-     * 使用JDK实现PBE算法加解密
+     * 使用 JDK 实现 PBE 算法加解密
      */
     private static void jdkPbe() throws Exception {
         // 初始化盐
@@ -36,7 +37,7 @@ public class DemoPbe {
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBEWITHMD5andDES");
         Key key = factory.generateSecret(pbeKeySpec);
 
-        // 加密
+        // 加密 (md笔记表格中的参数)
         PBEParameterSpec pbeParameterSpec = new PBEParameterSpec(salt, 100);
         Cipher cipher = Cipher.getInstance("PBEWITHMD5andDES");
         cipher.init(Cipher.ENCRYPT_MODE, key, pbeParameterSpec);
@@ -47,8 +48,12 @@ public class DemoPbe {
         System.out.println("jdk pbe encrypt:" + Base64.encodeBase64String(enResult));
 
         // 解密
-        cipher.init(Cipher.DECRYPT_MODE, key, pbeParameterSpec);
+        cipher.init(Cipher.DECRYPT_MODE, key, pbeParameterSpec); //重新初始化，同一个秘钥
         byte[] deResult = cipher.doFinal(enResult);
-        System.out.println("jdk pbe decrypt:" + Base64.encodeBase64String(deResult));
+        System.out.println("jdk pbe decrypt:" + new String(deResult));
     }
 }
+/* Output:
+jdk pbe encrypt:YxWkZRNBvb1z85nTCecNEbDPiuBBDe0i
+jdk pbe decrypt:imooc security pbe
+ */

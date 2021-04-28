@@ -5,12 +5,13 @@ import org.apache.commons.codec.binary.Base64;
 /**
  * Base64加密演示
  *
- * @author zc 2017-04-13
+ * 慕课网《Java实现Base64加密》https://www.imooc.com/learn/285
+ * @Date 2016-10-12
  */
 public class DemoBase64 {
 
     /**
-     * 待加密字符串
+     * 待加密的“原始的字符串”
      */
     private static String src = "imooc security base64";
 
@@ -24,34 +25,47 @@ public class DemoBase64 {
      * 通过JDK实现Base64加密
      */
     private static void jdkBase64() {
+        //编码
         java.util.Base64.Encoder encoder = java.util.Base64.getEncoder();
-        String encode = new String(encoder.encode(src.getBytes()));
-        System.out.println("encode:" + encode);
+        byte[] encode1 = encoder.encode(src.getBytes());
+        String encode = new String(encode1);
+        System.out.println("encode:" + encode); //aW1vb2Mgc2VjdXJpdHkgYmFzZTY0
 
+        //解码
         java.util.Base64.Decoder decoder = java.util.Base64.getDecoder();
-        System.out.println("decode:" + new String(decoder.decode(encode)));
+        byte[] decode = decoder.decode(encode);
+        String str = new String(decode);
+        System.out.println("decode:" + str); //imooc security base64
+
     }
 
     /**
-     * 通过commons codec实现Base64加密
+     * 另一个实现方式：通过 Commons codec 实现 Base64 加密
      */
     private static void commonsCodesBase64() {
+        //编码
         byte[] encodeBytes = Base64.encodeBase64(src.getBytes());
         System.out.println("encode:" + new String(encodeBytes));
+        //输出：aW1vb2Mgc2VjdXJpdHkgYmFzZTY0
 
+        //解码
         byte[] decodeBytes = Base64.decodeBase64(encodeBytes);
         System.out.println("decode:" + new String(decodeBytes));
+        //输出：imooc security base64
     }
 
     /**
-     * 通过Bouncy Castle实现Base64加密
+     * 另一个实现方式：通过 Bouncy Castle 实现 Base64 加密
      */
     private static void bouncyCastleBase64() {
+        //编码
         byte[] encodeBytes = org.bouncycastle.util.encoders.Base64.encode(src.getBytes());
         System.out.println("encode:" + new String(encodeBytes));
+        //输出：aW1vb2Mgc2VjdXJpdHkgYmFzZTY0
 
+        //解码
         byte[] decodeBytes = org.bouncycastle.util.encoders.Base64.decode(encodeBytes);
         System.out.println("decode:" + new String(decodeBytes));
+        //输出：imooc security base64
     }
-
 }
