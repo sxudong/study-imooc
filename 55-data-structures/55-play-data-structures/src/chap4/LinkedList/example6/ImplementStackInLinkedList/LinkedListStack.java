@@ -57,9 +57,8 @@ public class LinkedListStack<E> implements Stack<E> {
     }
 
     public static void main(String[] args) {
-
+        //创建链表栈
         LinkedListStack<Integer> stack = new LinkedListStack<>();
-
         for(int i = 0 ; i < 5 ; i ++){
             stack.push(i);
             System.out.println(stack);

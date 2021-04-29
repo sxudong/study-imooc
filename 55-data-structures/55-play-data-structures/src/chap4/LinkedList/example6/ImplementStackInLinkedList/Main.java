@@ -2,6 +2,9 @@ package chap4.LinkedList.example6.ImplementStackInLinkedList;
 
 import java.util.Random;
 
+/**
+ * 数组栈与链表栈 对比
+ */
 public class Main {
 
     // 测试使用stack运行opCount个push和pop操作所需要的时间，单位：秒
@@ -17,12 +20,12 @@ public class Main {
 
         long endTime = System.nanoTime();
 
-        return (endTime - startTime) / 1000000000.0;
+        return (endTime - startTime) / 1_000_000_000.0;
     }
 
     public static void main(String[] args) {
 
-        int opCount = 100000; // 10W 级别
+        int opCount = 100_000; // 10W 级别
 
         ArrayStack<Integer> arrayStack = new ArrayStack<>();
         double time1 = testStack(arrayStack, opCount);

@@ -123,15 +123,17 @@ public class LinkedList<E> {
         // E ret = findNode(index).e; // 两次遍历
 
         Node prev = dummyHead;
+        //找到待删除index位置之前的节点
         for(int i = 0 ; i < index ; i ++)
+            //prev存了待删除节点之前一个节点
             prev = prev.next;
 
-        Node retNode = prev.next;
-        prev.next = retNode.next;
-        retNode.next = null;
+        Node delNode = prev.next;
+        prev.next = delNode.next;
+        delNode.next = null;
         size --;
 
-        return retNode.e;
+        return delNode.e;
     }
 
     // 从链表中删除第一个元素, 返回删除的元素
