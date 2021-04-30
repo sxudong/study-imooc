@@ -131,7 +131,7 @@
 
 - OSI ( Open SystemInterconnection )
 
-![安全体系](/images/OSI.jpg)
+![安全体系](./images/OSI.jpg)
 
 
 
