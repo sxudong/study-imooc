@@ -190,6 +190,3 @@ Private Function FileList(Folderpath, Optional Pstr = "*", Optional Dimensions =
     End If
     FileList = arr
 End Function
-
-
-
