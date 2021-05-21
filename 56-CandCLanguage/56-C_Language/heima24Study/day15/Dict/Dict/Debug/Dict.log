@@ -1,0 +1,4 @@
+﻿  dict_0223.c
+d:\0223基础班\01_c基础第15天（快易通）\02代码\dict\dict\dict_0223.c(19): warning C4098: “ReadFile”:“void”函数返回值
+d:\0223基础班\01_c基础第15天（快易通）\02代码\dict\dict\dict_0223.c(99): warning C4013: “gets”未定义；假设外部返回 int
+  Dict.vcxproj -> D:\0223基础班\01_C基础第15天（快易通）\02代码\Dict\Debug\Dict.exe
