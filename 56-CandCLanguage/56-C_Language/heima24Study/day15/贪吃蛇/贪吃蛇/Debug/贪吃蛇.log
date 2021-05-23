@@ -1,0 +1,5 @@
+﻿  main.c
+G:\VisualStudioWorkSpace\贪吃蛇\贪吃蛇\main.c(13,18): warning C4244: “函数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+G:\VisualStudioWorkSpace\贪吃蛇\贪吃蛇\main.c(91,24): warning C4018: “<”: 有符号/无符号不匹配
+G:\VisualStudioWorkSpace\贪吃蛇\贪吃蛇\main.c(151,23): warning C4018: “<”: 有符号/无符号不匹配
+  贪吃蛇.vcxproj -> G:\VisualStudioWorkSpace\贪吃蛇\Debug\贪吃蛇.exe
