@@ -56,7 +56,7 @@ void test01()
 void allocateSpace(char* memorystr)
 {
 	//申请100个字节堆空间
-	memorystr = (char*)malloc(100);
+	memorystr = (char*) malloc(100);
 	memset(memorystr, 0, 100); //清零，初始化
 	strcpy(memorystr, "hello world!"); //函数体结束,变量p被销毁释放，但堆内存没有被释放，会造成堆溢出
 }
