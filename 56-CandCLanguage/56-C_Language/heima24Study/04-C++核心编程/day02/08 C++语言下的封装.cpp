@@ -2,6 +2,19 @@
 #include<iostream>
 using namespace std;
 
+/*
+7 C++语言的封装
+    7.1	将属性和行为作为一个整体，来表示生活中具体的事物
+    7.2	有访问权限
+    7.3	class 和struct唯一区别 默认权限不同
+        7.3.1	class默认是private
+        7.3.2	struct 默认是public
+    7.4	public 是类内类外都可以访问到
+    7.5	protected 类内可以，类外不可以
+    7.6	private 类内可以，类外不可以
+*/
+
+
 struct Person
 {
 	char mName[64];

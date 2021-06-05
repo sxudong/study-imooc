@@ -3,11 +3,17 @@
 using namespace std;
 #include "test.h"
 
+/*
+6 extern C浅析
+    6.1	解决了C++文件中调用C语言的代码
+    6.2	ifdef __cplusplus extern “C” {
+    6.3	}
+*/
+
 
 /*
 * C++中想调用C语言方法
 */
-
 //解决方法一：
 //extern "C" void show();  //show方法 按照C语言方式做连接
 

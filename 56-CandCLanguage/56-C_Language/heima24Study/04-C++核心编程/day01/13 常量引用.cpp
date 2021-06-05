@@ -2,6 +2,13 @@
 #include<iostream>
 using namespace std;
 
+/*
+8 常量引用
+    8.1	使用场景 修饰形参为只读
+    8.2	const int &a = 10;会分配内存
+*/
+
+
 void test01()
 {
 	//int &ref = 10; //err 引用了不合法的内存，不可以
@@ -32,9 +39,7 @@ void test02()
 	showValue(a);
 }
 
-
 int main(){
-
 	test01();
 	test02();
 	system("pause");

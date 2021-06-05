@@ -2,6 +2,17 @@
 #include<iostream>
 using namespace std;
 
+/*
+4 using声明和using编译指令
+    4.1	using LOL:: sunwukongID;
+    4.2	如果局部范围内还有 sunwukongID，会出现二义性问题，要注意避免
+    4.3	编译指令
+    4.4	using namespace LOL
+    4.5	如果局部范围内还有 sunwukongID ,使用局部的ID
+    4.6	如果打开多个房间，那么也要注意二义性问题
+*/
+
+
 namespace KingGlory
 {
 	int sunwukongId = 10;

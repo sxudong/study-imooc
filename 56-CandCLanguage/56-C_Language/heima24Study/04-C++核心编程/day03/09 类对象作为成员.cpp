@@ -3,6 +3,13 @@
 #include <string>
 using namespace std;
 
+/*
+9 类对象作为成员的案例
+    9.1	当类对象作为类的成员时候，构造顺序是先构造类对象的构造，然后构造自己，
+    9.2	析构顺序与构造相反
+*/
+
+
 class Phone
 {
 public:

@@ -1,7 +1,15 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
-
 using namespace std;
+
+/*
+2 内联函数 解决宏缺陷问题
+    2.1	给编译器一个建议，加上关键字，编译器不一定按照内联处理
+    2.2	不加关键字，也许编译器还偷摸的给你加inline
+    2.3	成员函数 默认加上关键字
+    2.4	函数声明加了关键字，函数实现也要加inline关键字
+*/
+
 
 //定义一个加法
 //#define  MyAdd(x,y) x + y
@@ -44,7 +52,6 @@ void test02()
 /*
 * 3 宏函数也没有作用域
 */
-
 
 int main() {
 

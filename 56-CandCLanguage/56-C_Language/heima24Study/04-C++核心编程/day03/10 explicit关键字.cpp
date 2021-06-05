@@ -2,6 +2,12 @@
 #include<iostream>
 using namespace std;
 
+/*
+10 explicit关键字
+    10.1 作用：防止构造函数中的隐式类型转换
+*/
+
+
 class MyString
 {
 public:

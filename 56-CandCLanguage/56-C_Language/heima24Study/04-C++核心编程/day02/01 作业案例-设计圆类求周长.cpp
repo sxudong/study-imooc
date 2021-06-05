@@ -2,6 +2,22 @@
 #include<iostream>
 using namespace std;
 
+/*
+1 设计类 抽象类
+    1.1	class 类名{
+    1.2	public 公共权限
+    1.3	 设置 成员属性
+    1.4	 设置 成员函数
+    1.5	}
+    1.6	使用类  创建对象  实例化对象
+    1.7	类名 对象名
+    1.8	通过对象 来设置属性 调用成员函数
+    1.9	 类和对象 关系？？？
+        1.9.1	类是对对象的抽象
+        1.9.2	对象是对类的实例
+*/
+
+
 const double pi = 3.14;
 
 // 1.设计一个类，求圆的周长
@@ -41,9 +57,7 @@ void test01()
 
 
 int main(){
-
 	test01();
-
 	system("pause");
 	return EXIT_SUCCESS;
 }

@@ -3,6 +3,11 @@
 #include <string>
 using namespace std;
 
+/*
+8 建议将所有成员属性设置为私有
+    8.1	自己提供公共的对外接口来进行 set或者get方法访问
+*/
+
 class Person
 {
 

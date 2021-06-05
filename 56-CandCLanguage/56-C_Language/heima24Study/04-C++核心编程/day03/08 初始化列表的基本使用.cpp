@@ -2,17 +2,25 @@
 #include<iostream>
 using namespace std;
 
+/*
+8 初始化列表语法
+    8.1	在构造函数后面 +  : 属性(值、参数), 属性（值、参数）...
+*/
+
+
 class Person
 {
 public:
 
 	//有参构造初始化数据
-	/*Person( int a,int b,int c)
+	/*
+	Person( int a,int b,int c)
 	{
 		m_A = a;
 		m_B = b;
 		m_C = c;
-	}*/
+	}
+	*/
 
 
 	/*

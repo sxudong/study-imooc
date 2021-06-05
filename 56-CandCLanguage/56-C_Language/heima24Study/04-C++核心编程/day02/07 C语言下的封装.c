@@ -3,6 +3,7 @@
 #include<string.h>
 #include<stdlib.h>
 
+
 struct Person
 {
 	char mName[64];

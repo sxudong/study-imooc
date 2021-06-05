@@ -3,6 +3,14 @@
 using namespace std;
 
 /*
+6.2	参数3种传递方式
+    6.2.1 值传递
+    6.2.2 地址传递
+    6.2.3 引用传递
+*/
+
+
+/*
 * 值传递
 */
 void mySwap(int a, int b)

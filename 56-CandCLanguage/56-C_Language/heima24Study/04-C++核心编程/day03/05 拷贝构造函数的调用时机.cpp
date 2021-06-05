@@ -2,6 +2,14 @@
 #include<iostream>
 using namespace std;
 
+/*
+5 拷贝构造函数调用时机
+    1、用已经创建好的对象来初始化新的对象
+    2、以值传递的方式给函数参数传值
+    3、以值方式返回局部对象
+    4、release 默认下会做优化
+*/
+
 class Person
 {
 public:

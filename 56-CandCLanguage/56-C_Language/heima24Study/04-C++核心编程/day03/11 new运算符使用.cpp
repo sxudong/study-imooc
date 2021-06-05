@@ -2,11 +2,20 @@
 #include<iostream>
 using namespace std;
 
+/*
+11	new 运算符 和 delete运算符
+    11.1 Person * p =  new Person 会返回一个Person指针
+    11.2 默认调用构造函数，开辟空间，返回不是void* ，不需要强制转换
+    11.3 delete释放
+    11.4 new 对象 用void* 去接受，释放不了对象
+    11.5 new出来的是数组 ，如何释放？  delete [] …
+    11.6 new出来的是数组，肯定会调用默认构造
+*/
+
 
 /*
 * 4.3.6 动态对象创建
 */
-
 class Person
 {
 public:

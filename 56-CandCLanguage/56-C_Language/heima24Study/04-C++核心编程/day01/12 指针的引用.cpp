@@ -2,6 +2,12 @@
 #include<iostream>
 using namespace std;
 
+/*
+7 指针的引用
+    7.1	用一级指针引用 可以代替二级指针
+*/
+
+
 struct Person
 {
 	int m_Age;

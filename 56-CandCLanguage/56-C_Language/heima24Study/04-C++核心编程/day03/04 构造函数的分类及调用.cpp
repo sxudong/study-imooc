@@ -2,6 +2,26 @@
 #include<iostream>
 using namespace std;
 
+/*
+4 构造函数的分类及调用
+    4.1	按照参数分类
+        4.1.1 无参构造（默认构造）  有参构造
+    4.2	按照类型分类
+        4.2.1 普通构造函数  拷贝构造函数
+    4.3	无参构造写法 和调用
+        4.3.1 Person p1 ; 注意不能写 Person p1() ，因为编译器认为这个是函数声明
+    4.4	有参构造写法 和调用
+        4.4.1 Person p2(10)  或者 Person p2 = Person(10)
+        4.4.2 Person(10) 匿名对象 ，执行当前行后就会释放这个对象
+    4.5	拷贝构造函数
+        4.5.1 Person( const Person & p )
+        4.5.2 Perons p1( p2) 或者 Person p1 = Person(p2)
+        4.5.3 不能用拷贝构造函数初始化匿名对象
+            4.5.3.1	如果写成 Person (p1)  这种写法等价于 Person p1
+            4.5.3.2	写到右值可以做拷贝构造函数
+    4.6	Person P = 100 隐式类型转换 相当于调用 Person p = Person(100)
+*/
+
 
 /*
 * 分类
