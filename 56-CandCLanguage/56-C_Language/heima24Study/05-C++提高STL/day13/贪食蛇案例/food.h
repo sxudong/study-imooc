@@ -1,7 +1,7 @@
 #pragma  once
 #include <iostream>
 #include "wall.h"
-using namespace std;
+using namespace std; //使用空间
 
 /*
 * 食物

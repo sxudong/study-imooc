@@ -1,4 +1,4 @@
-#ifndef _WALL_HEAD
+#ifndef _WALL_HEAD //11.3.2 条件编译 防止头文件被重复包含引用。_WALL_HEAD为自定义的标识符
 #define _WALL_HEAD
 //#pragma  once
 
@@ -9,8 +9,8 @@ class Wall
 {
 public:
 	enum {
-		ROW = 26,
-		COL = 26
+		ROW = 26, //长26行
+		COL = 26  //宽26列
 	};
 
 	//初始化墙壁
