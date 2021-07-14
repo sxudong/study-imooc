@@ -1,0 +1,16 @@
+# $@: 表示规则中的目标
+# $<: 表示规则中的第一个条件
+# $^: 表示规则中的所有条件, 组成一个列表, 以空格隔开, 如果这个列表中有重复的项则消除重复项。
+
+src=$(wildcard ./*.c)                 # 找到当前目录下所有后缀为.c的文件,赋值给src
+#object=main.o fun1.o fun2.o sum.o
+object=$(patsubst %.c, %.o, $(src))   # 把src变量里所有后缀为.c的文件替换成.o
+target=main                           # 目标
+CC=gcc                                # 自带变量CC
+CPPFLAGS=-I./                         # 自带变量CPPFLAGS
+
+$(target):$(object)
+	$(CC) -o $@ $^
+
+%.o:%.c
+	$(CC) -o $@ -c $< $(CPPFLAGS) 

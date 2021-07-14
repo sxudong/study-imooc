@@ -1,0 +1,27 @@
+# $@: 表示规则中的目标
+# $<: 表示规则中的第一个条件
+# $^: 表示规则中的所有条件, 组成一个列表, 以空格隔开, 如果这个列表中有重复的项则消除重复项。
+
+
+target=main                        #目标
+object=main.o fun1.o fun2.o sum.o  #依赖
+CC=gcc                             #自带变量CC
+CPPFLAGS=-I./                      #自带变量CPPFLAGS
+
+$(target):$(object)
+	$(CC) -o $@ $^                 #自动变量: $@ $< $^
+
+%.o:%.c
+	$(CC) -o $@ -c $< $(CPPFLAGS) 
+
+#main.o:main.c
+#	gcc -o main.o -c main.c -I./
+#
+#fun1.o:fun1.c
+#	gcc -o fun1.o -c fun1.c
+#
+#fun2.o:fun2.c
+#	gcc -o fun2.o -c fun2.c
+#
+#sum.o:sum.c
+#	gcc -o sum.o -c sum.c

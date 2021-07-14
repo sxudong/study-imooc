@@ -1,0 +1,22 @@
+# $@: 表示规则中的目标
+# $<: 表示规则中的第一个条件
+# $^: 表示规则中的所有条件, 组成一个列表, 以空格隔开, 如果这个列表中有重复的项则消除重复项
+
+
+src=$(wildcard ./*.c)               # 找到当前目录下所有后缀为.c的文件,赋值给src
+object=$(patsubst %.c, %.o, $(src)) # 把src变量里所有后缀为.c的文件替换成.o
+target=main                         # 目标
+CC=gcc                              # 自带变量CC
+CPPFLAGS=-I./                       # 自带变量CPPFLAGS
+
+$(target):$(object)
+	$(CC) -o $@ $^
+
+%.o:%.c
+	$(CC) -g -c $< $(CPPFLAGS) 
+
+# 伪（假）目标声明。声明目标为伪目标之后, makefile将不会检查该目标是否存在或者该目标是否需要“更新”
+# 执行"make clean"清理".o"文件和"main"执行文件
+.PHONY:clean
+clean:
+	-rm -f $(target) $(object)     

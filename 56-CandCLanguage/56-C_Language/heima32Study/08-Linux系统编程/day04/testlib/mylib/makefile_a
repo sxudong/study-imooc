@@ -1,0 +1,14 @@
+#生成一个静态库文件
+src=$(wildcard *.c)
+objs=$(patsubst %.c,%.o,$(src))
+target=libtest1.a
+
+$(target):$(objs)
+	ar rcs $@ $^
+
+%.o:%.c
+	gcc -c $<
+
+.PHONY:clean
+clean:
+	-rm -f $(target) $(objs)
