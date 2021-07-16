@@ -1,0 +1,275 @@
+//**********************************************************************;
+// DO NOT CHANGE THE METHOD NAME "INI"
+// PUT ALL START-UP CODE THERE
+//**********************************************************************;
+	Name(DEVC, 0)
+
+	Method (INI,0)		// run all OEM tune-ups here
+	{
+
+//	Set ACPI compliant settings in MIST device
+	Store(1, POFF)		// Not generate SMI upon Power Off Request
+	Store(1, POMS)		// Not generate SMI upon Power Off Request
+// Set GPO selector 0x30
+	Store(6, SMBD)		// Select LM75 & O2 Micro
+// Turn VGA activity on
+//	Store(1, VGAS)
+
+	}
+
+//**********************************************************************;
+// PIIX4 GPO Register Offset 0x34
+	OperationRegion(PWRG,SystemIO,0xef00,0x40)
+	Field(PWRG, ByteAcc,NoLock,Preserve){	// Fields for GP output bits
+		Offset(0x34),
+		MICD,1,			// #34.0 on board Mic on/off
+		,2,
+		SMBD,3,			// SMBus devices access decode
+		,2,
+		SPKD,1,			// #35.0 on board Speaker on/off
+		}
+
+// MIST IO area Miscelanious control
+	OperationRegion(MIST,SystemIO,0xc00,0x15)
+	Field (MIST, ByteAcc, NoLock, Preserve)
+		{
+		MSBY,1, 	//Versa Bay IDE Master/Slave Flag
+		BYID,4, 	//Versa Bay II Pack detection
+		PI05,1, 	//Panel Type ID
+		Offset(0x1),
+		,1,		//1 bit reserved
+		YLED,2, 	//Battery Warning LED(Yellow)
+		GLED,2, 	//Suspend LED (Green)
+		Offset(0x2),
+		YDUR,2, 	//Yellow LED flash duration
+		YCYL,2, 	//Yellow LED flash cycle
+		GDUR,2, 	//Green LED flash duration
+		GCYL,2, 	//Green LED flash cycle
+		Offset(0x3),
+		RWMS,1, 	//RTC Wakeup mask
+		CWMS,1,		//COM1 Wakeup mask
+		PWMS,1, 	//pcmcia wakeup mask
+		MWMS,1, 	//Modem Wakeup mask
+		RWRQ,1, 	//RTC wakeup request
+		CWRQ,1,		//COM1 Wakeup request
+		PWRQ,1, 	//pcmcia wakeup request
+		MWRQ,1, 	//modem wakeup request
+		Offset(0x4),
+		DSMI,1, 	//DOCKING SMI/SCI
+		CSMI,1,		//COM1 SMI
+		MDRI,1,		//Modem Ring Indicator
+		BATW,1, 	//BATTERY WARNING SMI/SCI
+		ACPW,1, 	//AC POWER DETECT SMI/SCI
+		POFF,1, 	//POWER OFF REQUEST SMI/SCI (Set in ACPI mode)
+		PCRI,1,		//PCMCIA Ring Indicate
+		LBSI,1,		//Low Battery SMI
+		Offset(0x5),
+		PBAR,1, 	//PORT BAR SMI/SCI
+		LCDT,1, 	//LCD TYPE ID
+		BATS,1, 	//BATTERY WARMING PIN STATUS
+		PBID,2, 	//PORT BAR TYPE
+		MRST,1,		//Modem/COM1 Ring Status
+		ACPS,1, 	//AC POWER STATUS
+		PCST,1, 	//PCMCIA Ring Status
+		Offset(0x6),
+		DKMS,1, 	//DOCKING SMI MASK
+		,2,
+//		COMS,1,		//COM1 SMI MASK NEC
+//		MDMS,1, 	//Modem Ring SMI Mask
+		BWMS,1, 	//BATT WARNING MASK
+		ACMS,1, 	//AC POWER DETECT SMI MASK
+		POMS,1, 	//POWER OFF SMI MASK
+//		PCMS,1, 	//PCMCIA Ring SMI MASK
+//		LBMS,1, 	//Low Battery SMI MASK
+		Offset(0x7),
+		,1,
+		MCSE,1,		//Modem Enable Active 0
+		MCSA,2,		//Modem CS 0-3f8,1-2f8,2-3e8,3-2e8
+		,2,
+//		FANE,1,		//FAN enable
+		Offset(0x8),
+		,3,
+		IRQS,1, 	//IDE IRQ Select
+		IRFR,1, 	//IR LOCATION (FRONT/BACK)
+		BATC,1, 	//BATT CHARGE
+		PSMD,1, 	//POWER SWITCH MODE
+		POAK,1, 	//POWER OFF ACK.
+		Offset(0x9),
+		,3,
+		DSSE,1, 	//DOCKING STATION SOUND ENABLE
+		MOIC,1,		//MOUSE IRQ12 CONTROL
+		VGAS,1,		//VGA Suspend
+		,2,
+		Offset(0xa),
+		,5,
+		PMDT,1, 	//PM DATA TO CHARGER
+		PMCK,1, 	//PM CLOCK TO CHARGER
+		PMRA,1, 	//PM REQ/ACK TO CHARGER
+		Offset(0xb),
+
+		FANO,1,		//FAN Compulsive off
+
+		SMCN,1,		//Sound Mute Control
+		Offset(0xc),
+		FBDC,1,		//File Base Docking
+		LCBD,1,		//Large Capacity Battery Docking
+		Offset(0xe),
+		ZVEN,1, 	//ZV Enable
+		TOE,1,		//Telephony out  enable
+		TIE,1,		//telephony in enable
+		,4,
+		SPNP,1, 	//PNP Mode control for Sound
+		Offset(0xf),
+		NTSC,1, 	//NTSC/PAL switch
+		TV,1,		//CRT/TV switch
+		,3,
+		VBQB,1, 	//Versa Bay Q Buffers Enable
+		Offset(0x10),
+		,6,
+		PMMP,2,		// Power management mode port(LCD indicator)
+		Offset(0x11),
+		,6,
+		PMMD,2, 	//PM Mode
+		Offset(0x12),
+		B1D1,4, 	//1ST DIGIT OF 1st battery remaining charge
+		B1D2,4, 	//2nd DIGIT OF 1st battery remaining charge
+		Offset(0x13),
+		B2D1,4, 	//1ST DIGIT OF 2ND battery remaining charge
+		B2D2,4, 	//2nd DIGIT OF 2ND battery remaining charge
+		Offset(0x14),
+		B2ST,3, 	//2nd battery status
+		B2CH,1, 	//2nd battery charging status.
+		B1ST,3, 	//1st battery status
+		B1CH,1	 	//1st battery charging status.
+		}
+
+
+//**********************************************************************;
+// 	GPE HANDLER FOR MPU (GPI.1) EVENT
+//**********************************************************************;
+
+Scope(\_GPE){
+
+	Method(_L0A) { NoOp }	// Modem RI Event. Take care of it in _L09.
+
+	Method(_L09) {
+
+		//Determine cause of GPI by reading O2 Micro reg 08
+		//SDT0 = Interrupt status (GPIO 8 - 15)
+			 // External SMI (AC, Battery warning, dock smi,
+			 // Gen SMI (GPIO 13)
+			 // Versa bay (GPIO 12)
+			 // Sus / Res Sw (GPIO 15)
+		//SDT1 = Wake Status (GPIO 8 - 15)
+			 // Pcmcia Ring (GPIO 8)
+			 // Serial Ring (GPIO 9)
+			 // Modem Ring (GPIO 10)
+			 // RTC Alarm (GPIO 11)
+			 // Sus / Res Sw (GPIO 15) Yes both wake & interrupt
+			// GPIO 14 available
+
+// Set GPO selector 0x30
+		Store(6, SMBD)		// Select LM75 & O2 Micro
+// Read O2 Micro Interrupt/Wakeup Status register # 0x8
+		Store(RWRD(0x30, 0x08), Local0)
+		// get data 0 GPIO[8] - [15]  Interrupt
+		//get data 1 GPIO[8] - [15]  Wake
+
+Store("GPE.L09", Debug)
+Store(Local0, Debug)
+		// GPIO 13 is programmed as an interrupt
+
+// Test for MIST External SMI, higher priorities
+		// Interrupt GPIO 13
+		If (And(local0, 0x20))
+		{
+// Test Docking SMI
+		If (DSMI) {
+		Store (One, DSMI)
+		\_SB.PCI0.DOCK.DHDL()		// call docking event handler
+//		Store (One, DSMI)
+		}				// end \_SB.DSMI
+// AC Detect
+		If (ACPW)
+		{
+			Store (One, ACPW)		// clear smi
+
+// Thermal Policy change upon AC On/Off
+			If(ACPS)
+			{
+				\_TZ.THRM._SCP(1)// AC Off-Line - Passive Policy
+			}
+			Else
+			{
+				\_TZ.THRM._SCP(0)// AC On-Line - Active Policy
+			}
+		Notify (\_SB.AC0, 0x80)
+// Thermal monitoring
+		Notify(\_SB.BAT1, 0x80)
+// DEBUG END
+		} 				// end \_SB.ACPW
+// Battery Warning (either Bat low or Bat warning)
+		If (BATW) {
+		Store (One, BATW)
+		// Display Battery waring LED - blinking yellow
+		Store(1, YDUR)		// 125 msec Duration
+		Store(1, YCYL)		// 1 sec Cycle
+		Store(2, YLED)
+		// Determine which battery is issuing
+		// Low or Warning
+		If (Or(B1ST, 3)) {
+		Notify(\_SB.BAT0, 0x80)
+		}
+		If (Or(B2ST, 3)) {
+		Notify(\_SB.BAT1, 0x80)
+		}
+		}				// end \_SB.BATW
+// Test for RTC ALarm
+		If (LEqual(And(local0, 0x808), 0x808)) {
+								}
+		}
+		ELSE {
+// Test for Interrupt Sus/Resume
+			If (Lequal(And(local0, 0x8080),0x8080)) {
+// Test for Sleep button event
+			\_SB.SLPB.SBEV()		// Sleep Button event handler
+				   }
+		   Else {
+// Test for PCMCIA Ring
+			If (And(local0, 0x0100)) {
+			// PCMCIA Ring
+			Store(1, PWRQ)
+////			Notify(\_SB.PCI0.CBUS, 0x80)
+//			Notify(\_SB.PCI0.LAN, 0x02)            // WAkeUp
+			}
+			Else {
+// Test for Serial Ring
+			If (And(local0, 0x0200)) {
+			// Serial Ring
+			Store(1, CWRQ)
+//			Notify(\_SB.PCI0.SBRG.SIO.COMA, 0x80)
+//			Notify(\_SB.PCI0.SBRG.EIO.UAR1, 0x02)	// WakeUp
+			Notify(\_SB.PCI0.SBRG.UAR1, 0x02)	// WakeUp
+			}
+			Else {
+// Test for Modem Ring
+			If (And(local0, 0x0400)) {
+//			// Modem Ring
+			Store(1, MWRQ)
+//			Notify(\_SB.PCI0.MODM, 0x80)
+			}
+			Else {
+// Test for Versa Bay SMI
+//			If (And(local0, 0x1000)) {
+			// Versa Bay SMI
+//			}
+//			Else {
+//			} // End ELSE Versa Bay
+			    } // End ELSE Modem Ring
+		      } // End ELSE Serial Ring
+		} // End Else PCMCIA Ring
+	      } // End Else Sus/Res
+	   }
+	}	// end _L09
+}		// end _GPE
+//**********************************************************************;

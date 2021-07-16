@@ -1,0 +1,108 @@
+
+// This AMI Setup Script Processor (SSP) file contains setup items for
+// all supported peripheral devices.
+
+//*****************************************************************;
+// $Header: /BIOS/PORTING/HOGAN/sis5571/IO/IOC.SSP 1     96/10/29 8:46p Hogan $
+//
+// $Revision: 1 $
+//
+// $Date: 96/10/29 8:46p $
+//*****************************************************************;
+//*****************************************************************;
+// Revision History
+// ----------------
+// $Log: /BIOS/PORTING/HOGAN/sis5571/IO/IOC.SSP $
+// 
+// 1     96/10/29 8:46p Hogan
+// 
+// 2     1/12/96 5:38p Dickh
+// Added SourceSafe keywords to track revision history.
+//  
+//*****************************************************************;
+
+Description = "Peripheral setup items"
+
+LanguageVersion = 1
+
+BeginDevice (SiS5513IdeController)
+
+        Screen (SCR_PERIPHERAL)
+
+
+    Question (Q_SPREAD_SPECTRUM)
+        Text    = "Spread Spectrum"
+        Options = "Disabled":DEFAULT:POWERON,
+                  "Center 0.25%",
+                  "Down 0.5%"
+        Present = Yes
+    EndQuestion
+
+    Question (Q_FREQ_SELECT)
+        Text    = "Clock Control"
+        Options = "H/W",
+                  "S/W":DEFAULT:POWERON
+        Present = Yes
+    EndQuestion
+
+    Question (Q_CPU_FREQ)
+        Text    = "Host Clock Select"
+        Options = "66.7/100.05",
+                  "90.0/90.0",
+                  "95.0/63.33",
+                  "100.0/66.66",
+                  "100.0/75.0",
+                  "112.0/74.66",
+                  "124.0/82.66",
+                  "133.3/88.86",
+                  "66.7/66.7",
+                  "75.0/75.0",
+                  "83.3/83.3",
+                  "95.0/95.0",
+                  "100.0/100.0":DEFAULT:POWERON,
+                  "112.0/112.0",
+                  "124.0/124.0",
+                  "133.3/133.3"
+        Present = No
+    EndQuestion
+
+                Question (Q_SIS5513_IDE_CONTROLLER)
+                        Text = "Onboard PCI IDE"
+                        Options = "Disabled",
+                                  "Primary",
+                                  "Secondary",
+                                  "Both":DEFAULT:POWERON
+                EndQuestion
+
+                Question (Q_SIS5513_PREFETCH_PM)
+                        Text = "  IDE1 Master Prefetch"
+                        ShadeWhen (Q_SIS5513_IDE_CONTROLLER) = "Disabled", "Secondary"
+                        Options = "Disable",
+                                  "Enable":DEFAULT:POWERON
+                EndQuestion
+
+                Question (Q_SIS5513_PREFETCH_PS)
+                        Text = "  IDE1 Slave Prefetch"
+                        ShadeWhen (Q_SIS5513_IDE_CONTROLLER) = "Disabled", "Secondary" 
+                        Options = "Disable",
+                                  "Enable":DEFAULT:POWERON
+                EndQuestion
+
+                Question (Q_SIS5513_PREFETCH_SM)
+                        Text = "  IDE2 Master Prefetch"
+                        ShadeWhen (Q_SIS5513_IDE_CONTROLLER) = "Disabled", "Primary"
+                        Options = "Disable",
+                                  "Enable":DEFAULT:POWERON
+                EndQuestion
+
+                Question (Q_SIS5513_PREFETCH_SS)
+                        Text = "  IDE2 Slave Prefetch"
+                        ShadeWhen (Q_SIS5513_IDE_CONTROLLER) = "Disabled", "Primary" 
+                        Options = "Disable",
+                                  "Enable":DEFAULT:POWERON
+                EndQuestion
+
+        EndScreen
+
+EndDevice   // SiS5513IdeController
+

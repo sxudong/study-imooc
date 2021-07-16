@@ -1,0 +1,252 @@
+Subttl.		Include file for GREEN PC support SMI/IRQ code...GPMEXT.CSS...GENERIC
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;	RUN TIME CHIPSET SPECIFIC SMI/IRQ HANDLER CODE		;
+;	RUN TIME CHIPSET SPECIFIC SMI/IRQ HANDLER CODE		;
+;	RUN TIME CHIPSET SPECIFIC SMI/IRQ HANDLER CODE		;
+;	RUN TIME CHIPSET SPECIFIC SMI/IRQ HANDLER CODE		;
+;---------------------------------------------------------------;
+
+;;	public	new_memory_ecc_handler		;
+;;	public	new_usb_init_handler		;
+;;	public	new_usb_handler			;
+;;	public	new_special_00_handler		;
+;;	public	new_special_01_handler		;
+
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		     NEW_MEMORY_ECC_HANDLER			;
+;---------------------------------------------------------------;
+;	Input : (DS) PM BIOS data segment			;
+;		STACK PRESENT					;
+;	Output: NONE						;
+;	Register destroyed : ALL GENERAL PURPOSE		;
+; NOTE :							;
+;  *  This is one of the hook from smi/irq handler to handle	;
+;     individual smi/irq source. The control will come here if	;
+;     you detected memory ECC scrubbing smi/irq source in	;
+;     'GET_SMI_SOURCE' routine.					;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about	;
+;     SMI/IRQ based power management currently being used.	;
+;  *  You should code whatever you need to do to scrub the memory
+;     for ECC.							;
+;  *  Interrupt controller current mask is saved and interrupts	;
+;     are masked at this point.					;
+;  *  Implementation of this hook is mandatory if your board/	;
+;     chipset implementation support generation of smi/irq for	;
+;     memory ECC scrubbing.					;
+;     Default implementation is 'RET'				;
+;---------------------------------------------------------------;
+
+new_memory_ecc_handler	proc	near
+
+	ret
+
+new_memory_ecc_handler	endp
+
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		      NEW_USB_INIT_HANDLER			;
+;---------------------------------------------------------------;
+;	Input : (DS) PM BIOS data segment			;
+;		STACK PRESENT					;
+;	Output: NONE						;
+;	Register destroyed : ALL GENERAL PURPOSE		;
+; NOTE :							;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected
+;     USB initialization smi/irq source in 'GET_SMI_SOURCE' routine.
+;  *  It is assumed that USB initialization will be done by	;
+;     generating software SMI.					;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about	;
+;     SMI/IRQ based power management currently being used.	;
+;  *  You should code whatever action you need to take for USB	;
+;     initialization smi/irq.					;
+;  *  Interrupt controller current mask is saved and interrupts	;
+;     are masked at this point.					;
+;  *  Implementation of this hook is mandatory if your board/	;
+;     chipset implementation support generation of smi/irq for	;
+;     USB initialization.					;
+;     Default implementation is 'RET'				;
+;---------------------------------------------------------------;
+; SPECIAL NOTE :
+;  * This hook may get control with or without 'init_chipset_data'
+;    & 'init_pm_registers' hooks being called before. So be	;
+;    careful in implementing this hook while enabling SMI for USB
+;    Also be careful in implementing 'init_chipset_data' and	;
+;    'init_pm_registers' hooks as USB may already be enabled.	;
+;---------------------------------------------------------------;
+        extern  UsbApiHandler(GpmDummyRet):near
+        public  GpmDummyRet
+new_usb_init_handler	proc	near
+        mov     ax, word ptr ds:[cpu_gen_purpose_reg_entry+reg_esi+2]
+        cmp     ax, 0001h
+        jne     @f                      ;Br if not UsbBiosInitialize function
+        mov     ebx, dword ptr ds:[cpu_gen_purpose_reg_entry+reg_ebx]
+        shr     ebx, 4                  ;Convert abs addr into seg addr
+        mov     word ptr ds:[usb_segment],bx
+@@:
+        mov     ax,word ptr ds:[usb_segment]
+        push    ds
+        push    es
+        mov     ds,ax
+        mov     es,ax
+        call    UsbApiHandler
+        pop     es
+        pop     ds
+
+GpmDummyRet::
+	ret
+
+new_usb_init_handler	endp
+
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		        NEW_USB_HANDLER				;
+;---------------------------------------------------------------;
+;	Input : (DS) PM BIOS data segment			;
+;		STACK PRESENT					;
+;	Output: NONE						;
+;	Register destroyed : ALL GENERAL PURPOSE		;
+; NOTE :							;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected
+;     USB smi/irq source in 'GET_SMI_SOURCE' routine.		;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about	;
+;     SMI/IRQ based power management currently being used.	;
+;  *  You should code whatever action you need to take for USB	;
+;     smi/irq.							;
+;  *  Interrupt controller current mask is saved and interrupts	;
+;     are masked at this point.					;
+;  *  Implementation of this hook is mandatory if your board/	;
+;     chipset implementation support generation of smi/irq for	;
+;     USB.							;
+;     Default implementation is 'RET'				;
+;---------------------------------------------------------------;
+
+new_usb_handler	proc	near
+
+IF MKF_USB_SUPPORT
+        extern  UsbHcHandler(GpmDummyRet):near
+        mov     ax,word ptr ds:[usb_segment]
+        push    ds
+        push    es
+        mov     ds,ax
+        mov     es,ax
+        call    UsbHcHandler
+        pop     es
+        pop     ds
+endif
+
+;; In suspend_mode
+;	extrn	suspend_usb_interrupt:near
+        cmp     byte ptr ds:[pmu_state],01h
+        jz	suspend_usb_interrupt
+
+	ret
+
+new_usb_handler	endp
+
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		     NEW_SPECIAL_00_HANDLER			;
+;---------------------------------------------------------------;
+;	Input : (DS) PM BIOS data segment			;
+;		STACK PRESENT					;
+;	Output: NONE						;
+;	Register destroyed : ALL GENERAL PURPOSE		;
+; NOTE :							;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected;
+;     special 00 (unused now, can be used for anything in future)
+;     smi/irq source in 'GET_SMI_SOURCE' routine.		;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about	;
+;     SMI/IRQ based power management currently being used.	;
+;  *  You should code whatever you need to do based on the usage
+;     of this smi/irq source.					;
+;  *  Interrupt controller current mask is saved and interrupts	;
+;     are masked at this point.					;
+;  *  Implementation of this hook is mandatory if your using	;
+;     this smi/irq source.					;
+;     Default implementation is 'RET'				;
+;---------------------------------------------------------------;
+
+new_special_00_handler	proc	near
+
+	ret
+
+new_special_00_handler	endp
+
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		     NEW_SPECIAL_01_HANDLER			;
+;---------------------------------------------------------------;
+;	Input : (DS) PM BIOS data segment			;
+;		STACK PRESENT					;
+;	Output: NONE						;
+;	Register destroyed : ALL GENERAL PURPOSE		;
+; NOTE :							;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected;
+;     special 01 (unused now, can be used for anything in future)
+;     smi/irq source in 'GET_SMI_SOURCE' routine.		;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about	;
+;     SMI/IRQ based power management currently being used.	;
+;  *  You should code whatever you need to do based on the usage
+;     of this smi/irq source.					;
+;  *  Interrupt controller current mask is saved and interrupts	;
+;     are masked at this point.					;
+;  *  Implementation of this hook is mandatory if your using	;
+;     this smi/irq source.					;
+;     Default implementation is 'RET'				;
+;---------------------------------------------------------------;
+
+new_special_01_handler	proc	near
+
+	ret
+
+new_special_01_handler	endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+
+
+

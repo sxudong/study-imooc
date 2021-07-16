@@ -1,0 +1,338 @@
+
+//;*****************************************************************;
+//;*****************************************************************;
+//;**								**;
+//;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+//;**								**;
+//;**			All Rights Reserved.			**;
+//;**								**;
+//;**		6145-F, Northbelt Parkway, Norcross,		**;
+//;**								**;
+//;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+//;**								**;
+//;*****************************************************************;
+//;*****************************************************************;
+
+//*****************************************************************;
+
+// This AMI Setup Script Processor (SSP) file contains setup items that
+// are related to power management.  This file is considered a core BIOS file
+// and should not be modified.
+
+Screen (SCR_POWER)
+
+	Question (Q_ACPI_OS)
+		Text = "ACPI Aware O/S"
+		Options = "No",
+			  "Yes":DEFAULT:POWERON 
+		Present = Yes
+	EndQuestion
+
+	Question (Q_POWER_MANAGEMENT)
+		Text = "Power Management/APM"
+		Options = "Disabled":POWERON,
+			  "Enabled":DEFAULT
+                Present = Yes
+	EndQuestion
+
+	Question (Q_GREEN_PC_MONITOR_STATE)
+		Text = "Green PC Monitor Power State"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Standby":DEFAULT:POWERON,
+			  "Suspend",
+			  "Off"
+	EndQuestion
+
+	Question (Q_VIDEO_POWER_DOWN)
+		Text = "Video Power Down Mode"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Disabled":POWERON,
+			  "Standby",
+			  "Suspend":DEFAULT
+	EndQuestion
+
+	Question (Q_IDE_POWER_DOWN)
+		Text = "Hard Disk Power Down Mode"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Disabled":POWERON,
+			  "Standby":DEFAULT,
+			  "Suspend"
+	EndQuestion
+
+	Question (Q_IDE_TIME_OUT)
+		Text = "Hard Disk Time Out (Minute)"
+		Options = "Disabled":DEFAULT:POWERON,
+			  "1",   "2",  "3",  "4",  "5",
+			  "6",   "7",  "8",  "9", "10",
+			  "11", "12", "13", "14", "15"
+		Present = No
+	EndQuestion
+
+	Question (Q_STANDBY_TIME_OUT)
+		Text = "Standby Time Out (Minute)"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Disabled":DEFAULT:POWERON,
+			  "1",   "2",  "3",  "4",  "5", "10",
+			  "20",  "30", "40", "50", "60"
+	EndQuestion
+
+	Question (Q_SUSPEND_TIME_OUT)
+		Text = "Suspend Time Out (Minute)"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Disabled":DEFAULT:POWERON,
+			  "1",   "2",  "3",  "4",  "5", "10",
+			  "20",  "30", "40", "50", "60"
+	EndQuestion
+
+	Question (Q_SLOW_CLOCK)
+		Text = "Slow Clock Ratio"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = RESERVED
+			  "12.5%",
+			  "25%",
+			  "32.5%":DEFAULT:POWERON,
+			  "50%",
+			  "62.5%",
+			  "75%",
+			  "87.5%"
+	EndQuestion
+
+        Question (Q_MODEM_IRQ)
+                Text = "Modem Use IRQ"
+                ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+                Options = "N/A":DEFAULT:POWERON,
+                          Reserved,
+                          Reserved,
+                          "3",
+                          "4",
+                          "5",
+                          Reserved,
+                          "7",
+                          Reserved,
+                          "9",
+                          "10",
+                          "11"
+	EndQuestion
+
+	Question (Q_VIDEO_ACCESS)
+		Text = "Display Activity"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Ignore":DEFAULT:POWERON,
+			  "Monitor",
+			  "WakeUp",
+			  "Both"
+		Present	= Yes
+	EndQuestion
+
+	Question (Q_IRQ3_PM_MONITOR)
+		Text = "IRQ3"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Ignore",
+			  "Monitor",
+			  "WakeUp",
+			  "Both":POWERON:DEFAULT
+	EndQuestion
+
+	Question (Q_IRQ4_PM_MONITOR)
+		Text = "IRQ4"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Ignore",
+			  "Monitor",
+			  "WakeUp",
+			  "Both":POWERON:DEFAULT
+	EndQuestion
+
+	Question (Q_IRQ5_PM_MONITOR)
+		Text = "IRQ5"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Ignore",
+			  "Monitor",
+			  "WakeUp",
+			  "Both":POWERON:DEFAULT
+	EndQuestion
+
+	Question (Q_IRQ7_PM_MONITOR)
+		Text = "IRQ7"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Ignore",
+			  "Monitor",
+			  "WakeUp",
+			  "Both":POWERON:DEFAULT
+	EndQuestion
+
+//	Question (Q_IRQ8_PM_MONITOR)
+//		Text = "IRQ8"
+//		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+//		Options = "Ignore",
+//			  "Monitor",
+//			  "WakeUp",
+//			  "Both":POWERON:DEFAULT
+//		Present = No
+//	EndQuestion
+
+	Question (Q_IRQ9_PM_MONITOR)
+		Text = "IRQ9"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Ignore",
+			  "Monitor",
+			  "WakeUp",
+			  "Both":POWERON:DEFAULT
+	EndQuestion
+
+	Question (Q_IRQ10_PM_MONITOR)
+		Text = "IRQ10"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Ignore",
+			  "Monitor",
+			  "WakeUp",
+			  "Both":POWERON:DEFAULT
+	EndQuestion
+
+	Question (Q_IRQ11_PM_MONITOR)
+		Text = "IRQ11"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Ignore",
+			  "Monitor",
+			  "WakeUp",
+			  "Both":POWERON:DEFAULT
+	EndQuestion
+
+//	Question (Q_IRQ12_PM_MONITOR)
+//		Text = "IRQ12"
+//		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+//		Options = "Ignore",
+//			  "Monitor",
+//			  "WakeUp",
+//			  "Both":POWERON:DEFAULT
+//		Present = No
+//	EndQuestion
+
+	Question (Q_IRQ13_PM_MONITOR)
+		Text = "IRQ13"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Ignore",
+			  "Monitor",
+			  "WakeUp",
+			  "Both":POWERON:DEFAULT
+	EndQuestion
+
+	Question (Q_IRQ14_PM_MONITOR)
+		Text = "IRQ14"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Ignore":POWERON:DEFAULT,
+			  "Monitor",
+			  "WakeUp",
+			  "Both"
+	EndQuestion
+
+	Question (Q_IRQ15_PM_MONITOR)
+		Text = "IRQ15"
+		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Ignore":POWERON:DEFAULT,
+			  "Monitor",
+			  "WakeUp",
+			  "Both"
+	EndQuestion
+
+	Question (Q_POWER_BUTTON)
+//		Text = "Power Button Quick Exit"
+//		Options = "Disabled",
+//			  "Enabled":DEFAULT:POWERON
+		Text = "Power Button Function"
+                Options = "On/Off":DEFAULT:POWERON
+			  "Suspend" 
+                Present = Yes
+	EndQuestion
+
+//	Question (Q_KEYPASS_SET)
+//                Text = "Set keyboard password "
+//                Options = "Disabled",
+//                          "Enabled":DEFAULT:POWERON
+//                Present = Yes
+//        EndQuestion
+
+	Question (Q_HOTKEY)
+                Text = "Hot Key Lead To Power On"
+		ShadeWhen (Q_KEYBOARD_PASSWORD) = "Enabled"
+                Options = "Disabled":DEFAULT:POWERON,
+                          "Enabled"
+                Present = Yes
+        EndQuestion
+
+	Question (Q_KEYBOARD_PASSWORD)
+                Text = "Keyboard Passwodr Lead To Power On"
+//		ShadeWhen (Q_HOTKEY) = "Enabled"
+                Options = "Disabled":DEFAULT:POWERON,
+                          "Enabled"
+                Present = Yes
+        EndQuestion
+
+	Question (Q_RING_ON)
+                Text = "Ring On Lead To Power On"
+                Options = "Disabled":DEFAULT:POWERON,
+			  Reserved,
+                          "High",
+                          "Low"
+                Present = Yes
+        EndQuestion
+
+	Question (Q_RESUME_BY_RTC)
+		Text = "RTC Alarm Lead To Power On"
+//		ShadeWhen (Q_POWER_MANAGEMENT) = "Disabled"
+		Options = "Disabled":DEFAULT:POWERON,
+			  "Enabled"
+		Present = Yes
+	EndQuestion
+
+	Question (Q_RESUME_BY_RTC_DATE)
+		Text = "  RTC Alarm Date"
+		ExternalFunction= rtc_resmue_date_ef
+		Optionbits	= 5
+		PowerOn 	= 15
+		Default 	= 15
+		Present 	= Yes
+	EndQuestion
+
+	Question (Q_RESUME_BY_RTC_HOUR)
+		Text = "  RTC Alarm Hour"
+		ExternalFunction= rtc_resmue_hour_ef
+		Optionbits	= 5
+		PowerOn 	= 12
+		Default 	= 12
+		Present 	= Yes
+	EndQuestion
+
+	Question (Q_RESUME_BY_RTC_MINUTE)
+		Text = "  RTC Alarm Minute"
+		ExternalFunction= rtc_resmue_minute_ef
+		Optionbits	= 6
+		PowerOn 	= 30
+		Default 	= 30
+		Present 	= Yes
+	EndQuestion
+
+	Question (Q_RESUME_BY_RTC_SECOND)
+		Text = "  RTC Alarm Second"
+		ExternalFunction= rtc_resmue_second_ef
+		Optionbits	= 6
+		PowerOn 	= 30
+		Default 	= 30
+		Present 	= Yes
+	EndQuestion
+
+EndScreen
+
+
+//;*****************************************************************;
+//;*****************************************************************;
+//;**								**;
+//;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+//;**								**;
+//;**			All Rights Reserved.			**;
+//;**								**;
+//;**		6145-F, Northbelt Parkway, Norcross,		**;
+//;**								**;
+//;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+//;**								**;
+//;*****************************************************************;
+//;*****************************************************************;

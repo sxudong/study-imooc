@@ -1,0 +1,333 @@
+//**********************************************************************;
+//     *****************************************************************;
+//     *****************************************************************;
+//     **                                                             **;
+//     **      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+//     **                                                             **;
+//     **                     All Rights Reserved.                    **;
+//     **                                                             **;
+//     **           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+//     **                                                             **;
+//     **                     Phone (770)-246-8600                    **;
+//     **                                                             **;
+//     *****************************************************************;
+//     *****************************************************************;
+//**************************************************************************/
+//* This file contains the OEM Battery and AC adapter devices.		   */
+//**************************************************************************/
+
+Device(BAT0) {		//Battery Pack 0 Device
+
+	Name(_HID,EISAID("PNP0C0A"))
+	Name(_UID,0)
+	Name(PAK0, Package()	//Batt Pack 0 Info
+			{
+			0x00000000,     //DWORD Power Unit (mAh)
+			0x00000A8C,     //DWORD Design Capacity (2700mAh)
+			0x00000A8C,     //DWORD Last Full Charge Capacity
+			0x00000001,	//DWORD Battery Technology (Rechg)
+//			0x00000000,     //DWORD Battery Technology (Primary NonRechg)
+//			0x0001A5E0,     //DWORD Design Voltage (10.8V)
+			0x00002A30,     //DWORD Design Voltage (10.8V)
+			0x0000021C,     //DWORD Design Capacity of Warning Full/5
+			0x0000010E,     //DWORD Design Capacity of Low (81mAh) Warn/2
+			0x00000010,     //DWORD Battery Capacity Granularity 1 (Warn-Low)/100
+			0x00000008,     //DWORD Battery Capacity Granularity 2 (Full-Warn)/5
+			"Model Number",	//Model Number
+			"SN#001",	//Serial Number
+			"LiON",		//Battery Type
+//			"6 Cell Li-ION Battery w/Gauge",   //Battery Type
+			"Sanyo-1",	//OEM Information
+			}
+	 )	//end of PAK0
+
+
+	Method(_BIF) {	//Battery Identification
+	Return(PAK0)
+	}	//End of _BIF
+
+	Name(BFB0, Package()	//Buffer for _BST for Batt Pack 1
+			{
+			0x00000001,	//DWORD Battery State
+			0x00000000,	//DWORD Battery Present Rate
+			0x00000a80,	//DWORD Battery Remaining Capacity
+			0x0001a500,	//DWORD Battery Present Voltage
+			}
+	)	//End of BFB2
+
+	Method(_BST) {	//Return Present Battery Status
+
+	Store(0x1, Index(BFB0, 0))
+
+	//Battery State	(BAST)
+	//Determine if battery is -
+	//	bit 0 = 1 = discharging
+	//	bit 1 = 1 = charging
+	//	bit 2 = 1 = in critical energy state
+	If (B1CH)
+	{
+	Store(2, Index(BFB0, 0))	//charging
+	}
+	Else
+	{
+	If(Lequal(B1ST, 1)) {		// set bit 2 - Battery's empty
+	Or(DeRefOf(Index(BFB0, 0)), 0x4, Index(BFB0, 0))
+	}
+
+	If(ACPS) {}
+	Else {	Store(0, Index(BFB0, 0))	//charging
+	}
+
+	}
+
+	//Battery Present Rate (BAPR) current
+
+//	If(ACPS){ Store(0xF001, Index(BFB0, 0x1))} // Battery On line
+//	Else 	{ Store(0x1001, Index(BFB0, 0x1))} // Battery Off line
+
+	If(ACPS){				// If AC off-line ?
+		Subtract(0, DeRefOf(Index(PAK0, 2)), Index(BFB0, 0x1))
+//	Store(0xDAAA, Index(BFB0, 0x1)) // Battery discharging
+	}
+	Else {					// AC on-Line
+	If(B1CH){
+		Store(DeRefOf(Index(PAK0, 2)), Index(BFB0, 0x1))
+//		Store(0x0100, Index(BFB0, 0x1))
+						} // Battery charging
+	Else 	{ Store(0x0000, Index(BFB0, 0x1))} // Battery Off line
+	}
+
+	//Battery Remaining Capacity (BARC)
+	Store(B1D2, Local0)
+	Store(B1D1, Local1)
+	Multiply(Local0, 0x0A, Local0)
+	Add(Local0, Local1, Local0)
+
+	Divide (Multiply(DeRefOf(Index(PAK0, 1)), Local0), 100, Local3, Index(BFB0, 2))
+
+	//Battery Present Voltage (BAPV)
+
+//	Store(DeRefOf(Index(PAK0, 4)), Index(BFB0, 3))
+	Subtract(DeRefOf(Index(PAK0, 4)), 0x10, Index(BFB0, 3))
+
+	Store(BFB0, Debug)
+
+	Return(BFB0)
+	}	//end of _BST
+
+//	  Method(_BTP,1) {	  //Set Trip Point
+//
+//	  }	//end of _BTP
+
+	Name(_PCL, Package(){\_SB})	//Returns list of pointer to devices
+					//power by this source
+
+	Method(_STA) {
+		If (B1ST) {
+			Return(0x01F)	//Batt present and working
+		}
+		Else {
+			Return(1)
+		}
+
+	}     //end of _STA
+
+}  //End of Bat0
+
+// Following device is actually used to display current Thermal conditions
+// in a 2nd Battery window you should see following
+// Current active cooling method - Passive(throttling) or Active(FAN)
+// 0. Current temperature - 2nd Battery capacity field (in Celcius degree)
+// 1. FAN ON - Battery charging
+// 2. Throttle ON - battery critical
+
+// Thermal monitoring(2nd Battery) only appears if AC Offline.
+
+Device(BAT1) {		//Battery Pack 1 Device
+	Name(_HID,EISAID("PNP0C0A"))
+	Name(_UID,1)
+	Name(PAK1, Package()
+			{
+/*
+			0x00000001,	//DWORD Power Unit (mAh)
+			0x00000578,	//DWORD Design Capacity	(2600mAh)
+			0x00000578,	//DWORD Last Full Charge Capacity
+			0x00000001,	//DWORD Battery Technology (Rechg)
+//			0x00023280,	//DWORD Design Voltage (14.4V)
+			0x00003840,	//DWORD Design Voltage (14.4V)
+			0x00000190,	//DWORD Design Capacity of Warning (1300mAh)
+			0x000000C8,	//DWORD Design Capacity of Low (650mAh)
+			0x00000010,	//DWORD Battery Capacity Granularity 1 ()
+			0x00000008,	//DWORD Battery Capacity Granularity 2 ()
+			"Model Number",	//Model Number
+			"SN#002",	//Serial Number
+			"LiON",		//Battery Type
+//			"8 Cell Li-ION Battery w/Gauge",//Battery Type
+			"Sanyo-2"	//OEM Information
+*/
+			0x00000001,	//DWORD Power Unit (mAh)
+			0x00000064,	//DWORD Design Capacity	(up to 200.0 C)
+			0x00000064,	//DWORD Last Full Charge Capacity
+			0x00000001,	//DWORD Battery Technology (Rechg)
+			0x00003840,	//DWORD Design Voltage (14.4V)
+			0x00000010,	//DWORD Design Capacity of Warning (1300mAh)
+			0x00000005,	//DWORD Design Capacity of Low (650mAh)
+			0x00000001,	//DWORD Battery Capacity Granularity 1 ()
+			0x00000001,	//DWORD Battery Capacity Granularity 2 ()
+			"PIIX4 SMBus host",	//Conenctin type
+			"SN#002",			//Serial Number
+			"LM75",			//Tsensor type
+			"DEBUG"			//OEM Information
+
+			}
+	)	//End of PAK1
+
+
+	Method(_BIF) {	//Battery Identification
+
+	Return(PAK1)
+	}	//end of _BIF
+
+	Name(BFB1, Package()	//Buffer for _BST for Batt Pack 1
+			{
+			0x00000001,	//DWORD Battery State
+			0x00000a00,	//DWORD Battery Present Rate
+			0x00000570,	//DWORD Battery Remaining Capacity
+			0x00023280,	//DWORD Battery Present Voltage
+			}
+	)	//End of BFB1
+
+
+	Method(_BST) {	//Return Present Battery Status
+/*
+	//Battery State	(BAST)
+	//Determine if battery is -
+	//	bit 0 = 1 = discharging
+	//	bit 1 = 1 = charging
+	//	bit 2 = 1 = in critical energy state
+	Store(0x1, Index(BFB1, 0))
+
+	If (B2CH)
+	{
+	Store(2, Index(BFB1, 0))	//charging
+		}
+	Else
+	{
+	If(Lequal(B2ST, 1)){	// set bit 2 - Battery's empty
+	Or(DeRefOf(Index(BFB1, 0)), 0x4, Index(BFB1, 0))
+		}
+	}
+
+	//Battery Present Rate (BAPR) current
+
+	If(ACPS){ Store(Ones, Index(BFB1, 0x1))}   // Battery On line
+	Else 	{ Store(0, Index(BFB1, 0x1))}	   // Battery Off line
+
+
+	//Battery Remaining Capacity (BARC)
+	Store(B2D2, Local0)
+	Store(B2D1, Local1)
+	Multiply(Local0, 0x0A, Local0)
+	Add(Local0, Local1, Local0)
+	Multiply(DeRefOf(Index(PAK1, 1)), Local0, Local2)
+	Divide (Local2, 100, Local3, Index(BFB1, 2))
+
+	//Battery Present Voltage (BAPV)
+
+	Store(DeRefOf(Index (PAK1, 0x4)), Index(BFB1, 0x3))
+*/
+	//Battery State	(BAST)
+	//Determine if battery is -
+	//	bit 0 = 1 = discharging
+	//	bit 1 = 1 = charging
+	//	bit 2 = 1 = in critical energy state
+
+	Store(0x1, Index(BFB1, 0))
+        And(\_TZ.RTMP(), 0xff, Local7)
+
+	If(\GFAN._STA)                    // Charging/ FAN ON
+	{
+		Store(0x2, Index(BFB1, 0))
+	}
+	If(LGreater(Local7, \_TZ.TMAX))// Trottle ON
+	{
+		Or(DeRefOf(Index(BFB1, 0)), 0x4, Index(BFB1, 0))
+	}
+
+	//Battery Present Rate (BAPR) current (unknown)
+	If(ACPS){ Store(Ones, Index(BFB1, 0x1))}   // Battery On line
+	Else 	{ Store(0, Index(BFB1, 0x1))}	   // Battery Off line
+
+
+	//Battery Remaining Capacity (Current temperature)
+	Store(Local7, Index(BFB1, 2))
+
+	//Battery Present Voltage - 1 Volt
+
+	Subtract(DeRefOf(Index(PAK1, 0x4)), 100, Index(BFB1, 0x3))
+
+	Store(BFB1, Debug)
+
+	Return(BFB1)
+
+	}	//end of _BST
+
+	Method(_BTP,1)         	//Set Trip Point
+	{
+
+	Store(Arg0, Debug)
+//		And(\_TZ.RTMP(), 0xff, Local0)
+//		If(And(LGreater(Arg0,Local0),LLessEqual(Arg0, \_TZ.TCRT)))
+//		{
+//			\_TZ.STOS(Arg0)			// Set Thigh
+//			\_TZ.STHY(Subtract(Local0, 5))	// Set TLow TMIN-5.0C
+//		}
+	}				//end of _BTP
+
+	Name(_PCL, Package(){\_TZ.FANC})//Returns list of pointer to devices
+					//power by this source
+
+	Method(_STA) {
+//		If (B2ST) {
+// Debug Mode.
+		If (B2EN) {
+			Return(0x01f)	//Batt present and working
+		}
+		Else {
+			Return(1)
+//			Return(0)
+		}
+	}     //end of _STA
+
+}  //End of Bat1
+
+// Debug mode only. Thermal monitoring.
+Name(B2EN, 0)
+
+Device(AC0) {
+	Name(_HID, "ACPI0003")
+
+//	Name(_PCL, Package(){ BAT0,BAT1 })	//Returns list of pointer to devices
+	Name(_PCL, Package(){ BAT0 })	//Returns list of pointer to devices
+
+//	Name(_PCL, Package(){\_SB.BAT0})	//Returns list of pointer to devices
+						//powered by this source
+
+	Method(_PSR,0) {		//Returns the current power source device
+	//0x00 = Offline.
+	//0x01 = Online
+	If(ACPS) {
+// Enable 2nd Battery-Thermal monitoring
+Store(1, B2EN)
+
+	Return(0)	//0x00 = Offline
+	}
+	Else {
+// Disable Thermal monitoring
+Store(0, B2EN)
+
+	Return(1)	//0x01 = Online
+	}
+	}  //end of _PSR
+
+	} //End of AC0

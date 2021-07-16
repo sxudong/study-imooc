@@ -1,0 +1,146 @@
+BeginDevice (IT8680FloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8680_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+	EndScreen
+EndDevice   // IT8680FloppyController
+BeginDevice (IT8680SerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8680_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice   // IT8680SerialPortA
+BeginDevice (IT8680SerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8680_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_IT8680_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+			ShadeWhen (Q_IT8680_COMB_PORT) = "Disabled"
+			Optionset = "Normal", "IrDA", "ASKIR", "MIR 0.5 Mbps", "MIR 1.1 Mbps", "FIR"
+			Optionset = "N/A"
+			Optionset = "Normal", "IrDA", "ASKIR", "MIR 0.5 Mbps", "MIR 1.1 Mbps", "FIR"
+		EndQuestion
+		Question (Q_IT8680_COMB_DUPLEX)
+			Text = "  Duplex Mode"
+			ShadeWhen (Q_IT8680_COMB_PORT) = "Disabled"
+			OptionSet = "Full Duplex", "Half Duplex"
+			OptionSet = "N/A"
+			OptionSet = "Full Duplex", "Half Duplex"
+		EndQuestion
+	EndScreen
+EndDevice   // IT8680SerialPortB
+BeginDevice (IT8680ParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8680_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_IT8680_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = IT8680_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice	// IT8680ParallelPort
+BeginDevice (IT8680ParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8680_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+                        ExternalFunction = IT8680_Lpt_Addr_Xfn
+                        OptionBits = 3
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_IT8680_LPT_MODE)
+			Text = "  Parallel Port Mode"
+                        ExternalFunction = IT8680_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 2
+                        PowerOn = 2
+		EndQuestion
+		Question (Q_IT8680_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = IT8680_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+		Question (Q_IT8680_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+                        ExternalFunction = IT8680_Lpt_Dma_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+		EndQuestion
+	EndScreen
+EndDevice	// IT8680ParallelPortExt	   
+String(STR_IT8680_NA)
+	Text ="N/A"
+EndString
+String(STR_IT8680_AUTO)
+        Text ="Auto"
+EndString
+String(STR_IT8680_DIS)
+        Text ="Disabled"
+EndString
+String(STR_IT8680_378)
+        Text ="378"
+EndString
+String(STR_IT8680_278)
+        Text ="278"
+EndString
+String(STR_IT8680_3BC)
+        Text ="3BC"
+EndString
+String(STR_IT8680_NORMAL)
+        Text ="Normal"
+EndString
+String (STR_IT8680_EPP)
+	Text = "EPP"
+EndString
+String(STR_IT8680_ECP)
+        Text ="ECP"
+EndString
+String(STR_IT8680_IRQ5)
+        Text ="5"
+EndString
+String(STR_IT8680_IRQ7)
+        Text ="7"
+EndString
+String(STR_IT8680_DMA0)
+        Text ="0"
+EndString
+String(STR_IT8680_DMA1)
+        Text ="1"
+EndString
+String(STR_IT8680_DMA2)
+        Text ="2"
+EndString
+String(STR_IT8680_DMA3)
+        Text ="3"
+EndString

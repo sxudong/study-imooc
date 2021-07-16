@@ -1,0 +1,78 @@
+;;;;	page	,132
+;;;;	title	POST INTERFACE ROUTINES FUNCTION NUMBER EQUATES
+;-----------------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------------------------------;
+;			00h-7Fh..GENERIC FUNCTIONS			;
+;-----------------------------------------------------------------------;
+generic_first_function		equ	00h	; 00h..first generic function#
+
+write_tty_func			equ	00h
+read_cursor_posn_func		equ	01h
+set_cursor_posn_func		equ	02h
+display_ax_func			equ	03h
+display_message_func		equ	04h
+display_message_set_func	equ	05h
+display_cpu_name_prating_func	equ	06h
+check_display_cpu_clock_func	equ	07h
+binary_2_decimal_func		equ	08h
+special_config_display_func	equ	09h
+get_l2_cache_info_func		equ	0Ah
+getparam1_func			equ	0Bh
+get_extd_param_func		equ	0Ch
+display_cpu_clock_func		equ	0Dh
+get_processor_info_func		equ	0Eh
+check_cmos_data_func		equ	0Fh
+display_al_hex_func		equ	10h
+						; (CORE0228+)>
+display_0d0a_func		equ	11h
+cmos_data_in_x_func		equ     12h
+display_al_func			equ     13h
+display_ax_hex_func		equ	14h
+get_dc_oem_table_func		equ	15h
+						; <(CORE0228+)
+generic_last_function		equ	7Fh	; 7Fh..last generic function#
+;-----------------------------------------------------------------------;
+;			80h-8Fh..SMBIOS FUNCTIONS			;
+;-----------------------------------------------------------------------;
+smbios_first_function		equ	80h	; 80h..first smbios function#
+
+smb_structures_info_func	equ	80h
+bios_details_func		equ	81h
+processor_info_func		equ	82h
+cpu_clock_details_func		equ	83h
+memory_module_info_func		equ	84h
+bios_language_info_func		equ	85h
+onboard_device_info_func	equ	86h
+ext_cache_info_func		equ	87h
+
+smbios_last_function		equ	8Fh	; 8Fh..last smbios function#
+;-----------------------------------------------------------------------;
+;			90h-FFh..RESERVED FOR FUTURE USE		;
+;-----------------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------------------------------;

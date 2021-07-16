@@ -1,0 +1,1006 @@
+ali5135f_hotkey_function..ra35xx1   ali5135f_key_wakeup_password..ra35xx1
+ALI5135XBBlkFloppyControllerAuto..ba35xfda  ALI5135XBBlkFloppyControllerOff..ba35xfdo
+ALI5135XBBlkKeyboardControllerAuto..ba35xkba  ALI5135XBBlkKeyboardControllerOff..ba35xkbo
+ALI5135XBBlkWriteIO_X..ba35xx       ALI5135XCommonRegisterInit..ra35xx1
+ALI5135XFloppyController..ra35xfd   ALI5135XParallelPort..ra35xlp
+ALI5135XParallelPortExt..ra35xlpe   ALI5135XRead6061..ra35xx1
+ALI5135XReadIO....ra35xx1           ALI5135XSerialConfigTable..ra35xca
+ALI5135XSerialPortA..ra35xca        ALI5135XSerialPortB..ra35xcb
+ALI5135XSerialPortC..ra35xcc        ALI5135XWrite6061..ra35xx1
+ALI5135XWriteIO...ra35xx1           CheckDevRev.......rw977x1
+CheckDevVer.......ra35xx1           Gm803CBBlkFloppyControllerAuto..bg03cfda
+Gm803CBBlkFloppyControllerOff..bg03cfdo  Gm803CBBlkReadIO..bg03cx
+Gm803CBBlkWriteIO..bg03cx           Gm803CComIrqTable..rg03cx1
+Gm803CCommonRegisterInit..rg03cx1   Gm803CComTable....rg03cx1
+Gm803CFloppyController..rg03cfd     Gm803CIdeController..rg03chd
+Gm803CIrqMaskTable..rg03cx1         Gm803CParallelPort..rg03clp
+Gm803CParallelPortExt..rg03clpe     Gm803CReadIO......rg03cx1
+Gm803CSerialPortA..rg03cca          Gm803CSerialPortB..rg03ccb
+Gm803CWriteIO.....rg03cx1           initial_mouse_function..ra35xx1
+IT8661FBBlkFloppyControllerAuto..bi61ffda  IT8661FBBlkFloppyControllerOff..bi61ffdo
+IT8661FBBlkWriteIO_x..bi61fx        IT8661FCommonRegisterInit..ri61fx1
+IT8661FFloppyController..ri61ffd    IT8661FIrPort.....ri61fir
+IT8661FParallelPort..ri61flp        IT8661FParallelPortExt..ri61flpe
+IT8661FRead6061...ri61fx1           IT8661FReadGlobal..ri61fx1
+IT8661FReadIO.....ri61fx1           IT8661FSerialPortA..ri61fca
+IT8661FSerialPortB..ri61fcb         IT8661FWrite6061..ri61fx1
+IT8661FWriteGlobal..ri61fx1         IT8661FWriteIO....ri61fx1
+IT8661SerialConfigTable..ri61fca    IT8671FBBlkFloppyControllerAuto..bi71ffda
+IT8671FBBlkFloppyControllerOff..bi71ffdo  IT8671FBBlkKeyboardControllerAuto..bi71fkba
+IT8671FBBlkKeyboardControllerOff..bi71fkbo  IT8671FBBlkWriteIO_x..bi71fx
+IT8671FCommonRegisterInit..ri71fx1  IT8671FFloppyController..ri71ffd
+IT8671FParallelPort..ri71flp        IT8671FParallelPortExt..ri71flpe
+IT8671FRead6061...ri71fx1           IT8671FRead6263...ri71fx1
+IT8671FReadGlobal..ri71fx1          IT8671FReadIO.....ri71fx1
+IT8671FSerialPortA..ri71fca         IT8671FSerialPortB..ri71fcb
+IT8671FWrite6061..ri71fx1           IT8671FWrite6263..ri71fx1
+IT8671FWriteGlobal..ri71fx1         IT8671FWriteIO....ri71fx1
+IT8679BBlkKeyboardControllerAuto..bi679kba  IT8679BBlkKeyboardControllerOff..bi679kbo
+IT8680BBlkFloppyControllerAuto..bi680fda  IT8680BBlkFloppyControllerOff..bi680fdo
+IT8680BBlkKeyboardControllerAuto..bi680kba  IT8680BBlkKeyboardControllerOff..bi680kbo
+IT8680BBlkRTCControllerAuto..bi680rta  IT8680BBlkRTCControllerOff..bi680rto
+IT8680BBlkWriteIO_x..bi680x         IT8680CommonRegisterInit..ri680x1
+IT8680FloppyController..ri680fd     IT8680ParallelPort..ri680lp
+IT8680ParallelPortExt..ri680lpe     IT8680Read6061....ri680x1
+IT8680ReadIO......ri680x1           IT8680SerialPortA..ri680ca
+IT8680SerialPortB..ri680cb          IT8680Write6061...ri680x1
+IT8680Write6263...ri680x1           IT8680WriteIO.....ri680x1
+KB_HotKey_Function..rn351x1         KB_Password_Function..rn351x1
+Nat306BBlkFloppyControllerAuto..bn306fda  Nat306BBlkFloppyControllerOff..bn306fdo
+Nat306BBlkKeyboardControllerAuto..bn306kba  Nat306BBlkKeyboardControllerOff..bn306kbo
+NAT306BBlkReadIO_x..bn306x1         Nat306BBlkRTCControllerAuto..bn306rta
+Nat306BBlkRTCControllerOff..bn306rto  NAT306BBlkWriteIO_x..bn306x1
+Nat306BBlockRegisterInit..bn306x2   Nat306CommonRegisterInit..rn306x1
+Nat306FloppyController..rn306fd     Nat306IdeController..rn306hd
+Nat306ParallelPort..rn306lp         Nat306ParallelPortExt..rn306lpe
+Nat306ReadIO......rn306x1           Nat306SerialPortA..rn306ca
+Nat306SerialPortB..rn306cb          Nat306WriteIO.....rn306x1
+NAT306_LPT_CODE_PRESENT..rn306lp    NAT306_LPT_EXT_CODE_PRESENT..rn306lpe
+Nat308BBlkFloppyControllerAuto..bn308fda  Nat308BBlkFloppyControllerOff..bn308fdo
+Nat308BBlkKeyboardControllerAuto..bn308kba  Nat308BBlkKeyboardControllerOff..bn308kbo
+Nat308BBlkRTCControllerAuto..bn308rta  Nat308BBlkRTCControllerOff..bn308rto
+Nat308BBlkWriteIO_x..bn308x         Nat308CommonRegisterInit..rn308x1
+Nat308FloppyController..rn308fd     Nat308ParallelPort..rn308lp
+Nat308ParallelPortExt..rn308lpe     Nat308Read6061....rn308x1
+Nat308ReadIO......rn308x1           Nat308SerialPortA..rn308ca
+Nat308SerialPortB..rn308cb          Nat308Write6061...rn308x1
+Nat308WriteIO.....rn308x1           Nat309BBlkFloppyControllerAuto..bn309fda
+Nat309BBlkFloppyControllerOff..bn309fdo  Nat309BBlkKeyboardControllerAuto..bn309kba
+Nat309BBlkKeyboardControllerOff..bn309kbo  Nat309BBlkWriteIO_x..bn309x
+Nat309CommonRegisterInit..rn309x1   Nat309FloppyController..rn309fd
+Nat309ParallelPort..rn309lp         Nat309ParallelPortExt..rn309lpe
+Nat309Read6061....rn309x1           Nat309ReadIO......rn309x1
+Nat309SerialPortA..rn309ca          Nat309SerialPortB..rn309cb
+Nat309Write6061...rn309x1           Nat309WriteIO.....rn309x1
+Nat336BBlkFloppyControllerAuto..bn336fda  Nat336BBlkFloppyControllerOff..bn336fdo
+Nat336BBlkReadIO..bn336x            Nat336BBlkWriteIO..bn336x
+Nat336ComAddress..rn336x1           Nat336ComIrq......rn336x1
+Nat336CommonRegisterInit..rn336x1   Nat336FloppyController..rn336fd
+Nat336ParallelPort..rn336lp         Nat336ParallelPortExt..rn336lpe
+Nat336ReadIO......rn336x1           Nat336SerialPortA..rn336ca
+Nat336SerialPortB..rn336cb          Nat336WriteIO.....rn336x1
+NAT336_LPT_CODE_PRESENT..rn336lp    NAT336_LPT_EXT_CODE_PRESENT..rn336lpe
+Nat338BBlkFloppyControllerAuto..bn338fda  Nat338BBlkFloppyControllerOff..bn338fdo
+Nat338BBlkReadIO..bn338x            Nat338BBlkWriteIO..bn338x
+Nat338ComAddress..rn338x1           Nat338ComIrq......rn338x1
+Nat338CommonRegisterInit..rn338x1   Nat338FloppyController..rn338fd
+Nat338ParallelPort..rn338lp         Nat338ParallelPortExt..rn338lpe
+Nat338ReadIO......rn338x1           Nat338SerialPortA..rn338ca
+Nat338SerialPortB..rn338cb          Nat338WriteIO.....rn338x1
+NAT351BBlkFloppyControllerAuto..bn351fda  NAT351BBlkFloppyControllerOff..bn351fdo
+NAT351BBlkKeyboardControllerAuto..bn351kba  NAT351BBlkKeyboardControllerOff..bn351kbo
+NAT351BBlkWriteIO_x..bn351x         NAT351CommonRegisterInit..rn351x1
+NAT351DXToConfigNumber..rn351x1     NAT351FloppyController..rn351fd
+NAT351ParallelPort..rn351lp         NAT351ParallelPortExt..rn351lpe
+NAT351Read6061....rn351x1           NAT351ReadIO......rn351x1
+NAT351SerialConfigTable..rn351ca    NAT351SerialPortA..rn351ca
+NAT351SerialPortB..rn351cb          NAT351Write6061...rn351x1
+NAT351WriteIO.....rn351x1           SerialAddressTable..rn309x1
+SerialConfigTable..rs67xx2          SetComBIRMode.....rw977cb
+set_key_wakeup_password..rw977x1    set_win627_key_wakeup_password..rw627x1
+Smc27xBBlkFloppyControllerAuto..bs27xfda  Smc27xBBlkFloppyControllerOff..bs27xfdo
+Smc27xBBlkKeyboardControllerAuto..bs27xkba  Smc27xBBlkKeyboardControllerOff..bs27xkbo
+Smc27xBBlkWriteIO_x..bs27xx         Smc27xCommonRegisterInit..rs27xx1
+Smc27xFloppyController..rs27xfd     Smc27xGamePort....rs27xgam
+Smc27xMidiPort....rs27xmid          Smc27xParallelPort..rs27xlp
+Smc27xParallelPortExt..rs27xlpe     Smc27xRead6061....rs27xx1
+Smc27xReadIO......rs27xx1           Smc27xSerialConfigTable..rs27xx1
+Smc27xSerialPortA..rs27xca          Smc27xSerialPortB..rs27xcb
+Smc27xWrite6061...rs27xx1           Smc27xWriteIO.....rs27xx1
+Smc27x_LPT_CODE_PRESENT..rs27xlp    Smc27x_LPT_EXT_CODE_PRESENT..rs27xlpe
+Smc669BBlkFloppyControllerAuto..bs669fda  Smc669BBlkFloppyControllerOff..bs669fdo
+Smc669BBlkWriteIO..bs669x           Smc669CommonRegisterInit..rs669x1
+Smc669FloppyController..rs669fd     Smc669IdeController..rs669hd
+Smc669ParallelPort..rs669lp         Smc669ParallelPortExt..rs669lpe
+Smc669ReadIO......rs669x1           Smc669SerialPortA..rs669ca
+Smc669SerialPortB..rs669cb          Smc669WriteIO.....rs669x1
+SMC669_LPT_CODE_PRESENT..rs669lp    Smc67xBBlkFloppyControllerAuto..bs67xfda
+Smc67xBBlkFloppyControllerOff..bs67xfdo  Smc67xBBlkKeyboardControllerAuto..bs67xkba
+Smc67xBBlkKeyboardControllerOff..bs67xkbo  Smc67xBBlkWriteIO_x..bs67xx
+Smc67xCommonRegisterInit..rs67xx1   Smc67xFloppyController..rs67xfd
+Smc67xParallelPort..rs67xlp         Smc67xParallelPortExt..rs67xlpe
+Smc67xRead6061....rs67xx1           Smc67xReadIO......rs67xx1
+Smc67xSerialPortA..rs67xca          Smc67xSerialPortB..rs67xcb
+Smc67xWrite6061...rs67xx1           Smc67xWriteIO.....rs67xx1
+Smc68xBBlkFloppyControllerAuto..bs68xfda  Smc68xBBlkFloppyControllerOff..bs68xfdo
+Smc68xBBlkKeyboardControllerAuto..bs68xkba  Smc68xBBlkKeyboardControllerOff..bs68xkbo
+Smc68xBBlkWriteIO_x..bs68xx         Smc68xCommonRegisterInit..rs68xx1
+Smc68xFloppyController..rs68xfd     Smc68xParallelPortExt..rs68xlpe
+Smc68xRead6061....rs68xx1           Smc68xReadIO......rs68xx1
+Smc68xSerialPortA..rs68xca          Smc68xSerialPortB..rs68xcb
+Smc68xWrite6061...rs68xx1           Smc68xWriteIO.....rs68xx1
+SMC68X_LPT_EXT_CODE_PRESENT..rs68xlpe  Smc932BBlkFloppyControllerAuto..bs932fda
+Smc932BBlkFloppyControllerOff..bs932fdo  Smc932BBlkKeyboardControllerAuto..bs932kba
+Smc932BBlkKeyboardControllerOff..bs932kbo  Smc932BBlkRTCControllerAuto..bs932rta
+Smc932BBlkRTCControllerOff..bs932rto  Smc932BBlkWriteIO_x..bs932x
+Smc932CommonRegisterInit..rs932x1   Smc932DXToConfigNumber..rs932x2
+Smc932FloppyController..rs932fd     Smc932FrSerialPortB..rs93fcb
+Smc932Ide1Controller..rs932hd1      Smc932Ide2Controller..rs932hd2
+Smc932ParallelPort..rs932lp         Smc932ParallelPortExt..rs932lpe
+Smc932Read6061....rs932x1           Smc932ReadIO......rs932x1
+Smc932SerialPortA..rs932ca          Smc932SerialPortB..rs932cb
+Smc932Write6061...rs932x1           Smc932WriteIO.....rs932x1
+SMC932_LPT_CODE_PRESENT..rs932lp    SMC932_LPT_EXT_CODE_PRESENT..rs932lpe
+SystemDmaController..rdma           SystemEisaBus.....reisabus
+SystemInterruptController..rint     SystemIsaBus......risabus
+SystemKeyboardController..rkbc      SystemMathCoprocessor..rmathco
+SystemMemory......rmemory           SystemPS2Mouse....rmouse
+SystemRealTimeClock..rrtc           SystemSpeaker.....rspeaker
+SystemTimer.......rtimer            SystemVlBus.......rvlbus
+Umc8669BBlkFloppyControllerAuto..bu669fda  Umc8669BBlkFloppyControllerOff..bu669fdo
+Umc8669BBlkWriteIO..bu669x          Umc8669CommonRegisterInit..ru669x1
+Umc8669FloppyController..ru669fd    Umc8669GetPnPDma..ru669x1
+Umc8669GetPnPIrq..ru669x1           Umc8669IdeController..ru669hd
+Umc8669ParallelPort..ru669lp        Umc8669ParallelPortExt..ru669lpe
+Umc8669ReadActive..ru669x1          Umc8669ReadComPortPriAddr..ru669x1
+Umc8669ReadIO.....ru669x1           Umc8669ReadPriAddr..ru669x1
+Umc8669SerialPortA..ru669ca         Umc8669SerialPortB..ru669cb
+Umc8669SetPnPDma..ru669x1           Umc8669SetPnPIrq..ru669x1
+Umc8669WriteActive..ru669x1         Umc8669WriteIO....ru669x1
+Umc8669WritePriAddr..ru669x1        Win627BBlkFloppyControllerAuto..bw627fda
+Win627BBlkFloppyControllerOff..bw627fdo  Win627BBlkKeyboardControllerAuto..bw627kba
+Win627BBlkKeyboardControllerOff..bw627kbo  Win627BBlkWriteIO_x..bw627x
+Win627CIrPort.....rw627ir           Win627CommonRegisterInit..rw627x1
+Win627FloppyController..rw627fd     Win627GamePort....rw627gam
+Win627MidiPort....rw627mid          Win627ParallelPort..rw627lp
+Win627ParallelPortExt..rw627lpe     Win627Read6061....rw627x1
+Win627ReadIO......rw627x1           WIN627SerialConfigTable..rw627x1
+Win627SerialPortA..rw627ca          Win627SerialPortB..rw627cb
+Win627Write6061...rw627x1           Win627WriteIO.....rw627x1
+Win627_LPT_CODE_PRESENT..rw627lp    Win627_LPT_EXT_CODE_PRESENT..rw627lpe
+Win877AFBBlkFloppyControllerAuto..bw87afda  Win877AFBBlkFloppyControllerOff..bw87afdo
+Win877AFBBlkWriteIO..bw87ax         Win877AFCommonRegisterInit..rw87ax1
+Win877AFFloppyController..rw87afd   Win877AFIdeController..rw87ahd
+Win877AFIrqMaskTable..rw87ax1       Win877AFParallelPort..rw87alp
+Win877AFParallelPortExt..rw87alpe   Win877AFReadIO....rw87ax1
+Win877AFSerialPortA..rw87aca        Win877AFSerialPortB..rw87acb
+Win877AFWriteIO...rw87ax1           Win877AF_LPT_CODE_PRESENT..rw87alp
+Win877AF_LPT_EXT_CODE_PRESENT..rw87alpe  Win877BBlkFloppyControllerAuto..bw877fda
+Win877BBlkFloppyControllerOff..bw877fdo  Win877BBlkWriteIO..bw877x
+Win877CommonRegisterInit..rw877x1   Win877FloppyController..rw877fd
+Win877IdeController..rw877hd        Win877IrqMaskTable..rw877x1
+Win877ParallelPort..rw877lp         Win877ParallelPortExt..rw877lpe
+Win877ReadIO......rw877x1           Win877SerialPortA..rw877ca
+Win877SerialPortB..rw877cb          Win877WriteIO.....rw877x1
+Win877_LPT_CODE_PRESENT..rw877lp    Win877_LPT_EXT_CODE_PRESENT..rw877lpe
+WIN977AFSerialConfigTable..rw977x2  Win977BBlkFloppyControllerAuto..bw977fda
+Win977BBlkFloppyControllerOff..bw977fdo  Win977BBlkKeyboardControllerAuto..bw977kba
+Win977BBlkKeyboardControllerOff..bw977kbo  Win977BBlkRTCControllerAuto..bw977rta
+Win977BBlkRTCControllerOff..bw977rto  Win977BBlkWriteIO_x..bw977x
+Win977CommonRegisterInit..rw977x1   Win977DXToConfigNumber..rw977x2
+Win977FloppyController..rw977fd     Win977IrPort......rw977ir
+Win977ParallelPort..rw977lp         Win977ParallelPortExt..rw977lpe
+Win977Read6061....rw977x1           Win977ReadIO......rw977x1
+Win977SerialPortA..rw977ca          Win977SerialPortB..rw977cb
+Win977Write6061...rw977x1           Win977WriteIO.....rw977x1
+Win977_LPT_CODE_PRESENT..rw977lp    Win977_LPT_EXT_CODE_PRESENT..rw977lpe
+_io_version.......iover             
+
+iover             Offset: 00000010H  Code and data size: 9H
+  _io_version     
+
+rmemory           Offset: 00000090H  Code and data size: 10bH
+  SystemMemory    
+
+rmouse            Offset: 000002a0H  Code and data size: c0H
+  SystemPS2Mouse  
+
+rint              Offset: 000004f0H  Code and data size: 21H
+  SystemInterruptController         
+
+rdma              Offset: 000005a0H  Code and data size: 29H
+  SystemDmaController               
+
+rtimer            Offset: 00000650H  Code and data size: 1dH
+  SystemTimer     
+
+rrtc              Offset: 000006f0H  Code and data size: 1dH
+  SystemRealTimeClock               
+
+rkbc              Offset: 00000790H  Code and data size: 21H
+  SystemKeyboardController          
+
+rspeaker          Offset: 00000840H  Code and data size: 1aH
+  SystemSpeaker   
+
+rmathco           Offset: 000008e0H  Code and data size: 1dH
+  SystemMathCoprocessor             
+
+risabus           Offset: 00000990H  Code and data size: 16H
+  SystemIsaBus    
+
+reisabus          Offset: 00000a30H  Code and data size: 96H
+  SystemEisaBus   
+
+rvlbus            Offset: 00000b50H  Code and data size: 16H
+  SystemVlBus     
+
+ra35xlp           Offset: 00000bf0H  Code and data size: 1d8H
+  ALI5135XParallelPort              
+
+ra35xlpe          Offset: 00001030H  Code and data size: 5c4H
+  ALI5135XParallelPortExt           
+
+ra35xca           Offset: 00001ab0H  Code and data size: 251H
+  ALI5135XSerialConfigTable           ALI5135XSerialPortA
+
+ra35xcb           Offset: 00001fc0H  Code and data size: 27dH
+  ALI5135XSerialPortB               
+
+ra35xcc           Offset: 00002520H  Code and data size: 364H
+  ALI5135XSerialPortC               
+
+ra35xfd           Offset: 00002c10H  Code and data size: 138H
+  ALI5135XFloppyController          
+
+ra35xx1           Offset: 00002f30H  Code and data size: 1a2H
+  ali5135f_hotkey_function            ali5135f_key_wakeup_password
+  ALI5135XCommonRegisterInit          ALI5135XRead6061  ALI5135XReadIO
+  ALI5135XWrite6061                   ALI5135XWriteIO   CheckDevVer
+  initial_mouse_function            
+
+ba35xfdo          Offset: 000032f0H  Code and data size: eH
+  ALI5135XBBlkFloppyControllerOff   
+
+ba35xfda          Offset: 000033c0H  Code and data size: 2eH
+  ALI5135XBBlkFloppyControllerAuto  
+
+ba35xkbo          Offset: 000034e0H  Code and data size: cH
+  ALI5135XBBlkKeyboardControllerOff 
+
+ba35xkba          Offset: 000035b0H  Code and data size: 2bH
+  ALI5135XBBlkKeyboardControllerAuto
+
+ba35xx            Offset: 000036e0H  Code and data size: 3eH
+  ALI5135XBBlkWriteIO_X             
+
+rg03clp           Offset: 000037d0H  Code and data size: 206H
+  Gm803CParallelPort                
+
+rg03clpe          Offset: 00003c20H  Code and data size: 5c8H
+  Gm803CParallelPortExt             
+
+rg03cca           Offset: 00004690H  Code and data size: 188H
+  Gm803CSerialPortA                 
+
+rg03ccb           Offset: 00004a30H  Code and data size: 1f1H
+  Gm803CSerialPortB                 
+
+rg03cfd           Offset: 00004f00H  Code and data size: 14cH
+  Gm803CFloppyController            
+
+rg03chd           Offset: 00005240H  Code and data size: 18aH
+  Gm803CIdeController               
+
+rg03cx1           Offset: 00005590H  Code and data size: 6cH
+  Gm803CComIrqTable                   Gm803CCommonRegisterInit
+  Gm803CComTable    Gm803CIrqMaskTable                  Gm803CReadIO
+  Gm803CWriteIO   
+
+bg03cfdo          Offset: 00005770H  Code and data size: 9H
+  Gm803CBBlkFloppyControllerOff     
+
+bg03cfda          Offset: 00005840H  Code and data size: 40H
+  Gm803CBBlkFloppyControllerAuto    
+
+bg03cx            Offset: 000059c0H  Code and data size: 61H
+  Gm803CBBlkReadIO  Gm803CBBlkWriteIO                 
+
+ri61flp           Offset: 00005b20H  Code and data size: 1c5H
+  IT8661FParallelPort               
+
+ri61flpe          Offset: 00005f20H  Code and data size: 57eH
+  IT8661FParallelPortExt            
+
+ri61fca           Offset: 00006910H  Code and data size: 19cH
+  IT8661FSerialPortA                  IT8661SerialConfigTable
+
+ri61fcb           Offset: 00006cb0H  Code and data size: 186H
+  IT8661FSerialPortB                
+
+ri61ffd           Offset: 00007030H  Code and data size: 14bH
+  IT8661FFloppyController           
+
+ri61fir           Offset: 00007340H  Code and data size: 1e7H
+  IT8661FIrPort   
+
+ri61fx1           Offset: 00007790H  Code and data size: 143H
+  IT8661FCommonRegisterInit           IT8661FRead6061   IT8661FReadGlobal
+  IT8661FReadIO     IT8661FWrite6061  IT8661FWriteGlobal
+  IT8661FWriteIO  
+
+bi61ffdo          Offset: 00007a80H  Code and data size: 10H
+  IT8661FBBlkFloppyControllerOff    
+
+bi61ffda          Offset: 00007b50H  Code and data size: 30H
+  IT8661FBBlkFloppyControllerAuto   
+
+bi61fx            Offset: 00007c70H  Code and data size: 9bH
+  IT8661FBBlkWriteIO_x              
+
+ri680lp           Offset: 00007dd0H  Code and data size: 1c6H
+  IT8680ParallelPort                
+
+ri680lpe          Offset: 000081c0H  Code and data size: 5afH
+  IT8680ParallelPortExt             
+
+ri680ca           Offset: 00008bb0H  Code and data size: 191H
+  IT8680SerialPortA                 
+
+ri680cb           Offset: 00008f20H  Code and data size: 1c4H
+  IT8680SerialPortB                 
+
+ri680fd           Offset: 00009310H  Code and data size: 134H
+  IT8680FloppyController            
+
+ri680x1           Offset: 00009600H  Code and data size: 120H
+  IT8680CommonRegisterInit            IT8680Read6061    IT8680ReadIO
+  IT8680Write6061   IT8680Write6263   IT8680WriteIO   
+
+bi680fdo          Offset: 00009890H  Code and data size: 10H
+  IT8680BBlkFloppyControllerOff     
+
+bi680fda          Offset: 00009960H  Code and data size: 30H
+  IT8680BBlkFloppyControllerAuto    
+
+bi680kbo          Offset: 00009a80H  Code and data size: cH
+  IT8680BBlkKeyboardControllerOff   
+
+bi680kba          Offset: 00009b40H  Code and data size: 2bH
+  IT8680BBlkKeyboardControllerAuto  
+
+bi680rto          Offset: 00009c70H  Code and data size: cH
+  IT8680BBlkRTCControllerOff        
+
+bi679kba          Offset: 00009d30H  Code and data size: 29H
+  IT8679BBlkKeyboardControllerAuto  
+
+bi679kbo          Offset: 00009e60H  Code and data size: cH
+  IT8679BBlkKeyboardControllerOff   
+
+bi680rta          Offset: 00009f20H  Code and data size: 27H
+  IT8680BBlkRTCControllerAuto       
+
+bi680x            Offset: 0000a010H  Code and data size: 9bH
+  IT8680BBlkWriteIO_x               
+
+rn306lp           Offset: 0000a170H  Code and data size: 1f3H
+  Nat306ParallelPort                  NAT306_LPT_CODE_PRESENT
+
+rn306lpe          Offset: 0000a5d0H  Code and data size: 60fH
+  Nat306ParallelPortExt               NAT306_LPT_EXT_CODE_PRESENT
+
+rn306ca           Offset: 0000b070H  Code and data size: 167H
+  Nat306SerialPortA                 
+
+rn306cb           Offset: 0000b380H  Code and data size: 1adH
+  Nat306SerialPortB                 
+
+rn306fd           Offset: 0000b770H  Code and data size: 13cH
+  Nat306FloppyController            
+
+rn306hd           Offset: 0000ba70H  Code and data size: 166H
+  Nat306IdeController               
+
+rn306x1           Offset: 0000bd80H  Code and data size: 45H
+  Nat306CommonRegisterInit            Nat306ReadIO      Nat306WriteIO
+
+bn306fdo          Offset: 0000bed0H  Code and data size: bH
+  Nat306BBlkFloppyControllerOff     
+
+bn306fda          Offset: 0000bf90H  Code and data size: 2cH
+  Nat306BBlkFloppyControllerAuto    
+
+bn306kbo          Offset: 0000c0b0H  Code and data size: 14H
+  Nat306BBlkKeyboardControllerOff   
+
+bn306kba          Offset: 0000c1a0H  Code and data size: 33H
+  Nat306BBlkKeyboardControllerAuto  
+
+bn306rto          Offset: 0000c2f0H  Code and data size: 14H
+  Nat306BBlkRTCControllerOff        
+
+bn306rta          Offset: 0000c3e0H  Code and data size: 3dH
+  Nat306BBlkRTCControllerAuto       
+
+bn306x1           Offset: 0000c530H  Code and data size: 2fH
+  NAT306BBlkReadIO_x                  NAT306BBlkWriteIO_x
+
+bn306x2           Offset: 0000c630H  Code and data size: 42H
+  Nat306BBlockRegisterInit          
+
+rn308lp           Offset: 0000c790H  Code and data size: 1edH
+  Nat308ParallelPort                
+
+rn308lpe          Offset: 0000cbe0H  Code and data size: 5ceH
+  Nat308ParallelPortExt             
+
+rn308ca           Offset: 0000d630H  Code and data size: 191H
+  Nat308SerialPortA                 
+
+rn308cb           Offset: 0000d9a0H  Code and data size: 224H
+  Nat308SerialPortB                 
+
+rn308fd           Offset: 0000de20H  Code and data size: 10cH
+  Nat308FloppyController            
+
+rn308x1           Offset: 0000e0d0H  Code and data size: 84H
+  Nat308CommonRegisterInit            Nat308Read6061    Nat308ReadIO
+  Nat308Write6061   Nat308WriteIO   
+
+bn308fdo          Offset: 0000e290H  Code and data size: 15H
+  Nat308BBlkFloppyControllerOff     
+
+bn308fda          Offset: 0000e370H  Code and data size: 35H
+  Nat308BBlkFloppyControllerAuto    
+
+bn308kbo          Offset: 0000e4a0H  Code and data size: 25H
+  Nat308BBlkKeyboardControllerOff   
+
+bn308kba          Offset: 0000e5a0H  Code and data size: 58H
+  Nat308BBlkKeyboardControllerAuto  
+
+bn308rto          Offset: 0000e710H  Code and data size: 13H
+  Nat308BBlkRTCControllerOff        
+
+bn308rta          Offset: 0000e7e0H  Code and data size: 35H
+  Nat308BBlkRTCControllerAuto       
+
+bn308x            Offset: 0000e8f0H  Code and data size: 1cH
+  Nat308BBlkWriteIO_x               
+
+rn309lp           Offset: 0000e9c0H  Code and data size: 1eeH
+  Nat309ParallelPort                
+
+rn309lpe          Offset: 0000ee10H  Code and data size: 64fH
+  Nat309ParallelPortExt             
+
+rn309ca           Offset: 0000f8e0H  Code and data size: 186H
+  Nat309SerialPortA                 
+
+rn309cb           Offset: 0000fc50H  Code and data size: 1f2H
+  Nat309SerialPortB                 
+
+rn309fd           Offset: 00010080H  Code and data size: 131H
+  Nat309FloppyController            
+
+rn309x1           Offset: 00010370H  Code and data size: 8eH
+  Nat309CommonRegisterInit            Nat309Read6061    Nat309ReadIO
+  Nat309Write6061   Nat309WriteIO     SerialAddressTable
+
+bn309fdo          Offset: 00010550H  Code and data size: 15H
+  Nat309BBlkFloppyControllerOff     
+
+bn309fda          Offset: 00010630H  Code and data size: 35H
+  Nat309BBlkFloppyControllerAuto    
+
+bn309kbo          Offset: 00010760H  Code and data size: 25H
+  Nat309BBlkKeyboardControllerOff   
+
+bn309kba          Offset: 00010860H  Code and data size: 4fH
+  Nat309BBlkKeyboardControllerAuto  
+
+bn309x            Offset: 000109b0H  Code and data size: 1cH
+  Nat309BBlkWriteIO_x               
+
+rn336lp           Offset: 00010a80H  Code and data size: 1f7H
+  Nat336ParallelPort                  NAT336_LPT_CODE_PRESENT
+
+rn336lpe          Offset: 00010ee0H  Code and data size: 625H
+  Nat336ParallelPortExt               NAT336_LPT_EXT_CODE_PRESENT
+
+rn336ca           Offset: 000119b0H  Code and data size: 187H
+  Nat336SerialPortA                 
+
+rn336cb           Offset: 00011d10H  Code and data size: 1e8H
+  Nat336SerialPortB                 
+
+rn336fd           Offset: 00012180H  Code and data size: 13cH
+  Nat336FloppyController            
+
+rn336x1           Offset: 00012480H  Code and data size: c1H
+  Nat336ComAddress  Nat336ComIrq      Nat336CommonRegisterInit
+  Nat336ReadIO      Nat336WriteIO   
+
+bn336fdo          Offset: 000126a0H  Code and data size: 63H
+  Nat336BBlkFloppyControllerOff     
+
+bn336fda          Offset: 000127d0H  Code and data size: 4fH
+  Nat336BBlkFloppyControllerAuto    
+
+bn336x            Offset: 00012980H  Code and data size: 2eH
+  Nat336BBlkReadIO  Nat336BBlkWriteIO                 
+
+rn338lp           Offset: 00012a70H  Code and data size: 1f2H
+  Nat338ParallelPort                
+
+rn338lpe          Offset: 00012ea0H  Code and data size: 5feH
+  Nat338ParallelPortExt             
+
+rn338ca           Offset: 00013900H  Code and data size: 187H
+  Nat338SerialPortA                 
+
+rn338cb           Offset: 00013c60H  Code and data size: 1daH
+  Nat338SerialPortB                 
+
+rn338fd           Offset: 00014070H  Code and data size: 13bH
+  Nat338FloppyController            
+
+rn338x1           Offset: 00014370H  Code and data size: d0H
+  Nat338ComAddress  Nat338ComIrq      Nat338CommonRegisterInit
+  Nat338ReadIO      Nat338WriteIO   
+
+bn338fdo          Offset: 000145b0H  Code and data size: 63H
+  Nat338BBlkFloppyControllerOff     
+
+bn338fda          Offset: 000146e0H  Code and data size: 55H
+  Nat338BBlkFloppyControllerAuto    
+
+bn338x            Offset: 000148a0H  Code and data size: 2eH
+  Nat338BBlkReadIO  Nat338BBlkWriteIO                 
+
+rn351lp           Offset: 00014990H  Code and data size: 1f2H
+  NAT351ParallelPort                
+
+rn351lpe          Offset: 00014df0H  Code and data size: 5a4H
+  NAT351ParallelPortExt             
+
+rn351ca           Offset: 00015800H  Code and data size: 196H
+  NAT351SerialConfigTable             NAT351SerialPortA
+
+rn351cb           Offset: 00015ba0H  Code and data size: 1feH
+  NAT351SerialPortB                 
+
+rn351fd           Offset: 00015ff0H  Code and data size: 189H
+  NAT351FloppyController            
+
+rn351x1           Offset: 00016380H  Code and data size: 23eH
+  KB_HotKey_Function                  KB_Password_Function
+  NAT351CommonRegisterInit            NAT351DXToConfigNumber
+  NAT351Read6061    NAT351ReadIO      NAT351Write6061   NAT351WriteIO
+
+bn351fdo          Offset: 000167c0H  Code and data size: 15H
+  NAT351BBlkFloppyControllerOff     
+
+bn351fda          Offset: 000168a0H  Code and data size: 35H
+  NAT351BBlkFloppyControllerAuto    
+
+bn351kbo          Offset: 000169d0H  Code and data size: 25H
+  NAT351BBlkKeyboardControllerOff   
+
+bn351kba          Offset: 00016ad0H  Code and data size: 4fH
+  NAT351BBlkKeyboardControllerAuto  
+
+bn351x            Offset: 00016c20H  Code and data size: 1cH
+  NAT351BBlkWriteIO_x               
+
+ri71flp           Offset: 00016cf0H  Code and data size: 1c5H
+  IT8671FParallelPort               
+
+ri71flpe          Offset: 000170f0H  Code and data size: 57dH
+  IT8671FParallelPortExt            
+
+ri71fca           Offset: 00017b00H  Code and data size: 193H
+  IT8671FSerialPortA                
+
+ri71fcb           Offset: 00017ea0H  Code and data size: 1c1H
+  IT8671FSerialPortB                
+
+ri71ffd           Offset: 000182c0H  Code and data size: 15cH
+  IT8671FFloppyController           
+
+ri71fx1           Offset: 00018650H  Code and data size: 1e6H
+  IT8671FCommonRegisterInit           IT8671FRead6061   IT8671FRead6263
+  IT8671FReadGlobal                   IT8671FReadIO     IT8671FWrite6061
+  IT8671FWrite6263  IT8671FWriteGlobal                  IT8671FWriteIO
+
+bi71ffdo          Offset: 00018a50H  Code and data size: 10H
+  IT8671FBBlkFloppyControllerOff    
+
+bi71ffda          Offset: 00018b20H  Code and data size: 30H
+  IT8671FBBlkFloppyControllerAuto   
+
+bi71fkbo          Offset: 00018c40H  Code and data size: cH
+  IT8671FBBlkKeyboardControllerOff  
+
+bi71fkba          Offset: 00018d10H  Code and data size: 2bH
+  IT8671FBBlkKeyboardControllerAuto 
+
+bi71fx            Offset: 00018e40H  Code and data size: 9bH
+  IT8671FBBlkWriteIO_x              
+
+rs27xlp           Offset: 00018fa0H  Code and data size: 1ddH
+  Smc27xParallelPort                  Smc27x_LPT_CODE_PRESENT
+
+rs27xlpe          Offset: 00019430H  Code and data size: 5b4H
+  Smc27xParallelPortExt               Smc27x_LPT_EXT_CODE_PRESENT
+
+rs27xca           Offset: 00019e70H  Code and data size: 186H
+  Smc27xSerialPortA                 
+
+rs27xcb           Offset: 0001a220H  Code and data size: 1ceH
+  Smc27xSerialPortB                 
+
+rs27xgam          Offset: 0001a6d0H  Code and data size: 138H
+  Smc27xGamePort  
+
+rs27xmid          Offset: 0001aa10H  Code and data size: 1aaH
+  Smc27xMidiPort  
+
+rs27xfd           Offset: 0001ae10H  Code and data size: 119H
+  Smc27xFloppyController            
+
+rs27xx1           Offset: 0001b100H  Code and data size: abH
+  Smc27xCommonRegisterInit            Smc27xRead6061    Smc27xReadIO
+  Smc27xSerialConfigTable             Smc27xWrite6061   Smc27xWriteIO
+
+bs27xfdo          Offset: 0001b320H  Code and data size: 19H
+  Smc27xBBlkFloppyControllerOff     
+
+bs27xfda          Offset: 0001b400H  Code and data size: 49H
+  Smc27xBBlkFloppyControllerAuto    
+
+bs27xkbo          Offset: 0001b590H  Code and data size: 13H
+  Smc27xBBlkKeyboardControllerOff   
+
+bs27xkba          Offset: 0001b670H  Code and data size: 47H
+  Smc27xBBlkKeyboardControllerAuto  
+
+bs27xx            Offset: 0001b7e0H  Code and data size: 31H
+  Smc27xBBlkWriteIO_x               
+
+rs669lp           Offset: 0001b8c0H  Code and data size: 1f6H
+  Smc669ParallelPort                  SMC669_LPT_CODE_PRESENT
+
+rs669lpe          Offset: 0001bd60H  Code and data size: 5f7H
+  Smc669ParallelPortExt             
+
+rs669ca           Offset: 0001c810H  Code and data size: 19bH
+  Smc669SerialPortA                 
+
+rs669cb           Offset: 0001cba0H  Code and data size: 1eeH
+  Smc669SerialPortB                 
+
+rs669fd           Offset: 0001d040H  Code and data size: 19cH
+  Smc669FloppyController            
+
+rs669hd           Offset: 0001d3e0H  Code and data size: 172H
+  Smc669IdeController               
+
+rs669x1           Offset: 0001d710H  Code and data size: 6dH
+  Smc669CommonRegisterInit            Smc669ReadIO      Smc669WriteIO
+
+bs669fdo          Offset: 0001d8b0H  Code and data size: fH
+  Smc669BBlkFloppyControllerOff     
+
+bs669fda          Offset: 0001d970H  Code and data size: 43H
+  Smc669BBlkFloppyControllerAuto    
+
+bs669x            Offset: 0001dad0H  Code and data size: 33H
+  Smc669BBlkWriteIO                 
+
+rs67xlp           Offset: 0001dbc0H  Code and data size: 1eeH
+  Smc67xParallelPort                
+
+rs67xlpe          Offset: 0001e020H  Code and data size: 5f9H
+  Smc67xParallelPortExt             
+
+rs67xca           Offset: 0001eab0H  Code and data size: 181H
+  Smc67xSerialPortA                 
+
+rs67xcb           Offset: 0001ee20H  Code and data size: 2a9H
+  Smc67xSerialPortB                 
+
+rs67xfd           Offset: 0001f3f0H  Code and data size: 112H
+  Smc67xFloppyController            
+
+rs67xx1           Offset: 0001f6d0H  Code and data size: acH
+  Smc67xCommonRegisterInit            Smc67xRead6061    Smc67xReadIO
+  Smc67xWrite6061   Smc67xWriteIO   
+
+rs67xx2           Offset: 0001f910H  Code and data size: aH
+  SerialConfigTable                 
+
+bs67xfdo          Offset: 0001f9d0H  Code and data size: 19H
+  Smc67xBBlkFloppyControllerOff     
+
+bs67xfda          Offset: 0001fab0H  Code and data size: 58H
+  Smc67xBBlkFloppyControllerAuto    
+
+bs67xkbo          Offset: 0001fc40H  Code and data size: 13H
+  Smc67xBBlkKeyboardControllerOff   
+
+bs67xkba          Offset: 0001fd20H  Code and data size: 3fH
+  Smc67xBBlkKeyboardControllerAuto  
+
+bs67xx            Offset: 0001fe80H  Code and data size: 31H
+  Smc67xBBlkWriteIO_x               
+
+rs68xlpe          Offset: 0001ff60H  Code and data size: 5ffH
+  Smc68xParallelPortExt               SMC68X_LPT_EXT_CODE_PRESENT
+
+rs68xca           Offset: 00020a40H  Code and data size: 18dH
+  Smc68xSerialPortA                 
+
+rs68xcb           Offset: 00020db0H  Code and data size: 1e3H
+  Smc68xSerialPortB                 
+
+rs68xfd           Offset: 00021240H  Code and data size: 129H
+  Smc68xFloppyController            
+
+rs68xx1           Offset: 00021530H  Code and data size: 8aH
+  Smc68xCommonRegisterInit            Smc68xRead6061    Smc68xReadIO
+  Smc68xWrite6061   Smc68xWriteIO   
+
+bs68xfdo          Offset: 00021700H  Code and data size: 15H
+  Smc68xBBlkFloppyControllerOff     
+
+bs68xfda          Offset: 000217e0H  Code and data size: 52H
+  Smc68xBBlkFloppyControllerAuto    
+
+bs68xkbo          Offset: 000219a0H  Code and data size: 13H
+  Smc68xBBlkKeyboardControllerOff   
+
+bs68xkba          Offset: 00021a80H  Code and data size: 51H
+  Smc68xBBlkKeyboardControllerAuto  
+
+bs68xx            Offset: 00021c10H  Code and data size: 25H
+  Smc68xBBlkWriteIO_x               
+
+rs932lp           Offset: 00021ce0H  Code and data size: 1f8H
+  Smc932ParallelPort                  SMC932_LPT_CODE_PRESENT
+
+rs932lpe          Offset: 00022160H  Code and data size: 5f1H
+  Smc932ParallelPortExt               SMC932_LPT_EXT_CODE_PRESENT
+
+rs932ca           Offset: 00022c20H  Code and data size: 18dH
+  Smc932SerialPortA                 
+
+rs932cb           Offset: 00022f90H  Code and data size: 1e3H
+  Smc932SerialPortB                 
+
+rs93fcb           Offset: 00023420H  Code and data size: 331H
+  Smc932FrSerialPortB               
+
+rs932fd           Offset: 00023ad0H  Code and data size: 112H
+  Smc932FloppyController            
+
+rs932hd1          Offset: 00023d90H  Code and data size: 195H
+  Smc932Ide1Controller              
+
+rs932hd2          Offset: 00024110H  Code and data size: 1a7H
+  Smc932Ide2Controller              
+
+rs932x1           Offset: 000244b0H  Code and data size: 8dH
+  Smc932CommonRegisterInit            Smc932Read6061    Smc932ReadIO
+  Smc932Write6061   Smc932WriteIO   
+
+rs932x2           Offset: 00024680H  Code and data size: 17H
+  Smc932DXToConfigNumber            
+
+bs932fdo          Offset: 00024770H  Code and data size: 15H
+  Smc932BBlkFloppyControllerOff     
+
+bs932fda          Offset: 00024850H  Code and data size: 45H
+  Smc932BBlkFloppyControllerAuto    
+
+bs932kbo          Offset: 000249e0H  Code and data size: 13H
+  Smc932BBlkKeyboardControllerOff   
+
+bs932kba          Offset: 00024ac0H  Code and data size: 51H
+  Smc932BBlkKeyboardControllerAuto  
+
+bs932rto          Offset: 00024c50H  Code and data size: 13H
+  Smc932BBlkRTCControllerOff        
+
+bs932rta          Offset: 00024d20H  Code and data size: 49H
+  Smc932BBlkRTCControllerAuto       
+
+bs932x            Offset: 00024e80H  Code and data size: 2cH
+  Smc932BBlkWriteIO_x               
+
+ru669lp           Offset: 00024f60H  Code and data size: 1a9H
+  Umc8669ParallelPort               
+
+ru669lpe          Offset: 00025380H  Code and data size: 594H
+  Umc8669ParallelPortExt            
+
+ru669ca           Offset: 00025dd0H  Code and data size: 169H
+  Umc8669SerialPortA                
+
+ru669cb           Offset: 00026160H  Code and data size: 1b4H
+  Umc8669SerialPortB                
+
+ru669fd           Offset: 000265c0H  Code and data size: 131H
+  Umc8669FloppyController           
+
+ru669hd           Offset: 000268f0H  Code and data size: 17cH
+  Umc8669IdeController              
+
+ru669x1           Offset: 00026c90H  Code and data size: 18bH
+  Umc8669CommonRegisterInit           Umc8669GetPnPDma  Umc8669GetPnPIrq
+  Umc8669ReadActive                   Umc8669ReadComPortPriAddr
+  Umc8669ReadIO     Umc8669ReadPriAddr                  Umc8669SetPnPDma
+  Umc8669SetPnPIrq  Umc8669WriteActive                  Umc8669WriteIO
+  Umc8669WritePriAddr               
+
+bu669fdo          Offset: 00026fe0H  Code and data size: 15H
+  Umc8669BBlkFloppyControllerOff    
+
+bu669fda          Offset: 000270b0H  Code and data size: 29H
+  Umc8669BBlkFloppyControllerAuto   
+
+bu669x            Offset: 000271c0H  Code and data size: 24H
+  Umc8669BBlkWriteIO                
+
+rw877lp           Offset: 00027260H  Code and data size: 1dcH
+  Win877ParallelPort                  Win877_LPT_CODE_PRESENT
+
+rw877lpe          Offset: 000276a0H  Code and data size: 608H
+  Win877ParallelPortExt               Win877_LPT_EXT_CODE_PRESENT
+
+rw877ca           Offset: 00028170H  Code and data size: 17dH
+  Win877SerialPortA                 
+
+rw877cb           Offset: 000284c0H  Code and data size: 1d9H
+  Win877SerialPortB                 
+
+rw877fd           Offset: 000288f0H  Code and data size: 17aH
+  Win877FloppyController            
+
+rw877hd           Offset: 00028c60H  Code and data size: 171H
+  Win877IdeController               
+
+rw877x1           Offset: 00028f80H  Code and data size: d8H
+  Win877CommonRegisterInit            Win877IrqMaskTable
+  Win877ReadIO      Win877WriteIO   
+
+bw877fdo          Offset: 00029170H  Code and data size: 9H
+  Win877BBlkFloppyControllerOff     
+
+bw877fda          Offset: 00029230H  Code and data size: 43H
+  Win877BBlkFloppyControllerAuto    
+
+bw877x            Offset: 00029390H  Code and data size: 6fH
+  Win877BBlkWriteIO                 
+
+rw87alp           Offset: 000294a0H  Code and data size: 1dcH
+  Win877AFParallelPort                Win877AF_LPT_CODE_PRESENT
+
+rw87alpe          Offset: 000298f0H  Code and data size: 617H
+  Win877AFParallelPortExt             Win877AF_LPT_EXT_CODE_PRESENT
+
+rw87aca           Offset: 0002a400H  Code and data size: 17dH
+  Win877AFSerialPortA               
+
+rw87acb           Offset: 0002a760H  Code and data size: 289H
+  Win877AFSerialPortB               
+
+rw87afd           Offset: 0002acd0H  Code and data size: 17aH
+  Win877AFFloppyController          
+
+rw87ahd           Offset: 0002b050H  Code and data size: 171H
+  Win877AFIdeController             
+
+rw87ax1           Offset: 0002b380H  Code and data size: d8H
+  Win877AFCommonRegisterInit          Win877AFIrqMaskTable
+  Win877AFReadIO    Win877AFWriteIO 
+
+bw87afdo          Offset: 0002b580H  Code and data size: 9H
+  Win877AFBBlkFloppyControllerOff   
+
+bw87afda          Offset: 0002b640H  Code and data size: 43H
+  Win877AFBBlkFloppyControllerAuto  
+
+bw87ax            Offset: 0002b7a0H  Code and data size: 6fH
+  Win877AFBBlkWriteIO               
+
+rw627lp           Offset: 0002b8c0H  Code and data size: 1dfH
+  Win627ParallelPort                  Win627_LPT_CODE_PRESENT
+
+rw627lpe          Offset: 0002bd50H  Code and data size: 5caH
+  Win627ParallelPortExt               Win627_LPT_EXT_CODE_PRESENT
+
+rw627ca           Offset: 0002c7c0H  Code and data size: 186H
+  Win627SerialPortA                 
+
+rw627cb           Offset: 0002cb70H  Code and data size: 1ccH
+  Win627SerialPortB                 
+
+rw627ir           Offset: 0002cfe0H  Code and data size: 192H
+  Win627CIrPort   
+
+rw627gam          Offset: 0002d3a0H  Code and data size: 128H
+  Win627GamePort  
+
+rw627mid          Offset: 0002d6c0H  Code and data size: 1b6H
+  Win627MidiPort  
+
+rw627fd           Offset: 0002dad0H  Code and data size: 147H
+  Win627FloppyController            
+
+rw627x1           Offset: 0002de10H  Code and data size: 145H
+  set_win627_key_wakeup_password      Win627CommonRegisterInit
+  Win627Read6061    Win627ReadIO      WIN627SerialConfigTable
+  Win627Write6061   Win627WriteIO   
+
+bw627fdo          Offset: 0002e100H  Code and data size: 19H
+  Win627BBlkFloppyControllerOff     
+
+bw627fda          Offset: 0002e1e0H  Code and data size: 49H
+  Win627BBlkFloppyControllerAuto    
+
+bw627kbo          Offset: 0002e370H  Code and data size: 13H
+  Win627BBlkKeyboardControllerOff   
+
+bw627kba          Offset: 0002e450H  Code and data size: 47H
+  Win627BBlkKeyboardControllerAuto  
+
+bw627x            Offset: 0002e5c0H  Code and data size: 32H
+  Win627BBlkWriteIO_x               
+
+rw977lp           Offset: 0002e6a0H  Code and data size: 1dcH
+  Win977ParallelPort                  Win977_LPT_CODE_PRESENT
+
+rw977lpe          Offset: 0002eb00H  Code and data size: 606H
+  Win977ParallelPortExt               Win977_LPT_EXT_CODE_PRESENT
+
+rw977ca           Offset: 0002f620H  Code and data size: 18aH
+  Win977SerialPortA                 
+
+rw977cb           Offset: 0002f9e0H  Code and data size: 1e0H
+  SetComBIRMode     Win977SerialPortB                 
+
+rw977ir           Offset: 0002feb0H  Code and data size: 2e5H
+  Win977IrPort    
+
+rw977fd           Offset: 000304a0H  Code and data size: 144H
+  Win977FloppyController            
+
+rw977x1           Offset: 000307b0H  Code and data size: 139H
+  CheckDevRev       set_key_wakeup_password             Win977CommonRegisterInit
+  Win977Read6061    Win977ReadIO      Win977Write6061   Win977WriteIO
+
+rw977x2           Offset: 00030aa0H  Code and data size: 21H
+  WIN977AFSerialConfigTable           Win977DXToConfigNumber
+
+bw977fdo          Offset: 00030b90H  Code and data size: 13H
+  Win977BBlkFloppyControllerOff     
+
+bw977fda          Offset: 00030c70H  Code and data size: 33H
+  Win977BBlkFloppyControllerAuto    
+
+bw977kbo          Offset: 00030de0H  Code and data size: 13H
+  Win977BBlkKeyboardControllerOff   
+
+bw977kba          Offset: 00030ec0H  Code and data size: 37H
+  Win977BBlkKeyboardControllerAuto  
+
+bw977rto          Offset: 00031010H  Code and data size: 13H
+  Win977BBlkRTCControllerOff        
+
+bw977rta          Offset: 000310e0H  Code and data size: 5cH
+  Win977BBlkRTCControllerAuto       
+
+bw977x            Offset: 00031250H  Code and data size: 3aH
+  Win977BBlkWriteIO_x               

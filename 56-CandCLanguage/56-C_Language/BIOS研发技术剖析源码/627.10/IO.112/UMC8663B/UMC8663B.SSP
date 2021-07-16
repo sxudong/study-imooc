@@ -1,0 +1,168 @@
+BeginDevice (Umc8663BIdeController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8663B_IDE_CONTROLLER)
+			Text = "On-Board IDE"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary":DEFAULT:POWERON,
+				  "Secondary",
+		EndQuestion
+	EndScreen
+EndDevice   // Umc8663BIdeController
+BeginDevice (Umc8663BFloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8663B_FLOPPY_CONTROLLER)
+			Text = "On-Board FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+	EndScreen
+EndDevice   // Umc8663BFloppyController
+BeginDevice (Umc8663BSerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8663B_COMA_PORT)
+			Text = "Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice   // Umc8663BSerialPortA
+BeginDevice (Umc8663BSerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8663B_COMB_PORT)
+			Text = "Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice   // Umc8663BSerialPortB
+BeginDevice (Umc8663BSerialPortA,Umc8663BSerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8663B_COM_MODE)
+			Text = "Serial Port Mode"
+			Options = "Normal":DEFAULT:POWERON,
+				  "HPSIR",
+				  "ASKIR"
+		EndQuestion
+		Question (Q_UMC8663B_IR_PORT)
+			Text = "  IR Port"
+			ShadeWhen (Q_UMC8663B_COM_MODE) = "Normal"
+			OptionSet = "N/A"
+			OptionSet = RESERVED, "Port1", "Port2" // Fixed - Davidd 4/3/96
+		EndQuestion
+		Question (Q_UMC8663B_DUPLEX) // Added - Davidd 4/3/96
+			Text = "  Duplex Mode"
+			ShadeWhen (Q_UMC8663B_COM_MODE) = "Normal"
+			OptionSet = "N/A"
+			OptionSet = "Full Duplex", "Half Duplex"
+		EndQuestion
+	EndScreen
+EndDevice   // Umc8663BSerialPortA,Umc8663BSerialPortB
+BeginDevice (Umc8663BParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8663B_LPT_PORT)
+			Text = "On-Board Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_UMC8663B_LPT_MODE)
+			Present = No
+			Text = "Dummy question"
+			Options = "N/A":DEFAULT:POWERON
+		EndQuestion
+		Question (Q_UMC8663B_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = UMC8663B_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice   // Umc8663BParallelPort
+BeginDevice (Umc8663BParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8663B_LPT_PORT)
+			Text = "On-Board Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_UMC8663B_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = Umc8663B_Lpt_Mode_Xfn
+			OptionBits = 2
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_UMC8663B_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+			ExternalFunction = UMC8663B_Lpt_Dma_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+		Question (Q_UMC8663B_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = UMC8663B_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice   // Umc8663BParallelPortExt
+String (STR_UMC8663B_AUTO)
+	Text = "Auto"
+EndString
+String (STR_UMC8663B_DIS)
+	Text = "Disabled"
+EndString
+String (STR_UMC8663B_378)
+	Text = "378"
+EndString
+String (STR_UMC8663B_278)
+	Text = "278"
+EndString
+String (STR_UMC8663B_3BC)
+	Text = "3BC"
+EndString
+String (STR_UMC8663B_NORMAL)
+	Text = "Normal"
+EndString
+String (STR_UMC8663B_EPP)
+	Text = "EPP"
+EndString
+String (STR_UMC8663B_ECP)
+	Text = "ECP"
+EndString
+String (STR_UMC8663B_IRQ5)
+	Text = "5"
+EndString
+String (STR_UMC8663B_IRQ7)
+	Text = "7"
+EndString
+String (STR_UMC8663B_DMA0)
+	Text = "0"
+EndString
+String (STR_UMC8663B_DMA1)
+	Text = "1"
+EndString
+String (STR_UMC8663B_DMA3)
+	Text = "3"
+EndString
+String (STR_UMC8663B_NA)
+	Text = "N/A"
+EndString

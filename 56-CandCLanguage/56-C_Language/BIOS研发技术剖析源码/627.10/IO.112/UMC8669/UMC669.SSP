@@ -1,0 +1,181 @@
+BeginDevice (Umc8669IdeController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8669_IDE_CONTROLLER)
+			Text = "OnBoard IDE"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary":DEFAULT:POWERON,
+				  "Secondary"
+		EndQuestion
+	EndScreen
+EndDevice	// UMC8669IdeController
+BeginDevice (Umc8669FloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8669_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+	EndScreen
+EndDevice	// UMC8669FloppyController
+BeginDevice (Umc8669SerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8669_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice	// UMC8669SerialPortA
+BeginDevice (Umc8669SerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8669_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_UMC8669_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+			ShadeWhen (Q_UMC8669_COMB_PORT) = "Disabled"
+			Optionset = "Normal",  "HPSIR", "ASKIR"
+			Optionset = "N/A"
+			Optionset = "Normal",  "HPSIR", "ASKIR"
+		EndQuestion
+		Question (Q_UMC8669_COMB_DUPLEX)
+			Text = "  Serial Port2 Duplex"
+			ExternalFunction = Umc8669_ComB_Duplex_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+		Question (Q_UMC8669_COMB_IR_GROUP)
+			Text = "  Serial Port2 IR group"
+			ExternalFunction = Umc8669_ComB_IrGroup_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+	EndScreen
+EndDevice   // Umc8669SerialPortB
+BeginDevice (UMC8669ParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8669_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_UMC8669_LPT_MODE)
+			Present = No
+			Text = "Dummy question"
+			Options = "N/A"
+		EndQuestion
+		Question (Q_UMC8669_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Umc8669_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice	// UMC8669ParallelPort
+BeginDevice (Umc8669ParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8669_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			ExternalFunction = Umc8669_Lpt_Addr_Xfn
+			OptionBits = 3
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_UMC8669_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = Umc8669_Lpt_Mode_Xfn
+			OptionBits = 2
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_UMC8669_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+			ExternalFunction = Umc8669_Lpt_Dma_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+		Question (Q_UMC8669_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Umc8669_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice   // Umc8669ParallelPortExt
+String (STR_UMC8669_HALF)
+	Text = "Half Duplex"
+EndString
+String (STR_UMC8669_FULL)
+	Text = "Full Duplex"
+EndString
+String (STR_UMC8669_GROUP_A)
+	Text = "A - No IDE"
+EndString
+String (STR_UMC8669_GROUP_B)
+	Text = "B - No IDE"
+EndString
+String (STR_UMC8669_GROUP_C)
+	Text = "C"
+EndString
+String (STR_UMC8669_AUTO)
+	Text = "Auto"
+EndString
+String (STR_UMC8669_DIS)
+	Text = "Disabled"
+EndString
+String (STR_UMC8669_378)
+	Text = "378"
+EndString
+String (STR_UMC8669_278)
+	Text = "278"
+EndString
+String (STR_UMC8669_3BC)
+	Text = "3BC"
+EndString
+String (STR_UMC8669_NORMAL)
+	Text = "Normal"
+EndString
+String (STR_UMC8669_EPP)
+	Text = "EPP"
+EndString
+String (STR_UMC8669_ECP)
+	Text = "ECP"
+EndString
+String (STR_UMC8669_IRQ5)
+	Text = "5"
+EndString
+String (STR_UMC8669_IRQ7)
+	Text = "7"
+EndString
+String (STR_UMC8669_DMA0)
+	Text = "0"
+EndString
+String (STR_UMC8669_DMA1)
+	Text = "1"
+EndString
+String (STR_UMC8669_DMA3)
+	Text = "3"
+EndString
+String (STR_UMC8669_NA)
+	Text = "N/A"
+EndString

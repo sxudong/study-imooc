@@ -1,0 +1,366 @@
+        page    ,132
+	title .				PCI Device Initializer
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;
+;---------------------------------------;
+;---------------------------------------;
+MaxPOSTI2OTimeOut       equ     20      ;; I2O time out in secs. during Post
+MaxRuntimeI2OTimeOut    equ     20      ;; I2O time out in secs. during Runtime
+MaxIOP          equ     08      ;; Maximum number of IOPs supported in the BIOS.
+MaxI2ODevices   equ     32      ;; Maximum number of devices that can be controlled by I2O (BIOS limitaion)
+MaxI2OBsaDevices        equ     8
+I2ODSEG_SIZE    equ     2000h   ;; 8K Bytes
+POST_I2ODSEG    equ     400h    ;; I2O Data Segment(during POST) 400h:0 (after USB data segment)
+;---------------------------------------;
+; I2O Message Specific equates          ;
+;---------------------------------------;
+        OrganizationID          equ     0000h
+        HostProcessorAddress    equ     001h
+        IOPAddress              equ     000h
+        VersionOffset           equ     001h            ; I2O Specification Version
+        InitiatorHPOrMask       equ     00001000h
+        ReplyBufferSize         equ     60h             ; 96 Bytes
+        InitiatorContext        equ     0FEh
+        TransactionContext      equ     0DCh
+        OutboundMframeSize      equ     64              ; 64 bytes
+        ScratchBufferSize       equ     60h
+        InitCode_BIOS           equ     10h
+        SimpleSGLFlags          equ     0D0h
+        RandomBlockStorageClassID       equ     10h
+        AllClassIdentifier      equ     0FFFFFFFFh
+        UnclaimedUserTID        equ     0FFFh
+        DeviceResetEventIndicator       equ     4000000h        ; bit 26 = _DEVICE_RESET event indicator
+        EventDataInvalid        equ     000h
+        EventDataValid          equ     0FFh
+        i2o_invalid_func        equ     001h
+;---------------------------------------;
+; I2O DetailedStatusCode equates        ;
+;---------------------------------------;
+        _SUCCESS                equ     0000h
+        _ABORT_DIRTY            equ     0001h
+        _ABORT_NO_DATA_TRANSFER equ     0002h
+        _ABORT_PARTIAL_TRANSFER equ     0003h
+        _DEVICE_RESET           equ     000Ch
+
+;---------------------------------------;
+; Parameter Operation List Codes        ;
+;---------------------------------------;
+        FIELD_GET               equ     0001h
+        LIST_GET                equ     0002h
+        MORE_GET                equ     0003h
+        SIZE_GET                equ     0004h
+        TABLE_GET               equ     0005h
+        FIELD_SET               equ     0006h
+        LIST_SET                equ     0007h
+        ROW_ADD                 equ     0008h
+        ROW_DELETE              equ     0009h
+        TABLE_CLEAR             equ     000Ah
+
+        BsaDeviceInfoGroup              equ     0000h
+        BsaOperationalControlGroup      equ     0001h
+        BsaMediaInformationGroup        equ     0004h
+        BsaDeviceIdentityGroup          equ     0F100h
+        LctScalarListGroup              equ     0101h
+;---------------------------------------;
+; IOP States                            ;
+;---------------------------------------;
+        IopResetState           equ     02h
+        IopReadyState           equ     05h
+        IopOpState              equ     08h
+;---------------------------------------;
+; I2O ClassCode equates                 ;
+;---------------------------------------;
+        ExecutiveClassID        equ     000h
+        DDMClassID              equ     001h
+        RandomBlockStorageClassID       equ     010h
+;---------------------------------------;
+; I2O Function Code equates             ; 
+;---------------------------------------;
+;; Executive Class Messages
+
+ExecStatusGet           equ     0A0h
+        ExecStatusGetMsgSize    equ     9               ; in dwords
+ExecOutboundInit        equ     0A1h
+        ExecOutboundInitMsgSize equ     8               ; in dwords
+        HostPageFrameSize       equ     -1
+ExecHrtGet              equ     0A8h
+        ExecHrtGetMsgSize       equ     6               ; in dwords
+ExecSysTabSet           equ     0A3h
+        ExecSysTabSetMsgSize    equ     12              ; in dwords
+ExecSysEnable           equ     0D1h
+        ExecSysEnableMsgSize    equ     4
+ExecLctNotify           equ     0A2h
+        ExecLctNotifyMsgSize    equ     8
+ExecBiosInfoSet         equ     0A5h
+        ExecBiosInfoSetMsgSize  equ     5
+ExecBootDeviceSet       equ     0A7h
+        ExecBootDeviceSetMsgSize  equ     5
+
+ExecIopReset            equ     0BDh
+ExecIopResetMsgSize     equ     8
+ExecSysQuiesce          equ     0C3h
+ExecSysQuiesceMsgSize   equ     4
+
+;; Utility Messages
+
+UtilClaim               equ     009h
+        UtilClaimMsgSize        equ     5
+        PRIMARY_USER    equ     001h
+        AUTHORIZED_USER equ     002h
+        SECONDARY_USER  equ     003h
+        MANAGEMENT_USER equ     004h
+        UtilClaimFlags  equ     00Eh        
+UtilClaimRelease        equ     00Bh
+        UtilClaimReleaseSize    equ     5
+UtilParamsGet           equ     006h
+        UtilParamsGetMsgSize    equ     9
+UtilParamsSet           equ     005h
+        UtilParamsSetMsgSize    equ     9
+UtilEventAck            equ     014h
+        UtilEventAckMsgSize     equ     6            
+
+;; Bsa Class Messages
+
+BsaBlockRead            equ     30h        
+BsaBlockWrite           equ     31h
+BsaBlockWriteVerify     equ     33h
+        BsaBlockRWVMsgSize      equ     10
+BsaDeviceReset          equ     27h
+        BsaDeviceResetMsgSize   equ     5
+BsaStatusCheck          equ     25h
+        BsaStatusCheckMsgSize   equ     4
+BsaMediaVerify          equ     35h
+        BsaMediaVerifyMsgSize   equ     8
+I2O_BSA_DSC_TIMEOUT     equ     000Eh
+;---------------------------------------;
+; I2O Bus Type Equates                  ;
+;---------------------------------------;
+        I2OPCIBusType      equ     04
+
+;---------------------------------------;
+; I2O BSA device specific Equates       ;
+;---------------------------------------;
+FDPTEHeadRegisterValue          equ     00E0h
+FDPTEInternalByteI2ODevice      equ     00AFh
+FDPTEHardwareFlags              equ     0810h
+FDPTERevisionLevel              equ     0011h
+BsaTimeMultiplierOrMask         equ     0000h
+BsaDeviceResetControlFlags      equ     0001h   ; Hard Reset
+
+;---------------------------------------;
+; I2O Structure Definitions             ;
+;---------------------------------------;
+i2o_boot_device_selection_key   equ     44h     ;; Scan code for F10 Key
+iop_struct      struct
+        bus_dev_func            dw      ?       ;; bus/dev/func#  
+        base_address            dd      ?       ;; base address
+        base_size               dd      ?       ;; Base address Size
+        InboundPortAddress      dd      ?       ;; InboundPortAddesss
+        OutboundPortAddress     dd      ?       ;; OutboundPortAddress
+
+;; The following info is filled based on replies from different messages during IOP INIT
+
+        ExpectedLctSize         dd      ?       ; ExecStatusGet reply 
+        DesiredPrivateMemSize   dd      ?       ; ExecStatusGet reply
+        DesiredPrivateIOSize    dd      ?       ; ExecStatusGet reply
+
+        OrganizationID          dw      ?       ; Fill this based on the ID assigned by I2O SIG
+        IOP_ID                  dw      ?       ; Assign an unique number for each IOP
+        SegmentNumber           dw      ?       ; Currently a NULL (0000h) value
+        I2oVersion              db      ?       ; ExecStatusGet reply
+        IopState                db      ?       ; ExecStatusGet reply
+        MessengerType           db      ?       ; ExecStatusGet reply
+        InboundMessageFrameSize dw      ?       ; ExecStatusGet reply
+        LastChanged             dd      ?       ; ExecHrtGet reply
+        IopCapabilities         dd      ?       ; ExecStatusGet reply
+
+iop_struct      ends
+
+DevInfo struct
+        IOPIndex        dw      ?
+        BusType         db      ?
+        DeviceInfo      dd      ?
+DevInfo ends
+
+BsaDevInfo      struct
+        IOPIndex        dw      ?
+        BIOSDevNumber   db      ?
+        FDPTOffset      dw      ?
+        FDPTSegment     dw      ?
+        FDPTEOffset     dw      ?
+        FDPTESegment    dw      ?
+        LocalTID        dw      ?
+        UserTID         dw      ?
+        ParentTID       dw      ?
+        IdentityTagLow  dd      ?
+        IdentityTagHigh dd      ?
+        DevInfoValid    db      ?
+;; The following information is derived from Parameter group 0000. The
+;; following info is valid only if DevInfoValid field is 0FFh
+        
+        DeviceType              db      ?
+        BlockSize               dd      ?
+        DeviceCapacityLow       dd      ?
+        DeviceCapacityHigh      dd      ?
+        DeviceCapability        dd      ?
+        DeviceState             dd      ?
+        MediaCapacityLow        dd      ?
+        MediaCapacityHigh       dd      ?
+        MediaBlockSize          dd      ?
+        RWVTimeoutBase          dd      ?
+        RWVTimeout              dd      ?
+        TimeoutBase             dd      ?
+	VendorInfo		db	16 dup(?)
+	ProductInfo		db	16 dup(?)
+	DeviceDescription	db	16 dup(?)
+	ProductRevisionLevel	db	8 dup(?)
+BsaDevInfo      ends
+
+RunBsaDevInfo      struct
+        BIOSDevNumber   db      ?
+        IopBaseAddress  dd      ?               ;; base address        
+        LocalTID        dw      ?
+        UserTID         dw      ?
+        ParentTID       dw      ?
+        IdentityTagLow  dd      ?
+        IdentityTagHigh dd      ?
+        NumOfCylinders  dw      ?               ;; number of cylinders
+        NumOfHeads      db      ?               ;; number of heads
+        NumOfSPT        db      ?               ;; number of SPT
+        NumOfBlocks     dd      ?               ;; Total number of Blocks
+        BlockSize       dd      ?               ;; BlockSize in bytes
+        BsaDummyByte    db      ?               ;; Not Used
+RunBsaDevInfo      ends
+
+;---------------------------------------;
+; EDDS Equates                          ;
+;---------------------------------------;
+MaxPhysicalRegions      equ     11
+
+Region_Size             equ     0
+Region_Offset           equ     4
+Seg_or_Select           equ     8
+Number_Avail            equ     0Ch
+Number_Used             equ     0Eh
+R0_Physical_Addr        equ     10h
+R0_Size                 equ     14h
+
+;---------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+
+;-----------------------------------------------;
+; I2O BlockStorage Status Code EQUATES          ;
+;-----------------------------------------------;
+
+I2OSuccessful           equ     00
+I2ODeviceFailure        equ     01
+I2ODeviceNotReady       equ     02
+I2OMediaNotPresent      equ     03
+I2OMediaLocked          equ     04
+I2OMediaFailure         equ     05
+I2OProtocolFailure      equ     06
+I2OBusFailure           equ     07
+I2OAccessVoilation      equ     08
+I2OWriteProtected       equ     09
+I2ONoReply              equ     10
+
+;-----------------------------------------------;
+;	STACK EQUATES FOR ES, DS in		;
+;	PUSH	ES				;
+;	PUSH	DS				;
+;	PUSHAD					;
+;-----------------------------------------------;
+
+StackPosEDI		equ	0		; position of EDI on PUSHAD
+StackPosESI		equ	4		; position of ESI on PUSHAD
+StackPosEBP		equ	8		; position of EBP on PUSHAD
+StackPosESP		equ	12		; position of old ESP on PUSHAD
+StackPosEBX		equ	16		; position of EBX on PUSHAD
+StackPosEDX		equ	20		; position of EDX on PUSHAD
+StackPosECX		equ	24		; position of ECX on PUSHAD
+StackPosEAX		equ	28		; position of EAX on PUSHAD
+StackPosPUSHADDS	equ	32
+StackPosPUSHADES	equ	34
+
+;-----------------------------------------------;
+;	  STACK EQUATES FOR PUSHA		;
+;-----------------------------------------------;
+
+StackPosDI		equ	0		; position of DI on PUSHA
+StackPosSI		equ	2		; position of SI on PUSHA
+StackPosBP		equ	4		; position of BP on PUSHA
+StackPosSP		equ	6		; position of old SP on PUSHA
+StackPosBX		equ	8		; position of BX on PUSHA
+StackPosDX		equ	10		; position of DX on PUSHA
+StackPosCX		equ	12		; position of CX on PUSHA
+StackPosAX		equ	14		; position of AX on PUSHA
+
+;-----------------------------------------------;
+;	STACK EQUATES FOR PUSHAD		;
+;	AFTER ALLOCATING n BYTES in STACK	;
+;-----------------------------------------------;
+MISCBYTESINSTACK        equ     32             	; allocate space in stack
+                                               	; for misc information
+StackPosDeviceType      equ     00h		; DB
+StackPosNoOfHead        equ     01h		; DB
+StackPosNoOfSPT         equ     02h		; DB
+StackPosReserved	equ	03h		; DB..Not used
+StackPosNoOfCylinder    equ     04h		; DW
+StackPosLocalTID        equ     06h		; DW
+StackPosLengthOfI2oSgl	equ	08h		; DW
+StackPosNoOfBlocks      equ     0Ah		; DD
+StackPosBlockSize       equ     0Eh		; DD
+StackPosIOPInboundPort  equ     12h		; DD
+StackPosIOPOutboundPort equ     16h		; DD
+
+I2oStackPosEDI          equ     00+MISCBYTESINSTACK; position of EDI on PUSHAD
+I2oStackPosESI          equ     04+MISCBYTESINSTACK; position of ESI on PUSHAD
+I2oStackPosEBP          equ     08+MISCBYTESINSTACK; position of EBP on PUSHAD
+I2oStackPosESP          equ     12+MISCBYTESINSTACK; position of ESP on PUSHAD
+I2oStackPosEBX          equ     16+MISCBYTESINSTACK; position of EBX on PUSHAD
+I2oStackPosEDX          equ     20+MISCBYTESINSTACK; position of EDX on PUSHAD
+I2oStackPosECX          equ     24+MISCBYTESINSTACK; position of ECX on PUSHAD
+I2oStackPosEAX          equ     28+MISCBYTESINSTACK; position of EAX on PUSHAD
+I2oStackPosPUSHADDS     equ     32+MISCBYTESINSTACK; position of DS  on PUSH ES/PUSH DS/PUSHAD
+I2oStackPosPUSHADES     equ     34+MISCBYTESINSTACK; position of ES  on PUSH ES/PUSH DS/PUSHAD
+
+;-----------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+
+

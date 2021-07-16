@@ -1,0 +1,126 @@
+.xlist
+
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------;
+;	CALL_SP MACRO DEFINITION	;
+;---------------------------------------;
+ret_sp	macro	dummy			; call routine without stack
+	local	llll			; local label
+	even
+	mov	sp,offset cgroup:llll-2	; return address
+	jmp	dummy
+	dw	offset cgroup:llll	; return address
+llll:
+endm
+;---------------------------------------;
+;	JMP_SP MACRO DEFINITION		;
+;---------------------------------------;
+jmp_sp	macro	dummy			; goto routine & back (via SP)
+	local	llll			; local label
+	mov	sp,offset cgroup:llll	; return address
+	jmp	dummy
+llll:
+endm
+;---------------------------------------;
+;	JMP_BP MACRO DEFINITION		;
+;---------------------------------------;
+jmp_bp	macro	dummy			; goto routine & back (via SI)
+	local	llll			; local label
+	mov	bp,offset cgroup:llll	; return address
+	jmp	dummy
+llll:
+endm
+;---------------------------------------;
+;	JMP_CX MACRO DEFINITION		;
+;---------------------------------------;
+jmp_cx	macro	dummy			; goto routine & back (via SI)
+	local	llll			; local label
+	mov	cx,offset cgroup:llll	; return address
+	jmp	dummy
+llll:
+endm
+;---------------------------------------;
+;	JMP_SI MACRO DEFINITION		;
+;---------------------------------------;
+jmp_si	macro	dummy			; goto routine & back (via SI)
+	local	llll			; local label
+	mov	si,offset cgroup:llll	; return address
+	jmp	dummy
+llll:
+endm
+;---------------------------------------;
+;	JMP_DI MACRO DEFINITION		;
+;---------------------------------------;
+jmp_di	macro	dummy			; goto routine & back (via DI)
+	local	llll			; local label
+	mov	di,offset cgroup:llll	; return address
+	jmp	dummy
+llll:
+endm
+;---------------------------------------;
+;	DES_TAB MACRO DEFINITION	;
+;---------------------------------------;
+des_tab	macro	v_mode_seg_size,seg_low_word,seg_high_byte,access_right
+	dw	v_mode_seg_size
+	dw	seg_low_word		; low word for descriptor
+	db	seg_high_byte			; descriptor high byte
+	db	access_right			; access right byte
+	dw	0000h			; reserved word
+endm
+;---------------------------------------;
+;	CHECK_POINT_INI	MACRO		;
+;	CHECK_POINT_SI	MACRO		;
+;	CHECK_POINT	MACRO		;
+;	CHECK_POINT_V	MACRO		;
+;---------------------------------------;
+check_point_ini	macro	xx
+	mov	al,xx
+	out	80h,al
+endm
+check_point_si	macro	xx
+	mov	al,xx
+	jmp_si	check_point_no_stack
+endm
+check_point	macro	xx
+	mov	al,xx
+	call	check_point_stack
+endm
+check_point_v	macro	xx
+	mov	al,xx
+	call	check_point_stack_virtual
+endm
+;---------------------------------------;
+;	IO_DELAY MACRO			;
+;---------------------------------------;
+io_delay	macro
+	jcxz	short $+2
+endm
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------;
+.list

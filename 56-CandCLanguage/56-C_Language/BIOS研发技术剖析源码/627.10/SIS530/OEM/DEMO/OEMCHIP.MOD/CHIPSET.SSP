@@ -1,0 +1,571 @@
+//;*****************************************************************;
+//;*****************************************************************;
+//;**                                                           **;
+//;**   (C)Copyright 1985-1996, American Megatrends Inc.        **;
+//;**                                                           **;
+//;**                   All Rights Reserved.                    **;
+//;**                                                           **;
+//;**           6145-F, Northbelt Parkway, Norcross,            **;
+//;**                                                           **;
+//;**           Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+//;**                                                           **;
+//;*****************************************************************;
+//;*****************************************************************;
+
+String (STR_CBR)
+        Text = "CBR"
+EndString
+
+String (STR_SELF)
+        Text = "Self"
+EndString
+
+String (STR_4SCLKS)
+        Text = "4 SCLKs"
+EndString
+
+String (STR_3SCLKS)
+        Text = "3 SCLKs"
+EndString
+
+String (STR_2SCLKS)
+        Text = "2 SCLKs"
+EndString
+
+String (STR_0WS)
+        Text = "0 W/S"
+EndString
+
+String (STR_1WS)
+        Text = "1 W/S"
+EndString
+
+String (STR_50NS)
+        Text = "50 ns"
+EndString
+
+String (STR_60NS)
+        Text = "60 ns"
+EndString
+
+String (STR_1MB)
+        Text    = "1MB"
+EndString
+
+String (STR_2MB)
+        Text    = "2MB"
+EndString
+
+String (STR_4MB)
+        Text    = "4MB"
+EndString
+
+String (STR_8MB)
+        Text    = "8MB"
+EndString
+
+Screen (SCR_CHIPSET)
+
+       Question (Q_SHARE_MEMORY)
+                Text    = "Share Memory Function"
+                Options = "Disabled"
+                          "Enabled":DEFAULT:POWERON 
+                Present = Yes
+       EndQuestion
+
+       Question (Q_SHARE_MEMORY_SIZE)
+                Text    = "Share Memory Size"
+                ExternalFunction = share_memory
+                OptionBits = 2
+                Default = 03h
+                PowerOn = 03h
+                Present = Yes
+       EndQuestion
+
+Question (Q_MONITOR_DEVICE)
+        Text    = "Display Type Select"
+        Options = "H/W Trapping":DEFAULT:POWERON,
+                  "CRT Only",
+                  "LCD Only", 
+                  "CRT & LCD", 
+                  "TV NTSC Over Scan", 
+                  "TV NTSC Under Scan", 
+                  "TV PAL Over Scan", 
+                  "TV PAL Under Scan" 
+        Present = Yes
+EndQuestion
+       Question (Q_CACHE_TAG)
+                Text    = "Cache Tag Address Line"
+                Options = "7-Bit",
+                          "8-Bit":DEFAULT:POWERON
+                Present = Yes
+       EndQuestion
+
+
+//      Question (Q_CHIPSET_VERSION)
+//                      Text    = "Chipset Version of SiS530"
+//                      Options = "Version A1",
+//                                "Version A2":DEFAULT:POWERON
+//              Present = No
+//      EndQuestion
+
+        //50h
+        Question (Q_NA)
+                Text = "NA# Assert Control"
+                Options = "Disabled",
+                          "Enabled":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+//      Question (Q_NA_WRITE)
+//                Text = "Mem Single Write Cycle NA#"
+//                Options = "Disabled":POWERON:DEFAULT,
+//                        "Enabled"
+//                Present = Yes
+//        EndQuestion
+
+        Question (Q_NA_L2_HIT)
+                Text = "NA# Timer for L2 Hit Read"
+                Options = "Normal",
+                          "Delay 1T":POWERON:DEFAULT
+                Present = Yes
+        EndQuestion
+
+        Question (Q_NA_IO_CYCYE)
+                Text = "NA# Timer for IO cycle"
+                Options = "Disabled",
+                          "Enabled":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+//        Question (Q_cache_auto)
+//                Text = "Cache auto sizing"
+//                Options = "Auto":DEFAULT:POWERON,
+//                          "256K",
+//                          "512K",
+//                          "1M"
+//                Present = Yes
+//        EndQuestion
+
+//        // 51h
+//        Question (Q_BRDY_L2_HIT)
+//                Text = "BRDY# timing for L2 hit read "
+//                Options = "Normal":DEFAULT:POWERON,
+//                          "Delay 1 CLK"
+//                Present = Yes
+//        EndQuestion
+
+//        Question (Q_L2_BURST)
+//                Text = "L2 cache burst"
+//                Options = "Toggle":DEFAULT:POWERON,
+//                          "Linear"
+//                Present = Yes
+//        EndQuestion
+
+        // 94h
+        Question (Q_GRAPHIC_WIN)
+                Text = "Graphic Win Size"
+                Options = "4M",
+                          "8M",
+                          "16M",
+                          "32M",
+                          "64M":POWERON:DEFAULT,
+                          "128M",
+                          "256M",
+                          RESERVED
+                Present         = Yes
+        EndQuestion
+
+        // 52h
+         Question (Q_DRAM_SYNCHRONOUS)
+                 Text = "DRAM read time lead-off"
+                 Options = "Normal":DEFAULT:POWERON,
+                           "Slower"
+                 Present = Yes
+         EndQuestion
+
+//        Question (Q_SINGLE_READ)
+//                Text = "Single read Allocation"
+//                ExternalFunction = Single_read
+//                OptionBits = 1
+//                Default = 01h
+//                PowerOn = 00h
+//                Present         = Yes
+//        EndQuestion
+
+         Question (Q_GRAPWIN_ADD_DECODE)
+                 Text = "Graphic Address decoding"
+                 Options = "1T",
+                           "2T":POWERON:DEFAULT
+                 Present = Yes
+         EndQuestion
+
+         Question (Q_SYNCHRONOUS_CPU_DRAM)
+                 Text = "Synchronous CPU/DRAM"
+                 Options = "Disabled":DEFAULT:POWERON,
+                           "Enabled"
+                 Present = Yes
+         EndQuestion
+
+//        //55h
+//        Question (Q_DRAM_START_POINT)
+//                Text = "Starting Point"
+//                Options = "1T":DEFAULT:POWERON,
+//                          "2T",
+//                          "3T",
+//                          "5T"
+//                Present = Yes
+//        EndQuestion
+//
+//         Question (Q_PAGE_MISS_WRITE)
+//                 Text = "Page Miss Write"
+//               Options = "Disabled",
+//                         "Enabled":DEFAULT:POWERON
+//                 Present = Yes
+//         EndQuestion
+//
+//         Question (Q_PAGE_MISS_DATAREAD)
+//                 Text = "Page Miss Data Read"
+//               Options = "Disabled",
+//                         "Enabled":DEFAULT:POWERON
+//                 Present = Yes
+//         EndQuestion
+//
+//         Question (Q_PAGE_MISS_CODEREAD)
+//                 Text = "Page Miss Code Read"
+//               Options = "Disabled":POWERON:DEFAULT,
+//                         "Enabled"
+//                 Present = Yes
+//         EndQuestion
+//
+//         Question (Q_PAGE_MISS_GRAPHICS)
+//                 Text = "Page Miss Graphics"
+//               Options = "Disabled",
+//                         "Enabled":DEFAULT:POWERON
+//                 Present = Yes
+//         EndQuestion
+
+        //56h
+        Question (Q_RAS_PULSE_WIDTH)
+                Text = "Refresh Command Delay"
+                 Options = "9T",
+                           "8T",
+                           "7T":DEFAULT:POWERON,
+                           "6T"
+                Present         = Yes
+        EndQuestion
+
+         Question (Q_REFRESH_DEPTH)
+                 Text = "Refresh Queue Depth"
+                 Options = "0",
+                           "4",
+                           "8",
+                           "12":DEFAULT:POWERON
+                 Present = Yes
+         EndQuestion
+
+         Question (Q_REFRESH_TIME)
+                 Text = "Refresh Rate Time"
+                 Options = "15.6us":DEFAULT:POWERON,
+                           "7.8us",
+                           "3.9us",
+                           Reserved
+                 Present = Yes
+         EndQuestion
+
+         Question (Q_REFRESH_ENABLE)
+                 Text = "DRAM Refresh Enable"
+                 Options = "Disable",
+                           "Enabled":POWERON:DEFAULT
+                 Present = Yes
+         EndQuestion
+
+//        //58h
+//         Question (Q_RAS_PRECHARGE)    // home
+//                 Text = "RAS precharge time"
+//                 Options = "2T",
+//                           "3T":DEFAULT:POWERON,
+//                           "4T",
+//                           "5T",
+//                 Present = Yes
+//         EndQuestion
+//
+//         Question (Q_RAS_CAS_DELAY)  // home
+//                 Text = "RAS to CAS Delay"
+//                 Options = "2T",
+//                           "3T":DEFAULT:POWERON,
+//                           "4T",
+//                           "5T",
+//                 Present = Yes
+//         EndQuestion
+
+
+        //5dh
+        Question (Q_SDRAM_WR_RETIRE)
+                Text = "SDRAM Write Retire Rate"
+                Options = "X222",
+                          "X111":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_CAS_LATENCY)
+                Text = "CAS Latency"
+                Options = "2T",
+                          "3T":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        //5eh
+        Question (Q_SDRAM_ROWHIT)
+                Text = "DRAM Optimal RAS"
+                Options ="Disabled":DEFAULT:POWERON,
+                         "Enabled"
+                Present = Yes
+        EndQuestion
+
+
+        //80h
+        Question (Q_MAX_BURSTABLE)
+                Text = "Address Align for Bursting"
+                Options = "256B",
+                          "512B",
+                          "1KB":POWERON:DEFAULT,
+                          "2KB",
+                          "4KB",
+                          RESERVED,
+                          RESERVED,
+                          RESERVED
+                Present = Yes
+        EndQuestion
+
+
+        //81h
+//        Question (Q_SNOOP_PCI_WRITE)
+//                Text = "Advanced Snoop for Write"
+//                Options = "Disabled":DEFAULT:POWERON,
+//                        "Enabled"
+//                Present = Yes
+//        EndQuestion
+
+//        Question (Q_SNOOP_PCI_READ)
+//                Text = "Advanced Snoop for Read"
+//                Options = "Disabled":DEFAULT:POWERON,
+//                        "Enabled"
+//                Present = Yes
+//        EndQuestion
+
+        Question (Q_DMA_REQ_CNT)
+                Text = "DMA request control"
+                Options = "After CPU":DEFAULT:POWERON,
+                          "After PCI"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_TIME_WRITE_L2)
+                Text = "Timing of Write L2"
+                Options = "2-2-2":DEFAULT:POWERON,
+                          "3-3-3"
+                Present = Yes
+        EndQuestion
+
+
+
+        //82h
+        Question (Q_CONCURRENCY_MODE)
+                Text = "PCI Peer concurrency"
+                Options = "Disabled",
+                          "Enabled":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_TRDY_ASSERT_TIME)
+                Text = "Prefetch Buffer Control"
+                Options = "2 Qws":DEFAULT:POWERON,
+                          "1 Qws"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_READ_PREFETCH)
+                Text = "Memory Read Command"
+                Options = "Enabled":DEFAULT:POWERON,
+                          "Disabled"
+                Present = Yes
+        EndQuestion
+
+//        Question (Q_INIT_LATENCY_TIME)
+//                Text = "Initial Latency Timer"
+//                Options = "Disabled":POWERON:DEFAULT,
+//                        "16 Clocks",
+//                        "24 Clocks",
+//                        "32 Clocks"
+//                Present = Yes
+//        EndQuestion
+
+//        Question (Q_SUB_LATENCY_TIME)
+//                Text = "Subsequent Latency Timer"
+//                Options = "Disabled":POWERON:DEFAULT,
+//                        "Enabled"
+//                Present = Yes
+//        EndQuestion
+
+        Question (Q_ADD_DECODE_TIME)
+                Text = "Address Decoding Time"
+                Options = "1T":DEFAULT:POWERON,
+                          "2T"
+                Present = Yes
+        EndQuestion
+
+        //83h
+        Question (Q_MEM_BURST_CNT)
+                Text = "Memory Burst Control"
+                Options = "Disabled",
+                          "Enabled":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_MEM_POST_WRITE)
+                Text = "Memory Post Write"
+                Options = "Disabled",
+                          "Enabled":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+//        //84h
+//        Question (Q_PCI_GRANT_TIMER)
+//                Text = "Grant Timer for PCI33"
+//                ExternalFunction = Grant_Timer_PCI
+//                OptionBits = 8
+//                Default = 060h
+//                PowerOn = 0ffh
+//                Present         = No
+//        EndQuestion
+//
+//        // 85h
+//        Question (Q_PCI_GRANT_TIMER1)
+//                Text = "Grant Timer for PCI33_1"
+//                ExternalFunction = Grant_Timer_PCI1
+//                OptionBits = 8
+//                Default = 000h
+//                PowerOn = 0ffh
+//                Present         = No
+//        EndQuestion
+//
+//        // 86h
+//        Question (Q_IDLE_TIMER_PCI)
+//                Text = "Idle Timer for PCI"
+//                ExternalFunction = Idle_Timer_PCI
+//                OptionBits = 8
+//                Default = 003h
+//                PowerOn = 0ffh
+//                Present         = No
+//        EndQuestion
+
+//        //87h
+//        Question (Q_CPU_ARBITRATION)
+//                Text = "CPU Arbitration on PCI"
+//                Options = "Disabled",
+//                        "Enabled":DEFAULT:POWERON
+//                Present = Yes
+//        EndQuestion
+//
+//        Question (Q_64BIT_RETRY)
+//                Text = "64Bit Access Retry"
+//                Options = "Continue":DEFAULT:POWERON,
+//                        "Back-off"
+//                Present = Yes
+//        EndQuestion
+//
+//        Question (Q_LOCK_CONTROL)
+//                Text = "LOCK CONTROL"
+//                Options = "Disabled",
+//                        "Enabled":DEFAULT:POWERON
+//                Present = Yes
+//        EndQuestion
+
+
+    // PCI to ISA Register 46h
+
+    Question (Q_16BIT_IO_CYCLE)
+        Text    = "16Bit I/O Recovery Time"
+        Options = "5T",
+                  "4T",
+                  "3T":DEFAULT:POWERON,
+                  "2T"
+        Present = Yes
+    EndQuestion
+
+    Question (Q_8BIT_IO_CYCLE)
+        Text    = "8Bit I/O Recovery Time"
+        Options = "8T",
+                  "5T":DEFAULT:POWERON,
+                  "4T",
+                  "3T"
+        Present = Yes
+    EndQuestion
+
+    // PCI to ISA Register 47h
+    Question (Q_16BIT_DMA_CYCLE)
+        Text    = "16Bit DMA Cycle Wait State"
+        Options = "1T":DEFAULT:POWERON,
+                  "2T",
+                  "3T",
+                  "4 DMACLK"
+        Present = Yes
+    EndQuestion
+
+    Question (Q_8BIT_DMA_CYCLE)
+        Text    = "8Bit DMA Cycle Wait State"
+        Options = "1T":DEFAULT:POWERON,
+                  "2T",
+                  "3T",
+                  "4T"
+        Present = Yes
+    EndQuestion
+
+    // PCI to ISA Register 45h
+    Question (Q_ISA_BUS_CLOCK)
+        Text    = "ISA Bus Clock"
+        Options = "7.159MHz",
+                  "PCICLK/4":DEFAULT:POWERON,
+                  "PCICLK/3"
+        Present = Yes
+    EndQuestion
+
+                                        // (CPU0040+)>
+        Question (Q_CYRIX_MII_PERFORMANCE)
+                Text    = "Cyrix M II Performance"
+                Options = "Disabled"
+                          "Enabled":DEFAULT:POWERON
+        EndQuestion
+                                        // <(CPU0040+)
+
+        Question (Q_USB_FUNCTION_ENABLE)
+                Text    = "USB Function"
+                Options = "Disabled"
+                          "Enabled":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_USB_LEGACY_ENABLE)
+                Text    = "USB Keyboard Legacy Support"
+                ShadeWhen (Q_USB_FUNCTION_ENABLE) = "Disabled"
+                Options = "Disabled":DEFAULT:POWERON 
+                          "Enabled"
+                Present = Yes
+        EndQuestion
+
+EndScreen
+
+//;*****************************************************************;
+//;*****************************************************************;
+//;**                                                           **;
+//;**   (C)Copyright 1985-1996, American Megatrends Inc.        **;
+//;**                                                           **;
+//;**                   All Rights Reserved.                    **;
+//;**                                                           **;
+//;**           6145-F, Northbelt Parkway, Norcross,            **;
+//;**                                                           **;
+//;**           Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+//;**                                                           **;
+//;*****************************************************************;
+//;*****************************************************************;

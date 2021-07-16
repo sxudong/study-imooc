@@ -1,0 +1,954 @@
+        title   SMIBIOS 2.1 DATA STRUCTURE
+;-----------------------------------------------------------------;
+;Do not change any structure defination unless otherwise specified;
+;-----------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+
+;-----------------------------------------------------------------;
+;Following Macros defines all strings used in the Bios Information;
+;Structure  							  ;
+;-----------------------------------------------------------------;
+	TERMINATOR	MACRO
+		db	0
+	ENDM
+;-----------------------------------------------------------------;
+;; (CORE0072)>
+	PUT_STR		MACRO	str:=<                                >
+;;		BYTE	"&str",0
+	LOCAL	str_start,str_len
+str_start:
+		BYTE	"&str"
+	str_len = $ - str_start
+if str_len LT 32
+		db	(32-str_len) dup (' ')
+endif
+		db	0
+;; <(CORE0072)
+	ENDM
+;-----------------------------------------------------------------;
+	BI_BIOS_VENDOR_$	MACRO	name
+		@biosVendor	TEXTEQU	<&name>
+	ENDM
+;-----------------------------------------------------------------;
+	BI_BIOS_VERSION_$	MACRO	name
+		@biosVersion	TEXTEQU	<&name>
+	ENDM
+;-----------------------------------------------------------------;
+	BI_BIOS_RELEASE_DATE_$	MACRO	name
+		@biosDate	TEXTEQU	<&name>
+	endm
+;-----------------------------------------------------------------;
+CALC_BIOS_CHAR	macro
+
+	LOCAL	BIOSCHARACTER, i
+	i = 55
+	BIOSCHARACTER    =       0   OR (1 shl 3)
+
+if	BI_ISA
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 4)
+endif
+if	BI_MCA
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 5)
+endif
+if	BI_EISA
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 6)
+endif
+if	BI_PCI
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 7)
+endif
+if	BI_PCMCIA
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 8)
+endif
+if	BI_PnP
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 9)
+endif
+if	BI_APM
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 10)
+endif
+if      BI_BIOS_Flash
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 11)
+endif
+if      BI_BIOS_Shadow
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 12)
+endif
+if      BI_VL_VESA
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 13)
+endif
+if      BI_ESCD
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 14)
+endif
+if      BI_CDROM_BOOT
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 15)
+endif
+if      BI_SELECTABLE_BOOT
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 16)
+endif
+if      BI_BIOS_ROM_SOCKET
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 17)
+endif
+if      BI_PCMCIA_BOOT
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 18)
+endif
+if      BI_EDD
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 19)
+endif
+if      BI_INT13_NEC9800
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 20)
+endif
+if      BI_INT13_TOSHIBA
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 21)
+endif
+if      BI_INT13_5point25_360
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 22)
+endif
+if      BI_INT13_5point25_1point2
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 23)
+endif
+if      BI_INT13_3point5_720
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 24)
+endif
+if      BI_INT13_3point5_2point88
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 25)
+endif
+if      BI_INT5_PRINT_SCRN
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 26)
+endif
+if      BI_INT9_8042_KBD
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 27)
+endif
+if      BI_INT14_SERIAL_SVC
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 28)
+endif
+if      BI_INT17_PRN_SVC
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 29)
+endif
+if      BI_INT10_CGA_MONO
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 30)
+endif
+if      BI_NEC_PC_98
+	BIOSCHARACTER    =       BIOSCHARACTER OR (1 shl 31)
+endif
+
+	EXITM	%BIOSCHARACTER
+endm
+;-----------------------------------------------------------------;
+CALC_BIOS_EXTCHAR		macro
+
+	LOCAL	BIOSEXTCHARACTER
+        BIOSEXTCHARACTER    =       0
+
+if      BI_ACPI_SUPPORT
+        BIOSEXTCHARACTER    =       BIOSEXTCHARACTER OR (1 shl 0)
+endif
+
+if      BI_USB_LEGACY_SUP
+	BIOSEXTCHARACTER    =       BIOSEXTCHARACTER OR (1 shl 1)
+endif
+
+if      BI_AGP_SUPPORT
+	BIOSEXTCHARACTER    =       BIOSEXTCHARACTER OR (1 shl 2)
+endif
+
+if      BI_I2O_BOOT_SUP
+	BIOSEXTCHARACTER    =       BIOSEXTCHARACTER OR (1 shl 3)
+endif
+
+if      BI_LS120_BOOT_SUP
+	BIOSEXTCHARACTER    =       BIOSEXTCHARACTER OR (1 shl 4)
+endif
+
+if      BI_ATAPI_ZIP_SUP
+	BIOSEXTCHARACTER    =       BIOSEXTCHARACTER OR (1 shl 5)
+endif
+
+if      BI_IEEE_1394_SUP
+	BIOSEXTCHARACTER    =       BIOSEXTCHARACTER OR (1 shl 6)
+endif
+
+if      BI_SMART_BAT_SUP
+	BIOSEXTCHARACTER    =       BIOSEXTCHARACTER OR (1 shl 7)
+endif
+
+	EXITM	%BIOSEXTCHARACTER
+endm
+
+;------------------------------------------------------------------;
+;Following String defines the Base Board Information Structure     ;
+;------------------------------------------------------------------;
+        BASE_BOARD_MANUFACTURER_$       MACRO   name
+               @boardManuFacturer  TEXTEQU <&name>
+        ENDM
+;------------------------------------------------------------------;
+        BASE_BOARD_PRODUCT_NAME_$       MACRO   name
+               @boardProduct       TEXTEQU  <&name>
+        ENDM
+;------------------------------------------------------------------;
+        BASE_BOARD_VERSION_$            MACRO   name
+                @boardVer          TEXTEQU  <&name>
+        ENDM
+;------------------------------------------------------------------;
+        BASE_BOARD_SERIAL_NUMBER_$      MACRO   name
+                @boardsrNumber     TEXTEQU  <&name>
+        ENDM
+
+;------------------------------------------------------------------;
+;Following Macor defines all the strings used inside System        ;
+;Information Structure				                   ;
+;------------------------------------------------------------------;
+        SYSTEM_MANUFACTRUER_$          MACRO   name
+                @manuFacturer   TEXTEQU <&name>
+	ENDM
+;------------------------------------------------------------------;
+        SYSTEM_PRODUCT_NAME_$          MACRO   name
+                @productName    TEXTEQU <&name>
+	ENDM
+;------------------------------------------------------------------;
+        SYSTEM_VERSION_$               MACRO   name
+                @systemVer      TEXTEQU <&name>
+	endm
+;------------------------------------------------------------------;
+        SYSTEM_SERIAL_NUMBER_$         MACRO   name
+                @srNumber       TEXTEQU <&name>
+	endm
+;------------------------------------------------------------------;
+;Following Macor defines all the strings used inside System Chasis ;
+;Information Structure                				   ;
+;------------------------------------------------------------------;
+        SYSTEM_CHASSIS_MANUFACTRUER_$  MACRO  name
+                @chassisManufactruer   TEXTEQU <&name>
+	ENDM
+;------------------------------------------------------------------;
+        SYSTEM_CHASSIS_VERSION_$       MACRO  name
+                @chassisVer           TEXTEQU <&name>
+	ENDM
+;------------------------------------------------------------------;
+        SYSTEM_CHASSIS_SERIAL_NUM_$    MACRO  name
+                @systemVer           TEXTEQU <&name>
+	endm
+;------------------------------------------------------------------;
+        SYSTEM_CHASSIS_ASSET_TAG_NUM_$  MACRO name
+                @chassisSrnumber      TEXTEQU <&name>
+	endm
+
+;------------------------------------------------------------------;
+;Following Macros are for Memory Controller Info   		   ;
+;------------------------------------------------------------------;
+MEM_CTRL_ECC           MACRO
+
+        LOCAL   MEMCONTROLLERECC
+                MEMCONTROLLERECC    =     0
+
+if      MCE_OTHER
+MEMCONTROLLERECC            =       MEMCONTROLLERECC OR (1 shl 0)
+endif
+
+if      MCE_UNKNOWN
+MEMCONTROLLERECC            =       MEMCONTROLLERECC OR (1 shl 1)
+endif
+
+if      MCE_NONE
+MEMCONTROLLERECC            =       MEMCONTROLLERECC OR (1 shl 2)
+endif
+
+if      MCE_SINGLE_BIT_ECC
+MEMCONTROLLERECC            =       MEMCONTROLLERECC OR (1 shl 3)
+endif
+
+if      MCE_DOUBLE_BIT_ECC
+MEMCONTROLLERECC            =       MEMCONTROLLERECC OR (1 shl 4)
+endif
+
+if      MCE_ERROR_SCRUBBING
+MEMCONTROLLERECC            =       MEMCONTROLLERECC OR (1 shl 5)
+endif
+
+        EXITM   %MEMCONTROLLERECC
+
+endm
+
+;------------------------------------------------------------------;
+MEM_CTRL_SPEED       MACRO
+
+        LOCAL   MEMCONTSUPSPEED
+                MEMCONTSUPSPEED  =  0
+
+if      SS_OTHER
+MEMCONTSUPSPEED             =       MEMCONTSUPSPEED OR (1 shl 0)
+endif
+
+if      SS_UNKNOWN
+MEMCONTSUPSPEED             =       MEMCONTSUPSPEED OR (1 shl 1)
+endif
+
+if      SS_70ns
+MEMCONTSUPSPEED             =       MEMCONTSUPSPEED OR (1 shl 2)
+endif
+
+if      SS_60ns
+MEMCONTSUPSPEED             =       MEMCONTSUPSPEED OR (1 shl 3)
+endif
+
+if      SS_50ns
+MEMCONTSUPSPEED             =       MEMCONTSUPSPEED OR (1 shl 4)
+endif
+
+        EXITM   %MEMCONTSUPSPEED
+
+endm
+
+;------------------------------------------------------------------;
+;Following Macros are defined for the Memory Module Info	   ;
+;------------------------------------------------------------------;
+MEM_MOD_VOLTAGE		MACRO
+
+	LOCAL	memVolt
+	memVolt = 0
+
+	if MM_VOLTAGE_5V
+		memVolt = memVolt OR 1
+	endif
+
+	if MM_VOLTAGE_33V
+		memVolt = memVolt OR (1 shl 1)
+	endif
+
+	if MM_VOLTAGE_29V
+		memVolt = memVolt OR (1 shl 2)
+	endif
+
+	EXITM	%memVolt
+ENDM
+
+;------------------------------------------------------------------;
+;Following Macros are defined for the Memory Module Info	   ;
+;------------------------------------------------------------------;
+SUPPORTED_MEM_TYPE    MACRO
+
+        LOCAL   MEMMODSUPTYPE
+                MEMMODSUPTYPE   =   0
+
+if      MM_TYPE_OTHER
+MEMMODSUPTYPE     =        MEMMODSUPTYPE OR (1 shl 0)
+endif
+
+if      MM_TYPE_UNKNOWN
+ MEMMODSUPTYPE    =        MEMMODSUPTYPE OR (1 shl 1)
+endif
+
+if      MM_TYPE_STANDARD
+MEMMODSUPTYPE     =        MEMMODSUPTYPE OR (1 shl 2)
+endif
+
+if      MM_TYPE_FAST_PAGE_MODE
+MEMMODSUPTYPE     =        MEMMODSUPTYPE OR (1 shl 3)
+endif
+
+if      MM_TYPE_EDO
+MEMMODSUPTYPE     =        MEMMODSUPTYPE OR (1 shl 4)
+endif
+
+if      MM_TYPE_PARITY
+MEMMODSUPTYPE     =        MEMMODSUPTYPE OR (1 shl 5)
+endif
+
+if      MM_TYPE_ECC
+MEMMODSUPTYPE     =        MEMMODSUPTYPE OR (1 shl 6)
+endif
+
+if      MM_TYPE_SIMM
+MEMMODSUPTYPE     =        MEMMODSUPTYPE OR (1 shl 7)
+endif
+
+if      MM_TYPE_DIMM
+MEMMODSUPTYPE     =        MEMMODSUPTYPE OR (1 shl 8)
+endif
+
+if      MM_TYPE_BURST_EDO
+MEMMODSUPTYPE     =        MEMMODSUPTYPE OR (1 shl 9)
+endif
+
+if      MM_TYPE_SDRAM
+MEMMODSUPTYPE     =        MEMMODSUPTYPE OR (1 shl 10)
+endif
+
+        EXITM   %MEMMODSUPTYPE
+
+endm
+
+;------------------------------------------------------------------;
+;Following Macro is defined for Bank Connection    		   ;
+;------------------------------------------------------------------;
+BANK_CONNECTION    MACRO
+
+        LOCAL   MEMBANKCONNECTION
+                MEMBANKCONNECTION  =   (BANK_CONNECTION_RAS_1 shl 4) OR BANK_CONNECTION_RAS_2
+
+	EXITM	%MEMBANKCONNECTION
+
+endm
+
+;------------------------------------------------------------------;
+;Following String defines the Port Connector Information Structure ;
+;------------------------------------------------------------------;
+        INTERNAL_REF_DESIGNATOR_$       MACRO   name
+               @intRefDesig  TEXTEQU <&name>
+        ENDM
+
+        EXTERNAL_REF_DESIGNATOR_$       MACRO   name
+               @extRefDesig  TEXTEQU  <&name>
+        ENDM
+
+;------------------------------------------------------------------;
+;Following String defines the Slot Information Structure           ;
+;------------------------------------------------------------------;
+SYSTEM_SLOT_CHAR1	             MACRO
+
+	LOCAL   SLOTCHAR1TYPE
+	SLOTCHAR1TYPE  =   0
+
+
+if      SLC_CHAR_UNKNOWN
+SLOTCHAR1TYPE   =       SLOTCHAR1TYPE OR (1 shl 0)
+endif
+
+if      SLC_CHAR_5VOLT
+SLOTCHAR1TYPE   =       SLOTCHAR1TYPE OR (1 shl 1)
+endif
+
+if      SLC_CHAR_3_POINT_3VOLT
+SLOTCHAR1TYPE   =       SLOTCHAR1TYPE OR (1 shl 2)
+endif
+
+if      SLC_CHAR_SHARE_SLOT
+SLOTCHAR1TYPE   =       SLOTCHAR1TYPE OR (1 shl 3)
+endif
+
+if      SLC_CHAR_PCCARD16
+SLOTCHAR1TYPE   =       SLOTCHAR1TYPE OR (1 shl 4)
+endif
+
+if      SLC_CHAR_CARDBUS
+SLOTCHAR1TYPE   =       SLOTCHAR1TYPE OR (1 shl 5)
+endif
+
+if      SLC_CHAR_ZOOM_VIDEO
+SLOTCHAR1TYPE   =       SLOTCHAR1TYPE OR (1 shl 6)
+endif
+
+if	SLC_CHAR_MODEM_RING_RESUME
+SLOTCHAR1TYPE	=	SLOTCHAR1TYPE OR (1 SHL 7)
+endif
+
+        EXITM   %SLOTCHAR1TYPE
+
+endm
+;------------------------------------------------------------------;
+SYSTEM_SLOT_CHAR2		MACRO
+
+	LOCAL	SLOTCHAR2TYPE
+	SLOTCHARTYPE2 =	0
+
+	if SLOT_CHAR2_PME
+		SLOTCHAR2TYPE =	SLTCHAR2TYPE OR (1 shl 0)
+	endif
+
+	EXITM	%SLOTCHAR2TYPE
+endm
+;------------------------------------------------------------------;
+     SLOT_DESIGNATOR_$       MACRO   name
+               @slotDesignator  TEXTEQU <&name>
+        ENDM
+;------------------------------------------------------------------;
+;Following String defines the OnBoard Devices       		   ;
+;Information Structure                              		   ;
+;------------------------------------------------------------------;
+DESCRIPTION_STRING_$       MACRO   name
+	@descriptionString  TEXTEQU <&name>
+ENDM
+
+;------------------------------------------------------------------;
+;Following Macro calculates the Memory size in unit of MegaByte,   ;
+;Porting engineer has to give value in SMB.EQU files only, and this;
+;macro will calculate the correct size in MB                       ;
+;------------------------------------------------------------------;
+MEM_SIZE_IN_MB	macro	xSize:REQ
+
+	LOCAL	aa, bb
+	bb = 0
+	aa = xSize/(1024*1024)
+	WHILE	aa GT 0
+		aa = aa SHR 1
+		bb = bb + 1
+	ENDM
+	if bb GT 0
+		bb = bb - 1
+	endif
+	EXITM %bb
+endm
+;------------------------------------------------------------------;
+;Following macro will calculate the BIOS size in unit of KB Porting;
+;Engineer has to give value in SMB.EQU, and this macro will	   ;
+;calculate the BIOS size in KB 					   ;
+;------------------------------------------------------------------;
+BIOS_SIZE_IN_KB		MACRO	xSize:REQ
+
+	LOCAL	aa
+	aa = xSize
+	if aa GE (64*1024)
+					;; (CORE0072)>
+;;		aa = aa/(64*1024)
+		aa = (aa/(64*1024))-1
+					;; <(CORE0072)
+	else
+		aa = -1
+	endif
+
+	EXITM	%aa
+endm
+;------------------------------------------------------------------;
+;Following String defines the Memory module Information Structure  ;
+;------------------------------------------------------------------;
+        SOCKET_DESIGNATION_$       MACRO   name
+               @socketDesignator  TEXTEQU <&name>
+        ENDM
+;------------------------------------------------------------------;
+;This Macro is defined for port Connector	    		   ;
+;------------------------------------------------------------------;
+DEFINE_PORT_CONNECTOR macro	IntRefStr:REQ, IntConTyp:REQ, ExtRefStr:REQ, ExtConTyp:REQ, PortTyp:REQ
+
+	PORT_DEFINE_STRUC	{\
+				1,
+				IntConTyp,
+				2,
+				ExtConTyp,
+				PortTyp\
+				}
+	PUT_STR IntRefStr
+	PUT_STR ExtRefStr
+endm
+
+;------------------------------------------------------------------;
+;This Macro is defined for BIOS Language Format		     	   ;
+;------------------------------------------------------------------;
+BIOS_LANGUAGE_FLAG		MACRO
+	LOCAL	BIOSLANGFLAG
+	BIOSLANGFLAG= 0
+	BIOSLANGFLAG= BIOSLANGFLAG OR (ABBRIVIATED_FORMAT shl 1)
+
+	EXITM	%BIOSLANGFLAG
+
+endm
+;------------------------------------------------------------------;
+;Following Macro is defined for Scanning the string and remove	   ;
+;the null character and tabulation in a string		      	   ;
+;------------------------------------------------------------------;
+SCAN_STR	MACRO	str
+
+	LOCAL	xW, xS, xN, xF, xE, xSS, xB
+if @SIZESTR(str)						   ;; (CORE0072)
+	xW = 0
+	xN = 1
+	xS TEXTEQU <str>
+	xE = @SIZESTR(%xS)
+	WHILE	xW EQ 0
+		IF xN LT xE
+			xB =  @INSTR(<%xN>, %xS, < >)
+			IF xB EQ xN
+				xN = xN+1
+			ELSE
+				xB = @INSTR(<%xN>, %xS, <	>)
+				IF xB EQ xN
+					xN = xN+1
+				ELSE
+					xW = 1
+				ENDIF
+			ENDIF
+		ELSE
+			xW = 1
+		ENDIF
+	ENDM
+	xF = ((xE-xN)+1)
+	xS TEXTEQU @SUBSTR(%xS, <%xN>, <%xF>)
+	EXITM <xS>
+endif
+
+ENDM
+
+;------------------------------------------------------------------;
+;This macro is defined for scaning and putting string	     	   ;
+;------------------------------------------------------------------;
+SCAN_PUT_STR	MACRO	str
+
+	LOCAL	xS
+	xS TEXTEQU <str>
+	xS TEXTEQU SCAN_STR(%xS)
+	PUT_STR %xS
+
+ENDM
+;-------------------------------------------------------------------;
+MCA_SLOT	MACRO	slnum:REQ
+
+	EXITM	%slnum
+ENDM
+;-------------------------------------------------------------------;
+EISA_SLOT	MACRO	slnum:REQ
+
+	EXITM	%slnum
+ENDM
+;-------------------------------------------------------------------;
+PCI_AGP_SLOT	MACRO	irqnum:REQ
+
+	EXITM	%irqnum
+ENDM
+;-------------------------------------------------------------------;
+PCMCIA_SLOT	MACRO	adpnum:REQ, socnum:REQ
+
+	LOCAL	xS
+	xS = ((socnum*256)+adpnum)
+	EXITM	%xS
+ENDM
+;-------------------------------------------------------------------;
+SYS_SLOT_CHAR	MACRO	arglist:VARARG
+
+	LOCAL	xRet
+	xRet = 0
+	FOR arg, <arglist>
+		xRet = xRet OR arg
+	ENDM
+
+	EXITM	%xRet
+ENDM
+
+;-------------------------------------------------------------------;
+SYS_SLOT_INFO	MACRO	type, leng, hndl, str, stype, busw, usage, slen, id, schar
+
+IF	DMI_VER
+	SYSTEM_SLOT_INFO_STRUC	{\
+			{type, leng, hndl},
+			1,
+			stype,
+			busw,
+			usage,
+			slen,
+			id,
+			LOW SYS_SLOT_CHAR(%schar),
+			HIGH SYS_SLOT_CHAR(%schar)\
+			}
+
+		PUT_STR %str
+else
+	SYSTEM_SLOT_INFO_STRUC20	{\
+			{type, leng, hndl},
+			1,
+			stype,
+			busw,
+			usage,
+			slen,
+			id,
+			LOW SYS_SLOT_CHAR(%schar)\
+			}
+
+		PUT_STR %str
+endif
+ENDM
+;------------------------------------------------------------------;
+;Following Macor defines all the strings used inside Portable	   ;
+;Battery Structure                         			   ;
+;------------------------------------------------------------------;
+	LOCATION_OF_BATTERY_$		MACRO name
+		@locationofBattery	TEXTEQU	 <&name>
+	ENDM
+;------------------------------------------------------------------;
+        PORTABLE_BAT_MANUFACTURER_$  MACRO  name
+                @porBatteryManufactruer   TEXTEQU <&name>
+	ENDM
+;------------------------------------------------------------------;
+        MANUFACTURER_DATE_$       MACRO  name
+                @manufacturerDate           TEXTEQU <&name>
+	ENDM
+;------------------------------------------------------------------;
+        BATTERY_SERIAL_NUMBER_$    MACRO  name
+                @batterySerialNumber   TEXTEQU <&name>
+	endm
+;------------------------------------------------------------------;
+        DEVICE_NAME_$  MACRO name
+                @deviceName      TEXTEQU <&name>
+	endm
+;------------------------------------------------------------------;
+	SBDS_VERSION_NUMBER_$	MACRO	name
+		@sbdsVersionNumber TEXTEQU <&name>
+	endm
+
+;------------------------------------------------------------------;
+;Following macro defines the maximum cache size	Info.Structure     ;
+;------------------------------------------------------------------;
+CACHE_SIZE	MACRO	xSize:REQ
+	LOCAL	cSize
+	if xSize GT (64*1024)
+		cSize = (xSize/(64*1024)) OR 8000h
+	else
+		cSize = xSize/(1024)
+	endif
+	EXITM	%cSize
+endm
+
+;------------------------------------------------------------------;
+;Following macro defines the maximum cache size	Info.Structure     ;
+;------------------------------------------------------------------;
+CACHE_SPEED	MACRO	xSize:REQ
+	LOCAL	cSize
+		cSize = xSize
+	EXITM	%cSize
+endm
+
+;------------------------------------------------------------------;
+;Following Macro is defined for Cache Information   		   ;
+;------------------------------------------------------------------;
+@CACHE_INFO	MACRO	arglist:VARARG
+
+	LOCAL	xCs, xIs, xTyp, xC
+	xC = 0
+	xTyp = 0
+	FOR arg, <arglist>
+		xC = xC+1
+		IF xC EQ 1
+			xCs = CACHE_SIZE(arg)
+		ENDIF
+		IF xC EQ 2
+			xIs = CACHE_SIZE(arg)
+		ENDIF
+		IF xC GT 2
+			xTyp = xTyp OR arg
+		ENDIF
+	ENDM
+	WORD	xCs
+	WORD	xIs
+	WORD	xTyp
+	WORD	xTyp
+ENDM
+
+;------------------------------------------------------------------;
+;Following Macro is defined for Cache Operational Mode		   ;
+;------------------------------------------------------------------;
+@CACHE_CFG		MACRO	arglist:VARARG
+
+	LOCAL	xCfg
+	xCfg = 0
+	FOR	arg, <arglist>
+		xCfg = xCfg OR arg OR INTERNAL
+	ENDM
+	WORD xCfg
+ENDM
+
+;------------------------------------------------------------------;
+@EXT_CACHE_CFG		MACRO	arglist:VARARG
+
+	LOCAL	xCfg
+	xCfg = 0
+	FOR	arg, <arglist>
+		xCfg = xCfg OR arg OR EXTERNAL
+	ENDM
+	WORD xCfg
+ENDM
+
+;------------------------------------------------------------------;
+;Following macro is defined for cache charistics    		   ;
+;------------------------------------------------------------------;
+@CACHE_CHAR		MACRO	arglist:VARARG
+
+	LOCAL	xCspeed, xErrCorrType, xSysCacheType, xAssoc, xC
+	xC = 0
+	FOR arg, <arglist>
+		xC = xC+1
+		IF xC EQ 1
+			xCspeed = CACHE_SPEED(arg)
+		ENDIF
+		IF xC EQ 2
+			xErrCorrType = arg
+		ENDIF
+		IF xC EQ 3
+			xSysCacheType = arg
+		ENDIF
+		IF xC EQ 4
+			xAssoc = arg
+		ENDIF
+	ENDM
+	BYTE	xCspeed
+	BYTE	xErrCorrType
+	BYTE	xSysCacheType
+	BYTE	xAssoc
+ENDM
+
+;------------------------------------------------------------------;
+;Following macro is defined for Mem module Information		   ;
+;------------------------------------------------------------------;
+@MEMORY_TYPE	MACRO	arglist:VARARG
+
+	LOCAL	xMt
+		xMt = 0
+		FOR arg, <arglist>
+			xMt = xMt OR arg
+		ENDM
+	WORD	xMt
+ENDM
+;------------------------------------------------------------------;
+
+@MEMORY_INFO	MACRO	arglist:VARARG
+
+	LOCAL	xB, xMs, xIs, xEs, xC
+	xC = 0
+	xB = 0
+	FOR arg, <arglist>
+		xC = xC + 1
+		IF xC EQ 1
+			xB = xB OR (arg shl 4)
+		ENDIF
+		IF xC EQ 2
+			xB = xB OR arg
+		ENDIF
+		IF xC EQ 3
+			xMs = arg
+		ENDIF
+		IF xC EQ 4
+			xIs = MEM_SIZE_IN_MB(arg)
+		ENDIF
+		IF xC EQ 5
+			xEs = MEM_SIZE_IN_MB(arg)
+		ENDIF
+		IF xC EQ 6
+			xIs = xIs OR arg
+			xEs = xEs OR arg
+		ENDIF
+	ENDM
+	BYTE	xB
+	BYTE	xMs
+	xEs = xEs*256
+	xEs = xEs OR xIs
+	EXITM	%xEs
+ENDM
+;------------------------------------------------------------------;
+
+@MEMORY_ERR_STATUS	MACRO	arglist:VARARG
+	LOCAL	xErr
+	FOR arg, <arglist>
+		xErr = 0
+	ENDM
+	BYTE	xErr
+ENDM
+
+;---------------------------------------------------------------------;
+
+@PROC_MAX_SPEED		MACRO	arglist:VARARG
+
+	LOCAL	xMs, xC
+	xC = 1
+	FOR	arg, <arglist>
+		IF xC EQ 2
+			xMs = arg
+		ENDIF
+		xC = xC+1
+	ENDM
+	EXITM	%xMs
+ENDM
+;------------------------------------------------------------------------;
+@PROC_SOCKET_STR	MACRO	arglist:VARARG
+	LOCAL	xSd, xC
+	xC=0
+	FOR arg, <arglist>
+		xC = xC+1
+		IF xC EQ 1
+		xSd TEXTEQU <arg>
+	ENDIF
+	ENDM
+	EXITM <xSd>
+ENDM
+;-----------------------------------------------------------------------;
+@PROC_UPGRADE	MACRO	arglist:VARARG
+	LOCAL	xUg, xC
+	xC = 0
+	FOR arg, <arglist>
+		xC = xC + 1
+		IF xC EQ 3
+			xUg = arg
+		ENDIF
+	ENDM
+	EXITM	%xUg
+ENDM
+
+;------------------------------------------------------------------------;
+@PROC_VOLT	MACRO	arglist:VARARG
+
+	LOCAL	xV, xC, xM
+	xC = 1
+	xV = 0
+	FOR arg, <arglist>
+		IF xC EQ 1
+			xM = arg
+		ENDIF
+
+		IF xC GT 1
+			IF xM EQ 0
+				xV = xV OR arg
+			ENDIF
+			IF xM GT 0
+				xV = arg OR 80h
+			ENDIF
+		ENDIF
+		xC = xC+1
+
+	ENDM
+	EXITM	%xV
+ENDM
+;--------------------------------------------------------------------;
+@GET_VAL		MACRO	xVal
+	LOCAL	xV
+	xV = xVal
+	EXITM %xV
+ENDM
+
+;--------------------------------------------------------------------;
+
+SUB_GROUP_ASSOCIATION	MACRO	xHandle, xNum, xTyp, xSh, xAttrib
+
+	LOCAL	length, xIh, hndl
+	length = (3*xNum)+5
+	xIh = xSh
+	hndl = xHandle
+	DMIHDR_STRUC	{14h, length, hndl}
+	BYTE	1
+	REPEAT	xNum
+		BYTE	xTyp
+		WORD	xIh
+		xIh = xIh+1
+	ENDM
+	SCAN_PUT_STR	%xAttrib
+	TERMINATOR
+	hndl = hndl+1
+	EXITM	%hndl
+ENDM
+
+;-------------------------------------------------------------------;
+CREATE_STRUC_OFFSET_TABLE       MACRO
+
+        LOCAL   xL, xN
+        xN = 0
+        REPEAT  TOTAL_NUM_STRUCS
+                xL TEXTEQU @CATSTR(<STRUC_LABEL_>, <%xN>)
+                WORD    xL
+		WORD	?
+                xN = xN+1
+        ENDM
+
+ENDM

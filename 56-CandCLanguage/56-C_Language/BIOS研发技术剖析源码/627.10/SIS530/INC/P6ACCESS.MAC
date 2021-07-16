@@ -1,0 +1,93 @@
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1995, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(404)-263-8181.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;Contains Macros for accessing P6 Registers.
+	.586p
+;------------------------------------------------------------------------
+;ReadMSR Macro follows. This macro allows us to read an MSR (Machine
+;specific register) of P6 CPU.
+
+;I/P = Index Value Of The MSR Being Read.
+;O/P = Data from the 64 bit MSR in EDX:EAX
+;Destroys EAX,EDX and ECX registers. Stack Usage = None.
+;MSR index will be sanity checked for validity when enough info
+;is available.
+;------------------------------------------------------------------------
+ReadMSR		Macro	MSRIndex
+
+	Mov	ecx,MSRIndex
+	RDMSR
+;;	Db	0fh,32h		;That is RDMSR that MASM does not know.
+
+EndM
+;-------------------------------------------------------------------------
+;WriteMSR Macro follows. This macro allows us to write an MSR (Machine
+;specific register) of P6 CPU.
+
+;I/P = Index Value Of The MSR Being Read.
+;I/P = Low32BitData and High32BitData dwords in hex.
+;O/P = 64 bit MSR is written with the value specified.
+;Destroys EAX,EDX and ECX registers. Stack Usage = None.
+;MSR index will be sanity checked for validity when enough info
+;is available.
+;------------------------------------------------------------------
+WriteMSR	Macro	MSRIndex,Low32bitData,High32BitData
+
+	Mov	ecx,MSRIndex
+	Mov	edx,High32BitData
+	Mov	eax,Low32bitData
+	WRMSR
+;;	Db	0fh,30h		;That is WRMSR that MASM does not know.
+
+EndM
+;-------------------------------------------------------------------------
+;ChangeMSR Macro follows. This macro allows us to change bits of an MSR
+;(Machine specific register) of P6 CPU.
+
+;I/P = Index Value Of The MSR Being Read.
+;I/P = Low32BitANDPattern and High32BitANDPattern dwords in hex.
+;I/P = Low32BitORPattern and High32BitORPattern dwords in hex.
+
+;O/P = 64 bit MSR bits are changed as specified.
+
+;Destroys EAX,EDX and ECX registers. Stack Usage = None.
+;--------------------------------------------------------------------------
+ChangeMSR	Macro	MSRIndex,Low32BitANDPattern,High32BitANDPattern,Low32BitORPattern,High32BitORPattern
+
+	ReadMSR		MSRIndex	;o/p in edx:eax.
+
+	And	eax,Low32BitANDPattern
+	Or	eax,Low32BitORPattern
+
+	And	edx,High32BitANDPattern
+	Or	edx,High32BitORPattern
+
+	WRMSR
+;;	Db	0fh,30h		;That is WRMSR that MASM does not know.
+
+EndM
+;---------------------------------------------------------------------------
+	.286p
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1995, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(404)-263-8181.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;

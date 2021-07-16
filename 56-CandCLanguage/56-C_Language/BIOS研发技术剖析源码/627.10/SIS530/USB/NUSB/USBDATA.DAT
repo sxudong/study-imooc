@@ -1,0 +1,254 @@
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+
+;---------------------------------------;
+; usbdseg                               ;
+;---------------------------------------;--------------------------------------;
+; This data area is used to keep the USB schedule, transfer descriptors, data  ;
+; buffers, and other miscellaneous data needed to run the USB host controller. ;
+; This data area must be avaliable for the USB host controller to busmaster    ;
+; data into and out of from the PCI bus.  This means it must be located in     ;
+; read/write memory such as in base memory or shadow.                          ;
+;------------------------------------------------------------------------------;
+;ifdef DOS_DEBUG
+;usbdgroup	group	usbdseg
+;usbdseg segment page public 'DATA'
+;else
+usbdgroup	group	usbdseg
+usbdseg segment page common 'DATA'
+;endif
+
+;------------------------------------------------------------------------------;
+;                                 UHCI Data                                    ;
+;------------------------------------------------------------------------------;
+if MKF_USB_UHCI
+
+FrameList	dd	1024 dup (?)
+
+align 32
+TdPool label byte
+TdDummy		Transfer_Descriptor <>	;Place holder to match up with DeviceTableEntry[0]
+TdHid		Transfer_Descriptor HID_DEVICE_LIMIT dup (<>) ;Used for polling HIDs
+TdHub		Transfer_Descriptor HUB_DEVICE_LIMIT dup (<>) ;Used for polling Hubs
+
+TdRootHub	Transfer_Descriptor <>	;Used to generate periodic interrupt
+TdRepeat	Transfer_Descriptor <>	;Used to generate keyboard repeat interrupt
+TdControlSetup	Transfer_Descriptor <>	;Used for setup portion of control transactions
+TdControlData	Transfer_Descriptor CONTROL_DATA_TD_COUNT dup (<>) ;Used for data portion of control transactions
+TdControlStatus	Transfer_Descriptor <>	;Used for handshake prtion of control transactions
+TdPoolEnd label byte
+
+align 32
+QhControl	Q_Head <>		;Queue head for TdControlSetup, TdControlData, and TdControlStatus
+
+IO_Space_Base_Address	dw ?		;Holds the I/O base address of USB HC
+
+endif	;MKF_USB_UHCI
+
+;------------------------------------------------------------------------------;
+;                                 OHCI Data                                    ;
+;------------------------------------------------------------------------------;
+if MKF_USB_OHCI
+
+; HCCA - Host Controller Commumications Area
+; HccaInterruptTable
+INTERRUPTLIST   dd      FRAME_LIST_SIZE  dup  (?)
+HCCAFRAMENUMBER dw      ?
+HCCAPAD1        dw      ?
+HCCADONEHEAD    dd      ?
+RES_HCCA        db      116 dup  (?)
+
+; Endpoint desriptors
+align 32
+EdPool label byte
+EdDummy		Endpoint_Descriptor <>	;Place holder to match up with DeviceTableEntry[0]
+EdHid		Endpoint_Descriptor HID_DEVICE_LIMIT dup (<>) ;Used for polling HIDs
+EdHub		Endpoint_Descriptor HUB_DEVICE_LIMIT dup (<>) ;Used for polling Hubs
+EdRepeat	Endpoint_Descriptor <>	;Used to generate keyboard repeat interrupt
+
+EdControl	Endpoint_Descriptor <>	;Used for control transactions
+EdPoolEnd label byte
+
+; Transfer descriptors
+align 32
+TdPool label byte
+TdDummy		General_Transfer_Descriptor <>	;Place holder to match up with DeviceTableEntry[0]
+TdHid		General_Transfer_Descriptor HID_DEVICE_LIMIT dup (<>) ;Used for polling HIDs
+TdHub		General_Transfer_Descriptor HUB_DEVICE_LIMIT dup (<>) ;Used for polling Hubs
+TdRepeat	General_Transfer_Descriptor <>	;Used to generate keyboard repeat interrupt
+
+TdControlSetup	General_Transfer_Descriptor <>	;Used for setup portion of control transactions
+TdControlData	General_Transfer_Descriptor <>	;Used for data portion of control transactions
+TdControlStatus	General_Transfer_Descriptor <>	;Used for handshake prtion of control transactions
+TdPoolEnd label byte
+
+;InterruptEd     Endpoint_Descriptor MAX_DEVICES dup (<>) ;Used for Head of interrupt Td queue
+;PeriodicEd      Endpoint_Descriptor <> ;Used for Head of periodic Td queue
+;InterruptTd     General_Transfer_Descriptor INT_TD_COUNT dup (<>)
+;PeriodicTd      General_Transfer_Descriptor <> ;Used to generate periodic interrupt
+
+Oper_Reg_Base_Address	dd ?		;Holds the I/O base address of USB HC
+StatusChangeInProgress	db ?		;Set to TRUE when processing a root hub
+					; status change to avoid reentrancy
+RootHubPortCount	db ?		;Holds number of ports on the HC's root hub
+
+endif	;MKF_USB_OHCI
+
+;------------------------------------------------------------------------------;
+;                       Host Controller Independant Data                       ;
+;------------------------------------------------------------------------------;
+
+DeviceTable	DeviceTableEntry MAX_DEVICES+1 dup (<>) ;Info on each device
+DeviceTableEnd	label	byte
+
+HcdDataArea		dd ?
+UsbHcBusDevFuncNum	dw ?		;Holds USB HC PCI bus/dev/func number
+HC_Interrupt_Level	db ?		;Holds IRQ level in use by HC
+Set_LED_in_progress	db ?		; NOT USED
+InitializationFlags	db ?		;Flags set when HC is inited (see INIT_FLAG_xxx)
+
+;-------------------------------;
+;===============================;
+;-------------------------------;
+; USB Keyboard/scanner data buffer
+;-------------------------------;
+host_kb_data_start	label	byte
+;-------------------------------;
+ch_buff_start	label	word	; character buffer start address
+		db	16 dup (?)
+ch_buff_end	label	word	; character buffer end address
+sc_buff_start	label	word	; scanner buffer start address
+		db	16 dup (?)
+sc_buff_end	label	word	; scanner buffer end address
+sc_flag_start	label	word	; scanner buffer flag_byte start address
+		db	16 dup (?)
+sc_flag_end	label	word	; scanner buffer flag_byte end address
+dv_flag_start	label	word	; device id flag_byte start address
+		db	16 dup (?)
+dv_flag_end	label	word	; device id flag_byte end address
+ip_buff_start	label	word	; expanded buffer null ended (8+6+1)
+		db	16 dup (?)
+scan_3_table	label	word	; scan-3 table, 128x2 bits = 32 bytes
+		db	32 dup (?)
+ccb		label	byte	; 32 bytes of 8042 RAM
+		db	32 dup (?)
+;-------------------------------;
+CH_BUFF_HEAD	dw	offset ch_buff_start; CHARACTER BUFFER HEAD POINTER
+CH_BUFF_TAIL	dw	offset ch_buff_start; CHARACTER BUFFER TAIL POINTER
+SC_BUFF_PTR	dw	offset sc_buff_start; SCANNER BUFFER POINTER
+tl0		db	00h	; temp scratch
+th0		db	00h	; temp scratch
+last_scan_index	db	00h	; last USBKeycode processed
+make_break_flag	db	00h	; Make/Break code generation
+current_scan_index	db	00h; current USBKeycode processed
+bk_device_id	db	00h	; breakcode generation flag for this device-id
+device_id	db	00h	; current USB device
+device_list	label	word	; max. 8 device supported.
+		dw	8 dup (?) ; device id, Interface number
+device_list_end	label	word
+;-------------------------------;
+flag_60		dw	0000h	; routine address for 64/60 command
+ram_address	db	00h	; 8042 RAM address during write
+flag_8042	db	00h	; FF = 8042 present, 00 = 8042 absent
+output_port	db	00h	; output port status
+password_ptr	dw	0000h	; current password pointer
+password_start	db	16 dup (?) ; 16 bytes password
+password_end	label	word
+repeat_counter	dw	0000h	; repeat counter
+repeat_rate	dw	0000h	; repeat rate
+port_60_char	db	00h	; last char sent to system (port 60)
+ext_kb_char	db	00h	; external keyboard data received
+;-------------------------------;
+TYPEMATIC_RATE		db	00h	; BIT-4..0 = TYPEMATIC RATE
+				;	00000..11111 = 30 to 2 characters/sec
+				; bit-6,5 = typematic rate delay
+				; 00,01,10,11 = 250,500,750,1000 milisecond
+	auto_repeat_bit	equ	7	; bit-7 used for auto repeat bit
+auto_repeat_bitx	equ	1 shl auto_repeat_bit	; AUTO REPEAT bit
+;-------------------------------;
+FLAG_BYTE_1		db	00h	; bit-7 (1=64/60 emulation on)
+					; bit-6,5,4 = C/N/S for FLAG_BYTE
+					; bit-3,2,1,0 = always 0
+FLAG_BYTE		db	00h	; EACH BIT IS A FLAG
+	function_bit	equ	7	; FUNCTION KEY led bit
+	scroll_lock_bit	equ	6	; SCROLL LOCK led bit
+	caps_lock_bit	equ	5	; CAPS LOCK led bit
+	num_lock_bit	equ	4	; NUM LOCK led bit
+	alt_key_bit	equ	3	; ALT KEY status bit
+	ctl_key_bit	equ	2	; CONTROL key status bit
+	left_shift_bit	equ	1	; LEFT SHIFT status bit
+	right_shift_bit	equ	0	; RIGHT SHIFT status bit
+function_bitx		equ	1 shl function_bit	; FUNCTION KEY led bit
+scroll_lock_bitx	equ	1 shl scroll_lock_bit	; SCROLL LOCK led bit
+caps_lock_bitx		equ	1 shl caps_lock_bit	; CAPS LOCK led bit
+num_lock_bitx		equ	1 shl num_lock_bit	; NUM LOCK led bit
+alt_key_bitx		equ	1 shl alt_key_bit	; ALT KEY status bit
+ctl_key_bitx		equ	1 shl ctl_key_bit	; CONTROL KEY stat bit
+left_shift_bitx		equ	1 shl left_shift_bit	; LEFT SHIFT stat bit
+right_shift_bitx	equ	1 shl right_shift_bit	; RIGHT SHIFT stat bit
+;-------------------------------;
+SCANNER_FLAG		db	00h	; 1,0 = scan code set 1/2/3
+					; 5,4,3,2 FREE
+	a6_flag_bit	equ	6	; A6 password active (1/0)
+	scanner_bit	equ	7	; scanner disable/enable (1/0)
+a6_flag_bitx	equ	1 shl a6_flag_bit	; 1 = password active
+scanner_bitx	equ	1 shl scanner_bit	; 1 = scanner disabled
+;-------------------------------;
+KBMS_COMMAND_STATUS	db	00h	; KEYBOARD COMMAND STATUS 2,1,0
+	ed_flag		equ	1	; xxxx x001
+	f0_flag		equ	2	; xxxx x010
+	f3_flag		equ	3	; xxxx x011
+	fb_flag		equ	4	; xxxx x100
+	fc_flag		equ	5	; xxxx x101
+	fd_flag		equ	6	; xxxx x110
+;-------------------------------;
+kbmsflag	db	00h	; bit 7 = re-entrant flag for LED on routine
+				; bit 6 = (1=mouse enabled, if emulation on)
+				; bit 5-4 = KB/MS data send to system
+				; bit 3 = USB mouse data packet ready to send
+				; bit 2-0 = FREE
+ms_buff_start	label	word	; mouse buffer start address
+		db	5 dup (?)
+ms_buff_end	label	word	; mouse buffer end address
+MS_BUFF_HEAD	dw	offset ms_buff_start; MOUSE BUFFER HEAD POINTER
+MS_BUFF_TAIL	dw	offset ms_buff_start; MOUSE BUFFER TAIL POINTER
+;-------------------------------;
+host_kb_data_end	label	byte
+;-------------------------------;
+;===============================;
+;-------------------------------;
+
+DeviceRequestDataBuf	db MAX_CONTROL_DATA_SIZE dup (?)
+					;Scratch area used for sending and
+					; receiving various data to/from USB
+					; devices in device requests.
+
+ApiDataBuffer		db MAX_CONTROL_DATA_SIZE dup (?)
+					;Scratch area used for communication
+					; with USB BIOS API callers.
+
+usbdseg	ends
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;

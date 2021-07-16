@@ -1,0 +1,352 @@
+        page    ,132
+        title   OEM RUNTIME HOOKS FOR PCI
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+; $Header: /BIOS/OEM/GENERIC/630/Intel/440BX/Desktop CR/OEMPORT/OEMRPCI.ASM 2     9/18/97 4:16p Juand $
+;
+; $Revision: 2 $
+;
+; $Date: 9/18/97 4:16p $
+;*****************************************************************;
+;*****************************************************************;
+; Revision History
+; ----------------
+; $Log: /BIOS/OEM/GENERIC/630/Intel/440BX/Desktop CR/OEMPORT/OEMRPCI.ASM $
+; 
+; 2     9/18/97 4:16p Juand
+; Updated PCI Routing table for INTEL CR board
+;
+; 1     9/15/97 5:57p Juand
+;
+; 1     9/11/97 6:41p Juand
+;
+; 1     6/05/97 12:43p Debkumar
+;
+; 1     1/31/97 1:15p Debkumar
+; New files for 62700.
+;
+; 1     1/13/97 2:22p Debkumar
+; New file for 6.27.00.
+;
+;*****************************************************************;
+;---------------------------------------;
+ifndef  RT32
+        .286
+else
+        .386
+endif
+;---------------------------------------;
+        include rt.equ
+        include pci.equ
+        include devnode.equ
+        include mac32.mac
+        include sis530.equ
+        include makeflag.equ
+;---------------------------------------;
+;       C O D E     S E G M E N T       ;
+;---------------------------------------;
+ifndef RT32
+        cgroup  group   _text
+        _text segment para public 'CODE'
+                 assume cs:CGROUP
+        .386
+else
+        .386
+        cgroup  group   _runtime32
+        _runtime32 segment para public USE32 'CODE'
+                 assume cs:cgroup
+endif
+
+ifndef RT32
+;------------------------------------------------------------------------------;
+;                                                                              ;
+;                             16 Bit Code Only                                 ;
+;                                                                              ;
+;------------------------------------------------------------------------------;
+;---------------------------------------;
+; rth_pci_irq_routing_table             ;
+;---------------------------------------;--------------------------------------;
+; The information below is used for two purposes:                              ;
+;     1. PCI IRQ routing during POST                                           ;
+;     2. Runtime dynamic IRQ routing (using Int 1A functions B10E / B10F)      ;
+;                                                                              ;
+; The IRQ routing table should contain one entry for each on-board PCI device  ;
+; or PCI slot.  Chipset devices such as host bridges and ISA bridges do not    ;
+; need an entry.  A generic BIOS can contain a few unused entries that BCP     ;
+; can use when adapting a generic BIOS to a customized BIOS for a motherboard  ;
+; containing on board devices such as PCI IDE, PCI SCSI, or PCI Network chips. ;
+; BCP can also use a blank entry if a motherboard OEM decices to put an extra  ;
+; PCI slot on their board.                                                     ;
+;                                                                              ;
+; The rth_pci_device_limit byte should be set to the total number of entries   ;
+; that are present including any blank entries.                                ;
+;                                                                              ;
+; The rth_pci_device_count byte should be set to the number of non-blank       ;
+; entries (entries that are actually used in this BIOS).                       ;
+;                                                                              ;
+; The rth_pci_dedicated_irqs word is a bitmask of IRQs that are dedicated to   ;
+; the PCI bus.  (Bit 0 = IRQ 0, ..., Bit 15 = IRQ 15)  In most cases this word ;
+; will be set to all 0's.  This word may be used in systems that implement     ;
+; IRQ routing with jumpers.                                                    ;
+;                                                                              ;
+; The fields in each table entry are discussed below:                          ;
+;                                                                              ;
+; - PCI Bus Number: Most boards contain only a single PCI bus, so this byte    ;
+;   should usually be set to 0.  If a board has multiple PCI busses, then      ;
+;   this byte should be set to indicate which bus the device or slot is on.    ;
+;                                                                              ;
+; - Dev Num: This field should be set to a slot's or device's address on the   ;
+;   PCI bus shifted left by three bits (the device number should be in         ;
+;   bits 7:3 and bits 2:0 should be 000).                                      ;
+;                                                                              ;
+; - Int A Pin, Chipset Reg: This field should be set to the chipset register   ;
+;   number that controls this slot's (or device's) Int A Pin.  The value in    ;
+;   this field is basically arbitrary, the value is returned by the function   ;
+;   rth_pci_get_irq_reg.  Slots and devices that share the same chipset        ;
+;   interrupt signal should have the same value for this field.  For example:  ;
+;   if Slot 1's Int A pin and Slot 2's Int B pin are both connected to the     ;
+;   same chipset interrupt signal, then the Chipset Reg value for Slot 1 Int A ;
+;   should match Slot 2 Int B.  The core BIOS (and configuration software)     ;
+;   need this information to know how IRQs are shared between slots.  If a     ;
+;   slot or device has nothing connected to its Int A pin, then this field     ;
+;   should be set to 0.  If a slot or device has its Int A pin hardwired       ;
+;   directly to an IRQ, then set this field to 0Fxh (where x is 0-F for        ;
+;   IRQ 0 - IRQ 15).  This is useful if a motherboard has a PCI IDE chip that  ;
+;   has its Int A pin hardwired to IRQ 14.                                     ;
+;                                                                              ;
+; - Int A Pin, Bitmap of IRQs Routable to Pin: This field should be set to     ;
+;   indicate which IRQs the chipset is capable of routing to the slot's (or    ;
+;   device's) Int A pin.  If the value for Chipset Reg (see above) was set to  ;
+;   0, then set all bits in this field to 0 also.  If the value for Chipset    ;
+;   Reg was set to 0Fxh to indicate a hardwired connection to a certain IRQ,   ;
+;   then only one bit corresponding to that IRQ should be set in this field.   ;
+;                                                                              ;
+; - Int B,C,D Pin, Chipset Reg: These fields work exactly like the Chipset Reg ;
+;   field for Int A Pin (see above).                                           ;
+;                                                                              ;
+; - Int B,C,D Pin, Bitmap of IRQs Routable to Pin: These fields work exactly   ;
+;   like the corresponding field for Int A Pin (see above).                    ;
+;                                                                              ;
+; - Physical Slot Number: This field should be set to the slot number of a     ;
+;   PCI slot as it appears to the end user.  Numbers like 1, 2, 3, 4 should be ;
+;   used.  On board PCI devices such as PCI IDE chips should have this field   ;
+;   set to 0 to indicate that the device is not a removable card that is       ;
+;   plugged into a slot.  Configuration software can use this value to         ;
+;   translate a PCI device number (0 - 1F) to a value that is meaningful to    ;
+;   an end user.                                                               ;
+;                                                                              ;
+; - Reserved Byte: Always set to 0.                                            ;
+;                                                                              ;
+;------------------------------------------------------------------------------;
+        public rth_pci_device_limit
+        public rth_pci_device_count
+        public rth_pci_dedicated_irqs
+        public rth_pci_irq_routing_table
+
+rth_pci_irq_routing_table_signature     db '$IRT'       ;So BCP can find table
+
+rth_pci_device_limit    db 6    ;Total number of table entries below
+rth_pci_device_count    db 6    ;Number of table entries actually used
+
+rth_pci_dedicated_irqs  dw 0000000000000000b ;Bitmap of IRQs dedicated to PCI
+
+
+rth_pci_irq_routing_table       label byte
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; USB         |  Device Location  |        Int A Pin          |        Int B Pin          |        Int C Pin          |        Int D Pin          |                    |
+;             +-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+;             | PCI Bus  Dev Num  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Physical  Reserved |
+; Device 1    | Number   (Shl 3)  | Reg       Routable to Pin | Reg       Routable Pin    | Reg       Routable Pin    | Reg       Routable Pin    | Slot Num  Byte     |
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+pci_irq_entry < 00h,     008h,      062h,   1101111010111000b,  000h,   0000000000000000b,  000h,   0000000000000000b,  000h,   0000000000000000b,  0,        0        >
+
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; AGP Bridge  |  Device Location  |        Int A Pin          |        Int B Pin          |        Int C Pin          |        Int D Pin          |                    |
+;             +-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+;             | PCI Bus  Dev Num  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Physical  Reserved |
+; Device 2    | Number   (Shl 3)  | Reg       Routable to Pin | Reg       Routable Pin    | Reg       Routable Pin    | Reg       Routable Pin    | Slot Num  Byte     |
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+pci_irq_entry < 00h,     010h,      041h,   1101111010111000b,  042h,   1101111010111000b,  043h,   1101111010111000b,  044h,   1101111010111000b,  0,        0        >
+
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; Slot 1      |  Device Location  |        Int A Pin          |        Int B Pin          |        Int C Pin          |        Int D Pin          |                    |
+;             +-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; AD#20       | PCI Bus  Dev Num  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Physical  Reserved |
+; Device 9    | Number   (Shl 3)  | Reg       Routable to Pin | Reg       Routable Pin    | Reg       Routable Pin    | Reg       Routable Pin    | Slot Num  Byte     |
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+pci_irq_entry < 00h,     048h,      041h,   1101111010111000b,  042h,   1101111010111000b,  043h,   1101111010111000b,  044h,   1101111010111000b,  1,        0        >
+
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; Slot 2      |  Device Location  |        Int A Pin          |        Int B Pin          |        Int C Pin          |        Int D Pin          |                    |
+;             +-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; AD#21       | PCI Bus  Dev Num  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Physical  Reserved |
+; Device 10   | Number   (Shl 3)  | Reg       Routable to Pin | Reg       Routable Pin    | Reg       Routable Pin    | Reg       Routable Pin    | Slot Num  Byte     |
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+pci_irq_entry < 00h,     050h,      044h,   1101111010111000b,  041h,   1101111010111000b,  042h,   1101111010111000b,  043h,   1101111010111000b,  2,        0        >
+
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; Slot 3      |  Device Location  |        Int A Pin          |        Int B Pin          |        Int C Pin          |        Int D Pin          |                    |
+;             +-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; AD#22       | PCI Bus  Dev Num  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Physical  Reserved |
+; Device 11   | Number   (Shl 3)  | Reg       Routable to Pin | Reg       Routable Pin    | Reg       Routable Pin    | Reg       Routable Pin    | Slot Num  Byte     |
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+pci_irq_entry < 00h,     058h,      043h,   1101111010111000b,  044h,   1101111010111000b,  041h,   1101111010111000b,  042h,   1101111010111000b,  3,        0        >
+
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; Audio       |  Device Location  |        Int A Pin          |        Int B Pin          |        Int C Pin          |        Int D Pin          |                    |
+;             +-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; AD#23       | PCI Bus  Dev Num  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Physical  Reserved |
+; Device 12   | Number   (Shl 3)  | Reg       Routable to Pin | Reg       Routable Pin    | Reg       Routable Pin    | Reg       Routable Pin    | Slot Num  Byte     |
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+pci_irq_entry < 00h,     060h,      044h,   1101111010111000b,  000h,   0000000000000000b,  000h,   0000000000000000b,  000h,   0000000000000000b,  0,        0        >
+
+align   16
+        public  ms_irq_route_table_sign
+ms_irq_route_table_sign label byte
+                        db      "$PIR"
+ms_irq_route_table_ver  dw      0100h
+ms_irq_route_table_size dw      32+(6*16)
+ms_irq_route_table_bus  db      00h
+ms_irq_route_table_dev  db      S5595_PCI2ISA_DEV_FUNC_NUM 
+ms_irq_route_table_irq  dw      0h
+ms_irq_route_table_id   dd      00081039h               ; SiS5595
+ms_irq_route_table_mini dd      0h
+ms_irq_route_table_resd db      11 dup(0)
+ms_irq_route_table_cksm db      0
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; USB         |  Device Location  |        Int A Pin          |        Int B Pin          |        Int C Pin          |        Int D Pin          |                    |
+;             +-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+;             | PCI Bus  Dev Num  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Physical  Reserved |
+; Device 1    | Number   (Shl 3)  | Reg       Routable to Pin | Reg       Routable Pin    | Reg       Routable Pin    | Reg       Routable Pin    | Slot Num  Byte     |
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+pci_irq_entry < 00h,     008h,      062h,   1101111010111000b,  000h,   0000000000000000b,  000h,   0000000000000000b,  000h,   0000000000000000b,  0,        0        >
+
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; AGP Bridge  |  Device Location  |        Int A Pin          |        Int B Pin          |        Int C Pin          |        Int D Pin          |                    |
+;             +-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+;             | PCI Bus  Dev Num  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Physical  Reserved |
+; Device 2    | Number   (Shl 3)  | Reg       Routable to Pin | Reg       Routable Pin    | Reg       Routable Pin    | Reg       Routable Pin    | Slot Num  Byte     |
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+pci_irq_entry < 00h,     010h,      041h,   1101111010111000b,  042h,   1101111010111000b,  043h,   1101111010111000b,  044h,   1101111010111000b,  0,        0        >
+
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; Slot 1      |  Device Location  |        Int A Pin          |        Int B Pin          |        Int C Pin          |        Int D Pin          |                    |
+;             +-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; AD#20       | PCI Bus  Dev Num  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Physical  Reserved |
+; Device 9    | Number   (Shl 3)  | Reg       Routable to Pin | Reg       Routable Pin    | Reg       Routable Pin    | Reg       Routable Pin    | Slot Num  Byte     |
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+pci_irq_entry < 00h,     048h,      041h,   1101111010111000b,  042h,   1101111010111000b,  043h,   1101111010111000b,  044h,   1101111010111000b,  1,        0        >
+
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; Slot 2      |  Device Location  |        Int A Pin          |        Int B Pin          |        Int C Pin          |        Int D Pin          |                    |
+;             +-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; AD#21       | PCI Bus  Dev Num  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Physical  Reserved |
+; Device 10   | Number   (Shl 3)  | Reg       Routable to Pin | Reg       Routable Pin    | Reg       Routable Pin    | Reg       Routable Pin    | Slot Num  Byte     |
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+pci_irq_entry < 00h,     050h,      044h,   1101111010111000b,  041h,   1101111010111000b,  042h,   1101111010111000b,  043h,   1101111010111000b,  2,        0        >
+
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; Slot 3      |  Device Location  |        Int A Pin          |        Int B Pin          |        Int C Pin          |        Int D Pin          |                    |
+;             +-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; AD#22       | PCI Bus  Dev Num  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Physical  Reserved |
+; Device 11   | Number   (Shl 3)  | Reg       Routable to Pin | Reg       Routable Pin    | Reg       Routable Pin    | Reg       Routable Pin    | Slot Num  Byte     |
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+pci_irq_entry < 00h,     058h,      043h,   1101111010111000b,  044h,   1101111010111000b,  041h,   1101111010111000b,  042h,   1101111010111000b,  3,        0        >
+
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; Audio       |  Device Location  |        Int A Pin          |        Int B Pin          |        Int C Pin          |        Int D Pin          |                    |
+;             +-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+; AD#23       | PCI Bus  Dev Num  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Chipset   Bitmap of IRQs  | Physical  Reserved |
+; Device 12   | Number   (Shl 3)  | Reg       Routable to Pin | Reg       Routable Pin    | Reg       Routable Pin    | Reg       Routable Pin    | Slot Num  Byte     |
+;-------------+-------------------+---------------------------+---------------------------+---------------------------+---------------------------+--------------------+
+pci_irq_entry < 00h,     060h,      044h,   1101111010111000b,  000h,   0000000000000000b,  000h,   0000000000000000b,  000h,   0000000000000000b,  0,        0        >
+;---------------------------------------------------------------------------;
+
+COMMENT ~
+~
+endif
+;------------------------------------------------------------------------------;
+;                                                                              ;
+;                              16/32 Bit Code                                  ;
+;                                                                              ;
+;------------------------------------------------------------------------------;
+;---------------------------------------;
+; rth_pci_search_xlat                   ;
+;---------------------------------------;--------------------------------------;
+; This function translates a PCI device search index to a logical PCI device   ;
+; number.  In the core BIOS there are several loops that search for each device;
+; on the PCI bus.  In most systems it is acceptable to search from device 0    ;
+; to device 1F or from device 1F down to 0.  But in some systems the search    ;
+; order may need to be more complex than a simple first-to-last or             ;
+; last-to-first scheme.  This routine allows any type of search order to be    ;
+; implemented.  In general there are three possibilties:                       ;
+;                                                                              ;
+; 1. Simple First-to-Last search order (0 - 1F)                                ;
+;    This is the easiest case.  To implement this type of search order, just   ;
+;    do nothing since BL is already set properly on entry.                     ;
+;                                                                              ;
+; 2. Simple Last-to-First search order (1F - 0)                                ;
+;    This is the most common search order because it gives priority to off     ;
+;    board devices (usually higher device numbers) over on board devices       ;
+;    (usually lower device numbers).  To implement this type of search order   ;
+;    just do:   SUB  BL, 1Fh                                                   ;
+;               NEG  BL                                                        ;
+;               RET                                                            ;
+;                                                                              ;
+; 3. Complex search order                                                      ;
+;    This type of search order may be needed if an on board device's number    ;
+;    lies between two PCI expansion slots.  Another use for this complex order ;
+;    is to control the searching order with setup questions.  To implement a   ;
+;    complex search order some sort of list must be used.                      ;
+;                                                                              ;
+; NOTE: This function does not need to be modified for most platforms.         ;
+;                                                                              ;
+; NOTE: This function is assembled twice, once for real mode code, and once    ;
+;       for 32 bit protected mode code.  All calls must be made using the      ;
+;       callproc macro.  Do not modify and segment registers.                  ;
+;                                                                              ;
+; Input:  BH = PCI bus number that is being searched                           ;
+;         BL = PCI device search index "n" (in the range 0 - 1F)               ;
+;                                                                              ;
+; Output: BL = The "nth" PCI device number to search for (in the range 0 - 1F) ;
+;                                                                              ;
+; Destroys: Nothing                                                            ;
+;------------------------------------------------------------------------------;
+        pubproc rth_pci_search_xlat
+defproc rth_pci_search_xlat
+;       sub     bl, 1Fh                 ;Default is search Last-to-First
+;       neg     bl
+        ret
+endproc rth_pci_search_xlat
+;------------------------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1995, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-263-8181                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+ifndef RT32
+        _text    ends
+else
+        _runtime32 ends
+endif
+         end

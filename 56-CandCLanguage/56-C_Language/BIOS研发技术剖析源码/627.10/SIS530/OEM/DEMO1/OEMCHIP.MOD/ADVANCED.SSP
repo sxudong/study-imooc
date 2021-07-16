@@ -1,0 +1,166 @@
+
+//;*****************************************************************;
+//;*****************************************************************;
+//;**								**;
+//;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+//;**								**;
+//;**			All Rights Reserved.			**;
+//;**								**;
+//;**		6145-F, Northbelt Parkway, Norcross,		**;
+//;**								**;
+//;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+//;**								**;
+//;*****************************************************************;
+//;*****************************************************************;
+
+//*****************************************************************;
+// $Header: /BIOS/GENERIC/627/INTEL/440BX/Notebook PIIX4/SYS/ADVANCED.SSP 1     8/18/97 4:58p Juand $
+//
+// $Revision: 1 $
+//
+// $Date: 8/18/97 4:58p $
+//*****************************************************************;
+//*****************************************************************;
+// Revision History
+// ----------------
+// $Log: /BIOS/GENERIC/627/INTEL/440BX/Notebook PIIX4/SYS/ADVANCED.SSP $
+// 
+// 1     8/18/97 4:58p Juand
+// 
+// 1     7/15/97 3:24p Juand
+//
+// 1     1/31/97 12:46p Debkumar
+// New files for 62700.
+//
+// 2     1/13/97 2:28p Debkumar
+// Modified for 6.27.00.
+//
+// 1     1/02/97 11:40a Debkumar
+//
+// 5     12/30/96 2:36p Debkumar
+// Version 6.26.02
+//
+// 4     9/03/96 5:15p Mandal
+// 6.26 for USA
+//
+// 1     6/17/96 2:34p Mandal
+//
+// 3     3/21/96 5:24p Mandal
+// (c)1996 and phone no changed.
+//
+// 2     1/12/96 5:38p Dickh
+// Added SourceSafe keywords to track revision history.
+//
+//*****************************************************************;
+
+// This AMI Setup Script Processor (SSP) file contains setup items that
+// are related to Advanced Setup . This file is considered a core BIOS file
+// and should not be modified.
+
+Screen (SCR_STANDARD)
+
+	Question (Q_LANGUAGE)
+		Text	= "Language"
+		Options	= "English":DEFAULT:POWERON
+		//	  "German"
+		//	  "French"
+		//	  "Spanish"
+		Present	= No
+	EndQuestion
+
+EndScreen // SCR_STANDARD
+
+StartSourceCode ("SETUPDAT.ASM")
+"public	no_of_languages"
+"no_of_languages	equ	1"
+EndSourceCode
+
+Screen (SCR_ADVANCED)
+
+	Question (Q_C0000_SHADOW)
+		Text = "C000,32k Shadow"
+		Options = "Disabled"
+			  "Enabled"
+			  "Cached":DEFAULT:POWERON
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+//	Question (Q_C4000_SHADOW)
+//		Text = "C400,16k Shadow"
+//		Options = "Disabled"
+//			  "Enabled"
+//			  "Cached":DEFAULT:POWERON
+//			  RESERVED
+//		Present = Yes
+//	EndQuestion
+
+	Question (Q_C8000_SHADOW)
+		Text = "C800,16k Shadow"
+		Options = "Disabled":DEFAULT:POWERON 
+			  "Enabled"
+			  "Cached"
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+	Question (Q_CC000_SHADOW)
+		Text = "CC00,16k Shadow"
+		Options = "Disabled":DEFAULT:POWERON 
+			  "Enabled"
+			  "Cached"
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+	Question (Q_D0000_SHADOW)
+		Text = "D000,16k Shadow"
+		Options = "Disabled":DEFAULT:POWERON 
+			  "Enabled"
+			  "Cached"
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+	Question (Q_D4000_SHADOW)
+		Text = "D400,16k Shadow"
+		Options = "Disabled":DEFAULT:POWERON 
+			  "Enabled"
+			  "Cached"
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+	Question (Q_D8000_SHADOW)
+		Text = "D800,16k Shadow"
+		Options = "Disabled":DEFAULT:POWERON 
+			  "Enabled"
+			  "Cached"
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+	Question (Q_DC000_SHADOW)
+		Text = "DC00,16k Shadow"
+		Options = "Disabled":DEFAULT:POWERON 
+			  "Enabled"
+			  "Cached"
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+EndScreen   // SCR_ADVANCED
+
+//;*****************************************************************;
+//;*****************************************************************;
+//;**								**;
+//;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+//;**								**;
+//;**			All Rights Reserved.			**;
+//;**								**;
+//;**		6145-F, Northbelt Parkway, Norcross,		**;
+//;**								**;
+//;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+//;**								**;
+//;*****************************************************************;
+//;*****************************************************************;

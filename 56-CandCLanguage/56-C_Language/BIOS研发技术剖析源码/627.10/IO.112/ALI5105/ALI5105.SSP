@@ -1,0 +1,82 @@
+BeginDevice (ALI5105FloppyController)
+	Screen (SCR_PERIPHERAL)
+		 Question (Q_ALI5105_FLOPPY_CONTROLLER)
+			 Text = "OnBoard FDC"
+			 Options = "Auto":DEFAULT:POWERON,
+				   "Disabled",
+				   "Enabled"
+		 EndQuestion
+	EndScreen
+EndDevice	// ALI5105FloppyController
+BeginDevice (ALI5105IdeController)
+	Screen (SCR_PERIPHERAL)
+		 Question (Q_ALI5105_IDE_CONTROLLER)
+			 Text = "OnBoard IDE"
+			 Options = RESERVED,
+				   "Disabled",
+				   "Enabled":DEFAULT:POWERON
+		 EndQuestion
+	EndScreen
+EndDevice	// ALI5105IdeController
+BeginDevice (ALI5105SerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_ALI5105_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			ExternalFunction = Ali5105_ComA_Xfn
+			OptionBits = 2
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+	EndScreen
+EndDevice	// ALI5105SerialPortA
+BeginDevice (ALI5105SerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_ALI5105_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			ExternalFunction = Ali5105_ComB_Xfn
+			OptionBits = 2
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+	EndScreen
+EndDevice	// ALI5105SerialPortB
+BeginDevice (Ali5105ParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_ALI5105_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "3BC",
+				  "278"
+		EndQuestion
+		Question (Q_ALI5105_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Ali5105_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice   // Ali5105ParallelPort
+String (STR_ALI5105_AUTO)
+	Text = "Auto"
+EndString
+String (STR_ALI5105_DIS)
+	Text = "Disabled"
+EndString
+String (STR_ALI5105_IRQ5)
+	Text = "5"
+EndString
+String (STR_ALI5105_IRQ7)
+	Text = "7"
+EndString
+String (STR_ALI5105_3F8)
+	Text = "3F8/COM1"
+EndString
+String (STR_ALI5105_2F8)
+	Text = "2F8/COM2"
+EndString
+String (STR_ALI5105_NA)
+	Text = "N/A"
+EndString

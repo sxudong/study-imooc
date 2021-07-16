@@ -1,0 +1,185 @@
+BeginDevice (WIN787IFIdeController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN787IF_IDE_CONTROLLER)
+			Text = "OnBoard IDE"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary":DEFAULT:POWERON,
+				  "Secondary"
+		EndQuestion
+	EndScreen
+EndDevice   // WIN787IFIdeController
+BeginDevice (WIN787IFFloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN787IF_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+	EndScreen
+EndDevice   // WIN787IFFloppyController
+BeginDevice (WIN787IFSerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN787IF_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+//				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice   // WIN787IFSerialPortA
+BeginDevice (WIN787IFSerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN787IF_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+//				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_WIN787IF_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+			ShadeWhen (Q_WIN787IF_COMB_PORT) = "Disabled"
+			Options = "Normal":DEFAULT:POWERON,
+				  "IrDA"
+		EndQuestion
+		Question (Q_WIN787IF_COMB_DUPLEX_MODE)
+			Text = "    IR Duplex Mode"
+			ShadeWhen (Q_WIN787IF_COMB_MODE) = "Normal"
+			Options = "Full Duplex":DEFAULT:POWERON,
+				  "Half Duplex"
+		EndQuestion
+		Question (Q_WIN787IF_COMB_PROTOCOL)
+			Text = "    IrDA Protocol"
+			ShadeWhen (Q_WIN787IF_COMB_MODE) = "Normal"
+			Options = "1.6 uS":DEFAULT:POWERON,
+				  "3/16 Baud"
+		EndQuestion
+	EndScreen
+EndDevice   // WIN787IFSerialPortB
+BeginDevice (WIN787IFParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN787IF_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_WIN787IF_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = Win787If_Lpt_Mode_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+
+		EndQuestion
+		Question (Q_WIN787IF_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Win787If_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+
+	EndScreen
+EndDevice   // WIN787IFParallelPort
+BeginDevice (WIN787IFParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN787IF_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			ExternalFunction = Win787If_Lpt_Addr_Xfn
+			OptionBits = 3
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+		Question (Q_WIN787IF_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = Win787If_Lpt_Mode_Xfn
+			OptionBits = 2
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_WIN787IF_LPT_EPPVER)
+			Text = "  EPP Version"
+                        ExternalFunction = Win787If_Lpt_EppVer_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_WIN787IF_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+			ExternalFunction = Win787If_Lpt_Dma_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+		Question (Q_WIN787IF_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Win787If_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+
+	EndScreen
+EndDevice   // WIN787IFParallelPortExt
+
+String (STR_WIN787IF_AUTO)
+	Text = "Auto"
+EndString
+String (STR_WIN787IF_DIS)
+	Text = "Disabled"
+EndString
+String (STR_WIN787IF_378)
+	Text = "378"
+EndString
+String (STR_WIN787IF_278)
+	Text = "278"
+EndString
+String (STR_WIN787IF_3BC)
+	Text = "3BC"
+EndString
+String (STR_WIN787IF_NORMAL)
+	Text = "Normal"
+EndString
+String (STR_WIN787IF_BIDIR)
+	Text = "Bi-Dir"
+EndString
+String (STR_WIN787IF_SPP_EPP)
+	Text = "SPP(EPP)"
+EndString
+String (STR_WIN787IF_ECP)
+	Text = "ECP"
+EndString
+String (STR_WIN787IF_EPP19)
+	Text = "1.9"
+EndString
+String (STR_WIN787IF_EPP17)
+	Text = "1.7"
+EndString
+String (STR_WIN787IF_IRQ5)
+	Text = "5"
+EndString
+String (STR_WIN787IF_IRQ7)
+	Text = "7"
+EndString
+String (STR_WIN787IF_DMA0)
+	Text = "0"
+EndString
+String (STR_WIN787IF_DMA1)
+	Text = "1"
+EndString
+String (STR_WIN787IF_DMA3)
+	Text = "3"
+EndString
+String (STR_WIN787IF_NA)
+	Text = "N/A"
+EndString

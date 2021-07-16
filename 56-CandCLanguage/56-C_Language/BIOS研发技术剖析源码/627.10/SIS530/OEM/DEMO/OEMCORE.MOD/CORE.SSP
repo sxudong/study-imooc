@@ -1,0 +1,1236 @@
+
+//;*****************************************************************;
+//;*****************************************************************;
+//;**                                                           **;
+//;**   (C)Copyright 1985-1996, American Megatrends Inc.        **;
+//;**                                                           **;
+//;**                   All Rights Reserved.                    **;
+//;**                                                           **;
+//;**           6145-F, Northbelt Parkway, Norcross,            **;
+//;**                                                           **;
+//;**           Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+//;**                                                           **;
+//;*****************************************************************;
+//;*****************************************************************;
+//*****************************************************************//
+
+include "..\..\rom\makeflag.equ"          // (CORE0218+)
+
+// This AMI Setup Script Processor (SSP) file contains setup items that
+// are common to all platforms.  This file is considered a core BIOS file
+// and should not be modified.
+
+Description = "General setup items"
+
+LanguageVersion = 1
+
+
+// These strings may be used by external functions but are not associated
+// with a particular question.
+
+String (STR_NOT_INSTALLED)
+        Text    = "Not Installed"
+EndString
+
+String (STR_USER)
+        Text    = "User"
+EndString
+
+String (STR_SCSI)
+        Text    = "SCSI"
+EndString
+
+String (STR_NETWORK)
+        Text    = "NETWORK"
+EndString
+
+String (STR_I2O)
+        Text    = "I2O"
+EndString
+
+String (STR_FDD0)
+        Text    = "FLOPPY"
+EndString
+
+String (STR_HDD0)
+        Text    = "IDE-0"
+EndString
+
+String (STR_HDD1)
+        Text    = "IDE-1"
+EndString
+
+String (STR_HDD2)
+        Text    = "IDE-2"
+EndString
+
+String (STR_HDD3)
+        Text    = "IDE-3"
+EndString
+
+String (STR_CDROM)
+        Text    = "CDROM"
+EndString
+
+String (STR_FLOPTICAL)
+        Text    = "FLOPTICAL"
+EndString
+
+String (STR_ARMD_FDD)
+//      Text    = "ARMD-FDD"
+        Text    = "LS-120/ZIP"
+EndString
+
+String (STR_ARMD_HDD)
+//      Text    = "ARMD-HDD"
+        Text    = "ATAPI ZIP"
+EndString
+
+String (STR_AUTO)
+        Text    = "Auto"
+EndString
+
+//String (STR_INTEL)
+//      Text    = "Intel"
+//EndString
+
+//String (STR_CYRIX)
+//      Text    = "CYRIX"
+//EndString
+
+//String (STR_AMD)
+//      Text    = "AMD"
+//EndString
+
+//String (STR_TI)
+//      Text    = "TI"
+//EndString
+
+//String (STR_IBM)
+//      Text    = "IBM"
+//EndString
+
+//String (STR_UMC)
+//      Text    = "UMC"
+//EndString
+
+String (STR_CACHE)
+        Text    = "Cached"
+EndString
+
+String (STR_WTHRU)
+        Text    = "WriteThru"
+EndString
+
+String (STR_WBACK)
+        Text    = "WriteBack"
+EndString
+
+String (STR_DISABLED)
+        Text    = "Disabled"
+EndString
+
+String (STR_ENABLED)
+        Text    = "Enabled"
+EndString
+
+String (STR_RESET)
+        Text    = "Reset"
+EndString
+
+                                        // (CORE0218+)>
+if (MKF_EVENT_LOG)
+// Event log status --------------------//
+String (str_space_available)
+        Text    = "Available"
+EndString
+
+String (str_space_full)
+        Text    = "Full"
+EndString
+
+String (str_valid)
+        Text    = "Valid"
+EndString
+
+String (str_invalid)
+        Text    = "Invalid"
+EndString
+
+// Event log types ---------------------//
+String (str_event_type00)
+        Text    = "No unread events"
+EndString
+
+String (str_event_type01)
+        Text    = "Single-bit ECC error"
+EndString
+
+String (str_event_type02)
+        Text    = "Multi-bit ECC error"
+EndString
+
+String (str_event_type03)
+        Text    = "Parity memory error"
+EndString
+
+String (str_event_type04)
+        Text    = "Bus time-out"
+EndString
+
+String (str_event_type05)
+        Text    = "I/O channel check"
+EndString
+
+String (str_event_type06)
+        Text    = "Software NMI"
+EndString
+
+String (str_event_type07)
+        Text    = "POST memory resize"
+EndString
+
+String (str_event_type08)
+        Text    = "POST error:"
+EndString
+
+String (str_event_type09)
+        Text    = "PCI parity error"
+EndString
+
+String (str_event_type0A)
+        Text    = "PCI system error"
+EndString
+
+String (str_event_type0B)
+        Text    = "CPU failure"
+EndString
+
+String (str_event_type0C)
+        Text    = "EISA failure time-out"
+EndString
+
+String (str_event_type0D)
+        Text    = "Correctable log disabled"
+EndString
+
+String (str_event_type0E)
+        Text    = "Too many error"
+EndString
+
+String (str_event_type10)
+        Text    = "System Limit Exceeded"
+EndString
+
+String (str_event_type11)
+        Text    = "Asynchronous timer expired"
+EndString
+
+String (str_event_type12)
+        Text    = "System configuration"
+EndString
+
+String (str_event_type13)
+        Text    = "Hard-disk information"
+EndString
+
+String (str_event_type14)
+        Text    = "System reconfigured"
+EndString
+
+String (str_event_type15)
+        Text    = "Uncorrectable CPU-complex"
+EndString
+
+String (str_event_type16)
+        Text    = "Log area reset/cleared"
+EndString
+
+String (str_event_type17)
+        Text    = "System boot"
+EndString
+
+// Event log post errors ---------------//
+
+String (STR_TIMER_ERR)
+        Text    = "Channel 2 timer error"
+EndString
+
+String (STR_MATSRE_PIC_ERR)
+        Text    = "Master PIC error"
+EndString
+
+String (STR_SLAVE_PIC_ERR)
+        Text    = "Slave PIC error"
+EndString
+
+String (STR_CMOS_BAT_ERR)
+        Text    = "CMOS battery failure"
+EndString
+
+String (STR_CMOS_OPT_ERR)
+        Text    = "CMOS options not set"
+EndString
+
+String (STR_CMOS_CSUM_ERR)
+        Text    = "CMOS checksum error"
+EndString
+
+String (STR_CMOS_CONF_ERR)
+        Text    = "CMOS configuration error"
+EndString
+
+String (STR_KEYB_LOCK_ERR)
+        Text    = "Keyboard locked"
+EndString
+
+String (STR_KEYB_ERR)
+        Text    = "Keyboard not functional"
+EndString
+
+String (STR_KEYB_CONT_ERR)
+        Text    = "Keyboard controller error"
+EndString
+
+String (STR_CMOS_MEM_DIFF_ERR)
+        Text    = "CMOS memory size different"
+EndString
+
+String (STR_CACHE_MEM_ERR)
+        Text    = "Cache memory error"
+EndString
+
+String (STR_FLOPPY0_ERR)
+        Text    = "Floppy drive 0 error"
+EndString
+
+String (STR_FLOPPY1_ERR)
+        Text    = "Floppy drive 1 error"
+EndString
+
+String (STR_FLOPPY_CONT_ERR)
+        Text    = "Floppy controller failure"
+EndString
+
+String (STR_CMOS_TIME_ERR)
+        Text    = "CMOS time not set"
+EndString
+
+// Event log DIM errors ----------------//
+
+String (STR_PCI_MEM_CONFLICT)
+        Text    = "PCI memory conflict"
+EndString
+
+String (STR_PCI_IO_CONFLICT)
+        Text    = "PCI I/O conflict"
+EndString
+
+String (STR_PCI_IRQ_CONFLICT)
+        Text    = "PCI IRQ conflict"
+EndString
+
+String (STR_STATIC_CONFLICT)
+        Text    = "Static resource conflict"
+EndString
+
+String (STR_NVRAM_CSUM_ERR)
+        Text    = "NVRAM checksum error, NVRAM cleared"
+EndString
+
+String (STR_FDC_CONFLICT)
+        Text    = "FDC resource conflict"
+EndString
+
+String (STR_PRI_ATA_CONFLICT)
+        Text    = "Primary ATA resource conflict"
+EndString
+
+String (STR_SEC_ATA_CONFLICT)
+        Text    = "Secondary ATA resource conflict"
+EndString
+
+String (STR_PARALLEL_CONFLICT)
+        Text    = "Parallel port resource conflict"
+EndString
+
+String (STR_SERIAL1_CONFLICT)
+        Text    = "Serial port 1 resource conflict"
+EndString
+
+String (STR_SERIAL2_CONFLICT)
+        Text    = "Serial port 2 resource conflict"
+EndString
+
+endif
+                                        // <(CORE0218+)
+
+Screen (SCR_ADVANCED)
+
+                                        // (CORE0218+)>
+if (MKF_EVENT_LOG)
+        Question (Q_EVENT_LOG_CAPACITY)
+                Text    = "Event log capacity"
+                Externalfunction= event_log_capacity
+                OptionBits      = 1
+                Default         = 00h
+                Poweron         = 00h
+                Present         = Yes
+//              Supervisor = Yes
+        EndQuestion
+        Question (Q_EVENT_LOG_VALIDITY)
+                Text    = "Event log validity"
+                Externalfunction= event_log_validity
+                OptionBits      = 1
+                Default         = 00h
+                Poweron         = 00h
+                Present         = Yes
+//              Supervisor = Yes
+        EndQuestion
+        Question (Q_VIEW_DMI_EVENT_LOG)
+                Text    = "View DMI event log"
+                Externalfunction= view_dmi_event_log
+                OptionBits      = 1
+                Default         = 00h
+                Poweron         = 00h
+                Present         = Yes
+//              Supervisor = Yes
+        EndQuestion
+        Question (Q_CLEAR_EVENT_LOG)
+                Text    = "Clear all DMI event logs"
+                Options = "No":DEFAULT:POWERON,
+                          "Yes"
+                Present = Yes
+//              Supervisor = Yes
+        EndQuestion
+        Question (Q_EVENT_LOGGING)
+                Text    = "Event logging"
+                Options = "Disabled",
+                          "Enabled":DEFAULT:POWERON
+                Present = Yes
+//              Supervisor = Yes
+        EndQuestion
+        Question (Q_MARK_DMI_EVENTS_AS_READ)
+                Text    = "Mark DMI events as read"
+                Externalfunction= mark_dmi_events_as_read
+                OptionBits      = 1
+                Default         = 00h
+                Poweron         = 00h
+                Present         = Yes
+//              Supervisor = Yes
+        EndQuestion
+endif
+                                        // <(CORE0218+)
+
+        Question (Q_QUICK_BOOT)
+                Text    = "Quick Boot"
+                Options = "Disabled":POWERON,
+                          "Enabled":DEFAULT
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PM_EMULATION_TYPE)
+                Text    = "Pri Master ARMD Emulated as"
+                Options = "Auto":DEFAULT:POWERON,
+                          "Floppy"
+                          "Hard Disk"
+//              Help    = "If set to Auto, the default emulation type "
+//                        "depends on ARMD drive. The default emulation "
+//                        "type is Floppy for LS120, Hard Disk for MO, "
+//                        "Hard Disk for IOMEGA Zip."
+                Present = No
+        EndQuestion
+
+        Question (Q_PS_EMULATION_TYPE)
+                Text    = "Pri Slave ARMD Emulated as"
+                Options = "Auto":DEFAULT:POWERON,
+                          "Floppy"
+                          "Hard Disk"
+//              Help    = "If set to Auto, the default emulation type "
+//                        "depends on ARMD drive. The default emulation "
+//                        "type is Floppy for LS120, Hard Disk for MO, "
+//                        "Hard Disk for IOMEGA Zip."
+                Present = No
+        EndQuestion
+
+        Question (Q_SM_EMULATION_TYPE)
+                Text    = "Sec Master ARMD Emulated as"
+                Options = "Auto":DEFAULT:POWERON,
+                          "Floppy"
+                          "Hard Disk"
+//              Help    = "If set to Auto, the default emulation type "
+//                        "depends on ARMD drive. The default emulation "
+//                        "type is Floppy for LS120, Hard Disk for MO, "
+//                        "Hard Disk for IOMEGA Zip."
+                Present = No
+        EndQuestion
+
+        Question (Q_SS_EMULATION_TYPE)
+                Text    = "Sec Slave ARMD Emulated as"
+                Options = "Auto":DEFAULT:POWERON,
+                          "Floppy"
+                          "Hard Disk"
+//              Help    = "If set to Auto, the default emulation type "
+//                        "depends on ARMD drive. The default emulation "
+//                        "type is Floppy for LS120, Hard Disk for MO, "
+//                        "Hard Disk for IOMEGA Zip."
+                Present = No
+        EndQuestion
+
+//      Question (Q_BOOT_SEQUENCE)
+//              Text    = "BootUp Sequence"
+//              Options = "C:,A:,CDROM":DEFAULT:POWERON,
+//                        "A:,C:,CDROM",
+//                        "CDROM,A:,C:",
+//                        RESERVED,
+//                        RESERVED,
+//                        RESERVED,
+//                        RESERVED,
+//                        RESERVED
+//              Present = Yes
+//      EndQuestion
+
+        Question (Q_FIRST_BOOT_DRIVE)
+                Text            = "1st Boot Device"
+                Externalfunction= boot_device_proc_1
+                OptionBits      = 4
+                Default         = 01h           // HDD
+                Poweron         = 01h           // HDD
+                Present         = Yes
+        EndQuestion
+
+        Question (Q_SECOND_BOOT_DRIVE)
+                Text            = "2nd Boot Device"
+                ExternalFunction= boot_device_proc_2
+                OptionBits      = 4
+                Default         = 05h           // Floppy
+                Poweron         = 05h           // Floppy
+                Present         = Yes
+        EndQuestion
+
+        Question (Q_THIRD_BOOT_DRIVE)
+                Text            = "3rd Boot Device"
+                ExternalFunction= boot_device_proc_3
+                OptionBits      = 4
+                Default         = 00h           // disable
+                Poweron         = 00h           // disable
+                Present         = Yes
+        EndQuestion
+
+        Question (Q_FOURTH_BOOT_DRIVE)
+                Text            = "4th Boot Device"
+                ExternalFunction= boot_device_proc_4
+                OptionBits      = 4
+                Default         = 00h           // disable
+                Poweron         = 00h           // disable
+                Present         = Yes
+        EndQuestion
+
+        Question (Q_REMAINING_BOOT_DRIVES)
+                Text    = "Try Other Boot Devices"
+                Help    = "If Yes, BIOS will try to boot from other Boot "
+                          "Devices if all Selected Boot Devices failed to "
+                          "boot. If No, BIOS will try to boot from only "
+                          "the Selected Boot Devices."
+                Options = "Yes"
+                          "No":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_INIT_I2O_DEVICE)
+                Text    = "Initialize I2O Devices"
+                Help    = "If Yes, BIOS will initialize I2O Processor(s), I2O "
+                          "Storage Device(s) and provide INT13 support for I2O "
+                          "Storage Device(s). If No, BIOS will not initialize "
+                          "I2O Processor(s) and I2O Storage Device(s)."
+                Options = "Yes"
+                          "No":DEFAULT:POWERON
+                Present = No
+        EndQuestion
+
+// This setup question is needed and used during I2O Initilization during
+// which user can select the index# of I2O Device from which system will
+// boot if I2O is selected as first boot device
+// DO NOT MAKE THIS SETUP QUESTION "PRESENT" AT ANY TIME
+
+        Question (Q_INDEX_I2O_BOOT_DRIVE)
+                Text    = "I2O Boot Device Index"
+                OptionBits              = 8
+                Default                 = 0             
+                Poweron                 = 0             
+                Present                 = No            // IT MUST BE "No"
+        EndQuestion
+
+        Question (Q_INITIAL_DISPLAY)
+                Text    = "Initial Display Mode"
+                Options = "BIOS":DEFAULT:POWERON,
+                          "Silent"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_ADDON_ROM_DISPLAY)
+                Text    = "Display Mode at Add-On ROM Init"
+                Options = "Force BIOS":DEFAULT:POWERON
+                          "Keep Current"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_FDD_ACCESS_CONTROL)
+                Text    = "Floppy Access Control"
+                Help    = "This Option will be effective "
+                          "only if the device is accessed "
+                          "through BIOS."
+                Options = "Read-Write":DEFAULT:POWERON,
+                          "Read-Only"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_HDD_ACCESS_CONTROL)
+                Text    = "Hard Disk Access Control"
+                Help    = "This Option will be effective "
+                          "only if the device is accessed "
+                          "through BIOS."
+                Options = "Read-Write":DEFAULT:POWERON,
+                          "Read-Only"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_SMART_IDE)
+                Text    = "S.M.A.R.T. for Hard Disks"
+                Options = "Disabled":DEFAULT:POWERON
+                          "Enabled"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_BOOTUP_SPEED)
+                Text    = "BootUp CPU Speed"
+                Options = "Low",
+                          "High":DEFAULT:POWERON
+                Present = No
+        EndQuestion
+
+        Question (Q_NUM_LOCK)
+                Text    = "BootUp Num-Lock"
+                Options = "Off",
+                          "On":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_TURBO_SWITCH)
+                Text    = "Turbo Switch"
+                Options = "Disabled":DEFAULT:POWERON,
+                          "Enabled"
+                Present = No
+        EndQuestion
+
+        Question (Q_FLOPPY_SWAP)
+                Text    = "Floppy Drive Swap"
+                Options = "Disabled":DEFAULT:POWERON,
+                          "Enabled"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_FLOPPY_SEEK)
+                Text    = "Floppy Drive Seek"
+                Options = "Disabled":DEFAULT:POWERON,
+                          "Enabled"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_MOUSE_SUPPORT)
+                Text    = "PS/2 Mouse Support"
+                Options = "Disabled",
+                          "Enabled":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_TYPEMATIC_RATE)
+                Text    = "Typematic Rate"
+                Options = "Slow",
+                          "Fast":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_KEYBOARD_PRESENT)
+                Text    = "System Keyboard"
+                Options = "Absent",
+                          "Present":DEFAULT:POWERON
+                Present = No
+        EndQuestion
+
+        Question (Q_DISPLAY_TYPE)
+                Text    = "Primary Display"
+                Options = "Absent",
+                          "VGA/EGA":DEFAULT:POWERON,
+                          RESERVED,
+                          "CGA40x25",
+                          RESERVED,
+                          "CGA80x25",
+                          RESERVED,
+                          "Mono"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PASSWORD_CHECK)
+                Text    = "Password Check"
+                Options = "Setup":DEFAULT:POWERON,
+                          "Always"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PARITY_ERROR)
+                Text    = "Parity Check"
+                Options = "Disabled":DEFAULT:POWERON
+                          "Enabled"
+                Present = No
+        EndQuestion
+
+        Question (Q_OS2_COMP_MODE)
+                Text    = "Boot To OS/2 > 64MB"
+                Options = "No":DEFAULT:POWERON
+                          "Yes"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_WAIT_FOR_F1)
+                Text    = "Wait For 'F1' If Error"
+                Options = "Disabled",
+                          "Enabled":DEFAULT:POWERON
+                Present = No
+        EndQuestion
+
+        Question (Q_DISPLAY_HIT_DEL)
+                Text    = "Hit 'DEL' Message Display"
+                Options = "Disabled",
+                          "Enabled":DEFAULT:POWERON
+                Present = No
+        EndQuestion
+
+//      Question (Q_CPU_OVERRIDE)
+//              Text                    = "CPU Selection"
+//              ExternalFunction        = cpu_selection_proc
+//              OptionBits              = 4
+//              Default                 = 0Fh           // auto
+//              Poweron                 = 0Fh           // auto
+//              Present                 = No
+//      EndQuestion
+
+//      Question (Q_BU_UPDATE)
+//              Text    = "CPU MicroCode Updation"
+//              RuntimeFunction = bu_update_proc
+//              Shaded          = No            // don't display if P6 is absent
+//              Options = "Disabled"
+//                        "Enabled":DEFAULT:POWERON
+//              Present         = No
+//      EndQuestion
+
+        Question (Q_INTERNAL_CACHE)
+                Text = "Internal Cache"
+                ExternalFunction        = internal_cache_proc
+                OptionBits              = 2
+                Default                 = 2             // wb
+                Poweron                 = 2             // wb
+                Present                 = Yes
+        EndQuestion
+
+        Question (Q_EXTERNAL_CACHE)
+                Text = "External Cache"
+                ExternalFunction        = external_cache_proc
+                OptionBits              = 2
+                Default                 = 2             // wt
+                Poweron                 = 0             // disabled
+                Present                 = Yes
+        EndQuestion
+
+//      Question (Q_L2_CACHE_ECC)
+//              Text = "Cache Bus ECC"
+//              ExternalFunction        = cache_ecc_proc
+//              OptionBits              = 1
+//              Default                 = 0
+//              Poweron                 = 0
+//              Present                 = Yes
+//      EndQuestion
+
+        Question (Q_CACHE_BIOS)
+                Text = "System BIOS Cacheable"
+                Options = "Disabled":POWERON,
+                          "Enabled":DEFAULT
+                Present = Yes
+        EndQuestion
+
+EndScreen
+
+Screen (SCR_CHIPSET)
+EndScreen
+
+Screen (SCR_POWER)
+EndScreen
+
+Screen (SCR_PCI)
+EndScreen
+
+Screen (SCR_PERIPHERAL)
+EndScreen
+
+Screen (SCR_CPU_CFG)
+
+                Question (Q_SYS_HW_DISPLAY)
+                        Text = "-= System Hardware Monitor ="
+//                      ShadeWhen (Q_SYS_HW_DISPLAY)="-"
+                        Options = "-":POWERON:DEFAULT
+                EndQuestion
+
+                Question (Q_SYS_TEMP)
+                        Text = "   System Temperature   "
+                        ExternalFunction        = sys_temp_proc
+                        OptionBits              = 1
+                        Default                 = 0
+                        Poweron                 = 0
+                        Present                 = Yes
+                EndQuestion
+
+                Question (Q_CPU_FAN_SPEED)
+//                        Text = "      Current CPU FAN Speed"
+                        Text = "   Current FAN#1 Speed"
+                        ExternalFunction        = cpu_fan_proc
+                        OptionBits              = 1
+                        Default                 = 0
+                        Poweron                 = 0
+                        Present                 = Yes
+                EndQuestion
+
+                Question (Q_SYS_FAN_SPEED)
+//                        Text = "      Current Chassis Fan Speed"
+                        Text = "   Current FAN#2 Speed"
+                        ExternalFunction        = sys_fan_proc
+                        OptionBits              = 1
+                        Default                 = 0
+                        Poweron                 = 0
+                        Present                 = Yes
+                EndQuestion
+
+                Question (Q_SYS_IN3)
+                        Text = "         Vcore"
+                        ExternalFunction        = in3_proc
+                        OptionBits              = 1
+                        Default                 = 0
+                        Poweron                 = 0
+                        Present                 = Yes
+                EndQuestion
+
+                Question (Q_SYS_IN2)
+                        Text = "      + 2.500V"
+                        ExternalFunction        = in2_proc
+                        OptionBits              = 1
+                        Default                 = 0
+                        Poweron                 = 0
+                        Present                 = Yes
+                EndQuestion
+
+                Question (Q_SYS_IN1)
+                        Text = "      + 3.300V"
+                        ExternalFunction        = in1_proc
+                        OptionBits              = 1
+                        Default                 = 0
+                        Poweron                 = 0
+                        Present                 = Yes
+                EndQuestion
+
+                Question (Q_SYS_IN0)
+                        Text = "      + 5.000V"
+                        ExternalFunction        = in0_proc
+                        OptionBits              = 1
+                        Default                 = 0
+                        Poweron                 = 0
+                        Present                 = Yes
+                EndQuestion
+
+EndScreen
+
+Screen (SCR_STANDARD)
+
+        Question (Q_FLOPPY_A)
+                Text    = "Floppy A"
+                Options = "Not Installed",
+                          "360  KB 5¬",
+                          "1.2  MB 5¬",
+                          "720  KB 3«",
+                          "1.44 MB 3«":DEFAULT:POWERON,
+                          "2.88 MB 3«"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_FLOPPY_B)
+                Text    = "Floppy B"
+                Options = "Not Installed",
+                          "360  KB 5¬",
+                          "1.2  MB 5¬":DEFAULT:POWERON,
+                          "720  KB 3«",
+                          "1.44 MB 3«",
+                          "2.88 MB 3«"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_COLOR)
+                Text            = "Color"
+                OptionBits      = 4
+                Present         = No
+        EndQuestion
+
+        Question (Q_VIRUS_PROTECTION)
+                Text    = "Boot Sector Virus Protection"
+                Options = "Disabled":DEFAULT:POWERON,
+                          "Enabled"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PRI_MASTER_TYPE)
+                Text            = "Type"
+                OptionBits      = 4
+                ExternalFunction= GetHddTypeC
+                Present         = No
+        EndQuestion
+
+        Question (Q_PRI_SLAVE_TYPE)
+                Text            = "Type"
+                OptionBits      = 4
+                ExternalFunction= GetHddTypeD
+                Present         = No
+        EndQuestion
+
+        Question (Q_SEC_MASTER_TYPE)
+                Text            = "Type"
+                OptionBits      = 8
+                ExternalFunction= GetHddTypeE
+                Present         = No
+        EndQuestion
+
+        Question (Q_SEC_SLAVE_TYPE)
+                Text            = "Type"
+                OptionBits      = 8
+                ExternalFunction= GetHddTypeF
+                Present         = No
+        EndQuestion
+
+        Question (Q_PRI_MASTER_LBA_MODE)
+                Text    = "LBA/Large Mode"
+                Options = "Off":DEFAULT:POWERON,
+                          "On"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PRI_SLAVE_LBA_MODE)
+                Text    = "LBA/Large Mode"
+                Options = "Off":DEFAULT:POWERON,
+                          "On"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_SEC_MASTER_LBA_MODE)
+                Text    = "LBA/Large Mode"
+                Options = "Off":DEFAULT:POWERON,
+                          "On"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_SEC_SLAVE_LBA_MODE)
+                Text    = "LBA/Large Mode"
+                Options = "Off":DEFAULT:POWERON,
+                          "On"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PRI_MASTER_BLOCK_MODE)
+                Text    = "Block Mode"
+                Options = "Off",
+                          "On":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PRI_SLAVE_BLOCK_MODE)
+                Text    = "Block Mode"
+                Options = "Off",
+                          "On":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_SEC_MASTER_BLOCK_MODE)
+                Text    = "Block Mode"
+                Options = "Off",
+                          "On":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_SEC_SLAVE_BLOCK_MODE)
+                Text    = "Block Mode"
+                Options = "Off",
+                          "On":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PRI_MASTER_32BIT_XFER)
+                Text    = "32Bit Mode"
+                Options = "Off",
+                          "On":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PRI_SLAVE_32BIT_XFER)
+                Text    = "32Bit Mode"
+                Options = "Off",
+                          "On":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_SEC_MASTER_32BIT_XFER)
+                Text    = "32Bit Mode"
+                Options = "Off",
+                          "On":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_SEC_SLAVE_32BIT_XFER)
+                Text    = "32Bit Mode"
+                Options = "Off",
+                          "On":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PRI_MASTER_PIO_MODE)
+                Text    = "PIO Mode"
+                Options = "Auto":DEFAULT:POWERON,
+                          "0", "1", "2", "3", "4", "5"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PRI_SLAVE_PIO_MODE)
+                Text    = "PIO Mode"
+                Options = "Auto":DEFAULT:POWERON,
+                          "0", "1", "2", "3", "4", "5"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_SEC_MASTER_PIO_MODE)
+                Text    = "PIO Mode"
+                Options = "Auto":DEFAULT:POWERON,
+                          "0", "1", "2", "3", "4", "5"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_SEC_SLAVE_PIO_MODE)
+                Text    = "PIO Mode"
+                Options = "Auto":DEFAULT:POWERON,
+                          "0", "1", "2", "3", "4", "5"
+                Present = Yes
+        EndQuestion
+
+EndScreen   // SCR_STANDARD
+
+
+
+
+StartSourceCode ("SETUPDAT.ASM")
+"page    ,132"
+"title   CMOS SETUP DATA"
+";---------------------------------------;"
+"extrn   _old_cmos_buffer    :byte"
+"extrn   _common_cmos_buffer :byte"
+"extrn   _temp_buffer        :byte"
+";---------------------------------------;"
+"include setupmsg.equ"
+";---------------------------------------;"
+"cgroup group   _text"
+"_text  segment word    public  'CODE'"
+"       assume  cs:cgroup"
+";---------------------------------------;"
+"public  _SD_STARTS"
+"_SD_STARTS      label   byte            ; marks start of module"
+";---------------------------------------;"
+"        public  zend"
+"zend            equ     0ffh"
+";---------------------------------------;"
+"       public  green_struc1"
+"       public  green_struc2"
+"       public  green_struc3"
+"       public  green_struc4"
+"       public  green_struc5"
+"green_struc1   equ     00h"
+"green_struc2   equ     00h"
+"green_struc3   equ     00h"
+"green_struc4   equ     00h"
+"green_struc5   equ     00h"
+";---------------------------------------;"
+"_CUR_SETUP_STRUC_ = 0"
+"DEFINE_SETUP_STRUC macro StrucName"
+"       public &StrucName"
+"       &StrucName equ _CUR_SETUP_STRUC_"
+"       _CUR_SETUP_STRUC_ = _CUR_SETUP_STRUC_ + 1"
+"endm                                   ;"
+";---------------------------------------;"
+"SetupStrucStart_SCR_STANDARD   textequ <_extra_strucs_start>"
+"SetupStrucEnd_SCR_STANDARD     textequ <_extra_strucs_end>"
+"SetupStrucStart_SCR_ADVANCED   textequ <_adv_cmos_strucs_start>"
+"SetupStrucEnd_SCR_ADVANCED     textequ <_adv_cmos_strucs_end>"
+"SetupStrucStart_SCR_CHIPSET    textequ <_chipset_strucs_start>"
+"SetupStrucEnd_SCR_CHIPSET      textequ <_chipset_strucs_end>"
+"SetupStrucStart_SCR_POWER      textequ <_pwr_mgmt_strucs_start>"
+"SetupStrucEnd_SCR_POWER                textequ <_pwr_mgmt_strucs_end>"
+"SetupStrucStart_SCR_PCI                textequ <_pci_strucs_start>"
+"SetupStrucEnd_SCR_PCI          textequ <_pci_strucs_end>"
+"SetupStrucStart_SCR_PERIPHERAL textequ <_peripheral_strucs_start>"
+"SetupStrucEnd_SCR_PERIPHERAL   textequ <_peripheral_strucs_end>"
+"SetupStrucStart_SCR_CPU_CFG    textequ <_plus_strucs_start>"
+"SetupStrucEnd_SCR_CPU_CFG      textequ <_plus_strucs_end>"
+"NUM_STRUC_SCR_STANDARD         textequ <no_ext_strucs>"
+"NUM_STRUC_SCR_ADVANCED         textequ <no_adv_strucs>"
+"NUM_STRUC_SCR_CHIPSET          textequ <no_chp_strucs>"
+"NUM_STRUC_SCR_POWER            textequ <no_pwr_strucs>"
+"NUM_STRUC_SCR_PCI              textequ <no_pci_strucs>"
+"NUM_STRUC_SCR_PERIPHERAL       textequ <no_prf_strucs>"
+"NUM_STRUC_SCR_CPU_CFG          textequ <no_plus_strucs>"
+";---------------------------------------;"
+EndSourceCode
+
+
+
+StartSourceCode ("SETUPEQU.ASM")
+"page    ,132"
+"title   CMOS SETUP DATA STRUCTURE EQUATES"
+";---------------------------------------;"
+"       public  green_struc1"
+"       public  green_struc2"
+"       public  green_struc3"
+"       public  green_struc4"
+"       public  green_struc5"
+"green_struc1   equ     00h"
+"green_struc2   equ     00h"
+"green_struc3   equ     00h"
+"green_struc4   equ     00h"
+"green_struc5   equ     00h"
+";---------------------------------------;"
+"_CUR_SETUP_STRUC_ = 0"
+"DEFINE_SETUP_STRUC macro StrucName"
+"       public &StrucName"
+"       &StrucName equ _CUR_SETUP_STRUC_"
+"       _CUR_SETUP_STRUC_ = _CUR_SETUP_STRUC_ + 1"
+"endm                                   ;"
+";---------------------------------------;"
+EndSourceCode
+
+
+
+StartSourceCode ("SETUPEQU.EXT")
+";---------------------------------------;"
+"; CMOS SETUP DATA STRUCTURE EXTRNS"
+";---------------------------------------;"
+EndSourceCode
+
+
+
+StartSourceCode ("SETUPRD.ASM")
+"page    ,132"
+"title   CMOS SETUP & DEFAULT DATA (RUNTIME SMALL STRUCTURES)"
+";---------------------------------------;"
+"cgroup group   _text"
+"_text  segment word    public  'CODE'"
+"       assume  cs:cgroup"
+";---------------------------------------;"
+"public  _RTSD_STARTS"
+"_RTSD_STARTS      label   byte            ; marks start of module"
+";---------------------------------------;"
+"RuntimeSetupStrucStart         textequ <setup_data_struc_start>"
+"public RuntimeSetupStrucStart"
+"RuntimeSetupStrucStart label byte"
+";---------------------------------------;"
+"cmos_data_struc        struc"
+"       cmos_reg_number db      (?)"
+"       reg_mask        db      (?)"
+"       best_reg_def    db      (?)"
+"       poweron_reg_def db      (?)"
+"       std_reboot_mask db      (?)"
+"       hk_reboot_mask  db      (?)"
+"cmos_data_struc        ends"
+";---------------------------------------;"
+"CmosTableStartTotal             textequ <cmos_table>"
+"CmosTableEndTotal               textequ <cmos_table_end>"
+"CmosTableStart_SCR_ADVANCED     textequ <advanced_table>"
+"CmosTableEnd_SCR_ADVANCED       textequ <advanced_table_end>"
+"CmosTableStart_SCR_CHIPSET      textequ <chipset_table>"
+"CmosTableEnd_SCR_CHIPSET        textequ <chipset_table_end>"
+"CmosTableStart_SCR_POWER        textequ <pwr_mgmt_table>"
+"CmosTableEnd_SCR_POWER          textequ <pwr_mgmt_table_end>"
+"CmosTableStart_SCR_PCI          textequ <pci_table>"
+"CmosTableEnd_SCR_PCI            textequ <pci_table_end>"
+"CmosTableStart_SCR_PERIPHERAL   textequ <peripheral_table>"
+"CmosTableEnd_SCR_PERIPHERAL     textequ <peripheral_table_end>"
+"CmosTableStart_SCR_CPU_CFG      textequ <plus_table>"
+"CmosTableEnd_SCR_CPU_CFG        textequ <plus_table_end>"
+"NumCmosStruct_SCR_ADVANCED      textequ <num_advanced_cmos_regs>"
+"NumCmosStruct_SCR_CHIPSET       textequ <num_chipset_regs>"
+"NumCmosStruct_SCR_POWER         textequ <num_pwr_mgmt_regs>"
+"NumCmosStruct_SCR_PCI           textequ <num_pci_regs>"
+"NumCmosStruct_SCR_PERIPHERAL    textequ <num_peripheral_regs>"
+"NumCmosStruct_SCR_CPU_CFG       textequ <num_plus_regs>"
+"NumCmosStructTotal              textequ <total_cmos_regs>"
+";---------------------------------------;"
+EndSourceCode
+
+
+
+StartSourceCode ("SETUPMSG.ASM")
+"page    ,132"
+"title   CMOS SETUP STRINGS"
+";---------------------------------------;"
+"cgroup group   _text"
+"_text  segment word    public  'CODE'"
+"       assume  cs:cgroup"
+";---------------------------------------;"
+"public  _ME_STARTS"
+"_ME_STARTS      label   byte            ; marks start of module"
+";---------------------------------------;"
+"DEFINE_STRING macro StringName"
+"       public &StringName"
+"       &StringName equ _CUR_STRING_NUM_"
+"       _CUR_STRING_NUM_ = _CUR_STRING_NUM_ + 1"
+"endm                                   ;"
+";-----------------------------------------------------------------------;"
+"; IF FOR ANY REASON HARD DISK HELPS ARE DISCARDED, DO THE FOLLOWING    ;"
+"; 1. Make >> _hdd_help equ 0                                           ;"
+"; 2. Discard other help equates.                                       ;"
+"; 2. Keep it public as it is.                                          ;"
+"; 3. Make sure that last_core_msg is really the last core message.     ;"
+";-----------------------------------------------------------------------;"
+"       public  _hdd_help"
+"_hdd_help      equ     1"
+";---------------------------------------;"
+EndSourceCode
+
+
+
+StartSourceCode ("SETUPMSG.EQU")
+";---------------------------------------;"
+"DEFINE_STRING macro StringName"
+"       &StringName equ _CUR_STRING_NUM_"
+"       _CUR_STRING_NUM_ = _CUR_STRING_NUM_ + 1"
+"endm                                   ;"
+";---------------------------------------;"
+"public STR_RESERVED"
+"public STR_END"
+"STR_END                equ 0FFh"
+"STR_RESERVED   equ 000h"
+";---------------------------------------;"
+EndSourceCode
+
+//;*****************************************************************;
+//;*****************************************************************;
+//;**                                                           **;
+//;**   (C)Copyright 1985-1996, American Megatrends Inc.        **;
+//;**                                                           **;
+//;**                   All Rights Reserved.                    **;
+//;**                                                           **;
+//;**           6145-F, Northbelt Parkway, Norcross,            **;
+//;**                                                           **;
+//;**           Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+//;**                                                           **;
+//;*****************************************************************;
+//;*****************************************************************;

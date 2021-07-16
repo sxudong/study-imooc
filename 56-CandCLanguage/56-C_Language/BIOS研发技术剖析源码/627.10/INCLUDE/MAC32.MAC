@@ -1,0 +1,49 @@
+;*****************************************************************;
+; $Header: /BIOS/PORTING/ /627.02/INCLUDE/MAC32.MAC 1     97/06/12 10:11p  wang $
+;
+; $Revision: 1 $
+;
+; $Date: 97/06/12 10:11p $
+;*****************************************************************;
+;*****************************************************************;
+
+defproc	macro procname
+ifndef RT32
+	&procname proc near
+else
+	&procname&_32 proc near
+endif
+endm
+
+endproc	macro procname
+ifndef RT32
+	&procname endp
+else
+	&procname&_32 endp
+endif
+endm
+
+pubproc macro procname
+ifndef RT32
+	public &procname
+else
+	public &procname&_32
+endif
+endm
+
+extproc macro procname
+ifndef RT32
+	extrn &procname : near
+else
+	extrn &procname&_32 : near32
+endif
+endm
+
+callproc macro procname
+ifndef RT32
+	call &procname
+else
+	call &procname&_32
+endif
+endm
+

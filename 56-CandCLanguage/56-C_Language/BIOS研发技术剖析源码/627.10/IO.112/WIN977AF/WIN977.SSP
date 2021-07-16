@@ -1,0 +1,364 @@
+//*****************************************************************//
+BeginDevice (Win977FloppyController)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_FLOPPY_CONTROLLER)
+                        Text = "OnBoard FDC"
+                        Options = "Auto":DEFAULT:POWERON,
+                                          "Disabled",
+                                          "Enabled"
+                EndQuestion
+        EndScreen
+EndDevice   // Win977FloppyController
+BeginDevice (Win977SerialPortA)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_COMA_PORT)
+                        Text = "OnBoard Serial PortA"
+                        Options = "Auto":DEFAULT:POWERON,
+                                          "Disabled",
+                                          "3F8/COM1",
+                                          "2F8/COM2",
+                                          "3E8/COM3",
+                                          "2E8/COM4"
+                EndQuestion
+        EndScreen
+EndDevice   // Win977SerialPortA
+BeginDevice (Win977SerialPortB)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_COMB_PORT)
+                        Text = "OnBoard Serial PortB"
+                        Options = "Auto":DEFAULT:POWERON,
+                                          "Disabled",
+                                          "3F8/COM1",
+                                          "2F8/COM2",
+                                          "3E8/COM3",
+                                          "2E8/COM4"
+                EndQuestion
+                Question (Q_WIN977_COMB_IR_PIN_SELECT)
+                        Text = "IR I/O pin Location Select"
+                        Options = "SINB/SOUTB.":DEFAULT:POWERON,
+                                          "IRRX/IRTX"
+                        Present = No
+                EndQuestion
+                Question (Q_Win977_COMB_MODE)
+                        Text =    "  Serial PortB Mode"
+                        RuntimeFunction = Win977_COMB_RFunc_Xfn
+//                      ShadeWhen (Q_Win977_COMB_PORT) = "Disabled"
+//                      Options = "Normal":DEFAULT:POWERON,
+//                                        "IrDA",
+//                                        "ASKIR"       
+                        ExternalFunction = Win977_ComB_EFunc_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_WIN977_COMB_DUPLEX_MODE)
+                        Text =    "    IR Duplex Mode"
+                        RuntimeFunction = Win977_COMB_RFunc_Xfn
+//                      ShadeWhen (Q_Win977_COMB_MODE) = "Normal"
+//                      Options = "Full Duplex",
+//                                "Half Duplex":DEFAULT:POWERON
+                        ExternalFunction = Win977_ComB_Duplex_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+                EndQuestion
+                Question (Q_WIN977_COMB_PROTOCOL)
+                        Text =    "    IrDA Protocol"
+                        RuntimeFunction = Win977_COMB_RFunc_Xfn
+//                      ShadeWhen (Q_WIN977TF_COMB_MODE) = "Normal"
+//                      Options = "1.6 uS":DEFAULT:POWERON,
+//                                "3/16 Baud"
+                        ExternalFunction = Win977_ComB_Protocol_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+        EndScreen
+EndDevice   // Win977SerialPortB
+BeginDevice (Win977SerialPortB)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_IR_PORT)
+                        Text = "IR Port Support"
+                        RuntimeFunction = Win977_IR_RFunc_Xfn
+//                      Options = "Disabled":DEFAULT:POWERON,
+//                                        "Enable"
+                        ExternalFunction = Win977_IR_EFunc_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win977_IR_PORT_MODE)
+                        Text = "  IR Mode Select"
+                        RuntimeFunction = Win977_IR_RFunc_Xfn
+//                      ShadeWhen (Q_Win977_IR_PORT) = "Disabled"
+//                      Options = "SIR":DEFAULT:POWERON,
+//                                        "ASKIR",      
+//                                        "FIR",        
+//                                        "CIR" 
+                        ExternalFunction = Win977_IR_Mode_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win977_IR_PORT_BASE)
+                        Text = "  IR Base Address Select"
+                        RuntimeFunction = Win977_IR_RFunc_Xfn
+//                      ShadeWhen (Q_Win977_IR_PORT) = "Disabled"
+//                      Options = "3E0",
+//                                        "2E0",        
+//                                        "3E8":DEFAULT:POWERON,        
+//                                        "2E8" 
+                        ExternalFunction = Win977_IR_Addr_Xfn
+                        OptionBits = 2
+                        Default = 2
+                        PowerOn = 2
+                EndQuestion
+                Question (Q_Win977_IR_PORT_IRQ)
+                        Text = "  IR IRQ Select"
+                        RuntimeFunction = Win977_IR_RFunc_Xfn
+//                      ShadeWhen (Q_Win977_IR_PORT) = "Disabled"
+//                      Options = "3",
+//                                        "4",  
+//                                        "9":DEFAULT:POWERON,  
+//                                        "10", 
+//                                        "11"  
+                        ExternalFunction = Win977_IR_IRQ_Xfn
+                        OptionBits = 3
+                        Default = 2
+                        PowerOn = 2
+                EndQuestion
+                Question (Q_Win977_IR_PORT_DMA)
+                        Text = "  IR DMA Select"
+                        RuntimeFunction = Win977_IR_RFunc_Xfn
+//                      ShadeWhen (Q_Win977_IR_PORT) = "Disabled"
+//                      Options = "Disabled":DEFAULT:POWERON,
+//                                        "0",  
+//                                        "1",  
+//                                        "3"   
+                        ExternalFunction = Win977_IR_DMA_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+        EndScreen
+EndDevice   // Win977Win977IrPort 
+BeginDevice (Win977ParallelPort)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_LPT_PORT)
+                        Text = "OnBoard Parallel Port"
+                        Options = "Auto":DEFAULT:POWERON,
+                                          "Disabled",
+                                          "378",
+                                          "278",
+                                          "3BC"
+                EndQuestion
+                Question (Q_Win977_LPT_MODE)
+                        Text = "  Parallel Port Mode"
+                        ExternalFunction = Win977_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win977_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Win977_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+                        EndQuestion
+        EndScreen
+EndDevice       // Win977ParallelPort
+BeginDevice (Win977ParallelPortExt)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_LPT_PORT)
+                        Text = "OnBoard Parallel Port"
+                        ExternalFunction = Win977_Lpt_Addr_Xfn
+                        OptionBits = 3
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_WIN977_LPT_PORT_SETTING)
+                        Text = "Test Item Do Not Present"
+                        Options = "0":DEFAULT:POWERON,"1","2","3"
+                        Present = No
+                EndQuestion
+                Question (Q_Win977_LPT_MODE)
+                        Text = "  Parallel Port Mode"
+                        ExternalFunction = Win977_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win977_LPT_EPPVER)
+                        Text = "  EPP Version"
+                        ExternalFunction = Win977_Lpt_EppVer_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win977_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Win977_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+                EndQuestion
+                Question (Q_Win977_LPT_ECP_DMA)
+                        Text = "  Parallel Port DMA Channel"
+                        ExternalFunction = Win977_Lpt_Dma_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+                EndQuestion
+        EndScreen
+EndDevice       // Win977ParallelPortExt           
+BeginDevice (Win977FloppyController)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_KB_WAKEUP_FUNC)
+                        Text = "K/B Wake-up function"
+                        RuntimeFunction = Win977_KB_Func_Xfn
+//                      Options = "Disabled":DEFAULT:POWERON,
+//                                        "Specific Key",
+//                                        "Any Key"
+                        ExternalFunction = Win977_KB_FuncE_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion                                                                                                                      
+                Question (Q_Win977_MOUSE_WAKEUP_FUNC)
+                        Text = "Mouse Wake-up function"
+                        RuntimeFunction = Win977_Mouse_Func_Xfn
+//                      Options = "Disabled":DEFAULT:POWERON,
+//                                        "Any Key",
+//                                        "Left-botton",
+//                                        "Right-botton"
+                        ExternalFunction = Win977_Mouse_FuncE_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+        EndScreen
+EndDevice       // Win977ACPI   
+String(STR_Win977_STANDARD)
+        Text ="Standard"
+EndString
+String(STR_Win977_IRDA)
+        Text ="IrDA"
+EndString
+String(STR_Win977_ASKIR)
+        Text ="ASK IR"
+EndString
+String(STR_Win977_FIR)
+        Text ="FIR"
+EndString
+String(STR_Win977_CIR)
+        Text ="CIR"
+EndString
+String(STR_Win977_FULL_DUPLEX)
+        Text ="Full Duplex"
+EndString
+String(STR_Win977_HALF_DUPLEX)
+        Text ="Half Duplex"
+EndString
+String(STR_Win977_16US)
+        Text ="1.6 uS"
+EndString
+String(STR_Win977_316)
+        Text ="3/16 Baud"
+EndString
+String(STR_Win977_ACTIVE_HIGH)
+        Text ="Active High"
+EndString
+String(STR_Win977_ACTIVE_LOW)
+        Text ="Active Low"
+EndString
+String(STR_Win977_NA)
+        Text ="N/A"
+EndString
+String(STR_Win977_AUTO)
+        Text ="Auto"
+EndString
+String(STR_Win977_EN)
+        Text ="Enabled"
+EndString
+String(STR_Win977_DIS)
+        Text ="Disabled"
+EndString
+String(STR_Win977_378)
+        Text ="378"
+EndString
+String(STR_Win977_278)
+        Text ="278"
+EndString
+String(STR_Win977_3BC)
+        Text ="3BC"
+EndString
+String(STR_Win977_3E0)
+        Text ="3E0"
+EndString
+String(STR_Win977_2E0)
+        Text ="2E0"
+EndString
+String(STR_Win977_3E8)
+        Text ="3E8"
+EndString
+String(STR_Win977_2E8)
+        Text ="2E8"
+EndString
+String(STR_Win977_NORMAL)
+        Text ="Normal"
+EndString
+String(STR_Win977_BIDIR)
+        Text ="Bi-Dir"
+EndString
+String(STR_Win977_EPP)
+        Text ="EPP"
+EndString
+String(STR_Win977_ECP)
+        Text ="ECP"
+EndString
+String(STR_Win977_EPP19)
+        Text ="1.9"
+EndString
+String(STR_Win977_EPP17)
+        Text ="1.7"
+EndString
+String(STR_Win977_IRQ5)
+                Text ="5"
+EndString
+String(STR_Win977_IRQ7)
+                Text ="7"
+EndString
+String(STR_Win977_DMA0)
+                Text ="0"
+EndString
+String(STR_Win977_DMA1)
+                Text ="1"
+EndString
+String(STR_Win977_DMA3)
+                Text ="3"
+EndString
+String(STR_Win977_4)
+                Text ="4"
+EndString
+String(STR_Win977_9)
+                Text ="9"
+EndString
+String(STR_Win977_10)
+                Text ="10"
+EndString
+String(STR_Win977_11)
+                Text ="11"
+EndString
+String(STR_SPECIFIC_KEY)
+                Text ="Specific Key"
+EndString
+String(STR_ANY_KEY)
+                Text ="Any Key"
+EndString
+String(STR_LEFT_BOTTON)
+                Text ="Left-botton"
+EndString
+String(STR_RIGHT_BOTTON)
+                Text ="Right-botton"
+EndString

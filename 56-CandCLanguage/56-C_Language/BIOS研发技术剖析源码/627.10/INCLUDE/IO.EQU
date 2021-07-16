@@ -1,0 +1,67 @@
+	page	,132
+	title .			Generic Peripheral Module Equates
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;****************************************************************************;
+;****************************************************************************;
+
+
+; PeriTable Structure
+;------------------------------------------------------------------------------
+PeriTable		struc
+
+Flags			dw ?		;See below for bit definitions
+DevNodeData		dw ?		;Pointer to device node data
+
+GetNodeStatic		dw ?		;Pointer to GetNodeStatic routine
+GetNodeDynamic		dw ?		;Pointer to GetNodeDynamic routine
+SetNodeStatic		dw ?		;Pointer to SetNodeStatic routine
+SetNodeDynamic		dw ?		;Pointer to SetNodeDynamic routine
+
+RegisterInit		dw ?		;Pointer to RegisterInit routine
+GetAutoStatus		dw ?		;Pointer to GetAutoStatus routine
+IdeSetMode		dw ?		;Pointer to IdeSetMode routine
+AdjustSetup		dw ?		;Pointer to AdjustSetup routine
+IsrInstall		dw ?		;Pointer to IsrInstall routine
+
+InitHotKey		dw ?		;Pointer to InitHotKey routine
+InitBufferPrfOptimal	dw ?		;Pointer to InitBufferPrfOptimal routine
+InitBufferPrfFailSafe	dw ?		;Pointer to InitBufferPrfFailSafe routine
+
+FloppySetDensity	dw ?		;Pointer to FloppySetDensity routine
+
+PeriTable		ends
+
+
+; Bit Definitions for PeriTable.Flags
+;------------------------------------------------------------------------------
+PTFLAG_STATIC		equ 0001h	;Bit 0: If set, peripheral is static
+PTFLAG_INVISIBLE_NODE	equ 0002h	;Bit 1: If set, node data is invisible at runtime
+
+
+
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+

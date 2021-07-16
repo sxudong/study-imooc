@@ -1,0 +1,1348 @@
+
+Microsoft (R) Program Maintenance Utility   Version 1.40       
+Copyright (c) Microsoft Corp 1988-93. All rights reserved.
+
+	SET LIB=..\..\rom;..\..\..\obj
+	..\..\..\exe\equator.exe .\oemport\message.asm ..\..\rom\me9.equ
+
+Equator - .EQU File Generation Utility - Ver 1.4
+(C) 1994 American Megatrends Inc.
+
+Reading .\oemport\message.asm ....
+
+DONE !
+
+Warning : Include File .\oemport\MAKEFLAG.EQU not found!
+	if exist ..\..\core.mod\me5pci.asm ..\..\..\exe\equator.exe ..\..\core.mod\me5pci.asm ..\..\rom\me5.equ
+	if exist .\OEMCORE.MOD\me5pci.asm ..\..\..\exe\equator.exe .\OEMCORE.MOD\me5pci.asm ..\..\rom\me5.equ
+	copy c:\masm611\tmp\nm948387. ..\..\rom\oemmake.equ
+        1 file(s) copied
+	copy c:\masm611\tmp\nma48387. + ..\..\rom\oemmake.equ ..\..\rom\makeflag.equ
+c:\masm611\tmp\nma48387
+..\..\rom\oemmake.equ
+        1 file(s) copied
+	copy c:\masm611\tmp\nmb48387. ..\..\rom\asmmp.rsp
+        1 file(s) copied
+	copy /b c:\masm611\tmp\nmc48387. +..\..\rom\asmmp.rsp ..\..\rom\asm.rsp
+c:\masm611\tmp\nmc48387
+..\..\rom\asmmp.rsp
+        1 file(s) copied
+DONOTDEL.ASM
+LAUNCH.ASM
+RAMDATA.ASM
+SDMISC.ASM
+ Assembling: ..\..\core.mod\DONOTDEL.ASM
+ Assembling: ..\..\core.mod\LAUNCH.ASM
+ Assembling: ..\..\core.mod\RAMDATA.ASM
+ Assembling: ..\..\core.mod\SDMISC.ASM
+=== Modify default year/date here ===
+DONOTDEL.ASM
+LAUNCH.ASM
+ Assembling: .\oemcore.mod\DONOTDEL.ASM
+ Assembling: .\oemcore.mod\LAUNCH.ASM
+	copy c:\masm611\tmp\nmd48387. ..\..\rom\io.inc
+        1 file(s) copied
+AMIBIOS Setup Script Processor
+Version 2.07b (AMISSP Language Version 1)
+Copyright (C) 1998 American Megatrends, Inc.
+Parsing c:\masm611\tmp\nme48387.
+Parsing .\\OEMCORE.MOD\\CORE.SSP
+Parsing ..\..\rom\makeflag.equ
+Parsing .\\OEMCHIP.MOD\\ADVANCED.SSP
+Parsing .\\OEMCHIP.MOD\\CHIPSET.SSP
+Parsing .\\OEMCHIP.MOD\\POWER.SSP
+Parsing .\\OEMCHIP.MOD\\PCIPNP.SSP
+Parsing ..\\..\\rom\\io.inc
+Parsing .\\OEMCHIP.MOD\\IO.SSP
+Parsing OEMCHIP.MOD\\IO1.SSP
+Parsing OEMCHIP.MOD\\IO2.SSP
+Parsing OEMCHIP.MOD\\IO3.SSP
+Parsing .\\OEMCHIP.MOD\\IOC.SSP
+	link ..\..\..\obj\EPA.OBJ, ..\..\rom\epa.exe;
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	..\..\..\exe\exe2bin ..\..\rom\epa.exe ..\..\rom\epa.bin
+ Assembling: ..\..\usb\nusb\postusb.asm
+ Assembling: ..\..\sys\nsys\npost.asm
+===== Silent TEXT buffer is not in DIMDATASEG =====
+Modified code for E820, in NPOST.ASM
+ Assembling: ..\..\sys\post.asm
+Modify this routine for Multi-Language Support
+ Assembling: .\oemport\oempost.asm
+ Assembling: ..\..\acpi\postacpi.asm
+ Assembling: ..\..\dim\ndim\dbug.asm
+ Assembling: ..\..\cpu\postcpu.asm
+=== Did you port 'if_hole_15_16m' correctly ?
+---| Cyrix6x86 table in POSTCPU.ASM |---
+ Assembling: .\oemport\message.asm
+ Assembling: ..\..\usb\runusb.asm
+Did you port Enable/Disable USB Function in Chipset properly ?
+ Assembling: ..\..\sys\nsys\flsinfo.asm
+ Assembling: ..\..\dim\ndim\flsnvrg.asm
+===== Silent TEXT buffer is not in DIMDATASEG =====
+ Assembling: ..\..\dim\ndim\rth.asm
+ Assembling: ..\..\sys\nsys\io.asm
+ Assembling: ..\..\dim\ndim\runext.asm
+ Assembling: ..\..\dim\runpci.asm
+ Assembling: .\oemport\oemrpci.asm
+ Assembling: ..\..\dim\ndim\nrunpci.asm
+ Assembling: ..\..\dim\ndim\runvuma.asm
+ Assembling: ..\..\dim\ndim\runfb.asm
+ Assembling: ..\..\rom\setupequ.asm
+ Assembling: ..\..\rom\setuprd.asm
+ Assembling: ..\..\sys\flash.asm
+ Assembling: .\oemport\oemflash.asm
+ Assembling: ..\..\..\include\cpudata.asm
+ Assembling: ..\..\cpu\runcpu.asm
+ Assembling: ..\..\sys\nsys\i16.asm
+ Assembling: ..\..\io\IOC.ASM
+ Assembling: ..\..\io\RMISC.ASM
+ Assembling: .\OEMIO.MOD\BI61FFDA.ASM
+ Assembling: .\OEMIO.MOD\BI61FFDO.ASM
+ Assembling: .\OEMIO.MOD\BI61FX.ASM
+ Assembling: .\OEMIO.MOD\DONOTDEL.ASM
+ Assembling: .\OEMIO.MOD\IT61FFN.ASM
+ Assembling: .\OEMIO.MOD\OEMIOTBL.ASM
+ Assembling: .\OEMIO.MOD\OEMRMISC.ASM
+ Assembling: .\OEMIO.MOD\RI61FCA.ASM
+ Assembling: .\OEMIO.MOD\RI61FCB.ASM
+ Assembling: .\OEMIO.MOD\RI61FFD.ASM
+ Assembling: .\OEMIO.MOD\RI61FIR.ASM
+ Assembling: .\OEMIO.MOD\RI61FLP.ASM
+ Assembling: .\OEMIO.MOD\RI61FLPE.ASM
+ Assembling: .\OEMIO.MOD\RI61FX1.ASM
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+
+Microsoft (R) Library Manager  Version 3.20.010
+Copyright (C) Microsoft Corp 1983-1992.  All rights reserved.
+
+ Assembling: ..\..\sys\runtime.asm
+ Assembling: ..\..\acpi\runacpi.asm
+===== Silent TEXT buffer is not in DIMDATASEG =====
+ Assembling: ..\..\sys\nsys\nruntime.asm
+===== Silent TEXT buffer is not in DIMDATASEG =====
+ Assembling: .\oemport\oemrun.asm
+ Assembling: ..\..\mp\nmp\mpfpstr.asm
+ Assembling: ..\..\gpc\ngpc\gapmnsmi.asm
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nmf48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\..\obj\CFDUMMY.OBJ +
+Object Modules [.obj]: ..\..\..\obj\JMPDUMMY.OBJ +
+Object Modules [.obj]: ..\..\rom\RAMDATA.OBJ +
+Object Modules [.obj]: ..\..\..\obj\DISR.OBJ +
+Object Modules [.obj]: ..\..\..\obj\RT.OBJ +
+Object Modules [.obj]: ..\..\..\obj\\RTGPNV.OBJ +
+Object Modules [.obj]: ..\..\..\obj\\GPNVR.OBJ +
+Object Modules [.obj]: ..\..\..\obj\\GPNVM.OBJ +
+Object Modules [.obj]: ..\..\rom\runusb.obj +
+Object Modules [.obj]: ..\..\..\obj\GS9020.OBJ +
+Object Modules [.obj]: ..\..\..\obj\NAT9020.OBJ +
+Object Modules [.obj]: ..\..\..\obj\GAM9002.OBJ +
+Object Modules [.obj]: ..\..\..\obj\GAMMX.OBJ +
+Object Modules [.obj]: ..\..\..\obj\NW9020.OBJ +
+Object Modules [.obj]: ..\..\rom\flsinfo.obj +
+Object Modules [.obj]: ..\..\rom\flsnvrg.obj +
+Object Modules [.obj]: ..\..\..\obj\RT-NVR.OBJ +
+Object Modules [.obj]: ..\..\rom\rth.obj +
+Object Modules [.obj]: ..\..\rom\io.obj +
+Object Modules [.obj]: ..\..\rom\runext.obj +
+Object Modules [.obj]: ..\..\..\obj\RT-PCI.OBJ +
+Object Modules [.obj]: ..\..\rom\runpci.obj +
+Object Modules [.obj]: ..\..\rom\oemrpci.obj +
+Object Modules [.obj]: ..\..\rom\nrunpci.obj +
+Object Modules [.obj]: ..\..\rom\runvuma.obj +
+Object Modules [.obj]: ..\..\rom\runfb.obj +
+Object Modules [.obj]: ..\..\rom\setupequ.obj +
+Object Modules [.obj]: ..\..\rom\setuprd.obj +
+Object Modules [.obj]: ..\..\..\obj\\RI.OBJ +
+Object Modules [.obj]: ..\..\rom\flash.obj +
+Object Modules [.obj]: ..\..\rom\oemflash.obj +
+Object Modules [.obj]: ..\..\rom\oemiotbl.obj +
+Object Modules [.obj]: ..\..\..\obj\BIOS.OBJ +
+Object Modules [.obj]: ..\..\..\obj\PMODE.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT15.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT19.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT9.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT10DM.OBJ +
+Object Modules [.obj]: ..\..\..\obj\PS.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BSR.OBJ +
+Object Modules [.obj]: ..\..\..\obj\AUTO.OBJ +
+Object Modules [.obj]: ..\..\..\obj\RELOCATE.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT16.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT2.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT1A.OBJ +
+Object Modules [.obj]: ..\..\..\obj\SI.OBJ +
+Object Modules [.obj]: ..\..\rom\cpudata.obj +
+Object Modules [.obj]: ..\..\..\obj\CPU2.OBJ +
+Object Modules [.obj]: ..\..\..\obj\SCPU2.OBJ +
+Object Modules [.obj]: ..\..\rom\runcpu.obj +
+Object Modules [.obj]: ..\..\rom\i16.obj +
+Object Modules [.obj]: ..\..\..\obj\FPU2.OBJ +
+Object Modules [.obj]: ..\..\rom\runtime.obj +
+Object Modules [.obj]: ..\..\rom\runacpi.obj +
+Object Modules [.obj]: ..\..\rom\nruntime.obj +
+Object Modules [.obj]: ..\..\rom\oemrun.obj +
+Object Modules [.obj]: ..\..\rom\mpfpstr.obj +
+Object Modules [.obj]: ..\..\rom\gapmnsmi.obj +
+Object Modules [.obj]: ..\..\..\obj\UI.OBJ +
+Object Modules [.obj]: ..\..\..\obj\IN.OBJ +
+Object Modules [.obj]: ..\..\..\obj\OUTN.OBJ +
+Object Modules [.obj]: ..\..\..\obj\REMNHDM.OBJ +
+Object Modules [.obj]: ..\..\..\obj\ME6.OBJ +
+Object Modules [.obj]: ..\..\..\obj\ME8DM.OBJ,
+Run File [CFDUMMY.exe]: ..\..\rom\dummyrun.exe,
+List File [c:dummyrun.map]: ..\..\rom\dummyrun.map,
+Libraries [.lib]: ..\..\rom\ioc.lib+
+Libraries [.lib]: ..\..\..\obj\io.lib;
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+ Assembling: ..\..\dim\RUNPCI.ASM
+ Assembling: .\oemport\OEMRPCI.ASM
+ Assembling: ..\..\dim\ndim\NRUNPCI.ASM
+ Assembling: ..\..\dim\ndim\RUNEXT.ASM
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nmg48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\..\obj\PRT-PCI.OBJ +
+Object Modules [.obj]: ..\..\rom\prunpci.obj +
+Object Modules [.obj]: ..\..\rom\poemrpci.obj +
+Object Modules [.obj]: ..\..\rom\pnrunpci.obj +
+Object Modules [.obj]: ..\..\rom\prunext.obj,
+Run File [PRT-PCI.exe]: ..\..\rom\dmrun32.exe,
+List File [c:dmrun32.map]: ..\..\rom\dmrun32.map;
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	debug <..\..\..\obj\runtim32.dat >nul
+-
+-
+-
+AX=0000  BX=0000  CX=0631  DX=0000  SP=0000  BP=0000  SI=0000  DI=0000  
+DS=2409  ES=2409  SS=2419  CS=2419  IP=0000   NV UP EI PL NZ NA PO NC 
+2419:0000 5F            POP	DI                                 
+-
+-
+-
+-
+-
+-
+-
+-
+-
+2419:0200 
+2419:0203 
+2419:0206 
+2419:0209 
+2419:020D 
+2419:0210 
+2419:0212 
+2419:0214 
+2419:0216 
+2419:0218 
+2419:021A 
+2419:021D 
+2419:021F 
+2419:0222 
+2419:0224 
+2419:0226 
+2419:0229 
+2419:022B 
+2419:022E 
+2419:022F 
+-
+2419:0280 
+2419:0282 
+2419:0284 
+2419:0286 
+2419:0288 
+2419:028A 
+2419:028D 
+2419:028E 
+2419:028F 
+-
+
+AX=0030  BX=D9C0  CX=0604  DX=0000  SP=0000  BP=0000  SI=D9C0  DI=0111  
+DS=2409  ES=2409  SS=2419  CS=2419  IP=022E   NV UP EI PL NZ NA PE NC 
+2419:022E CC            INT	3                                  
+-
+-
+-
+CX 0604
+:
+-
+BX D9C0
+:
+-
+Writing 000C5 bytes
+-
+-
+-
+-
+-
+AX=0000  BX=0000  CX=7611  DX=0000  SP=0000  BP=0000  SI=D9C0  DI=0111  
+DS=2409  ES=2409  SS=2419  CS=2419  IP=0000   NV UP EI PL NZ NA PE NC 
+2419:0000 50            PUSH	AX                                 
+-
+-
+-
+-
+-
+-
+-
+-
+2419:0200 
+2419:0203 
+2419:0206 
+2419:020A 
+2419:020C 
+2419:020E 
+2419:0210 
+2419:0212 
+2419:0214 
+2419:0217 
+2419:0219 
+2419:021C 
+2419:021E 
+2419:0220 
+2419:0223 
+2419:0225 
+2419:0228 
+2419:0229 
+-
+2419:0280 
+2419:0282 
+2419:0284 
+2419:0286 
+2419:0288 
+2419:028A 
+2419:028D 
+2419:028E 
+2419:028F 
+-
+
+AX=0030  BX=63A0  CX=7604  DX=0000  SP=0000  BP=0000  SI=63A0  DI=0111  
+DS=2409  ES=2409  SS=2419  CS=2419  IP=0228   NV UP EI PL NZ NA PE NC 
+2419:0228 CC            INT	3                                  
+-
+-
+-
+CX 7604
+:
+-
+BX 63A0
+:
+-
+Writing 000C1 bytes
+-
+-
+Microsoft (R) Macro Assembler Version 6.11
+Copyright (C) Microsoft Corp 1981-1993.  All rights reserved.
+
+ Assembling: ..\..\rom\dr.asm
+Microsoft (R) Macro Assembler Version 6.11
+Copyright (C) Microsoft Corp 1981-1993.  All rights reserved.
+
+ Assembling: ..\..\rom\rt32strt.asm
+ Assembling: ..\..\rom\dr.asm
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nmh48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\..\obj\DP.OBJ +
+Object Modules [.obj]: ..\..\rom\RAMDATA.OBJ +
+Object Modules [.obj]: ..\..\..\obj\\PI.OBJ +
+Object Modules [.obj]: ..\..\..\obj\SN.OBJ +
+Object Modules [.obj]: ..\..\..\obj\SILENTN.OBJ +
+Object Modules [.obj]: ..\..\..\obj\VM.OBJ +
+Object Modules [.obj]: ..\..\..\obj\RM.OBJ +
+Object Modules [.obj]: ..\..\..\obj\GPCUI.OBJ +
+Object Modules [.obj]: ..\..\..\obj\MKEYDM.OBJ +
+Object Modules [.obj]: ..\..\..\obj\DI.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BUS.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BUSMSG.OBJ +
+Object Modules [.obj]: ..\..\rom\postusb.obj +
+Object Modules [.obj]: ..\..\..\obj\CLK.OBJ +
+Object Modules [.obj]: ..\..\rom\npost.obj +
+Object Modules [.obj]: ..\..\rom\post.obj +
+Object Modules [.obj]: ..\..\rom\oempost.obj +
+Object Modules [.obj]: ..\..\rom\postacpi.obj +
+Object Modules [.obj]: ..\..\..\obj\GS1.OBJ +
+Object Modules [.obj]: ..\..\rom\dbug.obj +
+Object Modules [.obj]: ..\..\..\obj\BSP.OBJ +
+Object Modules [.obj]: ..\..\..\obj\CPU1.OBJ +
+Object Modules [.obj]: ..\..\..\obj\SCPU1.OBJ +
+Object Modules [.obj]: ..\..\rom\postcpu.obj +
+Object Modules [.obj]: ..\..\..\obj\\GPNVIM.OBJ +
+Object Modules [.obj]: ..\..\..\obj\\ME0G.OBJ +
+Object Modules [.obj]: ..\..\..\obj\ME5PCI.OBJ +
+Object Modules [.obj]: ..\..\..\obj\ME7.OBJ +
+Object Modules [.obj]: ..\..\rom\message.obj +
+Object Modules [.obj]: ..\..\..\obj\PSE.OBJ +
+Object Modules [.obj]: ..\..\rom\dr.obj +
+Object Modules [.obj]: ..\..\..\obj\DISR.OBJ +
+Object Modules [.obj]: ..\..\..\obj\RT.OBJ +
+Object Modules [.obj]: ..\..\..\obj\\RTGPNV.OBJ +
+Object Modules [.obj]: ..\..\..\obj\\GPNVR.OBJ +
+Object Modules [.obj]: ..\..\..\obj\\GPNVM.OBJ +
+Object Modules [.obj]: ..\..\rom\runusb.obj +
+Object Modules [.obj]: ..\..\..\obj\GS9020.OBJ +
+Object Modules [.obj]: ..\..\..\obj\NAT9020.OBJ +
+Object Modules [.obj]: ..\..\..\obj\GAM9002.OBJ +
+Object Modules [.obj]: ..\..\..\obj\GAMMX.OBJ +
+Object Modules [.obj]: ..\..\..\obj\NW9020.OBJ +
+Object Modules [.obj]: ..\..\rom\flsinfo.obj +
+Object Modules [.obj]: ..\..\rom\flsnvrg.obj +
+Object Modules [.obj]: ..\..\..\obj\RT-NVR.OBJ +
+Object Modules [.obj]: ..\..\rom\rth.obj +
+Object Modules [.obj]: ..\..\rom\io.obj +
+Object Modules [.obj]: ..\..\rom\runext.obj +
+Object Modules [.obj]: ..\..\..\obj\RT-PCI.OBJ +
+Object Modules [.obj]: ..\..\rom\runpci.obj +
+Object Modules [.obj]: ..\..\rom\oemrpci.obj +
+Object Modules [.obj]: ..\..\rom\nrunpci.obj +
+Object Modules [.obj]: ..\..\rom\runvuma.obj +
+Object Modules [.obj]: ..\..\rom\runfb.obj +
+Object Modules [.obj]: ..\..\rom\setupequ.obj +
+Object Modules [.obj]: ..\..\rom\setuprd.obj +
+Object Modules [.obj]: ..\..\..\obj\\RI.OBJ +
+Object Modules [.obj]: ..\..\rom\flash.obj +
+Object Modules [.obj]: ..\..\rom\oemflash.obj +
+Object Modules [.obj]: ..\..\rom\oemiotbl.obj +
+Object Modules [.obj]: ..\..\..\obj\BIOS.OBJ +
+Object Modules [.obj]: ..\..\..\obj\PMODE.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT15.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT19.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT9.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT10DM.OBJ +
+Object Modules [.obj]: ..\..\..\obj\PS.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BSR.OBJ +
+Object Modules [.obj]: ..\..\..\obj\AUTO.OBJ +
+Object Modules [.obj]: ..\..\..\obj\RELOCATE.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT16.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT2.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT1A.OBJ +
+Object Modules [.obj]: ..\..\..\obj\SI.OBJ +
+Object Modules [.obj]: ..\..\rom\cpudata.obj +
+Object Modules [.obj]: ..\..\..\obj\CPU2.OBJ +
+Object Modules [.obj]: ..\..\..\obj\SCPU2.OBJ +
+Object Modules [.obj]: ..\..\rom\runcpu.obj +
+Object Modules [.obj]: ..\..\rom\i16.obj +
+Object Modules [.obj]: ..\..\..\obj\FPU2.OBJ +
+Object Modules [.obj]: ..\..\rom\runtime.obj +
+Object Modules [.obj]: ..\..\rom\runacpi.obj +
+Object Modules [.obj]: ..\..\rom\nruntime.obj +
+Object Modules [.obj]: ..\..\rom\oemrun.obj +
+Object Modules [.obj]: ..\..\rom\mpfpstr.obj +
+Object Modules [.obj]: ..\..\rom\gapmnsmi.obj +
+Object Modules [.obj]: ..\..\..\obj\UI.OBJ +
+Object Modules [.obj]: ..\..\..\obj\IN.OBJ +
+Object Modules [.obj]: ..\..\..\obj\OUTN.OBJ +
+Object Modules [.obj]: ..\..\..\obj\REMNHDM.OBJ +
+Object Modules [.obj]: ..\..\..\obj\ME6.OBJ +
+Object Modules [.obj]: ..\..\..\obj\ME8DM.OBJ,
+Run File [DP.exe]: ..\..\rom\postrun.exe,
+List File [c:postrun.map]: ..\..\rom\postrun.map,
+Libraries [.lib]: ..\..\rom\ioc.lib+
+Libraries [.lib]: ..\..\..\obj\io.lib+
+Libraries [.lib]: jmpp.lib;
+..\..\..\obj\jmpp.lib(jmp.asm) : warning L4020: _TEXT : code-segment size exceeds 64K-36
+LINK : warning L4021: no stack segment
+	debug < c:\masm611\tmp\nmi48387.
+-
+-
+-
+CX FFFE
+:
+-
+BX 0000
+:
+-
+-
+Writing 10000 bytes
+-
+ Assembling: ..\..\rom\setupdat.asm
+ Assembling: ..\..\sys\nsys\nextfunc.asm
+ Assembling: .\OEMCHIP.MOD\extfunc.asm
+ Assembling: .\OEMCHIP.MOD\IT61FFN.asm
+ Assembling: ..\..\sys\setup.asm
+ Assembling: .\oemport\oemsetup.asm
+ Assembling: ..\..\sys\nsys\nsetup.asm
+ Assembling: ..\..\rom\setupmsg.asm
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nmj48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\..\obj\DS.OBJ +
+Object Modules [.obj]: ..\..\rom\RAMDATA.OBJ +
+Object Modules [.obj]: ..\..\rom\setupdat.obj +
+Object Modules [.obj]: ..\..\rom\nextfunc.obj +
+Object Modules [.obj]: ..\..\rom\extfunc.obj +
+Object Modules [.obj]: ..\..\..\obj\BOOTEXT.OBJ +
+Object Modules [.obj]: ..\..\rom\IT61FFN.OBJ +
+Object Modules [.obj]: ..\..\..\obj\CMOS.OBJ +
+Object Modules [.obj]: ..\..\..\obj\HS.OBJ +
+Object Modules [.obj]: ..\..\rom\setup.obj +
+Object Modules [.obj]: ..\..\rom\oemsetup.obj +
+Object Modules [.obj]: ..\..\rom\nsetup.obj +
+Object Modules [.obj]: ..\..\rom\LAUNCH.OBJ +
+Object Modules [.obj]: ..\..\..\obj\LANG.OBJ +
+Object Modules [.obj]: ..\..\rom\SDMISC.OBJ +
+Object Modules [.obj]: ..\..\rom\setupmsg.obj +
+Object Modules [.obj]: ..\..\..\obj\PSE.OBJ +
+Object Modules [.obj]: ..\..\rom\dr.obj +
+Object Modules [.obj]: ..\..\..\obj\DISR.OBJ +
+Object Modules [.obj]: ..\..\..\obj\RT.OBJ +
+Object Modules [.obj]: ..\..\..\obj\\RTGPNV.OBJ +
+Object Modules [.obj]: ..\..\..\obj\\GPNVR.OBJ +
+Object Modules [.obj]: ..\..\..\obj\\GPNVM.OBJ +
+Object Modules [.obj]: ..\..\rom\runusb.obj +
+Object Modules [.obj]: ..\..\..\obj\GS9020.OBJ +
+Object Modules [.obj]: ..\..\..\obj\NAT9020.OBJ +
+Object Modules [.obj]: ..\..\..\obj\GAM9002.OBJ +
+Object Modules [.obj]: ..\..\..\obj\GAMMX.OBJ +
+Object Modules [.obj]: ..\..\..\obj\NW9020.OBJ +
+Object Modules [.obj]: ..\..\rom\flsinfo.obj +
+Object Modules [.obj]: ..\..\rom\flsnvrg.obj +
+Object Modules [.obj]: ..\..\..\obj\RT-NVR.OBJ +
+Object Modules [.obj]: ..\..\rom\rth.obj +
+Object Modules [.obj]: ..\..\rom\io.obj +
+Object Modules [.obj]: ..\..\rom\runext.obj +
+Object Modules [.obj]: ..\..\..\obj\RT-PCI.OBJ +
+Object Modules [.obj]: ..\..\rom\runpci.obj +
+Object Modules [.obj]: ..\..\rom\oemrpci.obj +
+Object Modules [.obj]: ..\..\rom\nrunpci.obj +
+Object Modules [.obj]: ..\..\rom\runvuma.obj +
+Object Modules [.obj]: ..\..\rom\runfb.obj +
+Object Modules [.obj]: ..\..\rom\setupequ.obj +
+Object Modules [.obj]: ..\..\rom\setuprd.obj +
+Object Modules [.obj]: ..\..\..\obj\\RI.OBJ +
+Object Modules [.obj]: ..\..\rom\flash.obj +
+Object Modules [.obj]: ..\..\rom\oemflash.obj +
+Object Modules [.obj]: ..\..\rom\oemiotbl.obj +
+Object Modules [.obj]: ..\..\..\obj\BIOS.OBJ +
+Object Modules [.obj]: ..\..\..\obj\PMODE.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT15.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT19.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT9.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT10DM.OBJ +
+Object Modules [.obj]: ..\..\..\obj\PS.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BSR.OBJ +
+Object Modules [.obj]: ..\..\..\obj\AUTO.OBJ +
+Object Modules [.obj]: ..\..\..\obj\RELOCATE.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT16.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT2.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT1A.OBJ +
+Object Modules [.obj]: ..\..\..\obj\SI.OBJ +
+Object Modules [.obj]: ..\..\rom\cpudata.obj +
+Object Modules [.obj]: ..\..\..\obj\CPU2.OBJ +
+Object Modules [.obj]: ..\..\..\obj\SCPU2.OBJ +
+Object Modules [.obj]: ..\..\rom\runcpu.obj +
+Object Modules [.obj]: ..\..\rom\i16.obj +
+Object Modules [.obj]: ..\..\..\obj\FPU2.OBJ +
+Object Modules [.obj]: ..\..\rom\runtime.obj +
+Object Modules [.obj]: ..\..\rom\runacpi.obj +
+Object Modules [.obj]: ..\..\rom\nruntime.obj +
+Object Modules [.obj]: ..\..\rom\oemrun.obj +
+Object Modules [.obj]: ..\..\rom\mpfpstr.obj +
+Object Modules [.obj]: ..\..\rom\gapmnsmi.obj +
+Object Modules [.obj]: ..\..\..\obj\UI.OBJ +
+Object Modules [.obj]: ..\..\..\obj\IN.OBJ +
+Object Modules [.obj]: ..\..\..\obj\OUTN.OBJ +
+Object Modules [.obj]: ..\..\..\obj\REMNHDM.OBJ +
+Object Modules [.obj]: ..\..\..\obj\ME6.OBJ +
+Object Modules [.obj]: ..\..\..\obj\ME8DM.OBJ,
+Run File [DS.exe]: ..\..\rom\setrun.exe,
+List File [c:setrun.map]: ..\..\rom\setrun.map,
+Libraries [.lib]: ..\..\rom\ioc.lib+
+Libraries [.lib]: ..\..\..\obj\io.lib+
+Libraries [.lib]: jmps.lib;
+..\..\..\obj\jmps.lib(jmp.asm) : warning L4020: _TEXT : code-segment size exceeds 64K-36
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	debug <..\..\..\obj\runtim32.dat >nul
+-
+-
+-
+AX=0000  BX=0000  CX=0631  DX=0000  SP=0000  BP=0000  SI=0000  DI=0000  
+DS=2409  ES=2409  SS=2419  CS=2419  IP=0000   NV UP EI PL NZ NA PO NC 
+2419:0000 5F            POP	DI                                 
+-
+-
+-
+-
+-
+-
+-
+-
+-
+2419:0200 
+2419:0203 
+2419:0206 
+2419:0209 
+2419:020D 
+2419:0210 
+2419:0212 
+2419:0214 
+2419:0216 
+2419:0218 
+2419:021A 
+2419:021D 
+2419:021F 
+2419:0222 
+2419:0224 
+2419:0226 
+2419:0229 
+2419:022B 
+2419:022E 
+2419:022F 
+-
+2419:0280 
+2419:0282 
+2419:0284 
+2419:0286 
+2419:0288 
+2419:028A 
+2419:028D 
+2419:028E 
+2419:028F 
+-
+
+AX=0030  BX=D9C0  CX=0604  DX=0000  SP=0000  BP=0000  SI=D9C0  DI=0111  
+DS=2409  ES=2409  SS=2419  CS=2419  IP=022E   NV UP EI PL NZ NA PE NC 
+2419:022E CC            INT	3                                  
+-
+-
+-
+CX 0604
+:
+-
+BX D9C0
+:
+-
+Writing 000C5 bytes
+-
+-
+-
+-
+-
+AX=0000  BX=0000  CX=7611  DX=0000  SP=0000  BP=0000  SI=D9C0  DI=0111  
+DS=2409  ES=2409  SS=2419  CS=2419  IP=0000   NV UP EI PL NZ NA PE NC 
+2419:0000 50            PUSH	AX                                 
+-
+-
+-
+-
+-
+-
+-
+-
+2419:0200 
+2419:0203 
+2419:0206 
+2419:020A 
+2419:020C 
+2419:020E 
+2419:0210 
+2419:0212 
+2419:0214 
+2419:0217 
+2419:0219 
+2419:021C 
+2419:021E 
+2419:0220 
+2419:0223 
+2419:0225 
+2419:0228 
+2419:0229 
+-
+2419:0280 
+2419:0282 
+2419:0284 
+2419:0286 
+2419:0288 
+2419:028A 
+2419:028D 
+2419:028E 
+2419:028F 
+-
+
+AX=0030  BX=63A0  CX=7604  DX=0000  SP=0000  BP=0000  SI=63A0  DI=0111  
+DS=2409  ES=2409  SS=2419  CS=2419  IP=0228   NV UP EI PL NZ NA PE NC 
+2419:0228 CC            INT	3                                  
+-
+-
+-
+CX 7604
+:
+-
+BX 63A0
+:
+-
+Writing 000C1 bytes
+-
+-
+Microsoft (R) Macro Assembler Version 6.11
+Copyright (C) Microsoft Corp 1981-1993.  All rights reserved.
+
+ Assembling: ..\..\rom\dr.asm
+Microsoft (R) Macro Assembler Version 6.11
+Copyright (C) Microsoft Corp 1981-1993.  All rights reserved.
+
+ Assembling: ..\..\rom\rt32strt.asm
+ Assembling: ..\..\rom\rt32strt.asm
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nmk48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\rom\rt32strt.obj +
+Object Modules [.obj]: ..\..\..\obj\PRT-PCI.OBJ +
+Object Modules [.obj]: ..\..\rom\prunpci.obj +
+Object Modules [.obj]: ..\..\rom\poemrpci.obj +
+Object Modules [.obj]: ..\..\rom\pnrunpci.obj +
+Object Modules [.obj]: ..\..\rom\prunext.obj +
+Object Modules [.obj]: ..\..\..\obj\RT32END.OBJ,
+Run File [rt32strt.exe]: ..\..\rom\run32.exe,
+List File [c:run32.map]: ..\..\rom\run32.map;
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	debug < c:\masm611\tmp\nml48387.
+-
+-
+-
+-
+-
+ ^ Error
+-
+-
+ ^ Error
+-
+-
+ ^ Error
+-
+ ^ Error
+-
+2416:F6E9  01. 
+-
+ ^ Error
+-
+2416:F532  20. 
+-
+CX FFFE
+:
+-
+BX 0000
+:
+-
+-
+-
+Writing 10000 bytes
+-
+	debug < c:\masm611\tmp\nmm48387.
+-
+-
+-
+23D6:0100 
+23D6:0103 
+23D6:0105 
+23D6:0107 
+23D6:0109 
+23D6:010A 
+23D6:010C 
+23D6:010E 
+23D6:0110 
+23D6:0112 
+23D6:0114 
+23D6:0116 
+23D6:0119 
+23D6:011C 
+23D6:011F 
+23D6:0121 
+23D6:0123 
+23D6:0125 
+23D6:0127 
+23D6:0129 
+23D6:012C 
+23D6:012F 
+23D6:0132 
+23D6:0133 
+23D6:0135 
+23D6:0137 
+23D6:0139 
+23D6:013B 
+23D6:013D 
+23D6:0140 
+23D6:0143 
+23D6:0146 
+23D6:0147 
+-
+
+AX=3030  BX=0001  CX=2004  DX=2000  SP=FFEE  BP=0000  SI=0000  DI=0000  
+DS=3000  ES=23D6  SS=23D6  CS=23D6  IP=0146   NV UP EI PL NZ NA PE NC 
+23D6:0146 CC            INT	3                                  
+-
+CX 2004
+:
+-
+BX 0001
+:
+-
+Writing 10000 bytes
+-
+	debug < c:\masm611\tmp\nmn48387.
+-
+-
+-
+2406:0080 
+2406:0081 
+2406:0083 
+2406:0086 
+2406:0087 
+2406:0089 
+2406:008B 
+2406:008F 
+2406:0091 
+2406:0096 
+2406:009B 
+2406:009E 
+2406:00A1 
+2406:00A2 
+2406:00A3 
+-
+
+AX=3416  BX=DFF6  CX=0000  DX=0000  SP=0000  BP=0000  SI=DFF6  DI=0646  
+DS=2406  ES=2406  SS=2416  CS=2406  IP=00A2   NV UP DI PL NZ NA PE NC 
+2406:00A2 CC            INT	3                                  
+-
+-
+-
+-
+-
+SP 0000
+:
+-
+-
+2406:0080 
+2406:0081 
+2406:0083 
+2406:0085 
+2406:0088 
+2406:008B 
+2406:008D 
+2406:0094 
+2406:009A 
+2406:009C 
+2406:00A3 
+2406:00A6 
+2406:00A7 
+2406:00A9 
+2406:00AD 
+2406:00B1 
+2406:00B4 
+2406:00B6 
+2406:00B7 
+2406:00B8 
+-
+-
+
+AX=3416  BX=0001  CX=0000  DX=0000  SP=0100  BP=0000  SI=0646  DI=DFF6  
+DS=2406  ES=2416  SS=2406  CS=2406  IP=00B7   NV UP DI PL NZ NA PO NC 
+2406:00B7 CC            INT	3                                  
+-
+-
+CX 0000
+:
+-
+BX 0001
+:
+-
+-
+-
+Writing 10000 bytes
+-
+ Assembling: .\OEMIO.MOD\OEMIOTBL.ASM
+	copy c:\masm611\tmp\nmo48387. ..\..\rom\bkbcrtc.inc
+        1 file(s) copied
+	copy c:\masm611\tmp\nmp48387. ..\..\rom\bfdc.inc
+        1 file(s) copied
+ Assembling: ..\..\sys\nsys\flashio.asm
+ Assembling: ..\..\sys\memory.asm
+=== Memory refresh starts after memory sizing ===
+ Assembling: .\oemport\oemmemry.asm
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nmq48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\..\obj\BCF.obj +
+Object Modules [.obj]: ..\..\..\obj\UB.obj +
+Object Modules [.obj]: ..\..\..\obj\PMODE.OBJ +
+Object Modules [.obj]: ..\..\..\obj\UP.obj +
+Object Modules [.obj]: ..\..\..\obj\B_FLOPPY.OBJ +
+Object Modules [.obj]: ..\..\..\obj\B_FLASH.OBJ +
+Object Modules [.obj]: ..\..\rom\flsinfo.obj +
+Object Modules [.obj]: ..\..\..\obj\B-C.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BAM9002.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BS9020.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BAT9020.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BW9020.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BAMMX.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BAMMXINF.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BCFE.obj +
+Object Modules [.obj]: ..\..\..\obj\UCF.obj +
+Object Modules [.obj]: ..\..\rom\flash.obj +
+Object Modules [.obj]: ..\..\rom\oemflash.obj +
+Object Modules [.obj]: ..\..\rom\oemiotbb.obj +
+Object Modules [.obj]: ..\..\rom\flashio.obj +
+Object Modules [.obj]: ..\..\rom\memory.obj +
+Object Modules [.obj]: ..\..\rom\oemmemry.obj,
+Run File [BCF.exe]: ..\..\rom\init.exe,
+List File [c:init.map]: ..\..\rom\init.map,
+Libraries [.lib]: ..\..\rom\ioc.lib+
+Libraries [.lib]: ..\..\..\obj\io.lib;
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	debug < c:\masm611\tmp\nmr48387.
+-
+-
+-
+-
+-
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+-
+-
+-
+-
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+-
+-
+-
+-
+ ^ Error
+-
+ ^ Error
+-
+-
+-
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+-
+-
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+ ^ Error
+-
+-
+Writing 0E985 bytes
+-
+ ^ Error
+-
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nms48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\..\obj\INT13.OBJ +
+Object Modules [.obj]: ..\..\..\obj\HD.OBJ +
+Object Modules [.obj]: ..\..\..\obj\MO.OBJ +
+Object Modules [.obj]: ..\..\..\obj\RELOCATE.OBJ +
+Object Modules [.obj]: ..\..\..\obj\BUSIDE.OBJ +
+Object Modules [.obj]: ..\..\..\obj\VPDM.OBJ +
+Object Modules [.obj]: ..\..\..\obj\FD.OBJ +
+Object Modules [.obj]: ..\..\..\obj\CDR.OBJ +
+Object Modules [.obj]: ..\..\..\obj\AFD.OBJ +
+Object Modules [.obj]: ..\..\..\obj\AUTO.OBJ +
+Object Modules [.obj]: ..\..\..\obj\IBCOM.OBJ +
+Object Modules [.obj]: ..\..\..\obj\INT13RE.OBJ +
+Object Modules [.obj]: ..\..\..\obj\HI.OBJ +
+Object Modules [.obj]: ..\..\..\obj\FI.OBJ +
+Object Modules [.obj]: ..\..\..\obj\CDI.OBJ +
+Object Modules [.obj]: ..\..\..\obj\AFDI.OBJ +
+Object Modules [.obj]: ..\..\..\obj\ME6.OBJ +
+Object Modules [.obj]: ..\..\rom\setupequ.obj +
+Object Modules [.obj]: ..\..\..\obj\INT13PE.OBJ,
+Run File [INT13.exe]: ..\..\rom\int13.exe,
+List File [c:int13.map]: ..\..\rom\int13.map;
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	..\..\..\exe\exe2bin ..\..\rom\INT13.EXE ..\..\rom\1SIS5300.I13
+	copy c:\masm611\tmp\nmt48387. ..\..\rom\1SIS5300.bbp
+        1 file(s) copied
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nmu48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\..\obj\UUI.obj +
+Object Modules [.obj]: ..\..\..\obj\UZDAT.OBJ +
+Object Modules [.obj]: ..\..\..\obj\UZ.OBJ,
+Run File [UUI.exe]: ..\..\rom\uui.exe,
+List File [c:uui.map]: ..\..\rom\uui.map;
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	..\..\..\exe\exe2bin ..\..\rom\uui.exe ..\..\rom\1SIS5300.BBC
+	debug < c:\masm611\tmp\nmv48387.
+-
+-
+-
+BX 0000
+:
+-
+CX 0000
+:
+-
+-
+Writing 00008 bytes
+-
+ Assembling: ..\..\dim\postdim.asm
+ Assembling: .\oemport\oempdim.asm
+ Assembling: ..\..\dim\ndim\npostdim.asm
+ Assembling: ..\..\dim\ndim\postext.asm
+ Assembling: ..\..\dim\ndim\pcinc.asm
+ Assembling: ..\..\dim\ndim\pcifb.asm
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nmw48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\..\obj\DIMSTART.OBJ +
+Object Modules [.obj]: ..\..\..\obj\DIMNSLNT.OBJ +
+Object Modules [.obj]: ..\..\..\obj\RESMGR.OBJ +
+Object Modules [.obj]: ..\..\..\obj\DI-SYS.OBJ +
+Object Modules [.obj]: ..\..\rom\setupequ.obj +
+Object Modules [.obj]: ..\..\rom\postdim.obj +
+Object Modules [.obj]: ..\..\rom\oempdim.obj +
+Object Modules [.obj]: ..\..\rom\npostdim.obj +
+Object Modules [.obj]: ..\..\rom\postext.obj +
+Object Modules [.obj]: ..\..\..\obj\DI-ISA.OBJ +
+Object Modules [.obj]: ..\..\..\obj\DI-PNP.OBJ +
+Object Modules [.obj]: ..\..\..\obj\DI-PCI.OBJ +
+Object Modules [.obj]: ..\..\..\obj\PCI-BR.OBJ +
+Object Modules [.obj]: ..\..\..\obj\PCI-MNDM.OBJ +
+Object Modules [.obj]: ..\..\rom\pcinc.obj +
+Object Modules [.obj]: ..\..\rom\pcifb.obj +
+Object Modules [.obj]: ..\..\..\obj\DI-CLOSE.OBJ +
+Object Modules [.obj]: ..\..\..\obj\DIMEND.OBJ,
+Run File [DIMSTART.exe]: ..\..\rom\dim.exe,
+List File [c:dim.map]: ..\..\rom\dim.map;
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	..\..\..\exe\exe2bin ..\..\rom\dim.exe ..\..\rom\1SIS5300.dim
+ Assembling: ..\..\gpc\ngpc\gpm.asm
+ Assembling: ..\..\usb\nusb\usb.asm
+ Assembling: ..\..\usb\nusb\ohci.asm
+ Assembling: ..\..\usb\nusb\usbkbd.asm
+periodic interrupt every 16 milisec
+repeat rate is always 30 char/sec
+ Assembling: ..\..\usb\nusb\smipci.asm
+ Assembling: ..\..\usb\gpcusb.asm
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nmx48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\rom\gpm.obj +
+Object Modules [.obj]: ..\..\rom\usb.obj +
+Object Modules [.obj]: ..\..\rom\ohci.obj +
+Object Modules [.obj]: ..\..\rom\usbkbd.obj +
+Object Modules [.obj]: ..\..\rom\smipci.obj +
+Object Modules [.obj]: ..\..\rom\gpcusb.obj +
+Object Modules [.obj]: ..\..\rom\setupequ.obj,
+Run File [gpm.exe]: ..\..\rom\gpc.exe,
+List File [c:gpc.map]: ..\..\rom\gpc.map;
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	..\..\..\exe\exe2bin ..\..\rom\gpc.exe ..\..\rom\1SIS5300.GPC
+ Assembling: ..\..\acpi\acpitbl.asm
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nmy48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\rom\acpitbl.obj,
+Run File [acpitbl.exe]: ..\..\rom\acpitbl.exe,
+List File [c:acpitbl.map]: ..\..\rom\acpitbl.map;
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	..\..\..\exe\exe2bin ..\..\rom\acpitbl.exe ..\..\rom\1SIS5300.ACP
+.\oemport\acpi.asl\CUST_BAT.OEM
+.\oemport\acpi.asl\CUST_EC.OEM
+.\oemport\acpi.asl\CUST_FAN.OEM
+.\oemport\acpi.asl\CUST_IRQ.OEM
+.\oemport\acpi.asl\CUST_ISA.OEM
+.\oemport\acpi.asl\CUST_PCI.OEM
+.\oemport\acpi.asl\CUST_PTS.OEM
+.\oemport\acpi.asl\CUST_SI.OEM
+.\oemport\acpi.asl\CUST_STP.OEM
+        9 file(s) copied
+	copy c:\masm611\tmp\nmz48387. .\oemport\acpi.asl\OEMDSDT.asl
+        1 file(s) copied
+	..\..\..\exe\asl /Fo=..\..\rom\1SIS5300.AML  /Fl=..\..\rom\oemdsdt.lst /Fn=..\..\rom\oemdsdt.nsd  .\oemport\acpi.asl\oemdsdt.asl
+ACPI Source Language Assembler Version 1.0.13NT [Mar 29 2000, 10:38:46]
+Copyright (c) 1996,1999 Microsoft Corporation
+Compliant with ACPI 1.0 specification
+
+.\oemport\acpi.asl\oemdsdt.asl:
+.\oemport\acpi.asl\sis530.asl:
+.\oemport\acpi.asl\irq-pci.asl:
+.\oemport\acpi.asl\sysstand.asl:
+.\oemport\acpi.asl\superio.asl:
+.\oemport\acpi.asl\SI.asl:
+asl(OEMDSDT.AML): Image Size=5913, Image Checksum=0x5a
+
+ Assembling: ..\..\sys\nsys\smbdata.asm
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nn948387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\rom\smbdata.obj,
+Run File [smbdata.exe]: ..\..\rom\smd.exe,
+List File [c:smd.map]: ..\..\rom\smd.map;
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	..\..\..\exe\exe2bin ..\..\rom\smd.exe ..\..\rom\1SIS5300.DMI
+ Assembling: ..\..\sys\nsys\smb.asm
+ Assembling: ..\..\sys\nsys\smbrun.asm
+===== Silent TEXT buffer is not in DIMDATASEG =====
+Fill up DmiStorageBase and DmiStorageSize properly
+Need to Implement the validate parameter subfunction properly
+ Assembling: ..\..\sys\nsys\smbsub.asm
+ Assembling: ..\..\sys\nsys\smbrune.asm
+ Assembling: ..\..\sys\nsys\smbpost.asm
+Implement the routine to validate & sort the strucrues
+May need to be updated properly
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nna48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\rom\smb.obj +
+Object Modules [.obj]: ..\..\rom\smbrun.obj +
+Object Modules [.obj]: ..\..\rom\smbsub.obj +
+Object Modules [.obj]: ..\..\rom\smbrune.obj +
+Object Modules [.obj]: ..\..\rom\smbpost.obj,
+Run File [smb.exe]: ..\..\rom\smc.exe,
+List File [c:smc.map]: ..\..\rom\smc.map;
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	..\..\..\exe\exe2bin ..\..\rom\smc.exe ..\..\rom\1SIS5300.SMC
+ Assembling: ..\..\sys\nsys\devinfo.asm
+	link /m /ONERROR:NOEXE @c:\masm611\tmp\nnb48387.
+
+Microsoft (R) Segmented Executable Linker  Version 5.31.009 Jul 13 1992
+Copyright (C) Microsoft Corp 1984-1992.  All rights reserved.
+
+Object Modules [.obj]: /m /ONERROR:NOEXE ..\..\..\obj\DC.OBJ +
+Object Modules [.obj]: ..\..\rom\devinfo.obj +
+Object Modules [.obj]: ..\..\rom\setupequ.obj,
+Run File [DC.exe]: ..\..\rom\dc.exe,
+List File [c:dc.map]: ..\..\rom\dc.map;
+LINK : warning L4021: no stack segment
+LINK : warning L4038: program has no starting address
+	..\..\..\exe\exe2bin ..\..\rom\dc.exe ..\..\rom\1SIS5300.DC
+	copy c:\masm611\tmp\nnc48387. ..\..\rom\dc.bbp
+        1 file(s) copied
+	copy ..\..\rom\1SIS5300.BBP + ..\..\rom\dc.bbp ..\..\rom\1SIS5300.BBP
+..\..\rom\1SIS5300.bbp
+..\..\rom\dc.bbp
+        1 file(s) copied
+	..\..\..\exe\pnpcksum ..\..\rom\1SIS5300.set
+Plug and Play Installation Check Structure Checksum Fixer
+Copyright (C)1994, American Megatrends, Inc.
+  PnP Installation Check Structure (rev:16) found at offset 7480
+  Updated checksum field
+	..\..\..\exe\pcicksum ..\..\rom\1SIS5300.set
+PCI Installation Check Structure Checksum Fixer
+Copyright (C)1995, American Megatrends, Inc.
+  PCI Installation Check Structure (rev:0) found at offset D9C0
+  Updated checksum field
+	..\..\..\exe\amibbp ..\..\rom\1SIS5300.bbp
+
+AMIBIOS Builder Preprocessor - Version 2.03
+Copyright (c) 1998 American Megatrends, Inc.
+
+
+ AMIBBP Successful!!!
+	..\..\..\exe\amimm ..\..\rom\1SIS5300.mm /b
+DOS/4G Protected Mode Run-time  Version 2.01a
+Copyright (c) Tenberry Software, Inc. 1996
+
+!! Module Manipulation Successful !!
+	..\..\..\exe\amimm ..\..\rom\1SIS5300.rom /I ..\..\rom\1SIS5300.RID 0C /U /M 0000 0000
+DOS/4G Protected Mode Run-time  Version 2.01a
+Copyright (c) Tenberry Software, Inc. 1996
+
+!! Module Manipulation Successful !!
+	..\..\..\exe\amimm ..\..\rom\1SIS5300.rom /i ..\..\rom\epa.bin 31 /m 0000 0000
+DOS/4G Protected Mode Run-time  Version 2.01a
+Copyright (c) Tenberry Software, Inc. 1996
+
+!! Module Manipulation Successful !!
+	..\..\..\exe\amimm ..\..\rom\1SIS5300.rom /I ..\..\..\add-on.rom\530v107.rom 20 /M 6306 1039
+DOS/4G Protected Mode Run-time  Version 2.01a
+Copyright (c) Tenberry Software, Inc. 1996
+
+!! Module Manipulation Successful !!
+	..\..\..\exe\amimm ..\..\rom\1SIS5300.rom /L
+DOS/4G Protected Mode Run-time  Version 2.01a
+Copyright (c) Tenberry Software, Inc. 1996
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³         AMIBIOS ROM Module Manipulation Utility - Module Information        ³
+³   Copyright (C)1998 American Megatrends Inc. All Rights Reserved. Ver.2.00  ³
+ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+³ BIOS Version : 0627                  BIOS Date    : 12/20/00                ³
+³ BIOS Tag     : 1SIS5300              BIOS Size    : 256  Kb                 ³
+ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+³ ModuleID/ModuleName   RomLoc     SourceSize   SizeInRom    %%     RunLoc    ³
+ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+³    INIT               F000:C000  4000(16384)  4000(16384)  00.00  ---- ---- ³
+³    NVRAM/ESCD         F000:8000  4000(16384)  4000(16384)  00.00  ---- ---- ³
+³02 Runtime            F000:1019  9C60(40032)  6FDD(28637)  28.46  F000:63A0 ³
+³ 08 Interface          F000:0931  06DC(01756)  06E8(01768)  00.00  Dynamic   ³
+³00 POST               E000:CF4C  4BB2(19378)  39E5(14821)  23.52  F000:0000 ³
+³03 DIM                E000:9958  4F4A(20298)  35F4(13812)  31.95  E000:B0B0 ³
+³04 Setup Client       E000:7326  3BF4(15348)  2632(09778)  36.29  Dynamic   ³
+³01 Setup Server       E000:5B81  2410(09232)  17A5(06053)  34.43  F000:0000 ³
+³ 06 DMI Data           E000:5300  0875(02165)  0881(02177)  00.00  Dynamic   ³
+³07 GreenPC            E000:1E37  5700(22272)  34C9(13513)  39.33  Dynamic   ³
+³0B Int-10             E000:17D9  0856(02134)  065E(01630)  23.62  F000:F065 ³
+³0D Int-13             D000:D1C6  5F1F(24351)  4613(17939)  26.33  Dynamic   ³
+³0F ACPI Table         D000:CF65  C2A6(49830)  0261(00609)  98.78  Dynamic   ³
+³10 ACPI AML           D000:C433  1719(05913)  0B32(02866)  51.53  Dynamic   ³
+³12 Configuration      D000:BB61  0A4F(02639)  08D2(02258)  14.44  Dynamic   ³
+³13 DMI Code           D000:B409  0925(02341)  0758(01880)  19.69  Dynamic   ³
+³ 0C ROM-ID             D000:B3F5  0008(00008)  0014(00020)  00.00  Dynamic   ³
+³31 OEM Logo Data      D000:B2A9  01D6(00470)  014C(00332)  29.36  Dynamic   ³
+³20 PCI AddOn ROM      D000:694A  8000(32768)  495F(18783)  42.68  6000:4099 ³
+ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+³ Bytes Used       : 0296C8 ( 169672)     Bytes Free       : 016938 (  92472) ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+!! Module Manipulation Successful !!
+	copy ..\..\rom\1SIS5300.rom
+        1 file(s) copied
+        1 file(s) copied
+	lr ..\..\rom\1SIS5300.rom
+Bad command or file name

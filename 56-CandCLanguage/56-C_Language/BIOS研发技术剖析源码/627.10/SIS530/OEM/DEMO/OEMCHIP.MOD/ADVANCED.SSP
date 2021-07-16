@@ -1,0 +1,127 @@
+
+//;*****************************************************************;
+//;*****************************************************************;
+//;**								**;
+//;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+//;**								**;
+//;**			All Rights Reserved.			**;
+//;**								**;
+//;**		6145-F, Northbelt Parkway, Norcross,		**;
+//;**								**;
+//;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+//;**								**;
+//;*****************************************************************;
+//;*****************************************************************;
+
+
+// This AMI Setup Script Processor (SSP) file contains setup items that
+// are related to Advanced Setup . This file is considered a core BIOS file
+// and should not be modified.
+
+Screen (SCR_STANDARD)
+
+	Question (Q_LANGUAGE)
+		Text	= "Language"
+		Options	= "English":DEFAULT:POWERON
+		//	  "German"
+		//	  "French"
+		//	  "Spanish"
+		Present	= No
+	EndQuestion
+
+EndScreen // SCR_STANDARD
+
+StartSourceCode ("SETUPDAT.ASM")
+"public	no_of_languages"
+"no_of_languages	equ	1"
+EndSourceCode
+
+Screen (SCR_ADVANCED)
+
+	Question (Q_C0000_SHADOW)
+		Text = "C000,32k Shadow"
+		Options = "Disabled"
+			  "Enabled"
+			  "Cached":DEFAULT:POWERON
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+//	Question (Q_C4000_SHADOW)
+//		Text = "C400,16k Shadow"
+//		Options = "Disabled"
+//			  "Enabled"
+//			  "Cached":DEFAULT:POWERON
+//			  RESERVED
+//		Present = Yes
+//	EndQuestion
+
+	Question (Q_C8000_SHADOW)
+		Text = "C800,16k Shadow"
+		Options = "Disabled":DEFAULT:POWERON 
+			  "Enabled"
+			  "Cached"
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+	Question (Q_CC000_SHADOW)
+		Text = "CC00,16k Shadow"
+		Options = "Disabled":DEFAULT:POWERON 
+			  "Enabled"
+			  "Cached"
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+	Question (Q_D0000_SHADOW)
+		Text = "D000,16k Shadow"
+		Options = "Disabled":DEFAULT:POWERON 
+			  "Enabled"
+			  "Cached"
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+	Question (Q_D4000_SHADOW)
+		Text = "D400,16k Shadow"
+		Options = "Disabled":DEFAULT:POWERON 
+			  "Enabled"
+			  "Cached"
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+	Question (Q_D8000_SHADOW)
+		Text = "D800,16k Shadow"
+		Options = "Disabled":DEFAULT:POWERON 
+			  "Enabled"
+			  "Cached"
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+	Question (Q_DC000_SHADOW)
+		Text = "DC00,16k Shadow"
+		Options = "Disabled":DEFAULT:POWERON 
+			  "Enabled"
+			  "Cached"
+			  RESERVED
+		Present = Yes
+	EndQuestion
+
+EndScreen   // SCR_ADVANCED
+
+//;*****************************************************************;
+//;*****************************************************************;
+//;**								**;
+//;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+//;**								**;
+//;**			All Rights Reserved.			**;
+//;**								**;
+//;**		6145-F, Northbelt Parkway, Norcross,		**;
+//;**								**;
+//;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+//;**								**;
+//;*****************************************************************;
+//;*****************************************************************;

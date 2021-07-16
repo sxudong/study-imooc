@@ -1,0 +1,67 @@
+//**********************************************************************;
+// 	SYSTEM INDICATION
+//**********************************************************************;
+	Scope(_SI)
+{
+	Method(_SST,1)	{      // System status indicator
+	// Arg0 = 0 - No System state indication (indicator off)
+	// 	= 1 - Working
+	// 	= 2 - Waking
+	// 	= 3 - Sleeping (S1-S3)
+	// 	= 4 - Sleeping (S4)
+//      = 1 - Working
+	If(Arg0) {
+	If(LEqual(Arg0,1)) {	// solid green LED
+	Store(0, YLED)
+	Store(1, GLED)
+	}
+//      = 2 - Waking Indicator
+	If(LEqual(Arg0,2)) {	// Fast Blink Green
+	Store(0, YLED)
+	Store(3, GDUR)		// 31.25msec Duration
+	Store(3, GCYL)		// 256msec Cycle
+	Store(2, GLED)
+	}
+//      = 3 - Sleeping (S1,S2,S3)
+	If(LEqual(Arg0,3)) {	// Slow blink green
+	Store(0, YLED)
+	Store(0, GDUR)		// 256 msec Duration
+	Store(1, GCYL)		// 1 sec Cycle
+	Store(2, GLED)
+	}
+//      = 4 - Sleeping (S4)
+	If(LEqual(Arg0,4)) {	// Very Slow blink green
+	Store(0, YLED)
+	Store(0, GDUR)		// 256 msec Duration
+	Store(0, GCYL)		// 2 sec Cycle
+	Store(2, GLED)
+	}
+//	= 0 - No system state indication (indicator off)
+	}
+	Else {
+//	Store(0, YLED)
+//	Store(0, GLED)
+	Store(1, GLED)
+
+	Store(1, YDUR)		// 125 msec Duration
+	Store(0, YCYL)		// 2 msec Cycle
+	Store(2, YLED)
+	}
+	}
+
+	Method(_MSG,1)	{	// Message waiting status indicator
+				// Arg0 = # of messages waiting
+	If(Arg0){
+	Store(1, YDUR)		// 125 msec Duration
+	Store(1, YCYL)		// 1 msec Cycle
+	Store(2, YLED)
+		}
+	Else {			// No mesasge waiting,solid green LED
+	Store(0, YLED)
+	Store(1, GLED)
+		}
+	}
+}
+
+
+

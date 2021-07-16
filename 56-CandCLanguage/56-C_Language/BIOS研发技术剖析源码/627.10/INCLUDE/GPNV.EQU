@@ -1,0 +1,141 @@
+;;;;	title   GPNV STRUCTURES AND EQUATES
+;-----------------------------------------------------------------;
+;Do not change any structure defination unless otherwise specified;
+;-----------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+MAX_NUM_OF_GPNV_HANDLES		equ	08h	; max #of GPNV Handles (1-based) supported
+;---------------------------------------------------------------;
+;			GPNV GLOBAL HEADER			;
+; this defines the GPNV Global Header Structure which is present;
+; at the start of GPNV.						;
+;---------------------------------------------------------------;
+GPNV_GLOBAL_STRUC	struc
+  wNumberOfHandles	dw	?	; #of Handles (1-based) currently present in GPNV
+  wChecksum		dw	?	; checksum of whole GPNV area
+  wAttribute		dw	?	; Attribute
+  wSize			dw	?	; max size of GPNV in paragraphs
+  wFreeSpace		dw	?	; available space in GPNV in paragraphs
+  bReserved		db	6 dup(?); Reserved for future use
+GPNV_GLOBAL_STRUC	ends
+;---------------------------------------------------------------;
+;			GPNV HANDLE HEADER			;
+; this defines the Header Structure of a particular handle in	;
+; GPNV.								;
+;---------------------------------------------------------------;
+GPNV_HANDLE_STRUC	struc
+  wLink			dw	?	; offset of next handle from this handle
+					; FFFF if this is the last handle
+  wChecksum		dw	?	; checksum of this handle
+  wAttribute		dw	?	; Attribute
+  wSize			dw	?	; size of this handle in paragraphs
+  wHandle		dw	?	; handle# (0-based) of this GPNV handle
+  bReserved		db	6 dup(?); Reserved for future use
+GPNV_HANDLE_STRUC	ends
+;---------------------------------------------------------------;
+;		GPNV LOCAL DATA AREA STRUCTURE			;
+;---------------------------------------------------------------;
+GPNV_DATA_AREA_STRUC	struc
+  wMaximumNumberOfHandles dw	?	; #of handles (1-based) supported by GPNV
+					;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					; MAXIMUM value of this is 8 in this implementation !!!!!!
+					; If this value is increased, the
+					; number of entries in GPNV_AREA_SIZE_TABLE
+					; also needs to increased accordingly
+					;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  wCurrentNumberOfHandles dw	?	; #of handles (1-based) currently present in GPNV
+  wGPNVSize		dw	?	; physical GPNV size in bytes
+					; this should be the size of flash block having the whole GPNV
+  wGPNVBufferSize	dw	?	; buffer size in bytes needed for GPNV R/W
+					; this should be the twice the size of flash block having the whole GPNV
+  dGPNVBaseAddress	dd	?	; 32bit physical absolute base address of GPNV
+  wGPNVAreaSizeTable	dw	MAX_NUM_OF_GPNV_HANDLES dup (?)	; this table contains the data size of the respective GPNV areas in BYTEs
+GPNV_DATA_AREA_STRUC	ends
+;---------------------------------------------------------------;
+;			GPNV ATTRIBUTE				;
+;---------------------------------------------------------------;
+;;;;				5432109876543210
+gpnv_escd_bit		equ	0000000000000001b; Bit-0 = 1, ESCD Area
+gpnv_dmi_data_bit	equ	0000000000000010b; Bit-1 = 1, SMBIOS Data Structures
+gpnv_dmi_event_log_bit	equ	0000000000000100b; Bit-2 = 1, SMBIOS Event Log Data
+gpnv_dmi_setup_data_bit	equ	0000000000001000b; Bit-3 = 1, SMBIOS BIOS Setup Data
+						 ; Bit14-4....Reserved for future use
+gpnv_global_header_bit	equ	1000000000000000b; Bit-15= 1, GPNV Global Header
+;---------------------------------------------------------------;
+;		GPNV INTERFACE FUNCTIONS			;
+;---------------------------------------------------------------;
+get_gpnv_information_func	equ	00h	; 00..GET GPNV INFORMATION
+get_gpnv_handle_information_func equ	01h	; 01..GET GPNV HANDLE INFORMATION
+get_gpnv_attribute_information_func equ	02h	; 02..GET GPNV HANDLE INFORMATION
+read_gpnv_whole_func		equ	03h	; 03..READ  WHOLE GPNV
+write_gpnv_whole_func		equ	04h	; 04..WRITE WHOLE GPNV
+read_gpnv_handle_func		equ	05h	; 05..READ  GPNV HANDLE
+read_gpnv_attribute_func	equ	06h	; 06..READ  GPNV ATTRIBUTE
+  read_gpnv_data_subfunc	equ	  00h	;     00..READ GPNV DATA ONLY
+  read_gpnv_whole_subfunc	equ	  01h	;     01..READ GPNV HEADER+DATA
+update_gpnv_handle_func		equ	07h	; 07..UPDATE GPNV HANDLE
+update_gpnv_attribute_func	equ	08h	; 08..UPDATE GPNV ATTRIBUTE
+  write_gpnv_data_subfunc	equ	  00h	;     00..WRITE GPNV DATA ONLY
+  write_gpnv_whole_subfunc	equ	  01h	;     01..WRITE GPNV HEADER+DATA
+;---------------------------------------------------------------;
+;		RETURN CODE FROM GPNV INTERFACE FUNCTIONS	;
+;---------------------------------------------------------------;
+gpnv_empty_error	equ	01h	; GPNV is currently empty
+gpnv_read_error		equ	02h	; read error
+gpnv_write_error	equ	03h	; write error
+gpnv_erase_error	equ	04h	; erase error
+;---------------------------------------------------------------;
+;		AMIGPNV ENTRY POINT STRUCTURE			;
+;---------------------------------------------------------------;
+AMI_GPNV_MAJOR_VERSION	equ	01h	; AMIGPNV Version# 01.00
+AMI_GPNV_MINOR_VERSION	equ	00h
+
+AMI_GPNV_STRUC	STRUCT
+	bAnchorStr	BYTE	8 dup (?)	; $AMIGPNV signature
+	bChecksum	BYTE	?		; checksum
+	bLength		BYTE	?		; length in bytes
+	bMajorVer	BYTE	?		; Major Ver#
+	bMinorVer	BYTE	?		; Minor Ver#
+	dPtrGPNVRoutine	DWORD	?		; 32bit address of GPNV control routine
+	dPtrGPNVInfo	DWORD	?		; 32bit address of GPNV Information table
+						; each entry of this table has two fields
+						; Field-0	WORD	attribute of GPNV area
+						; Field-1	WORD	corresponding handle#
+						; end of this table is indicated by an entry
+						; whose both fields contain FFFF
+AMI_GPNV_STRUC	ENDS
+;---------------------------------------------------------------;
+;		GPNV INFORMATION TABLE STRUCTURE		;
+;---------------------------------------------------------------;
+GPNV_INFO_TABLE_STRUC	STRUC
+	wAttribute	WORD	?		; attribute
+	wHandle		WORD	?		; handle# (0-based) which can be used to access this area in GPNV
+GPNV_INFO_TABLE_STRUC	ENDS
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;

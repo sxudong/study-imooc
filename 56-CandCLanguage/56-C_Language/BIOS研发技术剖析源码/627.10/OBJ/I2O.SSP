@@ -1,0 +1,30 @@
+String (STR_I2O)
+        Text    = "I2O"
+EndString
+
+Screen (SCR_ADVANCED)
+	Question (Q_INIT_I2O_DEVICE)
+		Text	= "Initialize I2O Devices"
+//		Help    = "If Yes, BIOS will initialize I2O Processor(s), I2O "
+//			  "Storage Device(s) and provide INT13 support for I2O "
+//			  "Storage Device(s). If No, BIOS will not initialize "
+//			  "I2O Processor(s) and I2O Storage Device(s)."
+		Options = "Yes":DEFAULT:POWERON
+			  "No"
+		Present = Yes
+	EndQuestion
+
+// This setup question is needed and used during I2O Initilization during
+// which user can select the index# of I2O Device from which system will
+// boot if I2O is selected as first boot device
+// DO NOT MAKE THIS SETUP QUESTION "PRESENT" AT ANY TIME
+
+	Question (Q_INDEX_I2O_BOOT_DRIVE)
+		Text	= "I2O Boot Device Index"
+                OptionBits              = 8
+                Default                 = 0
+                Poweron                 = 0
+                Present                 = No		// IT MUST BE "No"
+	EndQuestion
+EndScreen
+

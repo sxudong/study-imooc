@@ -1,0 +1,340 @@
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+
+; Global equates for OHCI
+;-------------------------------------------------------------------------
+
+ifdef DOS_DEBUG
+USB_HC_CLASS_CODE	equ 0C0310h	;Class code for OHCI host controllers
+endif
+
+HID_DEVICE_LIMIT	equ 8		;Maximum number of HID devices supported
+HUB_DEVICE_LIMIT	equ 8		;Maximum number of Hub devices supported
+
+
+
+FRAME_LIST_SIZE		equ 32		;Number of DWORDs in interrupt list
+
+IDLE_FRAMES		equ 1		;Number of idle frames inserted between
+					; active frames in schedule of HIDs
+
+ACTIVE_FRAMES		equ 4		;Number of frames used to implement
+					; the schedule for HIDs
+					
+EDS_PER_FRAME		equ HID_DEVICE_LIMIT / ACTIVE_FRAMES
+			 		;Number of HID TDs to schedule per frame
+
+MAX_DEVICES		equ HID_DEVICE_LIMIT + HUB_DEVICE_LIMIT
+					;Maximum number of devices allowed in
+					; the schedule
+
+MIN_HID_DEVICE_INDEX	equ 1
+MAX_HID_DEVICE_INDEX	equ MIN_HID_DEVICE_INDEX + HID_DEVICE_LIMIT - 1
+MIN_HUB_DEVICE_INDEX	equ MAX_HID_DEVICE_INDEX + 1
+MAX_HUB_DEVICE_INDEX	equ MIN_HUB_DEVICE_INDEX + HUB_DEVICE_LIMIT - 1
+
+MAX_DEVICE_ADDR		equ MAX_DEVICES	;Highest possible used device address
+DUMMY_DEVICE_ADDR	equ MAX_DEVICE_ADDR + 1 ;Addr that is garanteed not to be used
+
+FRAME_REPEAT		equ ACTIVE_FRAMES + (ACTIVE_FRAMES * IDLE_FRAMES)
+					;The schedule repeats this often
+
+DEFAULT_PACKET_LENGTH	equ 8		;Max size of packet data
+
+
+; General Equates
+;-------------------------------------------------------------------------
+	
+TRUE	equ     -1
+FALSE   equ     0
+;=============================================
+LIST_ENTRY                   struc
+  Flink                       dd    ?
+  Blink                       dd    ?
+LIST_ENTRY                   ends
+
+HCD_ED_LIST                  struc ;now not used
+  Head 	                      LIST_ENTRY <> ;Used to link ControlEd queue
+  PhysicalHead                dd    ?
+  Bandwitch                   dw    ?
+  Next                        db    ?       ;Used for interrupt list
+HCD_ED_LIST                  ends
+
+; Endpoint Descriptor (ED) structure
+;---------------------------------------------
+Endpoint_Descriptor          struc
+  ED_Control                  dd    ?   
+  TDQ_Tail_Pointer            dd    ?	
+  TDQ_Head_Pointer            dd    ?	;The structure of ED is define
+  Next_ED                     dd    ?	; by OHCI for USB - RELEASE 1.0      
+Endpoint_Descriptor          ends
+
+;
+;Bit define for endpoint descriptor control
+;
+  FUNCTION_ADDRESS           equ    0000007fh	
+  ENDPOINT                   equ    00000780h	
+  DIRECTION                  equ    00001800h
+     ED_OUT_PACKET           equ    00000800h	
+     ED_IN_PACKET            equ    00001000h
+  LOW_SPEED                  equ    00002000h	
+  SKIP_TDQ                   equ    00004000h	
+  FORMAT                     equ    00008000h	
+  MAX_PACK_SIZE              equ    07ff0000h	
+;
+;
+;Bit define for endpoint descriptor direction
+;
+  DATA_OUT                   equ    01b	
+  DATA_IN                    equ    10b	
+
+;
+;Bit define for endpoint descriptor TD queue tail pointer
+;
+  HALTED                     equ    00000001h	
+  TOGGLE_CARRY               equ    00000002h
+
+;
+;Bit define for general pointer
+;
+  TERMINATE                  equ    00000000h	
+;=============================================
+; General Transfer Descriptor (TD) structure
+;---------------------------------------------
+General_Transfer_Descriptor  struc
+  GTD_Control                 dd    ?   ;The structure of general TD is define
+  GTD_Current_Buffer_Pointer  dd    ?   ;  by OHCI for USB - RELEASE 1.0
+  GTD_Next_TD                 dd    ?
+  GTD_Buffer_End              dd    ?
+
+  CSReloadValue               dd    ?
+  pCallback                   dw    ?
+  ActiveFlag                  db    ?
+  DeviceAddress               db    ?
+  GTD_Setup                   db    8 dup (?) ;use for setup packet
+General_Transfer_Descriptor  ends
+
+;
+;Bit define for General Transfer Descriptor CONTROL
+;
+  BUFFER_ROUNDING	     equ    000040000h	
+  DIRECTION_PID              equ    000180000h  
+    SETUP_PACKET             equ    000000000h
+    OUT_PACKET               equ    000080000h	    
+    IN_PACKET                equ    000100000h	    
+  DELAY_INTERRUPT            equ    000e00000h
+    IntD                     equ    000000000h   ;depend on device,now guest 0
+  DATA_TOGGLE		     equ    003000000h
+    SETUP_TOGGLE             equ    002000000h   ;same as MSB of data toggle
+    DATA1_TOGGLE             equ    003000000h
+    STATUS_TOGGLE	     equ    003000000h
+  ERROR_COUNT	   	     equ    00c000000h
+    NO_ERRORS                equ    000000000h
+    ONE_ERROR                equ    004000000h
+    TWO_ERRORS               equ    008000000h
+    THREE_ERRORS             equ    00C000000h
+  CONDITION_CODE 	     equ    0f0000000h
+;------------------------------------------------
+
+;------------------------------------------------
+;Bit define for ConditionCode or CompletionCode use for each CallBack func
+;transmission error
+  STATUS_FIELD               equ    0f0000000h ;include NOT_ACCESS
+  NO_ERROR                   equ    00h	 
+  CRC_ERROR                  equ    01h 
+  BIT_STUFF                  equ    02h 
+  TOGGLE_MISMATCH            equ    03h
+  STALL                      equ    04h
+  DEVICE_NOT_RESPOND         equ    05h
+  PID_CHECK_ERROR            equ    06h 
+  UNEXPECTED_PID             equ    07h
+  DATA_OVERRUN               equ    08h 
+  DATA_UNDERRUN              equ    09h
+  BUFFER_OVERRUN             equ    0ch ;not used for GTD
+  BUFFER_UNDERRUN            equ    0dh ;not used for GTD
+  NOT_ACCESSED               equ    0fh 
+;------------------------------------------------
+
+
+ 
+;===================================================
+;
+;Equates for OHCI-Related register in the PCI Configuration Space
+;
+USB_COMMAND                  equ    04h  ;offset 4,5h   of pci configuration reg
+USB_CLASS_CODE               equ    09h  ;offset 9-bh   of pci configuration reg 
+USB_BASE_ADDRESS             equ    10h  ;offset 10-13h of pci configuration reg 
+USB_IRQ_LEVEL                equ    3ch  ;offset 3ch    of pci configuration reg
+;===================================================
+; Equates for Host Controller Operational Register
+; reg for control and status
+OHCI_REVISION_REG            equ    00h
+OHCI_CONTROL_REG             equ    04h
+OHCI_COMMAND_STATUS          equ    08h
+OHCI_INTERRUPT_STATUS        equ    0ch
+OHCI_INTERRUPT_ENABLE        equ    10h
+OHCI_INTERRUPT_DISABLE       equ    14h
+; reg for memory pointer
+OHCI_HCCA_REG	             equ    18h
+OHCI_PERIOD_CURRENT_ED       equ    1ch
+OHCI_CONTROL_HEAD_ED         equ    20h
+OHCI_CONTROL_CURRENT_ED      equ    24h
+OHCI_BULK_HEAD_ED            equ    28h
+OHCI_BULK_CURRENT_ED         equ    2ch
+OHCI_DONE_HEAD               equ    30h
+; reg for frame counter
+OHCI_FRAME_INTERVAL          equ    34h
+OHCI_FRAME_REMAINING         equ    38h
+OHCI_FRAME_NUMBER            equ    3ch
+OHCI_PERIODIC_START          equ    40h
+OHCI_LS_THRESHOLD            equ    44h
+; reg for root hub
+OHCI_RH_DESCRIPTOR_A         equ    48h
+OHCI_RH_DESCRIPTOR_B         equ    4ch
+OHCI_RH_STATUS               equ    50h
+OHCI_RH_PORT1_STATUS         equ    54h
+OHCI_RH_PORT2_STATUS         equ    58h
+
+;
+; Bit define for HC control register 
+;
+CONTROL_BULK_RATE            equ    0003h
+PERIODIC_LIST_ENABLE         equ    0004h
+ISOCHRONOUS_ENABLE           equ    0008h
+CONTROL_LIST_ENABLE          equ    0010h
+BULK_LIST_ENABLE             equ    0020h
+HC_FUNCTION_STATE            equ    00c0h
+  USBRESET                   equ    0000h
+  USBRESUME                  equ    0040h
+  USBOPERATIONAL             equ    0080h
+  USBSUSPEND                 equ    00c0h
+INTERRUPT_ROUTING            equ    0100h
+REMOTE_WAKEUP_CONNECT        equ    0200h
+REMOTE_WAKEUP_ENABLE         equ    0400h
+
+;
+; Bit define for HC command status register
+;
+HC_RESET                     equ    00001h
+CONTROL_LIST_FILLED          equ    00002h
+BULK_LIST_FILLED             equ    00004h
+OWNERSHIP_CHANGE_REQUEST     equ    00008h
+SCHEDULING_OVERRUN_COUNT     equ    30000h
+									
+;
+; Bit define for HC interrupt status register
+;
+SCHEDULING_OVERRUN           equ    00000001h
+WRITEBACK_DONEHEAD           equ    00000002h
+START_OF_FRAME               equ    00000004h
+RESUME_DETECTED              equ    00000008h
+UNCOVERABLE_ERR              equ    00000010h
+FRAMENUMBER_OVERFLOW         equ    00000020h
+RH_STATUS_CHANGE             equ    00000040h
+OWNERSHIP_CHANGE             equ    40000000h
+
+;
+; Bit define for HC interrupt enable register
+;
+SCHEDULING_OVERRUN_ENABLE    equ    00000001h
+WRITEBACK_DONEHEAD_ENABLE    equ    00000002h
+START_OF_FRAME_ENABLE        equ    00000004h
+RESUME_DETECTED_ENABLE       equ    00000008h
+UNCOVERABLE_ERR_ENABLE       equ    00000010h
+FRAMENUMBER_OVERFLOW_ENABLE  equ    00000020h
+RH_STATUS_CHANGE_ENABLE      equ    00000040h
+OWNERSHIP_CHANGE_ENABLE      equ    40000000h
+MASTER_INTERRUPT_ENABLE      equ    80000000h
+
+;
+; Bit define for HC interrupt disable register
+;
+SCHEDULING_OVERRUN_DISABLE   equ    00000001h
+WRITEBACK_DONEHEAD_DISABLE   equ    00000002h
+START_OF_FRAME_DISABLE       equ    00000004h
+RESUME_DETECTED_DISABLE      equ    00000008h
+UNCOVERABLE_ERR_DISABLE      equ    00000010h
+FRAMENUMBER_OVERFLOW_DISABLE equ    00000020h
+RH_STATUS_CHANGE_DISABLE     equ    00000040h
+OWNERSHIP_CHANGE_DISABLE     equ    40000000h
+MASTER_INTERRUPT_DISABLE     equ    80000000h
+
+;
+; Bit define for HC frame interval register
+;
+FRAME_INTERVAL               equ    00003fffh
+FS_LARGEST_DATA_PACKET        equ    4fff0000h
+FRAME_INTERVAL_TOGGLE        equ    80000000h
+
+;
+; Bit define for HC frame remaining register
+;
+FRAME_REMAINING              equ    00003fffh
+FRAME_REMAINING_TOGGLE        equ    80000000h
+
+;
+; Bit define for HC root hub descriptor A register
+;
+RH_PORT_NUMBER               equ    000000ffh
+POWER_SWITCH_MODE            equ    00000100h
+NO_POWER_SWITCH              equ    00000200h
+DEVICE_TYPE                  equ    00000400h
+OVERCURRENT_PROTECT          equ    00000800h
+NO_OVERCURRENT_PROTECT       equ    00001000h
+POWERON2POWERGOOD_TIME	     equ    0ff000000h
+
+
+;
+; Bit define for HC root hub descriptor B register
+;
+DEVICE_REMOVABLE             equ    0000ffffh
+PORT_POWER_MASK              equ    0ffff0000h
+
+;
+; Bit define for HC root hub status register
+;								   
+LOCAL_POWER_STATUS           equ    00000001h
+CLEAR_GLOBAL_POWER           equ    00000001h
+OVERCURRENT                  equ    00000002h
+DEVICE_REMOTE_WAKEUP         equ    00008000h
+SET_REMOTE_WAKEUP            equ    00008000h
+LOCAL_POWER_CHANGE           equ    00010000h
+SET_GLOBAL_POWER             equ    00010000h
+OVERCURRENT_CHANGE           equ    00020000h
+CLEAR_REMOTE_WAKEUP          equ    80000000h
+					  
+;
+; Bit define for HC root hub port1,2 status register
+;
+CURRENT_CONNECT_STATUS       equ    00000001h
+CLEAR_PORT_ENABLE            equ    00000001h
+PORT_ENABLE_STATUS           equ    00000002h
+SET_PORT_ENABLE              equ    00000002h
+PORT_SUSPEND_STATUS          equ    00000004h
+SET_PORT_SUSPEND             equ    00000004h
+PORT_OVERCURRENT             equ    00000008h
+CLEAR_PORT_SUSPEND           equ    00000004h
+PORT_RESET_STATUS            equ    00000010h
+SET_PORT_RESET               equ    00000010h
+PORT_POWER_STATUS            equ    00000100h
+SET_PORT_POWER               equ    00000100h
+LOW_SPEED_DEVICE_ATTACHED    equ    00000200h
+CLEAR_PORT_POWER             equ    00000200h
+CONNECT_STATUS_CHANGE        equ    00010000h
+PORT_ENABLE_STATUS_CHANGE    equ    00020000h
+PORT_SUSPEND_STATUS_CHANGE   equ    00040000h
+PORT_OVERCURRENT_CHANGE      equ    00080000h
+PORT_RESET_STATUS_CHANGE     equ    00100000h
+
+ 					   

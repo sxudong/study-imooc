@@ -1,0 +1,4022 @@
+Subttl.         Include file for GREEN PC support INIT code & SMI/IRQ code...GPM.CSS...GENERIC
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-G, Noruhbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+
+;Subttl.        Include file for GREEN PC support INIT code...GPMINIT.CSS...GENERIC
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;       POST TIME CHIPSET SPECIFIC SMI/IRQ HANDLER CODE         ;
+;       POST TIME CHIPSET SPECIFIC SMI/IRQ HANDLER CODE         ;
+;       POST TIME CHIPSET SPECIFIC SMI/IRQ HANDLER CODE         ;
+;       POST TIME CHIPSET SPECIFIC SMI/IRQ HANDLER CODE         ;
+;---------------------------------------------------------------;
+
+;;      public  select_pm_method                ;
+;;      public  open_smram                      ;
+;;      public  close_smram                     ;
+;;      public  init_chipset_data               ;
+;;      public  init_pm_registers               ;
+;;      public  global_smi_enable               ;
+;;      public  generate_sw_smi_for_relocation  ;
+
+;;      public  get_mapped_smi_seg_and_size     ;
+
+;;      public  setup_hw_auto_pm                ;
+
+
+	include makeflag.equ
+        include sis5599.equ
+	include	setupequ.ext
+if MKF_ACPI_SUPPORT
+	include	acpi.equ
+	include	acpi_css.equ
+endif
+
+
+check_cmos_data_far:
+        db      9ah                             ; CALL FAR F000:EED5
+        dw      0eed5h
+        dw      0f000h
+        ret
+;-----------------------------------------------;
+
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       SELECT_PM_METHOD                        ;
+;---------------------------------------------------------------;
+;       Input : (CL) cpu number                                 ;
+;                       >= 16 IBM-CYRIX cpu (all in decimal)    ;
+;                       12-31 AMD-PLUS cpu (all in decimal)     ;
+;                       0f0h to 0feh USER added NEW CPU         ;
+;                       0ffh means UNKNOWN CPU                  ;
+;               (CH) vendor number                              ;
+;                       00 Intel                                ;
+;                       01 Cyrix                                ;
+;                       02 AMD                                  ;
+;                       03 IBM                                  ;
+;                       04 TI                                   ;
+;                       05 UMC                                  ;
+;                                                               ;
+;               (BH) bit 3  bit 2...valid if SMI support CPU    ;
+;                      0      0   ... INTEL type SMI            ;
+;                      0      1   ... CYRIX type SMI            ;
+;                      1      0   ... AMD type SMI              ;
+;                      1      1   ... reserved                  ;
+;                    bit 4 set for dual/multiple CPU present    ;
+;                    bit 4 clear for single CPU                 ;
+;                    bit 6 set for SMI capable CPU              ;
+;                    bit 6 clear for non-SMI CPU                ;
+;                                                               ;
+;               (BL) bit 7 set, cpu has SMI support             ;
+;                    bit 3-0...no. of secondary CPU present     ;
+;               STACK PRESENT                                   ;
+;       Output: (AL) 00h disable power management               ;
+;                    01h use SMI power management method        ;
+;                    02h use hardware auto power management method
+;                    03h use IRQ based power management         ;
+;               (AH) IRQ level 0 thru 0fh if you have chosen    ;
+;                    IRQ based power management ie. (AL) = 03h  ;
+;       Register destroyed : (EAX),(EDX)                        ;
+; NOTE :                                                        ;
+;  *  Control comes here from smi/irq post.                     ;
+;  *  This is the first hook from smi/irq post.                 ;
+;  *  You can force power management disable here if you need   ;
+;     to do so (eg. cmos setup option says power management     ;
+;     disabled) or You can force SMI power management irrespective
+;     of anything or you can go thru following steps....        ;
+;       Step 1 : If you have cmos setup option for power        ;
+;                management enable/disable and setup option says;
+;                power management disabled, return with (al) = 00
+;                otherwise                                      ;
+;       Step 2 : If (bl) bit 7 set, return with (al) = 01 if    ;
+;                your chipset has support for SMI for the cpu   ;
+;                vendor & cpu number available in (ch) & (cl)   ;
+;                otherwise                                      ;
+;       Step 3 : If chipset supports hardware automatic power   ;
+;                management, return with (al) = 02              ;
+;                otherwise                                      ;
+;       Step 4 : If chipset supports IRQ based power management,;
+;                return with (al) = 03 & (ah) = irq level (0-f) ;
+;                otherwise                                      ;
+;       Step 5 : return (al) = 00 power management disabled     ;
+;  *  PM BIOS data area is not available at this instant...so do;
+;     not try to access any data area.                          ;
+;  *  Implementation of this hook is mandatory.                 ;
+;     Default implementation is 'MOV AL,01H'                    ;
+;                               'RET'                           ;
+;---------------------------------------------------------------;
+
+select_pm_method        proc    near
+        mov     al, q_power_management
+        call    check_cmos_data_far             ; returns 0/1/2 for disabled/enabled/instant-on
+        ret
+
+select_pm_method        endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                         OPEN_SMRAM                            ;
+;---------------------------------------------------------------;
+;       Input : (CL) cpu number                                 ;
+;                       >= 16 IBM-CYRIX cpu (all in decimal)    ;
+;                       12-31 AMD-PLUS cpu (all in decimal)     ;
+;                       0f0h to 0feh USER added NEW CPU         ;
+;                       0ffh means UNKNOWN CPU                  ;
+;               (CH) vendor number                              ;
+;                       00 Intel                                ;
+;                       01 Cyrix                                ;
+;                       02 AMD                                  ;
+;                       03 IBM                                  ;
+;                       04 TI                                   ;
+;                       05 UMC                                  ;
+;               (BL) bit 0 set for 32KB SMRAM                   ;
+;                    bit 0 clear for 64KB or greater SMRAM      ;
+;                    bit 3  bit 2                               ;
+;                      0      0   ... INTEL type SMI            ;
+;                      0      1   ... CYRIX type SMI            ;
+;                      1      0   ... AMD type SMI              ;
+;                      1      1   ... reserved                  ;
+;                    bit 4 set for dual/multiple CPU present    ;
+;                    bit 4 clear for single CPU                 ;
+;                    bit 5 set for IRQ based power management   ;
+;                    bit 5 clear for SMI based power management ;
+;                    bit 6 set for SMI capable CPU              ;
+;                    bit 6 clear for non-SMI CPU                ;
+;               (BH) bit 3-0...no. of secondary CPU present     ;
+;                    bit 7-4...IRQ level for IRQ power management
+;                                                               ;
+;               STACK PRESENT                                   ;
+;       Output: (EDI) absolute address where smi/irq handler    ;
+;                     should be copied to.                      ;
+;               (CY) 00 successful                              ;
+;               (CY) 01 cannot open SMRAM                       ;
+;       Register destroyed : (EAX),(EDX),(EDI)                  ;
+; NOTE :                                                        ;
+;  *  Control comes here from smi/irq post.                     ;
+;  *  This is the second hook from smi/irq post.                ;
+;  *  This routine should setup the chipset to make the smram   ;
+;     available for initialization (shadow readable/writeable   ;
+;     for IRQ based power management).                          ;
+;  *  Return (EDI) as absolute address for example, if smi/irq  ;
+;     handler needs to be copied to 0d000:08000h, return (edi)  ;
+;     as 0d8000h or if smi/irq handler needs to be copied to    ;
+;     0d000:0000h, return (edi) as 0d0000h.                     ;
+;  *  If your chipset requires programming chipset register for ;
+;     proper CPU SMI, do it here.                               ;
+;  *  If your chipset requires programming chipset register for ;
+;     size of SMRAM, do it here.                                ;
+;  *  PM BIOS data area is not available at this instant...so do;
+;     not try to access any data area.                          ;
+;  *  Implementation of this hook is mandatory.                 ;
+;     Default implementation is 'STC'                           ;
+;                               'RET'                           ;
+;---------------------------------------------------------------;
+open_smram      proc    near
+.586p
+	wbinvd
+.386p
+	push	bx
+	and	bl,01001100b
+	cmp	bl,01000100b	; for Cyrix CPU
+	jne	not_Cyrix
+	mov	ah,0c2h
+	call	read_22_23		; Cyrix register
+	or	al,80h
+	call 	write_22_23
+not_Cyrix:
+        mov     ax,068d0h       ;; Open SMRAM at A000:0 - 32KB.
+        call    swrite_pci_byte ;; SMRAM Access Control
+
+	call	enable_a20
+;        mov     ah,064h        	;; Enable A20M#
+;        call    sread_sio_byte
+;        or	al, 00000010b
+;        call    swrite_sio_byte
+
+        mov     edi, 0A0000h    ;; SMI Handler will be copied here...
+        			;; Open SMRAM is successful
+        pop	bx
+.586p
+	wbinvd
+.386p
+	clc
+        ret
+
+open_smram      endp
+
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                          CLOSE_SMRAM                          ;
+;---------------------------------------------------------------;
+;       Input : (BL) bit 0 set for 32KB SMRAM                   ;
+;                    bit 0 clear for 64KB or greater SMRAM      ;
+;                    bit 3  bit 2                               ;
+;                      0      0   ... INTEL type SMI            ;
+;                      0      1   ... CYRIX type SMI            ;
+;                      1      0   ... AMD type SMI              ;
+;                      1      1   ... reserved                  ;
+;                    bit 4 set for dual/multiple CPU present    ;
+;                    bit 4 clear for single CPU                 ;
+;                    bit 5 set for IRQ based power management   ;
+;                    bit 5 clear for SMI based power management ;
+;                    bit 6 set for SMI capable CPU              ;
+;                    bit 6 clear for non-SMI CPU                ;
+;                    bit 7 0 for smi post successful            ;
+;                    bit 7 1 for smi post unsuccessful          ;
+;               (BH) bit 3-0...no. of secondary CPU present     ;
+;                    bit 7-4...IRQ level for IRQ power management
+;               (CH) cpu vendor #                               ;
+;                       00 Intel                                ;
+;                       01 Cyrix                                ;
+;                       02 AMD                                  ;
+;                       03 IBM                                  ;
+;                       04 TI                                   ;
+;                       05 UMC                                  ;
+;               (CL) cpu #                                      ;
+;                       >= 16 IBM-CYRIX cpu (all in decimal)    ;
+;                       12-31 AMD-PLUS cpu (all in decimal)     ;
+;                       0f0h to 0feh USER added NEW CPU         ;
+;                       0ffh means UNKNOWN CPU                  ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EDX)                        ;
+; NOTE :                                                        ;
+;  *  Control comes here from smi/irq post.                     ;
+;  *  If there is any error during smi/irq post, this is going to
+;     be the last hook. Otherwise there might be one or two hooks
+;     after this. If there is no error during smi/irq post, the next
+;     hook is going to be 'GLOBAL_SMI_ENABLE'. If smbase relocation
+;     is required, then 'GENERATE_SW_SMI_FOR_RELOCATION' hook   ;
+;     is going to be after 'GLOBAL_SMI_ENABLE' hook.            ;
+;  *  This routine should setup the chipset to lock the smram   ;
+;     after initialization (For IRQ based power management, make;
+;     the shadow area readable and write protect if no error    ;
+;     during initialization. For any error during initialization,
+;     disable the shadow area used for IRQ based power management)
+;  *  PM BIOS data area is not available at this instant...so do;
+;     not try to access any data area.                          ;
+;  *  Implementation of this hook is mandatory.                 ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+; SPECIAL NOTE FOR INTEL DUAL CPU SUPPORT :                     ;
+;  *  If INTEL P54C DUAL CPU is present and if you need to do   ;
+;     anything for the secondary CPU, you can do it here in     ;
+;     addition to closing SMRAM space.                          ;
+;  *  If (BL) bit 7 is set at this point, do nothing for secondary
+;     CPU, only close the SMRAM space.                          ;
+;  *  If (BL) bit 7 is clear at this point, (DS) & (ES) are     ;
+;     pointing to SMRAM segment. If you want to move some code  ;
+;     to the SMRAM space of secondary CPU, you can do it here.  ;
+;     BUT MAKE SURE YOU DO THAT BEFORE CLOSING SMRAM SPACE.     ;
+;  *  If (BL) bit 7 is clear at this point, core PM bios has    ;
+;     already moved cpu synchronization code in the SMRAM space ;
+;     of the secondary CPUs. If that is what you want, do nothing
+;     for secondary CPUs, only close the SMRAM space.           ;
+;  *  FOR INFORMATION...Let's say there are 4 CPUs in the system.
+;     So total 128KB of SMRAM space is required. 2nd 32KB of    ;
+;     of SMRAM space will be allocated to Boot strap processor  ;
+;     (BSP), 1st 32KB of SMRAM space will be allocated to 1st   ;
+;     secondary processor, 3rd 32KB of SMRAM space will be      ;
+;     allocated to 2nd secondary processor, 4th 32KB of SMRAM   ;
+;     space will be allocated to 3rd secondary processor.       ;
+;     For 2 CPU system, 64KB of SMRAM space is required. BSP    ;
+;     will get upper 32KB of 64KB SMRAM space and the secondary ;
+;     processor will get lower 32KB of 64KB SMRAM space.        ;
+;---------------------------------------------------------------;
+close_smram     proc    near
+.586p
+	wbinvd
+.386p
+        mov     ah,068h        ;; Close SMRAM at E000:0 - 32KB.
+        call    sread_pci_byte
+        and     al,11101111b   ;;disable SMRAM Access control
+        call    swrite_pci_byte
+
+	call	disable_a20
+
+.586p
+	wbinvd
+.386p
+        ret
+
+close_smram     endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                     INIT_CHIPSET_DATA                         ;
+;---------------------------------------------------------------;
+;       Input : (DS) SMRAM segment                              ;
+;               (ES) SMRAM segment                              ;
+;               (CS) SMI code source segment                    ;
+;               (BL) bit 0 set for 32KB SMRAM                   ;
+;                    bit 0 clear for 64KB or greater SMRAM      ;
+;                    bit 3  bit 2                               ;
+;                      0      0   ... INTEL type SMI            ;
+;                      0      1   ... CYRIX type SMI            ;
+;                      1      0   ... AMD type SMI              ;
+;                      1      1   ... reserved                  ;
+;                    bit 4 set for dual/multiple CPU present    ;
+;                    bit 4 clear for single CPU                 ;
+;                    bit 5 set for IRQ based power management   ;
+;                    bit 5 clear for SMI based power management ;
+;                    bit 6 set for SMI capable CPU              ;
+;                    bit 6 clear for non-SMI CPU                ;
+;               (BH) bit 3-0...no. of secondary CPU present     ;
+;                    bit 7-4...IRQ level for IRQ power management
+;               (CH) cpu vendor #                               ;
+;                       00 Intel                                ;
+;                       01 Cyrix                                ;
+;                       02 AMD                                  ;
+;                       03 IBM                                  ;
+;                       04 TI                                   ;
+;                       05 UMC                                  ;
+;               (CL) cpu #                                      ;
+;                       >= 16 IBM-CYRIX cpu (all in decimal)    ;
+;                       12-31 AMD-PLUS cpu (all in decimal)     ;
+;                       0f0h to 0feh USER added NEW CPU         ;
+;                       0ffh means UNKNOWN CPU                  ;
+;               (DI) pointer to chipset data area (CHIPSET_     ;
+;                    CONFIG_AREA in GPM.DAT)                    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EDX),(ESI),(EDI)            ;
+; NOTE :                                                        ;
+;  *  Control comes here from smi/irq post.                     ;
+;  *  This is the third hook from smi/irq post.                 ;
+;  *  The SMRAM is already cleared to 00, so no more zero       ;
+;     initialise is required.                                   ;
+;  *  This routine will initialize the data needed for smi/irq  ;
+;     handler from bios or cmos which is chipset specific.      ;
+;  *  Implementation of this hook is not mandatory.             ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+irq_table               label   byte
+        db      q_irq3_pm_monitor, 3
+        db      q_irq4_pm_monitor, 4
+        db      q_irq5_pm_monitor, 5
+        db      q_irq7_pm_monitor, 7
+        db      q_irq9_pm_monitor, 9
+        db      q_irq10_pm_monitor, 10
+        db      q_irq11_pm_monitor, 11
+;        db      q_irq12_pm_monitor, 12
+        db      q_irq13_pm_monitor, 13
+        db      q_irq14_pm_monitor, 14
+        db      q_irq15_pm_monitor, 15
+irq_table_end   label   byte
+
+timer_value	label	byte
+	db	52 			; 1Min
+	db	103			; 2Mins
+	db	154			; 3Mins
+	db	205			; 4Mins
+	db	01			; 5Mins
+	db	02			; 10Mins
+	db	04			; 20Mins
+	db	06			; 30Mins
+	db	08			; 40Mins
+	db	10			; 50Mins
+	db	12			; 60Mins
+
+init_chipset_data       proc    near
+;-----------------------------------------------;
+;       Set bit 0 of 'MISC_CONF_INFO' if        ;
+;    INSTANT ON support is enabled in setup     ;
+;-----------------------------------------------;
+
+        mov     byte ptr ds:misc_conf_info,00000000b; bit 0...INSTANT support is disabled
+
+;-----------------------------------------------;
+
+;-----------------------------------------------;
+; Set 'GPM_IDE_IDLE_TIMEOUT' based on your setup;
+; question. If it is set to 0ffh, IDE drive's   ;
+; IDLE timer will be inactive. For any other    ;
+; value, IDE drive's IDLE timer will be active. ;
+; The actual time is the value put into 'GPM_   ;
+; IDE_IDLE_TIMEOUT' * 5 in seconds.             ;
+;-----------------------------------------------;
+
+	mov	al,q_ide_time_out
+	call	check_cmos_data_far
+	mov	ah,0ch					; in 5 second units - so multiply with 12 to make minutes
+	mul	ah
+	jnz	@F
+	dec	ax					; disabled
+@@:
+	mov	byte ptr ds:gpm_ide_idle_timeout,al
+
+
+;; Power button	enable
+	mov	al,Q_POWER_BUTTON
+        call    check_cmos_data_far		;
+        mov     byte ptr ds:[power_button_status],al
+
+;; hot key
+	mov	al,q_hotkey
+	call	check_cmos_data_far
+        mov     byte ptr ds:[hot_key_enable_status],al
+
+;; keyboard password
+	mov	al,q_keyboard_password		; if keyboard power on enable?
+	call	check_cmos_data_far
+        mov     byte ptr ds:[keyboard_password_status],al
+
+;; power on by LAN
+;	mov	al,q_lan_on
+;	call	check_cmos_data_far
+;        mov     byte ptr ds:[power_on_by_network],al
+        mov     byte ptr ds:[power_on_by_network],0
+
+;; power on by Ring
+	mov	al,q_ring_on
+	call	check_cmos_data_far
+        mov     byte ptr ds:[power_on_by_ri],al
+
+
+        mov     byte ptr ds:[standby_timer_value],0   ;;default timer is 0
+        mov     byte ptr ds:[suspend_timer_value],0   ;;default timer is 0
+
+	push	bx
+	sub	dx,dx				; Timer Base 5 Mins
+        mov     al, q_power_management          ;
+        call    check_cmos_data_far             ;
+	mov	byte ptr ds:[pm_enable],al
+        jz      skip_timer_init			; jmp if power disable
+
+	mov	bx,offset cgroup:timer_value
+
+        mov     al,q_standby_time_out   ;; Initialize timer register value
+        call    check_cmos_data_far
+	jz	check_suspend_timer
+	cmp	al,05h
+	jae	@f
+	mov	dl,10h				; Timer Base 1.17s
+@@:
+	dec	ax
+	db	2eh  				; CS:
+	xlat
+        mov     byte ptr ds:[standby_timer_value],al    ;; X minutes
+check_suspend_timer:
+        mov     al,q_suspend_time_out   ;; Initialize timer register value
+        call    check_cmos_data_far
+	jz	skip_timer_init
+	cmp	al,05h
+	jae	@f
+	or	dl,40h				; Timer Base 1.17s
+@@:
+	dec	ax
+	db	2eh  				; CS:
+	xlat
+        mov     byte ptr ds:[suspend_timer_value],al    ;; X minutes
+skip_timer_init:
+;; Set Timer Base
+	mov	ah,7ch
+	call	sread_pmu_byte
+	and	al,0fh
+	or	al,dl
+	call	swrite_pmu_byte
+	pop	bx
+
+        mov     al,q_green_pc_monitor_state
+        call    check_cmos_data_far             ;; 0/1/2/3
+        mov     byte ptr ds:[smi_green_pc_monitor_state],al;; standby/suspend/off/reserved
+
+        mov     al,q_video_power_down
+        call    check_cmos_data_far             ;; 0/1/2
+        mov     byte ptr ds:[smi_video_power_down],al  ;; disable/standby/suspend
+
+        mov     al,q_ide_power_down             ;; Initialize drive data area
+        call    check_cmos_data_far             ;; 0/1/2
+        mov     byte ptr ds:[smi_ide_power_down],al    ;; disabel/standby/suspend
+
+;; set wake up irq in ram
+	push	cx
+        mov     si,offset cgroup:irq_table      ;; Initialize masks for suspend
+        mov     cx,(offset cgroup:irq_table_end-offset cgroup:irq_table)/2
+        mov     word ptr ds:[smi_21_a1_wake_mask], 0ffbdh;; IRQ 1/6 Wakeup Always
+        mov	word ptr ds:[smi_21_a1_moni_mask], 0ffbdh;; IRQ 1/6 Monitor Always
+get_irq_loop:
+	db	02eh
+	lodsb						; AL = setup structure
+        call    check_cmos_data_far
+	jz	next_setup_item
+	mov	dl,al
+	db	02eh
+	lodsb
+	dec	si
+	movzx	di,al
+	test	dl,1
+	jz	check_wakeup
+	btr 	word ptr ds:[smi_21_a1_moni_mask],di
+check_wakeup:
+	test	dl,2
+	jz	next_setup_item
+        btr     word ptr ds:[smi_21_a1_wake_mask], di
+next_setup_item:
+	inc	si
+	loop	get_irq_loop
+	pop	cx
+;; for modem wake up from irq
+	mov	al,q_modem_irq
+        call    check_cmos_data_far
+        jz	no_modem_irq_to_wake_up
+        movzx	di,al				; IRQ number
+        btr     word ptr ds:[smi_21_a1_wake_mask], di
+no_modem_irq_to_wake_up:
+; Initialize IRQ12 mask
+	push	ds
+	push	40h
+	pop	ds					; change to 400 data area
+	test	byte ptr ds:[10h],04h			; read 40:10 check bit 2
+	pop	ds					; restore data segment to SMRAM
+	jz	ps2_mouse_absent
+	and 	byte ptr ds:[smi_21_a1_moni_mask+1],0efh
+        and     byte ptr ds:[smi_21_a1_wake_mask+1],0efh
+ps2_mouse_absent:
+
+	mov	al,Q_VIDEO_ACCESS
+	call	check_cmos_data_far
+	mov	ds:[video_access],al
+
+	mov	al,Q_RESUME_BY_RTC
+	call	check_cmos_data_far
+	mov	ds:[rtc_alarm],al
+
+	mov	al,Q_RESUME_BY_RTC_DATE
+	call	check_cmos_data_far
+	mov	ds:[rtc_alarm_date],al
+
+	mov	al,Q_RESUME_BY_RTC_HOUR
+	call	check_cmos_data_far
+	mov	ds:[rtc_alarm_hour],al
+
+	mov	al,Q_RESUME_BY_RTC_MINUTE
+	call	check_cmos_data_far
+	mov	ds:[rtc_alarm_minute],al
+
+	mov	al,Q_RESUME_BY_RTC_SECOND
+	call	check_cmos_data_far
+	mov	ds:[rtc_alarm_second],al
+
+	mov	al,Q_USB_LEGACY_ENABLE
+	call	check_cmos_data_far
+	mov	byte ptr ds:[legacy_usb],al
+
+        mov     byte ptr ds:[pmu_state],0		; force set to 0
+
+        mov     byte ptr ds:[usb_interrupt_processing],0
+
+;; APM 1.2
+	mov	byte ptr ds:[standby_timeout],0
+	mov	al,q_modem_irq
+	call	check_cmos_data_far
+	mov	ds:[modem_irq],al
+	mov	byte ptr ds:[modem_ring],0h
+	jz	@f
+	mov	byte ptr ds:[modem_ring],0ffh
+@@:
+
+	mov	ah,03h				; Enable Power Button
+	call	read_smi_base
+	and	al,not 1
+	call	write_smi_base
+
+        mov     al, q_power_management
+        call    check_cmos_data_far             ; returns 0/1/2 for disabled/enabled/instant-on
+        jz	disable_power_button_action
+
+	mov	ah,03h				; Enable Power Button
+	call	read_smi_base
+	or	al,1
+	call	write_smi_base
+disable_power_button_action:
+
+        ret
+
+init_chipset_data       endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       INIT_PM_REGISTERS                       ;
+;---------------------------------------------------------------;
+;       Input : (DS) SMRAM segment                              ;
+;               (ES) SMRAM segment                              ;
+;               (CS) SMI code source segment                    ;
+;               (BL) bit 0 set for 32KB SMRAM                   ;
+;                    bit 0 clear for 64KB or greater SMRAM      ;
+;                    bit 3  bit 2                               ;
+;                      0      0   ... INTEL type SMI            ;
+;                      0      1   ... CYRIX type SMI            ;
+;                      1      0   ... AMD type SMI              ;
+;                      1      1   ... reserved                  ;
+;                    bit 4 set for dual/multiple CPU present    ;
+;                    bit 4 clear for single CPU                 ;
+;                    bit 5 set for IRQ based power management   ;
+;                    bit 5 clear for SMI based power management ;
+;                    bit 6 set for SMI capable CPU              ;
+;                    bit 6 clear for non-SMI CPU                ;
+;               (BH) bit 3-0...no. of secondary CPU present     ;
+;                    bit 7-4...IRQ level for IRQ power management
+;               (CH) cpu vendor #                               ;
+;                       00 Intel                                ;
+;                       01 Cyrix                                ;
+;                       02 AMD                                  ;
+;                       03 IBM                                  ;
+;                       04 TI                                   ;
+;                       05 UMC                                  ;
+;               (CL) cpu #                                      ;
+;                       >= 16 IBM-CYRIX cpu (all in decimal)    ;
+;                       12-31 AMD-PLUS cpu (all in decimal)     ;
+;                       0f0h to 0feh USER added NEW CPU         ;
+;                       0ffh means UNKNOWN CPU                  ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EDX),(ESI),(EDI)            ;
+; NOTE :                                                        ;
+;  *  Control comes here from smi/irq post.                     ;
+;  *  This is the fourth hook from smi/irq post.                ;
+;  *  This routine should program the chipset registers pertaining
+;     to power management  with bcp selected values or cmos     ;
+;     setup values. Do not enable smi/irq sources or global smi/;
+;     irq enable at this point as the smi/irq post is not over yet.
+;     Enable smi/irq sources or gobal smi/irq enable in the hook;
+;     'GLOBAL_SMI_ENABLE'.                                      ;
+;  *  Implementation of this hook is mandatory.                 ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+init_pm_registers       proc    near
+	push	ebx
+;;;=================================================
+;;  power on function support here
+;;  the should be set even if power manager disable
+;;;=================================================
+;;;  Set First reload timer IRQ (all IRQ except IRQ0)
+	mov	ah,0
+	call	timer_monitor_irq
+
+	mov	ah,1
+	call	timer_monitor_irq
+;;=================================================
+;;  Set Suspend(Timer0) & Standby(Timer1) register
+;;=================================================
+;; Standby timer
+        mov     al,byte ptr ds:[standby_timer_value]
+        mov     ah,07ah
+        call    swrite_pmu_byte
+;; Suspend timer
+        mov     al,byte ptr ds:[suspend_timer_value]
+        mov     ah,079h
+        call    swrite_pmu_byte
+
+;;Timer 0 Reload Event control register
+        mov     ah,040h
+        mov     ebx,21100080h			; Keyboard/IRQ/A&B Seg/AGP
+	test	byte ptr ds:[video_access],1
+	jnz	set_monitor_event
+	btr	ebx,20				; Keyboard/IRQ/AGP
+set_monitor_event:
+        call    swrite_pmu_dword
+
+;;Timer 1 Reload Event control register
+        mov     ah,044h
+        call    swrite_pmu_dword		;
+
+;;Wake Up Event 0 Control Register
+        mov     ah,050h
+        mov	ebx,01900280h			; IRQ/Ring/A&B Seg/ExtSMI/AGP
+	test	byte ptr ds:[video_access],2
+	jnz	set_wakeup_event
+	btr	ebx,20				; IRQ/Ring/ExtSMI/AGP
+set_wakeup_event:
+        call    swrite_pmu_dword
+
+;;Wake Up Event 1 Control Register
+        mov     ah,054h
+        call    swrite_pmu_dword
+
+; Power Button immediately action
+	mov	ah,13h
+	call	read_smi_base
+	or	al,10h
+	call	write_smi_base
+
+;;=================================================
+;;  		Open LM78
+;;=================================================
+
+;        mov     bx,offset cgroup:LM78_init_begin
+;        mov     cx,((offset LM78_init_end - offset LM78_init_begin) / 2)
+;cp_init_LM78:
+;        mov     ah,byte ptr cs:[bx]     ;; Get register index
+;        mov     al,byte ptr cs:[bx+1]   ;; Get register data
+;        call	write_lm78_byte
+;        add     bx,02h                  ;; Point to next table entry
+;        loop    cp_init_LM78
+
+;;=================================================
+;;  Get CMOS check standby or suspend or none
+;;=================================================
+;; Get CMOS value suspend or standy mode	;
+
+        mov     ah,060h         	        ; disable external SMI
+        call    sread_pmu_byte  	        ;
+        and      al,not 40h    	        ;
+        call    swrite_pmu_byte 	        ;
+
+	test	byte ptr ds:[pm_enable],01h
+	jz	short init_pm_done
+
+        mov     ah,060h         	        ; enable external SMI
+        call    sread_pmu_byte  	        ;
+        or      al,01000000b    	        ;
+        call    swrite_pmu_byte 	        ;
+
+	call	enable_timer
+init_pm_done:
+        pop	ebx
+        ret
+
+init_pm_registers       endp
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       GLOBAL_SMI_ENABLE                       ;
+;---------------------------------------------------------------;
+;       Input : (BL) bit 0 set for 32KB SMRAM                   ;
+;                    bit 0 clear for 64KB or greater SMRAM      ;
+;                    bit 1 set for smbase requires relocation   ;
+;                    bit 1 clear for smbase relocation not reqd.;
+;                    bit 3  bit 2                               ;
+;                      0      0   ... INTEL type SMI            ;
+;                      0      1   ... CYRIX type SMI            ;
+;                      1      0   ... AMD type SMI              ;
+;                      1      1   ... reserved                  ;
+;                    bit 4 set for dual/multiple CPU present    ;
+;                    bit 4 clear for single CPU                 ;
+;                    bit 5 set for IRQ based power management   ;
+;                    bit 5 clear for SMI based power management ;
+;                    bit 6 set for SMI capable CPU              ;
+;                    bit 6 clear for non-SMI CPU                ;
+;                    bit 7 0 means smi init called during late post
+;                          1 means smi init called during early post
+;               (BH) bit 3-0...no. of secondary CPU present     ;
+;                    bit 7-4...IRQ level for IRQ power management
+;               (CH) cpu vendor #                               ;
+;                       00 Intel                                ;
+;                       01 Cyrix                                ;
+;                       02 AMD                                  ;
+;                       03 IBM                                  ;
+;                       04 TI                                   ;
+;                       05 UMC                                  ;
+;               (CL) cpu #                                      ;
+;                       >= 16 IBM-CYRIX cpu (all in decimal)    ;
+;                       12-31 AMD-PLUS cpu (all in decimal)     ;
+;                       0f0h to 0feh USER added NEW CPU         ;
+;                       0ffh means UNKNOWN CPU                  ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EDX),(ESI),(EDI)            ;
+; NOTE :                                                        ;
+;  *  Control comes here from smi/irq post.                     ;
+;  *  This is next hook to 'CLOSE_SMRAM' if smi/irq post was    ;
+;     successful. If smbase relocation is not required, then    ;
+;     this is going to be the last hook in smi/irq post.        ;
+;  *  This routine should program the chipset registers for     ;
+;     enabling smi/irq sources and/or global smi/irq enable.    ;
+;  *  PM BIOS data area is not available at this instant...so do;
+;     not try to access any data area.                          ;
+;  *  Implementation of this hook is mandatory.                 ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+; SPECIAL NOTE :                                                ;
+;  * This hook may be called twice during post as 'init_smram'  ;
+;    may be called twice, once during early post and once during;
+;    late post to support USB kb/mouse device. Bit 7 of (BL)    ;
+;    in input has that information.                             ;
+;  * During early post 'init_smram', 'init_chipset_data' &      ;
+;    'init_pm_registers' hooks are not called.                  ;
+;  * When this hook is called during early post, DO NOT enable  ;
+;    any SMI sources, only program the chipset gobal smi bit so ;
+;    that software SMI can be generated for relocation. You may ;
+;    have to additionally program the software SMI enable bit   ;
+;    depending on the chipset.                                  ;
+;---------------------------------------------------------------;
+global_smi_enable       proc    near
+	push	ebx
+
+	mov     ah,064h				; Clear SMI REQUEST status
+        call    sread_pmu_dword
+        call    swrite_pmu_dword
+	pop	ebx
+	mov	ah,30h				; Clear LEGACY status
+	call	read_smi_base
+	call	write_smi_base
+
+; fixed for PM timer doesn't want to beging to count
+;	mov	ax,3500h+SMI_COMMAND_DI	; Set SMI COMMAND DISABLE value
+;	call	write_smi_base
+
+	mov	ah,31h				; enable SMI
+	call	read_smi_base			; enable SMI COMMAND Disable
+	or	al,30h
+;	call	check_sb_revision
+;	jnz	short @f
+;	or	al,08h				; enable SMI COMMAND Enable
+;@@:
+	call	write_smi_base
+
+;;=======================================
+;; enable for power button
+;;=======================================
+	mov	ah,01h				; Clear Power Button Status
+	call	read_smi_base
+	call	write_smi_base
+
+	mov	ah,03h				; Enable Power Button
+	call	read_smi_base
+	and	al,not 1
+	call	write_smi_base
+        mov     al, q_power_management
+        call    check_cmos_data_far             ; returns 0/1/2 for disabled/enabled/instant-on
+        jz	disable_power_button_action
+	mov	ah,03h				; Enable Power Button
+	call	read_smi_base
+	or	al,1
+	call	write_smi_base
+disable_power_button_action:
+
+	mov	ah,31h				; Legacy PMU enable bit enable
+	call	read_smi_base
+	or	al,02h
+	call	write_smi_base
+
+        ret
+
+global_smi_enable       endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;               GENERATE_SW_SMI_FOR_RELOCATION                  ;
+;---------------------------------------------------------------;
+;       Input : (BL) bit 0 set for 32KB SMRAM                   ;
+;                    bit 0 clear for 64KB or greater SMRAM      ;
+;                    bit 1 set for smbase requires relocation   ;
+;                    bit 1 clear for smbase relocation not reqd.;
+;                    bit 3  bit 2                               ;
+;                      0      0   ... INTEL type SMI            ;
+;                      0      1   ... CYRIX type SMI            ;
+;                      1      0   ... AMD type SMI              ;
+;                      1      1   ... reserved                  ;
+;                    bit 4 set for dual/multiple CPU present    ;
+;                    bit 4 clear for single CPU                 ;
+;                    bit 5 set for IRQ based power management   ;
+;                    bit 5 clear for SMI based power management ;
+;                    bit 6 set for SMI capable CPU              ;
+;                    bit 6 clear for non-SMI CPU                ;
+;               (BH) bit 3-0...no. of secondary CPU present     ;
+;                    bit 7-4...IRQ level for IRQ power management
+;               (CH) cpu vendor #                               ;
+;                       00 Intel                                ;
+;                       01 Cyrix                                ;
+;                       02 AMD                                  ;
+;                       03 IBM                                  ;
+;                       04 TI                                   ;
+;                       05 UMC                                  ;
+;               (CL) cpu #                                      ;
+;                       >= 16 IBM-CYRIX cpu (all in decimal)    ;
+;                       12-31 AMD-PLUS cpu (all in decimal)     ;
+;                       0f0h to 0feh USER added NEW CPU         ;
+;                       0ffh means UNKNOWN CPU                  ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EDX),(ESI),(EDI)            ;
+; NOTE :                                                        ;
+;  *  Control comes here from smi post.                         ;
+;  *  If IRQ based power management is selected, then control   ;
+;     never comes here.                                         ;
+;  *  This is next hook to 'GLOBAL_SMI_ENABLE' if smi post was  ;
+;     successful. This is the last hook in smi post.            ;
+;  *  This routine should program the chipset registers for     ;
+;     generating software smi for smbase relocation. You have to;
+;     have support for detecting this source in runtime smi     ;
+;     handler. In the runtime smi handler, the hook 'GET_SMI_   ;
+;     SOURCE' should return (BX) = 0ch to identify software smi ;
+;     for smbase relocation if you identify that source.        ;
+;  *  PM BIOS data area is not available at this instant...so do;
+;     not try to access any data area.                          ;
+;  *  Implementation of this hook is mandatory if relocation is ;
+;     required for the chipset you are porting. Relocation might;
+;     be required for INTEL and AMD PLUS CPUs. If for INTEL & AMD
+;     PLUS CPU, your chipset does not support mapping of SMRAM  ;
+;     to 3000:0000h for 64KB SMRAM, you need reloaction of smbase
+;     If for INTEL & AMD PLUS CPUs, your chipset does not support
+;     mapping of SMRAM to 3000:8000h for 32KB SMRAM, you need   ;
+;     relocation of smbase.                                     ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+generate_sw_smi_for_relocation  proc    near
+	mov	si,'RL'  	            ; signature for software SMI for Relocation base address
+	mov	al,SMI_COMMAND_DI		    ;
+        mov     dx,MKF_PM_BASE_ADDRESS+035h ;  Hot Key polarity
+;	call	check_sb_revision
+;	jnz	short @f
+;	mov	dl,32h
+;@@:
+        out     dx,al                       ;
+        ret
+
+generate_sw_smi_for_relocation  endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                  GET_MAPPED_SMI_SEG_AND_SIZE                  ;
+;---------------------------------------------------------------;
+;       Input : (CL) cpu number                                 ;
+;                       >= 16 IBM-CYRIX cpu (all in decimal)    ;
+;                       12-31 AMD-PLUS cpu (all in decimal)     ;
+;                       0f0h to 0feh USER added NEW CPU         ;
+;                       0ffh means UNKNOWN CPU                  ;
+;               (CH) vendor number                              ;
+;                       00 Intel                                ;
+;                       01 Cyrix                                ;
+;                       02 AMD                                  ;
+;                       03 IBM                                  ;
+;                       04 TI                                   ;
+;                       05 UMC                                  ;
+;               (BL) bit 3  bit 2                               ;
+;                      0      0   ... INTEL type SMI            ;
+;                      0      1   ... CYRIX type SMI            ;
+;                      1      0   ... AMD type SMI              ;
+;                      1      1   ... reserved                  ;
+;                    bit 4 set for dual/multiple CPU present    ;
+;                    bit 4 clear for single CPU                 ;
+;                    bit 5 set for IRQ based power management   ;
+;                    bit 5 clear for SMI based power management ;
+;                    bit 6 set for SMI capable CPU              ;
+;                    bit 6 clear for non-SMI CPU                ;
+;               (BH) bit 3-0...no. of secondary CPU present     ;
+;                    bit 7-4...IRQ level for IRQ power management
+;                                                               ;
+;               STACK PRESENT                                   ;
+;       Output: FOR SMI based power management.....             ;
+;               (EDI) smi segment size                          ;
+;                       00020000h for 128KB SMRAM               ;
+;                       00010000h for 64KB SMRAM (default)      ;
+;                       00008000h for 32KB SMRAM                ;
+;                       (Should be greater than 32KB and multiple
+;                        of 32KB. For INTEL APIC MULTIPROCESSOR ;
+;                        system, each processor needs 32KB of   ;
+;                        SMRAM space.)                          ;
+;               (AX) mapped SMI segment for INTEL/AMD PLUS CPU  ;
+;                       0A000h (default)                        ;
+;               (AX)+ mapped SMI segment for CYRIX/TI CPU       ;
+;                       0A000h (default)                        ;
+;               (SI) mapped SMI segment for IBM/AMD non-PLUS/UMC;
+;                       6000h (default)                         ;
+;       Output: FOR IRQ based power management.....             ;
+;               (EDI) read/write shadow area size               ;
+;                       00008000h for 32KB SHADOW area          ;
+;                       (always use 32KB shadow area for IRQ    ;
+;                        based power management)                ;
+;               (AX) shadow segment used for IRQ based power    ;
+;                    management (eg. 0e000h/0e800h etc.)        ;
+;                    It is suggested to use 0e800h instead of   ;
+;                    having user cmos setup option.             ;
+;                    ALWAYS KEEP WRITE BACK CACHING DISABLED FOR;
+;                    IRQ SHADOW AREA.                           ;
+;       Register destroyed : (EAX),(EDX),(SI),(EDI)             ;
+; NOTE :                                                        ;
+;  *  Control comes here from smi/irq post.                     ;
+;  *  This is in between first and second hook from smi/irq post.
+;     This is done this way as this hook probably will be removed
+;  *  Return the informations in (EAX),(SI),(EDI) as described  ;
+;     above. The informations are based on chipset support and  ;
+;     in some cases based on cmos setup options.                ;
+;  *  If your chipset does not support some of the cpu(s), return
+;     the default information.                                  ;
+;  *  If your chipset restricts SMRAM size to 32KB instead of   ;
+;     64KB, and if for INTEL 'S' series CPU it maps SMRAM to    ;
+;     3000:8000h, set INTEL CPU SMI code segment to 3800h.      ;
+;  *  If your chipset restricts SMRAM size to 32KB, you can't   ;
+;     support multiprocessor SMI.                               ;
+;  *  If your chipset supports more than 64KB SMRAM, use 64KB   ;
+;     only for single/dual processor system. For more than 2    ;
+;     processor system, return the size based on 32KB for each  ;
+;     processor.                                                ;
+;  *  PM BIOS data area is not available at this instant...so do;
+;     not try to access any data area.                          ;
+;  *  Implementation of this hook is mandatory.                 ;
+;     Example code is :                                         ;
+;       MOV AX,0a000H   ; CYRIX/TI CPU (default)                ;
+;       SHL EAX,16      ; in (ax)+                              ;
+;       MOV AX,0a000H   ; INTEL/AMD PLUS CPU (default)          ;
+;       MOV SI,6000H    ; IBM/AMD non-PLUS CPU (default)        ;
+;       MOV EDI,00010000H; smi segment size as 64KB (default)   ;
+;       RET                                                     ;
+;---------------------------------------------------------------;
+
+get_mapped_smi_seg_and_size     proc    near
+
+        mov     ax,0a000h                       ; mapped SMI segment for CYRIX/TI CPU (default)
+        shl     eax,16                          ; in (ax)+
+        mov     ax,0a000h                       ; mapped SMI segment for INTEL/AMD PLUS CPU (default)
+        mov     si,6000h                        ; mapped SMI segment for IBM/AMD non-PLUS CPU (default)
+        mov     edi,00010000h                   ; smi segment size as 64KB (default)
+        ret
+
+get_mapped_smi_seg_and_size     endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       SETUP_HW_AUTO_PM                        ;
+;---------------------------------------------------------------;
+;       Input : (CL) cpu number                                 ;
+;                       >= 16 IBM-CYRIX cpu (all in decimal)    ;
+;                       12-31 AMD-PLUS cpu (all in decimal)     ;
+;                       0f0h to 0feh USER added NEW CPU         ;
+;                       0ffh means UNKNOWN CPU                  ;
+;               (CH) vendor number                              ;
+;                       00 Intel                                ;
+;                       01 Cyrix                                ;
+;                       02 AMD                                  ;
+;                       03 IBM                                  ;
+;                       04 TI                                   ;
+;                       05 UMC                                  ;
+;                                                               ;
+;               (BH) bit 3  bit 2...valid if SMI support CPU    ;
+;                      0      0   ... INTEL type SMI            ;
+;                      0      1   ... CYRIX type SMI            ;
+;                      1      0   ... AMD type SMI              ;
+;                      1      1   ... reserved                  ;
+;                    bit 4 set for dual/multiple CPU present    ;
+;                    bit 4 clear for single CPU                 ;
+;                    bit 6 set for SMI capable CPU              ;
+;                    bit 6 clear for non-SMI CPU                ;
+;                                                               ;
+;               (BL) bit 7 set, cpu has SMI support             ;
+;                    bit 3-0...no. of secondary CPU present     ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL except (DS),(ES),(EBP)         ;
+; NOTE :                                                        ;
+;  *  Control comes here from smi post only if you have selected;
+;     automatic hardware power management in 'SELECT_PM_METHOD' ;
+;     hook.                                                     ;
+;  *  You should program the chipset for automatic hardware     ;
+;     power management.                                         ;
+;  *  PM BIOS data area is not available at this instant...so do;
+;     not try to access any data area.                          ;
+;  *  Implement this hook only if you are supporting automatic  ;
+;     hardware power management.                                ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+setup_hw_auto_pm        proc    near
+
+        ret
+
+setup_hw_auto_pm        endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+
+;Subttl.        Include file for GREEN PC support SMI/IRQ code...GPMSMI.CSS...GENERIC
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;       RUN TIME CHIPSET SPECIFIC SMI/IRQ HANDLER CODE          ;
+;       RUN TIME CHIPSET SPECIFIC SMI/IRQ HANDLER CODE          ;
+;       RUN TIME CHIPSET SPECIFIC SMI/IRQ HANDLER CODE          ;
+;       RUN TIME CHIPSET SPECIFIC SMI/IRQ HANDLER CODE          ;
+;---------------------------------------------------------------;
+
+;;      public  get_smi_source                  ;
+;;      public  clear_smi                       ;
+;;      public  doze_handler                    ;
+;;      public  sleep_handler                   ;
+;;      public  suspend_handler                 ;
+;;      public  apm_handler                     ;
+;;      public  device_handler                  ;
+;;      public  io_trap_handler                 ;
+;;      public  chipset_handler                 ;
+;;      public  resume0_handler                 ;
+;;      public  resume1_handler                 ;
+;;      public  sw_smi_handler                  ;
+;;      public  lb_handler                      ;
+;;      public  vlb_handler                     ;
+
+;;      public  instant_on_handler              ;
+
+;;      public  write_enable_irq_shadow         ;
+;;      public  write_protect_irq_shadow        ;
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                      GET_SMI_SOURCE                           ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: (BX) SMI source & defined as....                ;
+;               (BX) = 00h NO ACTIVE SMI SOURCE                 ;
+;               (BX) = 01h DOZE TIMER TIMEOUT                   ;
+;               (BX) = 02h SLEEP TIMER TIMEOUT                  ;
+;               (BX) = 03h SUSPEND TIMER TIMEOUT                ;
+;               (BX) = 04h PERIPHERAL TIMER TIMEOUT             ;
+;                       (CX) = 01h DEVICE 0                     ;
+;                       (CX) = 02h DEVICE 1                     ;
+;                       (CX) = 04h DEVICE 2                     ;
+;                       (CX) = 08h DEVICE 3                     ;
+;                       (CX) = 10h DEVICE 4                     ;
+;                       (CX) = 20h DEVICE 5                     ;
+;                       (CX) = 40h DEVICE 6                     ;
+;                       (CX) = 80h DEVICE 7                     ;
+;               (BX) = 05h APM CALL                             ;
+;               (BX) = 06h SOFTWARE SMI                         ;
+;               (BX) = 07h DEVICE I/O TRAP                      ;
+;                       (CX) = 01h DEVICE 0                     ;
+;                       (CX) = 02h DEVICE 1                     ;
+;                       (CX) = 04h DEVICE 2                     ;
+;                       (CX) = 08h DEVICE 3                     ;
+;                       (CX) = 10h DEVICE 4                     ;
+;                       (CX) = 20h DEVICE 5                     ;
+;                       (CX) = 40h DEVICE 6                     ;
+;                       (CX) = 80h DEVICE 7                     ;
+;               (BX) = 08h CHIPSET HOOK                         ;
+;                       (CX) = sub functions for chipset hook   ;
+;                              defined by the chipset code      ;
+;               (BX) = 09h RESUME0                              ;
+;               (BX) = 0Ah LOW BATTERY                          ;
+;               (BX) = 0Bh VERY LOW BATTERY                     ;
+;               (BX) = 0Ch SOFTWARE SMI FOR SMBASE RELOCATION.  ;
+;               (BX) = 0Dh NEW ECC MEMORY SCRUBBING SMI         ;
+;               (BX) = 0Eh NEW USB INITIALIZATION SMI           ;
+;               (BX) = 0Fh NEW USB SMI                          ;
+;               (BX) = 10h NEW SPECIAL 00 SMI (FUTURE USE)      ;
+;               (BX) = 11h NEW SPECIAL 01 SMI (FUTURE USE)      ;
+;               (BX) = 12h RESUME1                              ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  Control comes here from the very beginning of smi/irq handler.
+;     This is the first chipset hook from smi/irq handler.      ;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  For SMI based power management, all registers of cpu_gen_ ;
+;     purpose_reg_entry structure are available at this point   ;
+;     and also in all the smi source handler.                   ;
+;     For IRQ based power management, at this point and also in ;
+;     all the irq source handler, only EFLAGS and CR0 registers ;
+;     of cpu_gen_purpose_reg_entry structure are available. For ;
+;     software IRQ, additionally (EBX),(ECX),(ESI),(EDI) & (EBP);
+;     of cpu_gen_purpose_reg_entry structure are available.     ;
+;  *  It should return the smi/irq source.                      ;
+;  *  Implementation of this hook is mandatory.                 ;
+;     Default implementation is 'XOR BX,BX'                     ;
+;                               'RET'                           ;
+;---------------------------------------------------------------;
+get_smi_source  proc    near
+;-----------------------------------------------;
+;       USE THE FOLLOWING CODE IN BLOCK TO      ;
+;       HANDLE A BUG IN INTEL P54C CPU.         ;
+;     THE BUG IS FIXED IN STEP 3 OF THE CPU     ;
+;-----------------------------------------------;
+
+        mov     dword ptr ds:smi_idt_descriptor,000003ffh
+        mov     dword ptr ds:smi_idt_descriptor+4,00000000h
+        lidt    fword ptr ds:smi_idt_descriptor ;
+
+.586p
+        mov     dx,0cf8h
+        in      eax,dx
+        mov     ds:[pci_cf8_register],eax       ;save PCI CF8h
+.486p
+	call	enable_a20
+;;;;;
+;;;;; For Power Button quick exit
+;;;;;
+
+	mov	ah,03h				; Read PM Enable
+	call	read_smi_base
+	mov	dl,al
+	mov	ah,01h				; Read PM Status
+	call	read_smi_base
+	and	al,dl
+        test	al,01h
+        jz	power_button_check_done
+
+
+;@@:						; make sure thta status is clear
+;	call	write_smi_base
+;	call	read_smi_base
+;	test	al,01h
+;	jnz	short @b
+	call	prepare_for_shutdown
+
+        test    byte ptr ds:[power_button_status],01
+	jnz	short extsmi
+	call	soft_off
+
+power_button_check_done:
+;; get SMI Event
+	mov     ah,060h				; get SMI request
+        call    sread_pmu_dword			;
+	push	ebx
+	mov     ah,064h				; get SMI enable
+        call    sread_pmu_dword			;
+	pop	eax
+ 	and	eax,ebx				;
+;;;;;
+;;;;; check External SMI (bit6)
+;;;;;
+        test 	al,40h
+        jz      check_extsmi_done
+        mov	ah,14h
+@@:        					; ensure that status is clear
+        call	read_smi_base
+        test	al,01h
+        jz	short extsmi
+        call	write_smi_base
+        jmp	short @b
+extsmi:
+
+	mov	cx,3fffh
+	call	pm_fixed_delay
+
+	sub	bx,bx
+
+; Test if APM connected
+	test	byte ptr ds:[apm_connection_info],(apm_real_mode_connect_est or apm_16bit_mode_connect_est or apm_32bit_mode_connect_est)
+	jz	EXTSMI_APM_not_connected
+
+	test	byte ptr ds:[apm_state+apm_sys_state],pm_engaged_by_apm
+	jz	EXTSMI_APM_not_connected		; connect but disengaged - take same action as not connected
+
+;; when APM connected and DOS disconnected
+	mov	ah,01h
+@@:						; make sure thta status is clear
+	call	write_smi_base
+	call	read_smi_base
+	test	al,01h
+	jnz	short @b
+
+;        mov	ah,14h
+;@@:        					; ensure that status is clear
+;        call	read_smi_base
+;        test	al,01h
+;        jz	short extsmi
+;        call	write_smi_base
+;        jmp	short @b
+;extsmi:
+
+; Check APM BIOS version
+	test	byte ptr ds:[apm_connection_info],apm_bios_active_ver_above_v10
+	jnz	set_v11_user_request
+
+; Post APM V1.0 event and exit
+	or	word ptr ds:[pending_apm_event],sys_suspend_req_bit
+	jmp	short extsmidone
+
+; Post APM V1.1 event and exit
+set_v11_user_request:
+	or	word ptr ds:[pending_apm_event],user_sys_suspend_req_bit  ; 1000000000b
+	jmp	short extsmidone
+
+EXTSMI_APM_not_connected:
+	mov	bx,03h					; suspend request
+extsmidone:
+	ret
+
+; EXTSMI# path end
+;-----------------
+check_extsmi_done:
+	bt	eax,18
+	jnc	short not_10bit_io_trap_smi
+        mov     esi, dword ptr ds:[cpu_gen_purpose_reg_entry + reg_esi]
+        cmp     si,'AP'                         ;; check if APM call
+        jnz	short not_10bit_io_trap_smi
+        mov     bx,05h                          ;; APM SMI code
+	ret
+not_10bit_io_trap_smi:
+;;=================================================
+;;  Set Wake Up Event 0 & 1 register
+;;=================================================
+;;	mov     bx,ds:[smi_intr_mask_save_area]	; (bx) = saved mask for master & slave
+;-----------------------------------------------;
+
+        xor     bx,bx           ;; default...no active SMI/IRQ source
+;; Check Legacy Event
+	mov	ah,31h				; Read Legacy Enable
+	call	read_smi_base
+	mov	dl,al
+	mov	ah,30h				; Read Legacy Status
+	call	read_smi_base
+        and	al,dl
+	test	al,40h				;
+	jz	check_smi_command		; Br, if not USB event
+        mov     bx,0fh
+        mov     byte ptr ds:[usb_interrupt_processing],1
+        ret
+check_smi_command:
+
+	mov	dl,10h
+	test	al,dl				;
+	jz	not_sw_usb_smi			;  if NOT SOFT SMI event
+
+;------------------------------------------------
+;       check soft smi
+;------------------------------------------------
+check_soft_smi:
+	test	al,20h
+	jz	not_sw_usb_smi
+
+;; Get ESI - signature for software SMI
+        mov     bx,05h                          ;; APM SMI code
+        mov     esi, dword ptr ds:[cpu_gen_purpose_reg_entry + reg_esi]
+        cmp     si,'AP'                         ;; check if APM call
+        je      softsmidone
+
+
+;; Check relocation SM BASE
+        mov     bx,0Ch                          ;; APM SMI code
+        cmp     si,'RL'                         ;; check if APM call
+        je      softsmidone
+        mov     bx,0eh
+        cmp     si,'SB'
+        je      softsmidone
+
+							; (CORE0221+)>
+if (MKF_GPNV_SUPPORT) and (MKF_GPNV_FLASH)
+	mov	ax,word ptr ds:[cpu_gen_purpose_reg_entry+reg_eax+2]
+	mov	cx,ax					; CX = subfunction 'GP'
+	cmp	ax,'GP'					; from GPNV ?
+	jne	not_gpnv_smi				; no..
+	mov	al,ds:[misc_proc_smi_info]
+	and	al,smi_type_mask			; bit 3:2 = SMI type
+	jnz	not_intel				; nz - not Intel type SMI
+	mov	ax,cs:[0ffb4h]				; get DS from dump area
+	mov	dx,cs:[0ffa8h]				; get ES from dump area
+	jmp	short get_common_ds_es
+not_intel:
+	cmp	al,smi_type_cyrix			; Cyrix type SMI?
+	jne	not_cyrix				; no..
+	mov	ax,ds:[temp_cpu_dump_ds_sel_crx_ti]
+	mov	dx,ds:[temp_cpu_dump_es_sel_crx_ti]
+	jmp	get_common_ds_es
+not_cyrix:
+;;	cmp	al,smi_type_amd
+;;	jne	no_smi_type
+	jmp	short no_smi_type			; AMD type SMI (non-plus 386/486) are not supported right now
+get_common_ds_es:
+	mov	word ptr ds:[reg_ds],ax
+	mov	word ptr ds:[reg_es],dx
+;; move from chipset handle
+;	jmp	get_smi_source_exit
+	cmp	cx,'GP'
+	jne	not_gpnv
+	push	ds
+	mov 	eax,dword ptr ds:[cpu_gen_purpose_reg_entry+reg_eax]
+	mov 	ebx,dword ptr ds:[cpu_gen_purpose_reg_entry+reg_ebx]
+	mov 	ecx,dword ptr ds:[cpu_gen_purpose_reg_entry+reg_ecx]
+	mov 	edx,dword ptr ds:[cpu_gen_purpose_reg_entry+reg_edx]
+	mov 	edi,dword ptr ds:[cpu_gen_purpose_reg_entry+reg_edi]
+	mov 	esi,dword ptr ds:[cpu_gen_purpose_reg_entry+reg_esi]
+	mov 	ebp,dword ptr ds:[cpu_gen_purpose_reg_entry+reg_ebp]
+	mov	es,word ptr ds:[reg_es]
+	mov	ds,word ptr ds:[reg_ds]
+	shr	edx,16
+call_gpnv:
+	push	cs
+	push	offset cs:gpnv_back + orgbase; return address is CS:gpnv_back
+	push	0f000h
+	push	bp
+	retf				; far jump
+gpnv_back:
+
+	push	cs			; DS = CS
+	pop	ds
+	push	cs			; ES = CS
+	pop	es
+
+	; put registers for SMI to exit
+	pushf
+	mov 	dword ptr ds:[cpu_gen_purpose_reg_entry+reg_eax], eax
+	mov 	dword ptr ds:[cpu_gen_purpose_reg_entry+reg_ebx], ebx
+	mov 	dword ptr ds:[cpu_gen_purpose_reg_entry+reg_ecx], ecx
+	mov 	dword ptr ds:[cpu_gen_purpose_reg_entry+reg_edx], edx
+	mov 	dword ptr ds:[cpu_gen_purpose_reg_entry+reg_esi], esi
+	mov 	dword ptr ds:[cpu_gen_purpose_reg_entry+reg_edi], edi
+	mov 	dword ptr ds:[cpu_gen_purpose_reg_entry+reg_ebp], ebp
+;;;; Not writable for DS/ES in dump area
+;;;;	mov     word ptr ds:[reg_ds],ds
+;;;;	mov     word ptr ds:[reg_es],es
+	and	byte ptr ds:[cpu_gen_purpose_reg_entry+reg_eflags],not 01h; clc first
+	popf
+	jnc	gpnv_nc
+	or 	byte ptr ds:[cpu_gen_purpose_reg_entry+reg_eflags],01h	; stc
+gpnv_nc:
+not_gpnv:
+	xor	bx,bx			; no active SMI
+	jmp	short softsmidone
+no_smi_type:
+not_gpnv_smi:
+endif;	if (MKF_GPNV_SUPPORT) and (MKF_GPNV_FLASH)
+							; <(CORE0221+)
+
+	mov	bx,06h				; Soft SMI for ACPI
+
+softsmidone:
+        ret
+
+;------------------------------------------------
+;       other SMI
+;------------------------------------------------
+not_sw_usb_smi:
+;; get SMI Event
+	mov     ah,064H				; get SMI request
+        call    sread_pmu_dword			;
+	push	ebx
+
+	mov     ah,060H				; get SMI enable
+        call    sread_pmu_dword			;
+	pop	eax
+	and	eax,ebx				;
+;;;;;;
+;;;;;; check WeakUp 0 event  for Standby  BEGIN
+;;;;;;
+.586p
+	bswap	eax
+.486p
+check_weakup1:
+        test	al,08h
+        jz	short check_weakup0
+        mov     bx,09h		     		;; resume0 handler
+        ret
+;;;;;
+;;;;; check WeakUp 1 event  for Suspend  BEGIN
+;;;;;
+check_weakup0:
+        test	al,10h
+        jz	short check_timeout
+        mov     bx,12h		     		;; resume1 handler
+        jmp     get_smi_source_exit
+
+check_timeout:
+
+; Check time out (Timer0 & Timer 1)
+	test	al,0c0h
+	jz	get_smi_source_exit
+
+;;
+;; Test if APM connected
+;;
+	test	byte ptr ds:[apm_connection_info],(apm_real_mode_connect_est or apm_16bit_mode_connect_est or apm_32bit_mode_connect_est)
+	jz	BIOS_standby_suspend
+
+	test	byte ptr ds:[apm_state+apm_sys_state],pm_engaged_by_apm
+	jz	BIOS_standby_suspend
+
+;; fix for windows can't control APM (2)
+	test	byte ptr ds:apm_misc_info, timer_based_req_enabled_by_apm
+	jz	get_smi_source_exit
+
+	xor	bx,bx
+
+	mov	dx,sys_standby_req_bit 			; default is system standby request
+
+	mov	byte ptr ds:[standby_timeout],1
+	test	al,40h
+; APM is connected - issue request to suspend to driver
+	jnz	set_APM_event
+
+	mov	byte ptr ds:[standby_timeout],0
+
+;; suspend request
+
+;	test	byte ptr ds:[apm_connection_info],apm_bios_active_ver_above_v10
+;	jz	short no_event_needed_for_standby_to_suspend
+;	or	word ptr ds:[pending_apm_event],sys_standby_resume_bit
+;no_event_needed_for_standby_to_suspend:
+
+	mov	dx,sys_suspend_req_bit
+
+set_APM_event:
+	or	word ptr ds:[pending_apm_event],dx	; Post APM event
+
+	ret
+;-----------------------------------------------;
+;	BIOS Standby & Suspend			;
+;-----------------------------------------------;
+BIOS_standby_suspend:
+;;;;;
+;;;;; check System Standby resume BEGIN
+;;;;;
+check_standy:
+        test	al,40h
+        jz	short check_suspend
+        mov     bx,02h                          ;; sleep handler
+        ret
+;;;;;
+;;;;; check System Suspend resume BEGIN
+;;;;;
+check_suspend:
+        test	al,80h
+        jz	short get_smi_source_exit
+        mov     bx,03h		     		;; suspend handler
+get_smi_source_exit:
+        ret
+
+get_smi_source  endp
+
+;power_off_system        proc    near
+;        call    open_apc_cmos      	; Enable Access APC Control Reg.
+;        mov     ax,0303h		; Ext. APC.03 (APC RegI)
+;        call    smi_cmos_data_in_x
+;        xchg    ah,al
+;        or      ah,40h		; Set Auto Power Control (APC_EN)
+;        call    smi_cmos_data_out_x
+;        call    close_apc_cmos	; Disable Access APC Control Reg.
+
+;        mov     ah, 063h
+;        call    read_sio_byte   ;
+;        or      al,00000100b    ; power off system control, Force Power Off!
+;        call    write_sio_byte  ;
+;	ret
+;power_off_system        endp
+
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                            CLEAR_SMI                          ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is the last chipset hook from smi/irq handler before ;
+;     exiting smi/irq.                                          ;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  Interrupt controller mask is restored at this point, so   ;
+;     interrupt controller has mask when smi/irq was generated  ;
+;  *  This routine should clear the smi/irq in chipset, so that there
+;     is no recurring smi/irq as soon as smi/irq code is exited.;
+;  *  Implementation of this hook is mandatory.                 ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+clear_smi       proc    near
+        push	ebx
+
+        mov     ah,64h        ;; Clear status of requests.
+        call    sread_pmu_dword
+        call    swrite_pmu_dword
+
+;; Clear Legacy Status.
+	mov	ah,30h
+	call	read_smi_base
+	call	write_smi_base
+
+;; Clear PM Status.
+        mov     dx,MKF_PM_BASE_ADDRESS
+        in      ax,dx
+        jmp     short $+2
+        jmp     short $+2
+        out     dx,ax
+
+;; Clear GP Status
+        mov     dx,MKF_PM_BASE_ADDRESS+14h
+        in      eax,dx
+        jmp     short $+2
+        jmp     short $+2
+        out     dx,eax
+        jmp     short $+2
+
+usb_coming:
+	mov     byte ptr ds:[usb_interrupt_processing],0
+
+        call	disable_a20
+.586p
+        mov     dx,0cf8h                        ; first PCI register 0cf8h
+        mov     eax,ds:[pci_cf8_register]       ; get saved value
+        out     dx,eax                          ; restore register
+.486p
+        pop	ebx
+        ret
+
+clear_smi       endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                         DOZE_HANDLER                          ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is one of the hook from smi/irq handler to handle individual
+;     smi/irq source. The control will come here if you detected;
+;     doze timeout smi/irq source in 'GET_SMI_SOURCE' routine.  ;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;     SMI/IRQ based power management currently being used.      ;
+;  *  You should code whatever power saving action you intend to;
+;     take for the system in doze mode.                         ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatory if your board/   ;
+;     chipset implementation support generation of smi/irq for  ;
+;     doze timer timeout.                                       ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+doze_handler    proc    near
+
+        ret
+
+doze_handler    endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       SLEEP_HANDLER                           ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected
+;     sleep timeout smi/irq source in 'GET_SMI_SOURCE' routine. ;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  You should code whatever power saving action you intend to;
+;     take for the system in sleep mode.                        ;
+;  *  If you do stop clock in sleep/suspend mode and stop cpu   ;
+;     clock for more than one timer tick then system date/time  ;
+;     needs to be updated. One way to do that is to set apm     ;
+;     resume event for V1.0 apm or to set update date/time event;
+;     for V1.1 apm. Another way to do that is to update dos     ;
+;     date/time by using the routines provided by the bios. The ;
+;     routines are....                                          ;
+;               SAVE_SUSPEND_DATE_TIME                          ;
+;               RES_SUSPEND_DATE_TIME                           ;
+;     All the code from label 'DOS_DATE_TIME_RESTORE' to the    ;
+;     label 'DOS_DATE_TIME_RESTORE_ENDS' should be made active  ;
+;     to use above routines.                                    ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatory if your board/   ;
+;     chipset implementation support generation of smi/irq for  ;
+;     sleep timer timeout.                                      ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+sleep_handler   proc    near
+
+	mov	al,0d1h
+	out	80h,al		; Output D1h to 80h port for diagnost.
+
+;; Disable Timer1 (Standby Timer)
+	mov	dx,0040h
+	call	timer_wakeup_subroute
+
+;;      Video CMOS bit set to 0/1/2 for disabled/standby/suspend
+        cmp     byte ptr ds:[smi_video_power_down], 01h
+        jne     standby_skip_video_down
+        call    video_power_down_routine
+standby_skip_video_down:
+
+;;      IDE CMOS bit set to 0/1/2 for disabled/standby/suspend
+        cmp     byte ptr ds:[smi_ide_power_down], 01h
+        jne     standby_skip_drive_down
+        call    drive_power_down_routine
+standby_skip_drive_down:
+
+;;IRQ and NMI enable for Wake Up Event 1
+	mov	ah,1
+	call	timer_wakeup_irq
+
+;; Get CMOS value check suspend
+        test	byte ptr ds:[suspend_timer_value],0ffh
+	jz	no_suspend			;
+
+;; enable Timer0
+	mov	dx,8080h
+	call	timer_wakeup_subroute
+no_suspend:
+;; Enable Wake Up Event 1 for Standby
+	mov	dx,0808h
+	call	timer_wakeup_subroute
+
+;;slow CPU clock
+	mov	al,Q_SLOW_CLOCK			;
+        call    check_cmos_data_far		;
+	shl	al,1
+	mov	dl,al
+
+	mov	ah,0ch
+	call	read_smi_base
+        and	al,11100001b                        ; set slow CPU clock
+        or	al,dl
+	or	al,10h
+	call	write_smi_base
+
+        ret
+
+sleep_handler   endp
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       SUSPEND_HANDLER                         ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected;
+;     suspend timeout smi/irq source in 'GET_SMI_SOURCE' routine.
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  You should code whatever power saving action you intend to;
+;     take for the system in suspend mode.                      ;
+;  *  If you do stop clock in sleep/suspend mode and stop cpu   ;
+;     clock for more than one timer tick then system date/time  ;
+;     needs to be updated. One way to do that is to set apm     ;
+;     resume event for V1.0 apm or to set update date/time event;
+;     for V1.1 apm. Another way to do that is to update dos     ;
+;     date/time by using the routines provided by the bios. The ;
+;     routines are....                                          ;
+;               SAVE_SUSPEND_DATE_TIME                          ;
+;               RES_SUSPEND_DATE_TIME                           ;
+;     All the code from label 'DOS_DATE_TIME_RESTORE' to the    ;
+;     label 'DOS_DATE_TIME_RESTORE_ENDS' should be made active  ;
+;     to use above routines.                                    ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatory if your board/   ;
+;     chipset implementation support generation of smi/irq for  ;
+;     suspend timer timeout                                     ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+suspend_handler proc    near
+
+	mov	al,0d2h
+	out	80h,al		; Output D2h to 80h port for diagnost.
+
+;-----------------------------------------------;
+;       Use the following routine if you are    ;
+;       doing stop clock for more than one      ;
+;       timer ticks. If you are using slow      ;
+;       cpu clock or stop clock for one tick,   ;
+;       you don't need to use this routine      ;
+;       If you are coming from sleep to suspend ;
+;       and the date/time was saved while going ;
+;       to sleep, do not save it again.         ;
+;-----------------------------------------------;
+
+;;      call    save_suspend_date_time          ; save current DOS DATE/TIME
+
+;; Disable Timer 0/1 & Wakeup1, Enable Wakeup0
+	mov	dx,10d8h
+	call	timer_wakeup_subroute
+
+;-----------------------------------------------;
+; Put your code here to go to CPU STOP clock or ;
+; CPU SLOW clock here.....                      ;
+; Put code for whatever power saving action you ;
+; need to take for system in SUSPEND mode....   ;
+;-----------------------------------------------;
+
+;  ADD YOUR CODE HERE...................
+
+if (MKF_CUSTOMER eq 9999)
+;; turn on sleep LED
+	mov	ah,04h
+	call	read_apc_cmos
+	and	al, not 08h
+	or	al,03h
+	call	write_apc_cmos
+endif
+
+if (MKF_CUSTOMER eq 1199)
+;; turn off fan
+	mov	dx,MKF_PM_BASE_ADDRESS+1dh
+	in	al,dx
+	jmp	short $+2
+	and	al, not 02h				; turn off fan
+	jmp	short $+2
+	out	dx,al
+
+;; turn on sleep LED
+	mov	ah,04h
+	call	read_apc_cmos
+	or	al,03h
+	call	write_apc_cmos
+endif
+
+if (MKF_CUSTOMER eq 1121)
+	mov	ah,04h
+	call	read_apc_cmos
+	or	al,01h
+	call	write_apc_cmos
+endif
+
+if (MKF_CUSTOMER eq 1223)
+	mov	ah,04h
+	call	read_apc_cmos
+	or	al,01h
+	call	write_apc_cmos
+endif
+
+if (MKF_CUSTOMER eq 1259)
+	mov	dx,MKF_PM_BASE_ADDRESS+1ch		; turn off the power LED
+	in	al,dx
+	jmp	short $+2
+	or	al,08h
+	out	dx,al
+	jmp	$+2
+
+	mov	dx,MKF_PM_BASE_ADDRESS+1dh		; turn off the system fan
+	in	al,dx
+	jmp	short $+2
+	and	al,11111101b
+	out	dx,al
+	jmp	$+2
+endif
+
+
+;-----------------------------------------------;
+; Put your code here for exiting SUSPEND mode...;
+; It depends on the implementation whether you  ;
+; are going to exit SUSPEND mode thru this path ;
+; or not                                        ;
+;-----------------------------------------------;
+
+;  ADD YOUR CODE HERE...................
+
+;-----------------------------------------------;
+;       Use the following routines if you are   ;
+;       doing stop clock for more than one      ;
+;       timer ticks. If you are using slow      ;
+;       cpu clock or stop clock for one tick,   ;
+;       you don't need to use this routines     ;
+;       This routines will restore dos date/    ;
+;       time only.                              ;
+;-----------------------------------------------;
+
+;-----------------------------------------------;
+;       Set proper apm event (for V1.0 & V1.1)  ;
+;       here to update dos/windows date/time if ;
+;       you are stopping cpu clock for more than;
+;       one timer tick.                         ;
+;-----------------------------------------------;
+;; 4 seconds shutdown support
+	mov	ah,1
+recheck_power_button:
+	call	read_smi_base
+	test	al,01h
+	jz	check_power_button_done
+	call	write_smi_base
+	jmp	short recheck_power_button
+check_power_button_done:
+
+;;      Video CMOS bit set to 0/1/2 for disabled/standby/suspend
+        cmp     byte ptr ds:[smi_video_power_down], 0H
+        je      suspend_skip_video_down
+        call    video_power_down_routine
+
+suspend_skip_video_down:
+;;      IDE CMOS bit set to 0/1/2 for disabled/standby/suspend
+        cmp     byte ptr ds:[smi_ide_power_down], 0h
+        je      suspend_skip_drive_down
+        call    drive_power_down_routine
+suspend_skip_drive_down:
+
+;;IRQ and NMI enable for Wake Up Event 0
+	mov	ah,0
+	call	timer_wakeup_irq
+
+	test	byte ptr ds:[modem_ring],0ffh
+	jnz	modem_ring_enable
+;; Disable Ring-In
+	mov	ah,52h
+	call	sread_pmu_byte
+	and	al,07fh
+	call	swrite_pmu_byte
+modem_ring_enable:
+
+;; suspend state
+        mov     byte ptr ds:[pmu_state],01h
+
+	call	set_resume_base_timer
+
+;; 8259 IRQ mask
+        mov     ah,068h
+        call    sread_pmu_byte
+	out	21h,al
+        mov     ah,069h
+        call    sread_pmu_byte
+	out	0a1h,al
+
+	mov	ah,64h
+	call	sread_pmu_dword
+	call	swrite_pmu_dword			;
+
+;	public	suspend_usb_interrupt
+suspend_usb_interrupt::
+
+        mov     dx,MKF_PM_BASE_ADDRESS
+        in      ax,dx
+        jmp     short $+2
+        jmp     short $+2
+        out     dx,ax
+
+        mov     dx,MKF_PM_BASE_ADDRESS+14h
+        in      eax,dx
+        jmp     short $+2
+        jmp     short $+2
+        out     dx,eax
+
+;;; 4 seconds shutdown support
+;	mov	ah,1
+;recheck_power_button:
+;	call	read_smi_base
+;	test	al,01h
+;	jz	check_power_button_done
+;	call	write_smi_base
+;	jmp	short recheck_power_button
+;check_power_button_done:
+
+	mov	ah,13h
+	call	read_smi_base
+	and	al, not 10h
+	call	write_smi_base
+
+;; clear SMI
+	mov	ah,30h
+	call	read_smi_base
+	call	write_smi_base
+
+;;Clear Weak Up enable status
+	mov	ax,1480h
+	call	write_smi_base
+	mov	ax,1501h
+	call	write_smi_base
+
+;; Enable Weak Up IRQ enable
+	mov	ah,18h
+	call	read_smi_base
+	or	al,080h				; IRQ
+	call	write_smi_base
+	mov	ah,19h
+	call	read_smi_base
+	or	al,001h				; USB
+	call	write_smi_base
+
+;; clear wake-up status
+	mov	ah,14h
+	call	read_smi_base
+	call	write_smi_base
+	mov	ah,15h
+	call	read_smi_base
+	call	write_smi_base
+
+;; clear external SMI status
+	mov	ah,64h
+        call    sread_pmu_byte
+        call    swrite_pmu_byte
+
+	mov     ah,060H				; clear external SMI enable
+        call    sread_pmu_byte
+	and	al,not 40h
+        call    swrite_pmu_byte
+
+	mov	ah,05h
+	call	read_smi_base
+        and	al,0c3h                        ; Set entry S1 state
+        or	al,024h
+	call	write_smi_base
+
+	in 	al,61h
+	in 	al,61h
+	in 	al,61h
+	in 	al,61h
+	in 	al,61h
+	in 	al,61h
+
+if (MKF_CUSTOMER eq 1199)
+;; disable button wake up
+	mov	ah,01h
+	call	read_smi_base
+	test	al,01h			; button status
+	jz	short @f		; not power button
+	call	write_smi_base
+	jmp	short go_back_to_sleep
+@@:
+endif
+;; Disable Weak Up IRQ enable
+	mov	ah,18h
+	call	read_smi_base
+        and	al,not 08ch
+	call	write_smi_base
+	mov	ah,19h
+	call	read_smi_base
+        and	al,not 001h
+	call	write_smi_base
+
+;;Clear Weak Up enable status
+	mov	ah,14h
+	call	read_smi_base
+	mov	dl,al
+	or	al,08ch
+	call	write_smi_base
+	mov	ah,15h
+	call	read_smi_base
+	mov	dh,al
+	or	al,001h
+	call	write_smi_base
+
+	mov	ah,31h
+	call	read_smi_base
+	test	dl,01h				; Ext smi was pushed
+	jnz	exit_suspend
+	test	al,40h				; USB event?
+	jz	exit_suspend
+	test	dh,01h
+	jnz	new_usb_handler
+exit_suspend:
+
+	mov     al,0ffh                                 ; Remask interrupt controler
+	out     021h,al                                 ; Master mask port
+	jmp	short $+2
+	jmp	short $+2
+	out     0a1h,al                                 ; Slave mask port
+	jmp	short $+2
+	jmp	short $+2
+
+	call	restore_resume_timer
+
+	test	byte ptr ds:[modem_ring],0ffh
+	jnz	modem_ring_enable1
+;; Enable Ring-In
+	mov	ah,52h
+	call	sread_pmu_byte
+	or	al,80h
+	call	swrite_pmu_byte
+modem_ring_enable1:
+
+	mov	ah,13h
+	call	read_smi_base
+	or	al, 10h
+	call	write_smi_base
+
+;;      call    res_suspend_date_time           ; restore DOS DATE/TIME
+
+; Post resume event to APM driver
+	or	word ptr ds:[pending_apm_event], normal_resume_sys_bit
+
+	call	resume1_handler
+        ret
+
+
+suspend_handler endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       RESUME0_HANDLER                         ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected
+;     resume smi/irq source in 'GET_SMI_SOURCE' routine.        ;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  You should code whatever action you need to take to bring ;
+;     the system from sleep or suspend mode.                    ;
+;  *  If you do stop clock in sleep/suspend mode and stop cpu   ;
+;     clock for more than one timer tick then system date/time  ;
+;     needs to be updated. One way to do that is to set apm     ;
+;     resume event for V1.0 apm or to set update date/time event;
+;     for V1.1 apm. Another way to do that is to update dos     ;
+;     date/time by using the routines provided by the bios. The ;
+;     routines are....                                          ;
+;               SAVE_SUSPEND_DATE_TIME                          ;
+;               RES_SUSPEND_DATE_TIME                           ;
+;     All the code from label 'DOS_DATE_TIME_RESTORE' to the    ;
+;     label 'DOS_DATE_TIME_RESTORE_ENDS' should be made active  ;
+;     to use above routines.                                    ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatory if your board/   ;
+;     chipset implementation support generation of smi/irq for  ;
+;     sleep/suspend timer timeout and you have a seperate source;
+;     for resume.                                               ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+resume0_handler  proc    near
+
+	mov	al,0e0h
+	out	80h,al		; Output E0h to 80h port for diagnost.
+
+;-----------------------------------------------;
+; Put your code here for exiting SLEEP/SUSPEND  ;
+; mode....It depends on the implementation      ;
+; whether you are going to exit SLEEP/SUSPEND   ;
+; mode thru this path or not                    ;
+;-----------------------------------------------;
+
+;  ADD YOUR CODE HERE...................
+
+if (MKF_CUSTOMER eq 9999)
+;; turn off sleep LED
+	mov	ah,04h
+	call	read_apc_cmos
+	and	al,not 03h
+	or	al,08h
+	call	write_apc_cmos
+endif
+
+
+;; Disable Wake Up 1
+	mov	dx,0008h
+	call	timer_wakeup_subroute
+
+;; Disable Timer 0 (Suspend Timer)
+	mov	dl,80h
+	call	timer_wakeup_subroute
+
+;;IRQ and NMI enable for Monitor Event 1
+	mov	ah,1
+	call	timer_monitor_irq
+
+;; Enable Timer 1
+        test	byte ptr ds:[standby_timer_value],0ffh
+	jz	skip_load_time1
+	mov	dx,4040h
+	call	timer_wakeup_subroute
+skip_load_time1:
+;-----------------------------------------------;
+;       Use the following routines if you are   ;
+;       doing stop clock for more than one      ;
+;       timer ticks. If you are using slow      ;
+;       cpu clock or stop clock for one tick,   ;
+;       you don't need to use this routines     ;
+;       This routines will restore dos date/    ;
+;       time only.                              ;
+;-----------------------------------------------;
+
+;;      call    res_suspend_date_time           ; restore DOS TIME
+
+;-----------------------------------------------;
+;       Set proper apm event (for V1.0 & V1.1)  ;
+;       here to update dos/windows date/time if ;
+;       you are stopping cpu clock for more than;
+;       one timer tick.                         ;
+;-----------------------------------------------;
+;;restore CPU clock
+	mov	ah,0ch
+	call	read_smi_base
+        and	al,11100001b                        ; Disable Slow CPU clock
+	call	write_smi_base
+
+	cmp	byte ptr ds:[smi_video_power_down], 01h
+	jne	doze_skip_video_up
+	call	video_power_up_routine
+doze_skip_video_up:
+
+	cmp	byte ptr ds:[smi_ide_power_down], 01h
+	jne	doze_skip_drive_up
+	call	drive_power_up_routine
+doze_skip_drive_up:
+
+	mov	dx, normal_resume_sys_bit		; resume event for 1.0 BIOS
+	test	byte ptr ds:[apm_connection_info],apm_bios_active_ver_above_v10
+	jz	short standby_resume_event_set
+	mov	dx, sys_standby_resume_bit		; resume event for 1.1 BIOS
+
+standby_resume_event_set:
+; Post event to driver
+	or	word ptr ds:[pending_apm_event],dx
+
+        ret
+
+resume0_handler  endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       RESUME1_HANDLER                         ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected
+;     resume smi/irq source in 'GET_SMI_SOURCE' routine.        ;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  You should code whatever action you need to take to bring ;
+;     the system from sleep or suspend mode.                    ;
+;  *  If you do stop clock in sleep/suspend mode and stop cpu   ;
+;     clock for more than one timer tick then system date/time  ;
+;     needs to be updated. One way to do that is to set apm     ;
+;     resume event for V1.0 apm or to set update date/time event;
+;     for V1.1 apm. Another way to do that is to update dos     ;
+;     date/time by using the routines provided by the bios. The ;
+;     routines are....                                          ;
+;               SAVE_SUSPEND_DATE_TIME                          ;
+;               RES_SUSPEND_DATE_TIME                           ;
+;     All the code from label 'DOS_DATE_TIME_RESTORE' to the    ;
+;     label 'DOS_DATE_TIME_RESTORE_ENDS' should be made active  ;
+;     to use above routines.                                    ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatory if your board/   ;
+;     chipset implementation support generation of smi/irq for  ;
+;     sleep/suspend timer timeout and you have a seperate source;
+;     for resume.                                               ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+resume1_handler  proc    near
+
+	mov	al,0e1h
+	out	80h,al		; Output E1h to 80h port for diagnost.
+
+
+	cmp	byte ptr ds:[smi_video_power_down], 00h
+	jz	suspend_skip_video_up
+	call	video_power_up_routine
+suspend_skip_video_up:
+
+	cmp	byte ptr ds:[smi_ide_power_down], 00h
+	jz	suspend_skip_drive_up
+	call	drive_power_up_routine
+suspend_skip_drive_up:
+
+
+;-----------------------------------------------;
+; Put your code here for exiting SLEEP/SUSPEND  ;
+; mode....It depends on the implementation      ;
+; whether you are going to exit SLEEP/SUSPEND   ;
+; mode thru this path or not                    ;
+;-----------------------------------------------;
+
+;  ADD YOUR CODE HERE...................
+
+if (MKF_CUSTOMER eq 9999)
+;; turn off sleep LED
+	mov	ah,04h
+	call	read_apc_cmos
+	and	al,not 03h
+	or	al,08h
+	call	write_apc_cmos
+endif
+
+
+;; disable Weak Up 0
+	mov	dx,0010h
+	call	timer_wakeup_subroute
+
+;;IRQ and NMI enable for Monitor Event 0/1
+	mov	ah,0
+	call	timer_monitor_irq
+
+	mov	ah,1
+	call	timer_monitor_irq
+
+;; enable external SMI enable
+	mov	cx,3fffh
+	call	pm_fixed_delay
+
+	mov     ax,06440h			; Clear ExtSMI Status
+	call	swrite_pmu_byte
+
+;; Clear suspend mode
+        mov     byte ptr ds:[pmu_state],0h
+
+;;Clear Weak Up enable
+	mov	ax,1480h
+	call	write_smi_base
+	mov	ax,1501h
+	call	write_smi_base
+
+;; disable Weak Up IRQ enable
+	mov	ah,18h
+	call	read_smi_base
+        and	al,not 080h
+	call	write_smi_base
+	mov	ah,19h
+	call	read_smi_base
+        and	al,not 001h
+	call	write_smi_base
+
+;; Clear Legacy SMI
+	mov	ah,30h
+	call	read_smi_base
+	call	write_smi_base
+
+	test	byte ptr ds:[pm_enable],01h
+	jz	skip_enable_timer
+	call	enable_timer
+skip_enable_timer:
+;-----------------------------------------------;
+;       Use the following routines if you are   ;
+;       doing stop clock for more than one      ;
+;       timer ticks. If you are using slow      ;
+;       cpu clock or stop clock for one tick,   ;
+;       you don't need to use this routines     ;
+;       This routines will restore dos date/    ;
+;       time only.                              ;
+;-----------------------------------------------;
+
+;;      call    res_suspend_date_time           ; restore DOS TIME
+
+;-----------------------------------------------;
+;       Set proper apm event (for V1.0 & V1.1)  ;
+;       here to update dos/windows date/time if ;
+;       you are stopping cpu clock for more than;
+;       one timer tick.                         ;
+;-----------------------------------------------;
+;;restore CPU clock
+	mov	ah,0ch
+	call	read_smi_base
+        and  	al,11100001b                        ; set slow CPU clock
+	call	write_smi_base
+
+;; clear external SMI status
+	mov	ah,64h
+        call    sread_pmu_byte
+        call    swrite_pmu_byte
+
+;; Enable ExtSMI
+	mov     ah,060H				;
+        call    sread_pmu_byte			;
+	or	al,40h				;
+        call    swrite_pmu_byte			;
+
+;;exit S1 state
+	mov	ah,05h
+	call	read_smi_base
+        and	al,0c3h                        ; set entry S1 state
+	call	write_smi_base
+
+        ret
+
+resume1_handler  endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       DEVICE_HANDLER                          ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected;
+;     device timeout smi/irq source in 'GET_SMI_SOURCE' routine.;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  You should code whatever power saving action you intend to;
+;     take for the device whose inactivity timer has timed out  ;
+;     for inactivity.                                           ;
+;  *  You probably need to handle ide & video inactivity timer  ;
+;     for most of the chipsets.                                 ;
+;  *  If you are handling video inactivity, then probably you   ;
+;     have to handle power pin to power off the display unit.   ;
+;     You might consider vesa green pc function calls to power  ;
+;     off the display unit.                                     ;
+;  *  If you are handling ide inactivity (both primary &        ;
+;     secondary ide), you need to use ide standby command to    ;
+;     take power saving action for ide drives.                  ;
+;  *  For some of the chipsets you might need to handle serial/ ;
+;     parallel or some other device.                            ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatory if your board/   ;
+;     chipset implementation support generation of smi/irq for  ;
+;     device inactivity timeout.                                ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+device_handler  proc    near
+
+        ret
+
+device_handler  endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       IO_TRAP_HANDLER                         ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected
+;     device io trap smi/irq source in 'GET_SMI_SOURCE' routine.;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  IO TRAP smi/irq is complement of device inactivity timeout;
+;     smi/irq. Whatever devices are in power saving mode due to ;
+;     inactivity should come in fully on mode when io trap smi/ ;
+;     irq is generated for those devices.                       ;
+;  *  You should code whatever you need to do to bring concerned;
+;     device to fully on mode as the device is going to be used ;
+;     by the system.                                            ;
+;  *  You probably need to handle ide & video IO TRAP for most  ;
+;     of the chipsets.                                          ;
+;  *  If you are handling video io trap, then probably you have ;
+;     to handle power pin to power on the display unit. You might
+;     consider vesa green pc function calls to power on the     ;
+;     display unit.                                             ;
+;  *  If you are handling ide io trap (both primary & secondary ;
+;     ide), you need to use ide idle command to power on ide drives.
+;     If you used standby command to go to low power mode for   ;
+;     ide drive(s), you really don't need to give the idle command
+;     as the ide drives will automatically come to fully on mode;
+;     from standby when it is accessed.                         ;
+;  *  For some of the chipsets you might need to handle serial/ ;
+;     parallel or some other device.                            ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatoryif your board/    ;
+;     chipset implementation support generation of smi/irq for  ;
+;     device io trap smi/irq.                                   ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+io_trap_handler proc    near
+
+        ret
+
+io_trap_handler endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       SW_SMI_HANDLER                          ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected;
+;     software smi/irq source in 'GET_SMI_SOURCE' routine.      ;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  You should take action depending on specific software smi/;
+;     irq source. software smi/irq source for apm should be     ;
+;     handled in 'apm_handler'.                                 ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatory if your board/   ;
+;     chipset implementation support generation of software smi/;
+;     irq and you are using it.                                 ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+sw_smi_handler  proc    near
+if MKF_ACPI_SUPPORT
+;	call	check_sb_revision
+;	jnz	@f
+;	mov	ah,30h
+;	call	read_smi_base
+;	test	al,10h
+; 	jnz	sw_acpi_disable
+;	jmp	short acpi_enable_x
+;@@:
+	mov	dx,MKF_PM_BASE_ADDRESS+35h
+	in	al,dx
+	jcxz	short $+2
+	cmp	al,ACPI_ENABLE
+	jnz	sw_acpi_disable
+acpi_enable_x:
+;;===============================================;
+;;	Soft SMI ENABLE of ACPI			 ;
+;;===============================================;
+;;sw_acpi_enable:
+clear_64_status:		  ; clear SMI request status
+	mov	ah,64h		  ;
+        call    sread_pmu_dword   ;
+        call    swrite_pmu_dword  ;
+
+	mov	ah,60h
+	call	sread_pmu_dword   ;
+	mov	ds:[save_reg_60h],ebx
+	sub	ebx,ebx		  ; Clear SMI Enable register
+	call	swrite_pmu_dword  ;
+
+        mov     dx,MKF_PM_BASE_ADDRESS;
+	mov	eax,0ffffffffh
+        out     dx,ax
+	jmp	short $+2
+
+        mov     dl,014h
+        out     dx,eax
+	jmp	short $+2
+
+	mov	ah,0
+	call	sread_usb_byte
+	sub	cx,cx
+	cmp	al,0ffh
+	jz	short usb_control_disable
+
+	mov	ah,3ch
+	call	sread_usb_byte
+	movzx	cx,al
+usb_control_disable:
+
+	mov	ah,68h
+        call    sread_pmu_dword			; EBX
+	mov	ds:[save_reg_68h],ebx
+
+	mov	ah,6ah				; Enable ACPI IRQ
+	call	sread_sio_byte
+	and	al, not 80h
+	call	swrite_sio_byte
+	mov	ah,0
+	bts	bx,ax				; Disable SCI IRQ Wakeup
+
+	cmp	al,cl
+	jz	short skip_usb_irq_wakeup
+	or	cx,cx
+	jz	short skip_usb_irq_wakeup
+	btr	bx,cx				; Enable USB IRQ Wakeup
+skip_usb_irq_wakeup:
+	mov	ah,68h
+	call	swrite_pmu_dword
+
+;; Disable System Wake-Up SMI
+	mov	ah,31h
+	call	read_smi_base
+	and	al,NOT 02h
+	call	write_smi_base
+
+;; The power button will be set until the power button is being released.
+	mov	ah,13h
+	call	read_smi_base
+	and	al,NOT 10h
+	call	write_smi_base
+
+;; Enable SCI
+	mov	ah,04h
+	call	read_smi_base
+	or	al,01h
+	call	write_smi_base
+	ret
+
+;;===============================================;
+;;	Soft SMI DISABLE of ACPI    		 ;
+;;===============================================;
+sw_acpi_disable:
+	call	check_sb_revision
+	jz	short @f
+	cmp	al,ACPI_DISABLE
+	jnz	acpi_handler_end
+@@:
+	mov	ah,6ah				; Disable ACPI IRQ
+	call	sread_sio_byte
+	or	al,80h
+	call	swrite_sio_byte
+
+	mov	ah,04h
+	call	read_smi_base
+        and  	al,not 01h
+	call	write_smi_base
+
+;; Clear 64h Status
+	mov	ah,64h
+        call    sread_pmu_dword
+        call    swrite_pmu_dword
+
+	mov	ah,60h
+	mov	ebx, ds:[save_reg_60h]
+	call	swrite_pmu_dword
+
+;; Enable System Wake-Up SMI
+	mov	ah,31h
+	call	read_smi_base
+	or	al,02h
+	call	write_smi_base
+
+;; Enable Power Button
+	mov	ah,03h
+	call	read_smi_base
+	or	al,01h
+	call	write_smi_base
+
+;; The power button will be set immediately when the power button is being pressed.
+	mov	ah,13h
+	call	read_smi_base
+	or	al,10h
+	call	write_smi_base
+
+	mov	ah,68h
+	mov	ebx, ds:[save_reg_68h]
+	call	swrite_pmu_dword
+
+endif
+acpi_handler_end:
+        ret
+
+sw_smi_handler  endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       CHIPSET_HANDLER                         ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected
+;     chipset hook smi/irq source in 'GET_SMI_SOURCE' routine.  ;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  This source is intended to handle any smi/irq source not  ;
+;     covered by generic green pc support core bios. You can    ;
+;     support your own sources using (cx) bit 0 thru 15 under   ;
+;     this chipset hook source.                                 ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatory if your board/   ;
+;     chipset implementation support smi/irq sources not covered;
+;     by generic green pc core bios.                            ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+chipset_handler proc    near
+
+        ret
+
+chipset_handler endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                          LB_HANDLER                           ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected
+;     very low battery smi/irq source in 'GET_SMI_SOURCE' routine.
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  You should code whatever power saving action you intend to;
+;     take for very low battery.                                ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatory if your board/   ;
+;     chipset implementation support generation of smi/irq for  ;
+;     low battery.                                              ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+lb_handler      proc    near
+
+        ret
+
+lb_handler      endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                           VLB_HANDLER                         ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected
+;     very low battery smi/irq source in 'GET_SMI_SOURCE' routine.
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  You should code whatever power saving action you intend to;
+;     take for very low battery. Usually it should be same as   ;
+;     suspend handler.                                          ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatory if your board/   ;
+;     chipset implementation support generation of smi/irq for  ;
+;     very low battery.                                         ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+vlb_handler     proc    near
+
+        ret
+
+vlb_handler     endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                         APM_HANDLER                           ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This is one of the hook from smi/irq handler to handle individ-
+;     ual smi/irq source. The control will come here if you detected
+;     software smi/irq source for apm in 'GET_SMI_SOURCE' routine.
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  You need to implement whatever apm support you want to    ;
+;     provide in smi/irq code.                                  ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatory if your board/   ;
+;     chipset implementation support generation of software smi/;
+;     irq and you are using it for implementing apm in smi/irq. ;
+;     DO NOT CHANGE THE CORE IMPLEMENTATION OF THIS HOOK.       ;
+;---------------------------------------------------------------;
+
+apm_handler     proc    near
+
+        call    get_on_entry_regs               ; get all on entry general purpose registers
+        call    apm_call_near                   ; execute APM function
+        call    set_on_exit_regs                ; set all on exit general purpose registers
+        ret
+
+apm_handler     endp
+
+;;ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+;;³                 DRIVE_POWER_UP_ROUTINE                       ³
+;;³ This routine will power up the drive and additionally program³
+;;³ auto drive timeout.                                          ³
+;;³ Input:              None                                     ³
+;;³ Output:             None                                     ³
+;;³ Stack:              Available                                ³
+;;³ Registers destryed: None                                     ³
+;;ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+drive_power_up_routine  proc    near
+        pushad
+        mov     dl,02fh         ;; set up call wake up all drives immediately
+        mov     dh,byte ptr ds:gpm_ide_idle_timeout
+        call    ide_low_power_request           ;; spin up drives
+        popad
+        ret
+drive_power_up_routine  endp
+
+;;ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+;;³                 DRIVE_POWER_DOWN_ROUTINE³
+;;³ This routine will power down the drive  ³
+;;³ Input:              None                ³
+;;³ Output:             None                ³
+;;³ Stack:              Available           ³
+;;³ Registers destryed: None                ³
+;;ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+drive_power_down_routine        proc    near
+        pushad
+        mov     dl,01fh                 ;; set up call to power down all drives immediately
+;;;;    mov     dh,0ffh
+        mov     dh,byte ptr ds:gpm_ide_idle_timeout
+        call    ide_low_power_request   ;; spin down drives
+        popad
+        ret
+drive_power_down_routine        endp
+
+;;ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+;;³                 VIDEO_POWER_UP_ROUTINE ³
+;;³ This routine will power up the video   ³
+;;³ Input:              None               ³
+;;³ Output:             None               ³
+;;³ Stack:              Available          ³
+;;³ Registers destryed: None               ³
+;;ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+video_power_up_routine  proc    near
+        pushad
+        xor     cx,cx                   ;; cx = 00 for for primary controller
+        mov     bx,000ffh               ;; bx set for wakeup power state
+        call    vesa_low_power_request  ;;
+        popad
+        ret
+video_power_up_routine  endp
+
+;;ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+;;³                 VIDEO_POWER_DOWN_ROUTINE                     ³
+;;³ This routine will power down the video based on setup options³
+;;³ Input:              None                                     ³
+;;³ Output:             None                                     ³
+;;³ Stack:              Available                                ³
+;;³ Registers destryed: None                                     ³
+;;ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+video_power_down_routine        proc    near
+        pushad
+        mov     al,byte ptr ds:[smi_green_pc_monitor_state];; al=0,1,2(standby/suspend/off)
+        xor     cx,cx                   ;; cx = 00 for for primary controller
+        mov     bx,001ffh               ;; bx set to set power state
+                                        ;; bh=1,2,4(standby/suspend/off)
+        xchg    al,cl                   ;; cl has shift value
+        shl     bh,cl                   ;; adjust bh value based on setup option
+        xchg    al,cl                   ;; restore cx
+        call    vesa_low_power_request
+        popad
+        ret
+video_power_down_routine        endp
+
+
+
+
+;---------------------------------------------------------------;
+;                       GET_ON_ENTRY_REGS                       ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;       Output: (AX),(EBX),(ECX),(DX),(SI),(EDI) set to on      ;
+;               ENTRY SMI values                                ;
+;       Register destroyed : ALL GENERAL PURPOSE REGISTERS      ;
+;---------------------------------------------------------------;
+
+get_on_entry_regs       proc    near
+
+        mov     si,cpu_gen_purpose_reg_entry    ; (si) = pointer to on entry reg values
+
+        mov     ebx,[si+reg_ebx]                ; (ebx) on entry
+        mov     ecx,[si+reg_ecx]                ; (ecx) on entry
+        mov     edi,[si+reg_edi]                ; (edi) on entry
+        mov     ebp,[si+reg_ebp]                ;
+
+        mov     si,[si+reg_esi+2]               ; (si) on entry
+
+        mov     ax,bp                           ; ASSUMES GENERATION OF SOFTWARE SMI WILL USE (AX)
+                                                ; AND ACTUAL (AX) WILL BE AVAILABLE IN LOWER WORD OF (EBP)
+        shr     ebp,16                          ;
+        mov     dx,bp                           ; ASSUMES GENERATION OF SOFTWARE SMI WILL USE (DX)
+                                                ; AND ACTUAL (DX) WILL BE AVAILABLE IN UPPER WORD OF (EBP)
+        movzx   bp,ah                           ; (bp) bit 0/1/2 has info about called in real/16 bit/32 bit mode
+        mov     ah,53h                          ; put on entry (ah)
+
+        ret
+
+get_on_entry_regs       endp
+
+;---------------------------------------------------------------;
+;                       SET_ON_EXIT_REGS                        ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;             : (AX),(EBX),(ECX),(DX),(SI),(EDI),(EFLAGS) for   ;
+;               on EXIT SMI values                              ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE REGISTERS      ;
+;---------------------------------------------------------------;
+
+set_on_exit_regs        proc    near
+
+        mov     ds:[cpu_gen_purpose_reg_entry+reg_esi+2],si; on exit upper word of (si)
+        mov     si,0                            ; clear on exit (si)
+        jnc     short set_on_exit_regs_00       ; (CY) clear
+        or      si,0000000000000001b            ; set (CY) flag in bit 0 of (si)
+set_on_exit_regs_00:
+        mov     ds:[cpu_gen_purpose_reg_entry+reg_esi],si; on exit (si)
+
+        mov     si,cpu_gen_purpose_reg_entry    ; (si) = pointer to on entry reg values
+
+        shl     edx,16                          ; upper 16 bit of (edx) contains (dx)
+        mov     dx,ax                           ; lower 16 bit of (edx) contains (ax)
+        mov     [si+reg_ebp],edx                ;
+
+        mov     [si+reg_ebx],ebx                ; on exit (ebx)
+        mov     [si+reg_ecx],ecx                ; on exit (ecx)
+
+        mov     [si+reg_edi],edi                ; on exit (edi)
+
+        ret
+
+set_on_exit_regs        endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       INSTANT_ON_HANDLER                      ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (DI) pointer to APM system state                ;
+;               (SI) APM standby/suspend request identification ;
+;                    0003h standby req (off_set_apm_standby_fn) ;
+;                    0004h suspend req (off_set_apm_suspend_fn) ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : ALL GENERAL PURPOSE                ;
+; NOTE :                                                        ;
+;  *  This hook gets control from APM standby/suspend request   ;
+;     call if APM standby/suspend request is being monitored    ;
+;     thru INSTANT ON software running under WINDOWS 95.        ;
+;  *  'MISC_PROC_SMI_INFO' bit 5 has the information about      ;
+;      SMI/IRQ based power management currently being used.     ;
+;  *  You should code whatever power saving action you intend to;
+;     take for the system in suspend mode.                      ;
+;  *  Interrupt controller current mask is saved and interrupts ;
+;     are masked at this point.                                 ;
+;  *  Implementation of this hook is mandatory to support       ;
+;     INSTANT ON software.                                      ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+instant_on_handler      proc    near
+
+;-----------------------------------------------;
+; Put your code here to go to CPU STOP clock.   ;
+; Put code for whatever power saving action you ;
+; need to take for system in SUSPEND mode....   ;
+; You need to setup user alarm wakeup from      ;
+; suspend state.                                ;
+;-----------------------------------------------;
+
+;  ADD YOUR CODE HERE...................
+
+;-----------------------------------------------;
+; Put your code here for exiting SUSPEND mode...;
+; Do not wake up video or IDE drives if the     ;
+; system was resumed by ALARM.                  ;
+;-----------------------------------------------;
+
+;  ADD YOUR CODE HERE...................
+
+;-----------------------------------------------;
+;       Set proper apm event (for  V1.1)        ;
+;       here to update windows 95 date/time if  ;
+;       you are stopping cpu clock for more than;
+;       one timer tick.                         ;
+;-----------------------------------------------;
+
+        ret
+
+instant_on_handler      endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;          RUN TIME CHIPSET SPECIFIC IRQ HANDLER CODE           ;
+;          RUN TIME CHIPSET SPECIFIC IRQ HANDLER CODE           ;
+;          RUN TIME CHIPSET SPECIFIC IRQ HANDLER CODE           ;
+;          RUN TIME CHIPSET SPECIFIC IRQ HANDLER CODE           ;
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                    WRITE_ENABLE_IRQ_SHADOW                    ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT...OS STACK...RESTRICTED USAGE     ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EDX)                        ;
+; NOTE :                                                        ;
+;  *  This is the hook coming from IRQ based power management   ;
+;     handler. Immediately after getting control in the IRQ     ;
+;     handler, this call is made to write enable the shadow     ;
+;     ram used for IRQ based power management. This is called   ;
+;     from IRQ based APM handler also.                          ;
+;  *  When this call is made, the shadow ram area is readable.  ;
+;     While write enabling the shadow ram area, DO NOT CHANGE   ;
+;     THE READABLE STATUS OF SHADOW RAM.                        ;
+;  *  You can go through following steps for this hook...       ;
+;       Step 1 : If you are not implementing IRQ handling support
+;                for your chipset (irq_handling_support set to 00
+;                in GPM.CFG file), do nothing...just return.    ;
+;                otherwise                                      ;
+;       Step 2 : IRQ shadow area segment information is available
+;                at smi_code_seg_intel_amd_plus_cseg and IRQ    ;
+;                shadow area size is available at smi_seg_size_ ;
+;                cseg. (It is suggested to use FIXED SHADOW     ;
+;                AREA FOR IRQ HANDLER USAGE...also note that    ;
+;                SHADOW AREA SIZE FOR IRQ HANDLER IS FIXED TO   ;
+;                32KB...best choice of shadow area for irq      ;
+;                handler is probably 0e800h)                    ;
+;                Write enable IRQ shadow area. IRQ shadow area  ;
+;                is already readable, DO NOT CHANGE READABLE    ;
+;                STATUS of IRQ shadow area.                     ;
+;  *  Implementation of this hook is mandatory if IRQ based     ;
+;     power management is implemented for your chipset, otherwise
+;     ignore this hook.                                         ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+write_enable_irq_shadow proc    near
+
+        ret
+
+write_enable_irq_shadow endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                    WRITE_PROTECT_IRQ_SHADOW                   ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT...OS STACK...RESTRICTED USAGE     ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EDX)                        ;
+; NOTE :                                                        ;
+;  *  This is the hook coming from IRQ based power management   ;
+;     handler. Immediately before exiting the IRQ handler, this ;
+;     call is made to write protect the shadow ram used for IRQ ;
+;     based power management. This is called from IRQ based APM ;
+;     handler also.                                             ;
+;  *  When this call is made, the shadow ram area is readable   ;
+;     and writeable. While write protecting the shadow ram area,;
+;     DO NOT CHANGE THE READABLE STATUS OF SHADOW RAM.          ;
+;  *  You can go through following steps for this hook...       ;
+;       Step 1 : If you are not implementing IRQ handling support
+;                for your chipset (irq_handling_support set to 00
+;                in GPM.CFG file), do nothing...just return.    ;
+;                otherwise                                      ;
+;       Step 2 : IRQ shadow area segment information is available
+;                at smi_code_seg_intel_amd_plus_cseg and IRQ    ;
+;                shadow area size is available at smi_seg_size_ ;
+;                cseg. (It is suggested to use FIXED SHADOW     ;
+;                AREA FOR IRQ HANDLER USAGE...also note that    ;
+;                SHADOW AREA SIZE FOR IRQ HANDLER IS FIXED TO   ;
+;                32KB...best choice of shadow area for irq      ;
+;                handler is probably 0e800h)                    ;
+;                Write protect IRQ shadow area. IRQ shadow area ;
+;                is already readable and writeable, DO NOT CHANGE
+;                READABLE STATUS of IRQ shadow area.            ;
+;  *  Implementation of this hook is mandatory if IRQ based     ;
+;     power management is implemented for your chipset, otherwise
+;     ignore this hook.                                         ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+write_protect_irq_shadow        proc    near
+
+        ret
+
+write_protect_irq_shadow        endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;    CHIPSET INDEXED REGISTER READ/WRITE SUPPORTIVE ROUTINES    ;
+;    CHIPSET INDEXED REGISTER READ/WRITE SUPPORTIVE ROUTINES    ;
+;    CHIPSET INDEXED REGISTER READ/WRITE SUPPORTIVE ROUTINES    ;
+;    CHIPSET INDEXED REGISTER READ/WRITE SUPPORTIVE ROUTINES    ;
+;---------------------------------------------------------------;
+;       Following routines are for chipsets with indexed        ;
+;       BYTE registers.....                                     ;
+;               * SET_REG_BIT_BYTE ... set a bit                ;
+;               * RESET_REG_BIT_BYTE ... clear a bit            ;
+;               * RW_CHIP_REG_BYTE ... set/clear selected bit(s);
+;               * READ_CHIP_REG_BYTE ... read the indexed reg   ;
+;               * WRITE_CHIP_REG_BYTE ... write the indexed reg ;
+;       If you want to use those routines, please uncomment those
+;---------------------------------------------------------------;
+
+;;      public  set_reg_bit_byte                ;
+;;      public  reset_reg_bit_byte              ;
+;;      public  rw_chip_reg_byte                ;
+;;      public  read_chip_reg_byte              ;
+;;      public  write_chip_reg_byte             ;
+
+;---------------------------------------------------------------;
+;                       SET_REG_BIT_BYTE                        ;
+;---------------------------------------------------------------;
+;       Input : (AL) index of the reg for which                 ;
+;                    some bit has to be set                     ;
+;               (CL) bit# to be set                             ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+; NOTE :                                                        ;
+;  *  Use this routine to set a bit for a chipset indexed byte reg
+;---------------------------------------------------------------;
+
+;set_reg_bit_byte       proc    near
+;
+;       push    dx                              ;
+;       mov     dx,0ff01h                       ; (dh) = 'AND' mask
+;       shl     dl,cl                           ; (dl) = 'OR' mask
+;       call    rw_chip_reg_byte                ;
+;       pop     dx                              ;
+;       ret
+;
+;set_reg_bit_byte       endp
+
+;---------------------------------------------------------------;
+;                     RESET_REG_BIT_BYTE                        ;
+;---------------------------------------------------------------;
+;       Input : (AL) index of the reg for which                 ;
+;                    some bit has to be cleared                 ;
+;               (CL) bit# to clear                              ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+; NOTE :                                                        ;
+;  *  Use this routine to clear a bit for a chipset indexed byte;
+;     register.                                                 ;
+;---------------------------------------------------------------;
+
+;reset_reg_bit_byte     proc    near
+;
+;       push    dx                              ;
+;       mov     dx,0100h                        ; (dl) = 'OR' mask
+;       shl     dh,cl                           ; get in proper bit position
+;       not     dh                              ; (dh) = 'AND' mask
+;       call    rw_chip_reg_byte                ;
+;       pop     dx                              ;
+;       ret
+;
+;reset_reg_bit_byte     endp
+
+;---------------------------------------------------------------;
+;                      RW_CHIP_REG_BYTE                         ;
+;---------------------------------------------------------------;
+;       Input : (AL) index to the reg to change                 ;
+;               (DL) OR mask                                    ;
+;               (DH) AND mask                                   ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+; NOTE :                                                        ;
+;  *  Use this routine to change selected bit(s) for a chipset  ;
+;     indexed byte register.                                    ;
+;---------------------------------------------------------------;
+
+;rw_chip_reg_byte       proc    near
+;
+;       push    ax                              ;
+;       call    read_chip_reg_byte              ; (ah) = data read
+;       and     ah,dh                           ; use 'AND' mask
+;       or      ah,dl                           ; use 'OR' mask
+;       call    write_chip_reg_byte             ;
+;       pop     ax                              ;
+;       ret
+;
+;rw_chip_reg_byte       endp
+
+;---------------------------------------------------------------;
+;                     READ_CHIP_REG_BYTE                        ;
+;---------------------------------------------------------------;
+;       Input : (AL) index of the reg to read                   ;
+;               STACK PRESENT                                   ;
+;       Output: (AH) data value read                            ;
+;       Register destroyed : NONE except (AH)                   ;
+; NOTE :                                                        ;
+;  *  Read chipset indexed byte register.                       ;
+;  *  Implementation of this hook is mandatory if chipset has   ;
+;     indexed byte register & chipset porter is using 'set_reg_ ;
+;     bit_byte', 'reset_reg_bit_byte' & 'rw_chip_reg_byte'      ;
+;     routines.                                                 ;
+;---------------------------------------------------------------;
+
+;read_chip_reg_byte     proc    near
+;
+;       out     xx,al                   ; select the index (XX = INDEX SELECT PORT)
+;       xchg    al,ah                   ; (ah) = index
+;       in      al,yy                   ; (al) = data read (YY = DATA PORT)
+;       xchg    al,ah                   ; (al) = index, (ah) = data
+;       ret
+;
+;read_chip_reg_byte     endp
+
+;---------------------------------------------------------------;
+;                      WRITE_CHIP_REG_BYTE                      ;
+;---------------------------------------------------------------;
+;       Input : (AL) index of the reg to write                  ;
+;               (AH) data to write                              ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+; NOTE :                                                        ;
+;  *  Write chipset indexed byte register.                      ;
+;  *  Implementation of this hook is mandatory if chipset has   ;
+;     indexed byte register & chipset porter is using 'set_reg_ ;
+;     bit_byte', 'reset_reg_bit_byte' & 'rw_chip_reg_byte'      ;
+;     routines.                                                 ;
+;---------------------------------------------------------------;
+
+;write_chip_reg_byte    proc    near
+;
+;       out     xx,al                   ; select the index (XX = INDEX SELECT PORT)
+;       xchg    al,ah                   ; (ah) = index, (al) = data
+;       out     yy,al                   ; write the data (YY = DATA PORT)
+;       xchg    al,ah                   ; (al) = index, (ah) = data
+;       ret
+;
+;write_chip_reg_byte    endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;    CHIPSET INDEXED REGISTER READ/WRITE SUPPORTIVE ROUTINES    ;
+;    CHIPSET INDEXED REGISTER READ/WRITE SUPPORTIVE ROUTINES    ;
+;    CHIPSET INDEXED REGISTER READ/WRITE SUPPORTIVE ROUTINES    ;
+;    CHIPSET INDEXED REGISTER READ/WRITE SUPPORTIVE ROUTINES    ;
+;---------------------------------------------------------------;
+;       Following routines are for chipsets with indexed        ;
+;       WORD registers.....                                     ;
+;               * SET_REG_BIT_WORD ... set a bit                ;
+;               * RESET_REG_BIT_WORD ... clear a bit            ;
+;               * RW_CHIP_REG_WORD ... set/clear selected bit(s);
+;               * READ_CHIP_REG_WORD ... read the indexed reg   ;
+;               * WRITE_CHIP_REG_WORD ... write the indexed reg ;
+;       If you want to use those routines, please uncomment those
+;---------------------------------------------------------------;
+
+;;      public  set_reg_bit_word                ;
+;;      public  reset_reg_bit_word              ;
+;;      public  rw_chip_reg_word                ;
+;;      public  read_chip_reg_word              ;
+;;      public  write_chip_reg_word             ;
+
+;---------------------------------------------------------------;
+;                       SET_REG_BIT_WORD                        ;
+;---------------------------------------------------------------;
+;       Input : (AX) index of the reg for which                 ;
+;                    some bit has to be set                     ;
+;               (CL) bit# to be set                             ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+; NOTE :                                                        ;
+;  *  Use this routine to set a bit for a chipset indexed word reg
+;---------------------------------------------------------------;
+
+;set_reg_bit_word       proc    near
+;
+;       push    bx                              ;
+;       push    cx                              ;
+;       mov     bx,0001h                        ;
+;       shl     bx,cl                           ; (bx) = 'OR' mask
+;       mov     cx,0ffffh                       ; (cx) = 'AND' mask
+;       call    rw_chip_reg_word                ;
+;       pop     cx                              ;
+;       pop     bx                              ;
+;       ret
+;
+;set_reg_bit_word       endp
+
+;---------------------------------------------------------------;
+;                     RESET_REG_BIT_WORD                        ;
+;---------------------------------------------------------------;
+;       Input : (AX) index of the reg for which                 ;
+;                    some bit has to be cleared                 ;
+;               (CL) bit# to clear                              ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+; NOTE :                                                        ;
+;  *  Use this routine to clear a bit for a chipset indexed word;
+;     register.                                                 ;
+;---------------------------------------------------------------;
+
+;reset_reg_bit_word     proc    near
+;
+;       push    bx                              ;
+;       push    cx                              ;
+;       mov     bx,0001h                        ;
+;       shl     bx,cl                           ; get in proper bit position
+;       not     bx                              ;
+;       mov     cx,bx                           ; (cx) = 'AND' mask
+;       xor     bx,bx                           ; (bx) = 'OR' mask
+;       call    rw_chip_reg_word                ;
+;       pop     cx                              ;
+;       pop     bx                              ;
+;       ret
+;
+;reset_reg_bit_word     endp
+
+;---------------------------------------------------------------;
+;                       RW_CHIP_REG_WORD                        ;
+;---------------------------------------------------------------;
+;       Input : (AX) index to the reg to change                 ;
+;               (BX) OR mask                                    ;
+;               (CX) AND mask                                   ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+; NOTE :                                                        ;
+;  *  Use this routine to change selected bit(s) for a chipset  ;
+;     indexed word register.                                    ;
+;---------------------------------------------------------------;
+
+;rw_chip_reg_word       proc    near
+;
+;       push    dx                              ;
+;       call    read_chip_reg_word              ; (dx) = data read
+;       and     dx,cx                           ; use 'AND' mask
+;       or      dx,bx                           ; use 'OR' mask
+;       call    write_chip_reg_word             ;
+;       pop     dx                              ;
+;       ret
+;
+;rw_chip_reg_word       endp
+
+;---------------------------------------------------------------;
+;                      READ_CHIP_REG_WORD                       ;
+;---------------------------------------------------------------;
+;       Input : (AX) index of the reg to read                   ;
+;               STACK PRESENT                                   ;
+;       Output: (DX) data value read                            ;
+;       Register destroyed : NONE except (DX)                   ;
+; NOTE :                                                        ;
+;  *  Read chipset indexed word register                        ;
+;  *  Implementation of this hook is mandatory if chipset has   ;
+;     indexed word register & chipset porter is using 'set_reg_ ;
+;     bit_word', 'reset_reg_bit_word' & 'rw_chip_reg_word'      ;
+;     routines.                                                 ;
+;---------------------------------------------------------------;
+
+;read_chip_reg_word     proc    near
+;
+;       out     xx,ax                   ; select the index (XX = INDEX SELECT PORT)
+;       xchg    ax,dx                   ; (dx) = index
+;       in      ax,yy                   ; (ax) = data read (YY = DATA PORT)
+;       xchg    ax,dx                   ; (ax) = index, (dx) = data
+;       ret
+;
+;read_chip_reg_word     endp
+
+;---------------------------------------------------------------;
+;                      WRITE_CHIP_REG_WORD                      ;
+;---------------------------------------------------------------;
+;       Input : (AX) index of the reg to write                  ;
+;               (DX) data to write                              ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+; NOTE :                                                        ;
+;  *  Write chipset indexed word register.                      ;
+;  *  Implementation of this hook is mandatory if chipset has   ;
+;     indexed word register & chipset porter is using 'set_reg_ ;
+;     bit_word', 'reset_reg_bit_word' & 'rw_chip_reg_word'      ;
+;     routines.                                                 ;
+;---------------------------------------------------------------;
+
+;write_chip_reg_word    proc    near
+;
+;       out     xx,ax                   ; select the index (XX = INDEX SELECT PORT)
+;       xchg    ax,dx                   ; (dx) = index, (ax) = data
+;       out     yy,ax                   ; write the data (YY = DATA PORT)
+;       xchg    ax,dx                   ; (ax) = index, (dx) = data
+;       ret
+;
+;write_chip_reg_word    endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;   CYRIX CPU INDEXED REGISTER READ/WRITE SUPPORTIVE ROUTINES   ;
+;   CYRIX CPU INDEXED REGISTER READ/WRITE SUPPORTIVE ROUTINES   ;
+;   CYRIX CPU INDEXED REGISTER READ/WRITE SUPPORTIVE ROUTINES   ;
+;   CYRIX CPU INDEXED REGISTER READ/WRITE SUPPORTIVE ROUTINES   ;
+;---------------------------------------------------------------;
+;       Following routines are for CYRIX CPU with indexed       ;
+;       BYTE registers.....                                     ;
+;               * RW_CPU_REG_CRX_TI ... set/clear selected bit(s)
+;               * READ_CPU_REG_CRX_TI ... read the indexed reg  ;
+;               * WRITE_CPU_REG_CRX_TI ... write the indexed reg;
+;       If you want to use those routines, please uncomment those
+;---------------------------------------------------------------;
+
+;;      public  rw_cpu_reg_crx_ti               ;
+;;      public  read_cpu_reg_crx_ti             ;
+;;      public  write_cpu_reg_crx_ti            ;
+
+;---------------------------------------------------------------;
+;                      RW_CPU_REG_CRX_TI                        ;
+;---------------------------------------------------------------;
+;       Input : (AL) index to the reg to change                 ;
+;               (DL) OR mask                                    ;
+;               (DH) AND mask                                   ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+;       NOTE : COMMON ROUTINE FOR CYRIX/TI CPU                  ;
+;---------------------------------------------------------------;
+
+;rw_cpu_reg_crx_ti      proc    near
+;
+;       push    ax                              ;
+;       call    read_cpu_reg_crx_ti             ; (ah) = data read
+;       and     ah,dh                           ; use 'AND' mask
+;       or      ah,dl                           ; use 'OR' mask
+;       call    write_cpu_reg_crx_ti            ;
+;       pop     ax                              ;
+;       ret
+;
+;rw_cpu_reg_crx_ti      endp
+
+;---------------------------------------------------------------;
+;                       READ_CPU_REG_CRX_TI                     ;
+;---------------------------------------------------------------;
+;       Input : (AL) index to read                              ;
+;               STACK PRESENT                                   ;
+;       Output: (AL) index                                      ;
+;               (AH) data read                                  ;
+;       Register destroyed : (AH)                               ;
+;       NOTE : COMMON ROUTINE FOR CYRIX/TI CPU                  ;
+;---------------------------------------------------------------;
+
+;read_cpu_reg_crx_ti    proc    near
+;
+;       mov     ah,al                           ; (ah) = (al) = index
+;       out     crx_ti_index_reg,al             ; select the index
+;       smi_io_delay                            ; i/o delay
+;       in      al,crx_ti_data_reg              ; (al) = read data
+;       xchg    al,ah                           ; (al) = index, (ah) = data read
+;       ret
+;
+;read_cpu_reg_crx_ti    endp
+
+;---------------------------------------------------------------;
+;                       WRITE_CPU_REG_CRX_TI                    ;
+;---------------------------------------------------------------;
+;       Input : (AL) index to write                             ;
+;               (AH) data to write                              ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+;       NOTE : COMMON ROUTINE FOR CYRIX/TI CPU                  ;
+;---------------------------------------------------------------;
+
+;write_cpu_reg_crx_ti   proc    near
+;
+;       out     crx_ti_index_reg,al             ; select the index
+;       smi_io_delay                            ; i/o delay
+;       xchg    al,ah                           ; (al) = data to write
+;       out     crx_ti_data_reg,al              ; write the data
+;       xchg    al,ah                           ; (al) = index, (ah) = data
+;       ret
+;
+;write_cpu_reg_crx_ti   endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;                 COREBIOS INTERACTION ROUTINES                 ;
+;---------------------------------------------------------------;
+
+;;      public  get_cpu_id_local                ;
+;;      public  get_vendor_name_local           ;
+;;      public  set_smi_type                    ;
+;;      public  get_no_of_sec_cpu_local         ;
+
+;;      public  get_apic_id_for_current_processor
+;;      public  get_local_apic_base_addr        ;
+
+;---------------------------------------------------------------;
+;                       GET_CPU_ID_LOCAL                        ;
+;---------------------------------------------------------------;
+;       Input : NONE                                            ;
+;               STACK PRESENT                                   ;
+;       Output: (DX:AX) pointer to ASCIIZ cpu name string       ;
+;               (BX) function field                             ;
+;                       (BL) bit 7 set, SMI support CPU         ;
+;                       (BH) bit 6  bit 5...valid if SMI        ;
+;                                           support CPU         ;
+;                              0      0   ... INTEL type SMI    ;
+;                              0      1   ... CYRIX type SMI    ;
+;                              1      0   ... AMD type SMI      ;
+;                              1      1   ... reserved          ;
+;               (CL) CPU number                                 ;
+;                       >= 16 IBM-CYRIX cpu (all in decimal)    ;
+;                       12-31 AMD-PLUS cpu (all in decimal)     ;
+;                       0f0h to 0feh USER added NEW CPU         ;
+;                       0ffh means UNKNOWN CPU                  ;
+;       Register destroyed : (AX),(BX),(CX),(DX)                ;
+; NOTE :                                                        ;
+;  *  Normally there is no need to change this routine. If you  ;
+;     want to execute GREEN PC code other than F000 segment,    ;
+;     then you need to change this.                             ;
+;  *  Only from 10-10-94 CORE BIOS, the above info in bit5 &    ;
+;     bit6 of (BH) is available.                                ;
+;  *  In 10-10-94 CORE BIOS, 'GET_CPU_ID' routine is available  ;
+;     at 0f000:0eecch and can be accessed as far call.          ;
+;---------------------------------------------------------------;
+
+get_cpu_id_local        proc    near
+
+;-----------------------------------------------;
+        db      09ah                            ; CALL FAR
+        dw      0eecch                          ; returns (dx:ax) pointer to ASCIIZ cpu name string
+                                                ; (cl) cpu number, (bx) function field
+        dw      0f000h                          ;
+        ret
+;-----------------------------------------------;
+
+get_cpu_id_local        endp
+
+;---------------------------------------------------------------;
+;                   GET_VENDOR_NAME_LOCAL                       ;
+;---------------------------------------------------------------;
+;       Input : NONE                                            ;
+;               STACK PRESENT                                   ;
+;       Output: (BL) CPU vendor number                          ;
+;                       00 Intel                                ;
+;                       01 Cyrix                                ;
+;                       02 AMD                                  ;
+;                       03 IBM                                  ;
+;                       04 TI                                   ;
+;                       05 UMC                                  ;
+;       Register destroyed : (AX),(BX),(DX)                     ;
+; NOTE :                                                        ;
+;  *  Normally there is no need to change this routine. If you  ;
+;     want to execute GREEN PC code other than F000 segment,    ;
+;     then you need to change this.                             ;
+;  *  In 10-10-94 CORE BIOS, 'GET_VENDOR_NAME' is available at  ;
+;     0f000:0eecfh and can be accessed as far call.             ;
+;---------------------------------------------------------------;
+
+get_vendor_name_local   proc    near
+
+;-----------------------------------------------;
+        db      09ah                            ; CALL FAR
+        dw      0eecfh                          ; returns (bl) = cpu vendor number
+        dw      0f000h                          ;
+        ret
+
+get_vendor_name_local   endp
+
+;---------------------------------------------------------------;
+;                         SET_SMI_TYPE                          ;
+;---------------------------------------------------------------;
+;       Input : (CH) cpu vendor #                               ;
+;                       00 Intel                                ;
+;                       01 Cyrix                                ;
+;                       02 AMD                                  ;
+;                       03 IBM                                  ;
+;                       04 TI                                   ;
+;                       05 UMC                                  ;
+;               (CL) cpu #                                      ;
+;                       >= 16 IBM-CYRIX cpu (all in decimal)    ;
+;                       12-31 AMD-PLUS cpu (all in decimal)     ;
+;                       0f0h to 0feh USER added NEW CPU         ;
+;                       0ffh means UNKNOWN CPU                  ;
+;               (BL) bit 7 set, cpu has SMI support             ;
+;               (BH) bit 6  bit 5...valid if SMI support CPU    ;
+;                      0      0   ... INTEL type SMI            ;
+;                      0      1   ... CYRIX type SMI            ;
+;                      1      0   ... AMD type SMI              ;
+;                      1      1   ... reserved                  ;
+;               STACK PRESENT                                   ;
+;       Output: (BH) bit 3  bit 2                               ;
+;                      0      0   ... INTEL type SMI            ;
+;                      0      1   ... CYRIX type SMI            ;
+;                      1      0   ... AMD type SMI              ;
+;                      1      1   ... reserved                  ;
+;               (BH) bit 6 set for SMI capable CPU              ;
+;                    bit 6 clear for non-SMI CPU                ;
+;               (BH) all other bits cleared to 0                ;
+;       Register destroyed : (BH)                               ;
+; NOTE :                                                        ;
+;  *  Only from 10-10-94 CORE BIOS, the above info in bit5 &    ;
+;     bit6 of (BH) is available.                                ;
+;---------------------------------------------------------------;
+
+set_smi_type    proc    near
+
+;-----------------------------------------------;
+        shr     bh,3                            ; get SMI type information in bits 2 & 3
+        and     bh,00001100b                    ; clear all bits of (bh) except SMI type bits to 00
+        test    bl,10000000b                    ; cpu has SMI support ?
+        jz      short set_smi_type_10           ; no...
+        or      bh,smi_capable_cpu              ; set for CPU has SMI support
+set_smi_type_10:
+        ret
+;-----------------------------------------------;
+set_smi_type    endp
+
+;---------------------------------------------------------------;
+;                   GET_NO_OF_SEC_CPU_LOCAL                     ;
+;---------------------------------------------------------------;
+;       Input : NONE                                            ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 01...no secondary CPU                      ;
+;               (CY) 00...secondary CPU present &               ;
+;                         (AL) bits 3 thru 0 contains # of      ;
+;                              secondary CPU present            ;
+;       Register destroyed : (AX)                               ;
+;---------------------------------------------------------------;
+
+get_no_of_sec_cpu_local proc    near
+
+	stc
+        ret
+
+get_no_of_sec_cpu_local endp
+
+
+;;=============================================
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+
+IF      INTEL_APIC_MP_SUPPORT
+
+;---------------------------------------------------------------;
+;                 COREBIOS INTERACTION ROUTINES                 ;
+;---------------------------------------------------------------;
+
+;;      public  get_local_apic_base_addr        ;
+
+;;      public  send_apic_smi_ipi               ;
+
+;---------------------------------------------------------------;
+;                    GET_LOCAL_APIC_BASE_ADDR                   ;
+;---------------------------------------------------------------;
+;       Input : NONE                                            ;
+;       Output: (ESI) local APIC base address                   ;
+;       Register destroyed : (ESI)                              ;
+; NOTE :                                                        ;
+;  * The following code should work for most of the implementa- ;
+;    tion. Change following code if LOCAL APIC base address is  ;
+;    programmed differently.                                    ;
+;  * This routine will be called both from POST and RUNTIME     ;
+;    SMI code, so don't depend on any specifics of (CS),(DS),(ES)
+;  * Always return lower 12 bits of local APIC base address as  ;
+;    000h, as local APIC sits at 4KB boundary.                  ;
+;---------------------------------------------------------------;
+
+get_local_apic_base_addr        proc    near
+
+        mov     esi,0fee00000h                  ; (esi) = default base address for local APIC
+        ret
+
+get_local_apic_base_addr        endp
+
+;---------------------------------------------------------------;
+;                       SEND_APIC_SMI_IPI                       ;
+;---------------------------------------------------------------;
+;       Input : (DS) boot strap processor (BSP) SMI code segment;
+;               (ES) default INTEL CPU SMI segment (3000H)      ;
+;               (CS) dual/multiple CPU SMI code source segment  ;
+;               (AX) current processor bit                      ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error                            ;
+;               (CY) 01 for error                               ;
+;       Register destroyed : NONE                               ;
+;---------------------------------------------------------------;
+
+send_apic_smi_ipi       proc    near
+
+        pushad                                  ;
+
+        call    get_apic_id_for_current_processor; (edi) = APIC ID for the processor requested in (ax)
+        and     edi,00f000000h                  ; 'OR' (clear non APIC ID bits) for ICR HIGH
+        mov     ebx,0f0ffffffh                  ; 'AND' mask (clear 4 bit APIC ID field) for ICR HIGH
+
+        mov     ecx,0fff3f800h                  ; 'AND' mask (clear delivery mode & vector field & dest. shorthand) for ICR LOW
+        mov     edx,000000200h                  ; 'OR' (SMI IPI & vector field 00) for ICR LOW
+
+        call    send_ipi_to_apic                ; send SMI IPI to non-BSP CPU APIC
+        popad                                   ;
+        ret
+
+send_apic_smi_ipi       endp
+
+;---------------------------------------------------------------;
+;               GET_APIC_ID_FOR_CURRENT_PROCESSOR               ;
+;---------------------------------------------------------------;
+;       Input : (DS) boot strap processor (BSP) SMI code segment;
+;               (ES) default INTEL CPU SMI segment (3000H)      ;
+;               (CS) dual/multiple CPU SMI code source segment  ;
+;               (AX) current processor bit                      ;
+;                       bit 0 set for BSP processor             ;
+;                       bit 1 set for 1st secondary processor   ;
+;                       bit 2 set for 2nd secondary processor   ;
+;                               and so on....                   ;
+;               STACK PRESENT                                   ;
+;       Output: (EDI) bit 24-27 APIC ID for current processor   ;
+;       Register destroyed : (EBX),(ECX),(EDX),(ESI),(EDI)      ;
+; NOTE :                                                        ;
+;  * It is assumed (DS) has 4 GB limit at this point            ;
+;  * This routine is called for secondary processor only        ;
+;  * The following code should work for 1st secondary processor ;
+;    of a DUAL processor system. But actually the following     ;
+;    code should be replaced by MP table informations created by;
+;    DESKTOP core bios.                                         ;
+;---------------------------------------------------------------;
+
+get_apic_id_for_current_processor       proc    near
+
+        push    ds                              ;
+
+        push    0000h                           ;
+        pop     ds                              ; set (ds) to 0000h to access 4 GB address space
+
+        mov     esi,apic_id_reg                 ; APIC ID reg (0FEE0_0020H)
+        mov     edi,[esi]                       ;
+        and     edi,00f000000h                  ; (edi) = APIC ID for BSP in bits 24 thru 27
+        xor     edi,001000000h                  ; (edi) = APIC ID for 1st secondary processor...toggle bit 24
+
+        pop     ds                              ;
+        ret
+
+get_apic_id_for_current_processor       endp
+
+;---------------------------------------------------------------;
+;                       SEND_IPI_TO_APIC                        ;
+;---------------------------------------------------------------;
+;       Input : (ECX) 'AND" mask data for ICR LOW               ;
+;               (EDX) 'OR' data for ICR LOW                     ;
+;               (EBX) 'AND' mask data for ICR HIGH              ;
+;               (EDI) 'OR' data for ICR HIGH                    ;
+;       Output: (CY) 00 for no error                            ;
+;               (CY) 01 for error                               ;
+;       Register destroyed : (EAX),(EBX),(CX),(ESI),(EDI)       ;
+; NOTE :                                                        ;
+;  * It is assumed (DS) has 4 GB limit at this point            ;
+;---------------------------------------------------------------;
+
+send_ipi_to_apic        proc    near
+
+        push    ds                              ;
+
+        push    0000h                           ;
+        pop     ds                              ; set (ds) to 0000h to access 4 GB address space
+
+        call    get_local_apic_base_addr        ; (esi) = local APIC base address
+        or      si,apic_lvt_err_reg             ; (esi) = APIC local vector table for ERROR reg (0FEE0_0370H)
+        mov     eax,[esi]                       ; read current value of APIC local vector table for error
+        push    esi                             ;
+        push    eax                             ;
+        or      eax,apic_intr_mask_bit          ; mask error interrupt
+        mov     [esi],eax                       ;
+;;      mov     eax,[esi]                       ; read back to post write
+
+        call    get_local_apic_base_addr        ; (esi) = local APIC base address
+        or      si,apic_intr_cmd_high_reg       ; (esi) = APIC ICR HIGH (0FEE0_0310H)
+        mov     eax,[esi]                       ; current value
+        and     eax,ebx                         ; 'AND' mask
+        or      eax,edi                         ; 'OR'
+        mov     [esi],eax                       ; program ICR HIGH
+
+        call    get_local_apic_base_addr        ; (esi) = local APIC base address
+        or      si,apic_intr_cmd_low_reg        ; (esi) = APIC ICR LOW (0FEE0_0300H)
+        mov     eax,[esi]                       ; current value
+        and     eax,ecx                         ; 'AND' mask
+        or      eax,edx                         ; 'OR'
+
+        mov     edi,esi                         ;
+        and     di,0f000h                       ; (edi) = local APIC base address
+        or      di,apic_error_status_reg        ; (edi) = APIC error status reg (0FEE0_0280H)
+        mov     cx,send_apic_ipi_retry_count    ; retry count for sending IPI to APIC
+
+send_ipi_to_apic_01:
+        mov     [esi],eax                       ; program ICR LOW
+        mov     ebx,[edi]                       ; (ebx) = error status reg current data
+        and     ebx,000000025                   ; consider errors as
+                                                ; bit 0 ... checksum error in message
+                                                ; bit 2 ... message sent by local APIC was not accepted by anybody
+                                                ; bit 5 ... illegal vector in message
+        loopnz  send_ipi_to_apic_01             ; wait till no error condition
+        jz      short send_ipi_to_apic_10       ; no error...(CY) = 00
+        stc                                     ; (cy) = 01 for error
+send_ipi_to_apic_10:
+        pop     eax                             ; (eax) = saved local vector table for error
+        pop     esi                             ; (esi) = APIC local vector table for ERROR reg (0FEE0_0370H)
+        mov     [esi],eax                       ;
+
+        pop     ds                              ;
+        ret
+
+send_ipi_to_apic        endp
+
+;---------------------------------------------------------------;
+
+ENDIF
+;---------------------------------------------------------------;
+
+	include	pmaccess.inc
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+

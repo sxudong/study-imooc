@@ -1,0 +1,1630 @@
+
+// This AMI Setup Script Processor (SSP) file contains setup items for
+// all supported peripheral devices.  This file is considered a core BIOS
+// file and should not be modified.
+
+Description = "Peripheral setup items"
+
+LanguageVersion = 1
+
+//*****************************************************************;
+BeginDevice (ALI5135XFloppyController)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135X_FLOPPY_CONTROLLER)
+            Text = "OnBoard FDC"
+            Options = "Auto":DEFAULT:POWERON,
+                      "Disabled",
+                      "Enabled"
+        EndQuestion
+//        Question (Q_ALI5135X_FLOPPY_SWAP)
+//            Text = "  Floppy Drive Swap"
+//            ShadeWhen (Q_ALI5135X_FLOPPY_CONTROLLER) = "Disabled"
+//            Optionset = "Disabled", "Enabled"
+//            Optionset = "N/A"
+//            Optionset = "Disabled", "Enabled"
+//        EndQuestion
+        Question (Q_ALI5135X_FLOPPY_ACCESS)
+            Text = "  Floppy Access Control"
+            RuntimeFunction = ALI5135X_FDC_Xrn
+            ExternalFunction = ALI5135X_FDC_Xfn
+            OptionBits = 1
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+    EndScreen
+EndDevice // ALI5135XFloppyController
+BeginDevice (ALI5135XSerialPortA)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135X_COMA_PORT)
+            Text = "OnBoard Serial Port1"
+            Options = "Auto":DEFAULT:POWERON,
+                      "Disabled",
+                      "3F8/COM1",
+                      "2F8/COM2",
+                      "3E8/COM3",
+                      "2E8/COM4"
+        EndQuestion
+        Question (Q_ALI5135X_COMA_MODE)
+            Text = "  Serial Port1 Mode"
+            ShadeWhen (Q_ALI5135X_COMA_PORT) = "Disabled"
+            Optionset = "Normal", "IrDA", "ASKIR"
+            Optionset = "N/A"
+            Optionset = "Normal", "IrDA", "ASKIR"
+        EndQuestion
+        Question (Q_ALI5135X_COMA_TIMER)
+            Text = "    IR Half-Duplex Time-Out"
+            ExternalFunction = ALI5135X_ComA_Timer_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 0
+        EndQuestion
+    EndScreen
+EndDevice // ALI5135XSerialPortA
+BeginDevice (Ali5135XSerialPortB)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135X_COMB_PORT)
+            Text = "OnBoard Serial Port2"
+            Options = "Auto":DEFAULT:POWERON,
+                      "Disabled",
+                      "3F8/COM1",
+                      "2F8/COM2",
+                      "3E8/COM3",
+                      "2E8/COM4"
+        EndQuestion
+        Question (Q_ALI5135X_COMB_MODE)
+            Text = "  Serial Port2 Mode"
+            ShadeWhen (Q_ALI5135X_COMB_PORT) = "Disabled"
+            Optionset = "Normal", "IrDA", "ASKIR"
+            Optionset = "N/A"
+            Optionset = "Normal", "IrDA", "ASKIR"
+//          ExternalFunction = ALI5135X_ComB_Mode_Xfn
+//          OptionBits = 2
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+        Question (Q_ALI5135X_COMB_TIMER)
+            Text = "    IR Half-Duplex Time-Out"
+            ExternalFunction = ALI5135X_ComB_Timer_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 0
+        EndQuestion
+    EndScreen
+EndDevice // Ali5135XSerialPortB
+BeginDevice (ALI5135XSerialPortC)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135X_COMC_PORT)
+            Text = "OnBoard Serial Port3"
+//          Options = "Auto":DEFAULT:POWERON,
+//                    "Disabled",
+//                    "3F8/COM1",
+//                    "2F8/COM2",
+//                    "3E8/COM3",
+//                    "2E8/COM4"
+            RuntimeFunction = ALI5135X_ComC_Port_Xrn
+            ExternalFunction = ALI5135X_ComC_Port_Xfn
+            OptionBits = 3
+            Default = 1
+            PowerOn = 1
+        EndQuestion
+        Question (Q_ALI5135X_COMC_MODE)
+            Text = "  Serial Port3 Mode"
+//          ShadeWhen (Q_ALI5135X_COMC_PORT) = "Disabled"
+//          Optionset = "Normal", "IrDA", "ASKIR", "FIR"
+//          Optionset = "N/A"
+//          Optionset = "Normal", "IrDA", "ASKIR", "FIR"
+            RuntimeFunction = ALI5135X_ComC_Mode_Xrn
+            ExternalFunction = ALI5135X_ComC_Mode_Xfn
+            OptionBits = 2
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+        Question (Q_ALI5135X_COMC_IRQ)
+            Text = "  Serial Port3 IRQ"
+            RuntimeFunction = ALI5135X_ComC_Irq_Xrn
+            ExternalFunction = ALI5135X_ComC_Irq_Xfn
+            OptionBits = 4
+            Default = 11
+            PowerOn = 11
+        EndQuestion
+        Question (Q_ALI5135X_COMC_DMA)
+            Text = "  Serial Port3 DMA"
+            RuntimeFunction = ALI5135X_ComC_Dma_Xrn
+            ExternalFunction = ALI5135X_ComC_Dma_Xfn
+            OptionBits = 2
+            Default = 1
+            PowerOn = 1
+        EndQuestion
+        Question (Q_ALI5135X_COMC_TYPE)
+            Text = "    IR Transceiver Module Type"
+            RuntimeFunction = ALI5135X_ComC_Type_Xrn
+            ExternalFunction = ALI5135X_ComC_Type_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 1
+        EndQuestion
+        Question (Q_ALI5135X_COMC_TIMER)
+            Text = "    IR Half-Duplex Time-Out"
+            RuntimeFunction = ALI5135X_ComC_Timer_Xrn
+            ExternalFunction = ALI5135X_ComC_Timer_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 0
+        EndQuestion
+    EndScreen
+EndDevice       // ALI5135XSerialPortC
+BeginDevice (ALI5135XParallelPort)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135X_LPT_PORT)
+            Text = "OnBoard Parallel Port"
+            Options = "Auto":DEFAULT:POWERON,
+                      "Disabled",
+                      "378",
+                      "278",
+                      "3BC"
+        EndQuestion
+        Question (Q_ALI5135X_LPT_MODE)
+            Text = "  Parallel Port Mode"
+            ShadeWhen (Q_ALI5135X_LPT_PORT) = "Disabled"
+            OptionSet = "Normal", "Bi-Dir"
+            OptionSet = "N/A"
+            OptionSet = "Normal", "Bi-Dir"
+        EndQuestion
+        Question (Q_ALI5135X_LPT_IRQ)
+            Text = "  Parallel Port IRQ"
+            ExternalFunction = ALI5135X_Lpt_Irq_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 1
+        EndQuestion
+    EndScreen
+EndDevice       // ALI5135XParallelPort
+BeginDevice (ALI5135XParallelPortExt)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135X_LPT_PORT)
+            Text = "OnBoard Parallel Port"
+            ExternalFunction = ALI5135X_Lpt_Addr_Xfn
+            OptionBits = 3
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+        Question (Q_ALI5135X_LPT_MODE)
+            Text = "  Parallel Port Mode"
+            ExternalFunction = ALI5135X_Lpt_Mode_Xfn
+            OptionBits = 2
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+        Question (Q_ALI5135X_LPT_EPPVER)
+            Text = "    EPP Version"
+            ExternalFunction = ALI5135X_Lpt_EppVer_Xfn
+            OptionBits = 1
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+        Question (Q_ALI5135X_LPT_IRQ)
+            Text = "  Parallel Port IRQ"
+            ExternalFunction = ALI5135X_Lpt_Irq_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 1
+        EndQuestion
+        Question (Q_ALI5135X_LPT_ECP_DMA)
+            Text = "  Parallel Port DMA Channel"
+            ExternalFunction = ALI5135X_Lpt_Dma_Xfn
+            OptionBits = 2
+            Default = 3
+            PowerOn = 3
+        EndQuestion
+    EndScreen
+EndDevice       // ALI5135XParallelPortExt         
+BeginDevice (ALI5135XFloppyController)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135F_KEYBOARD_POWERON)
+            Text = "KeyBoard PowerOn"
+//          Options = "Disabled":DEFAULT:POWERON,
+//                    "Enabled"
+            RuntimeFunction = ALI5135F_poweron_Xrn
+            ExternalFunction = ALI5135F_poweron_Xfn
+            OptionBits = 1
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+        Question (Q_ALI5135F_POWERON_SELECT)
+            Text = "PowerOn Select"
+//          ShadeWhen (Q_ALI5135F_KEYBOARD_POWERON) = "Disabled"
+//          Options = "Password",
+//                    "HotKey":DEFAULT:POWERON
+            RuntimeFunction = ALI5135F_poweron_select_Xrn
+            ExternalFunction = ALI5135F_poweron_select_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 1
+        EndQuestion
+        Question (Q_ALI5135F_HOTKEY_SELECT)
+            Text = "HotKey Select"
+//          Options = "Ctrl-Alt-Del":DEFAULT:POWERON,
+//                    "Ctrl-Alt-Ins"
+//                    "C-A-LShift"
+//                    "C-A-RShift"
+//                    "Ctrl-Alt-F1"
+//                    "Ctrl-Alt-F2"
+//                    "Ctrl-Alt-F3"
+//                    "Ctrl-Alt-F4"
+//                    "Ctrl-Alt-F5"
+//                    "Ctrl-Alt-F6"
+//                    "Ctrl-Alt-F7"
+//                    "Ctrl-Alt-F8"
+//                    "Ctrl-Alt-F9"
+//                    "Ctrl-Alt-F10"
+//                    "Ctrl-Alt-F11"
+//                    "Ctrl-Alt-F12"
+            RuntimeFunction = ALI5135F_hotkey_select_Xrn
+            ExternalFunction = ALI5135F_hotkey_select_Xfn
+            OptionBits = 4
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+    EndScreen
+EndDevice       // ALI5135FHotKeyController
+String(STR_ALI5135X_NA)
+    Text = "N/A"
+EndString
+String(STR_ALI5135X_AUTO)
+    Text = "Auto"
+EndString
+String(STR_ALI5135X_378)
+    Text = "378"
+EndString
+String(STR_ALI5135X_278)
+    Text = "278"
+EndString
+String(STR_ALI5135X_3BC)
+    Text = "3BC"
+EndString
+String(STR_ALI5135X_3F8)
+    Text = "3F8/COM1"
+EndString
+String(STR_ALI5135X_2F8)
+    Text = "2F8/COM2"
+EndString
+String(STR_ALI5135X_3E8)
+    Text = "3E8/COM3"
+EndString
+String(STR_ALI5135X_2E8)
+    Text = "2E8/COM4"
+EndString
+String(STR_ALI5135X_NORMAL)
+    Text = "Normal"
+EndString
+String(STR_ALI5135X_READONLY)
+    Text = "Read Only"
+EndString
+String(STR_ALI5135X_IRDA)
+    Text = "IrDA"
+EndString
+String(STR_ALI5135X_ASKIR)
+    Text = "ASKIR"
+EndString
+String(STR_ALI5135X_FIR)
+    Text = "FIR"
+EndString
+String(STR_ALI5135X_BIDIR)
+    Text = "Bi-Dir"
+EndString
+String(STR_ALI5135X_EPP)
+    Text = "EPP"
+EndString
+String(STR_ALI5135X_ECP)
+    Text = "ECP+EPP"
+EndString
+String(STR_ALI5135X_EPP17)
+    Text = "1.7"
+EndString
+String(STR_ALI5135X_EPP19)
+    Text = "1.9"
+EndString
+String(STR_ALI5135X_1)
+    Text = "1"
+EndString
+String(STR_ALI5135X_2)
+    Text = "2"
+EndString
+String(STR_ALI5135X_3)
+    Text = "3"
+EndString
+String(STR_ALI5135X_4)
+    Text = "4"
+EndString
+String(STR_ALI5135X_5)
+    Text = "5"
+EndString
+String(STR_ALI5135X_7)
+    Text = "7"
+EndString
+String(STR_ALI5135X_9)
+    Text = "9"
+EndString
+String(STR_ALI5135X_A)
+    Text = "10"
+EndString
+String(STR_ALI5135X_B)
+    Text = "11"
+EndString
+String(STR_ALI5135X_C)
+    Text = "12"
+EndString
+String(STR_ALI5135X_IBM)
+    Text = "IBM"
+EndString
+String(STR_ALI5135X_HP)
+    Text = "HP"
+EndString
+String(STR_ALI5135X_HIGH)
+    Text = "High"
+EndString
+String(STR_ALI5135X_LOW)
+    Text = "Low"
+EndString
+String(STR_ALI5135F_PASSWORD)
+    Text = "Password"
+EndString
+String(STR_ALI5135F_HOTKEY)
+    Text = "HotKey"
+EndString
+String(STR_ALI5135F_CTRL_ALT_DEL)
+    Text = "Ctrl-Alt-Del"
+EndString
+String(STR_ALI5135F_CTRL_ALT_INS)
+    Text = "Ctrl-Alt-Ins"
+EndString
+String(STR_ALI5135F_CTRL_ALT_LSHIFT)
+    Text = "C-A-LShift"
+EndString
+String(STR_ALI5135F_CTRL_ALT_RSHIFT)
+    Text = "C-A-RShift"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F1)
+    Text = "Ctrl-Alt-F1"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F2)
+    Text = "Ctrl-Alt-F2"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F3)
+    Text = "Ctrl-Alt-F3"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F4)
+    Text = "Ctrl-Alt-F4"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F5)
+    Text = "Ctrl-Alt-F5"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F6)
+    Text = "Ctrl-Alt-F6"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F7)
+    Text = "Ctrl-Alt-F7"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F8)
+    Text = "Ctrl-Alt-F8"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F9)
+    Text = "Ctrl-Alt-F9"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F10)
+    Text = "Ctrl-Alt-F10"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F11)
+    Text = "Ctrl-Alt-F11"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F12)
+    Text = "Ctrl-Alt-F12"
+EndString
+BeginDevice (Gm803CIdeController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_GM803C_IDE_CONTROLLER)
+			Text = "OnBoard IDE"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary":DEFAULT:POWERON,
+				  "Secondary"
+		EndQuestion
+	EndScreen
+EndDevice   // Gm803CIdeController
+BeginDevice (Gm803CFloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_GM803C_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+	EndScreen
+EndDevice   // Gm803CFloppyController
+BeginDevice (Gm803CSerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_GM803C_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice   // Gm803CSerialPortA
+BeginDevice (Gm803CSerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_GM803C_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_GM803C_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+			ShadeWhen (Q_GM803C_COMB_PORT) = "Disabled"
+			OptionSet = "Normal", "IrDA", "ASK IR"
+			OptionSet = "N/A"
+			OptionSet = "Normal", "IrDA", "ASK IR"
+		EndQuestion
+		Question (Q_GM803C_COMB_IR_PIN)
+			Text = "    IR Pins"
+                        ExternalFunction = Gm803C_ComB_IrPin_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_GM803C_COMB_DUPLEX)
+			Text = "    Duplex Mode"
+                        ExternalFunction = Gm803C_ComB_Duplex_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+		Question (Q_GM803C_COMB_RX_POLARITY)
+			Text = "    Receiver Polarity"
+                        ExternalFunction = Gm803C_ComB_Rx_Polarity_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_GM803C_COMB_TX_POLARITY)
+			Text = "    Transmitter Polarity"
+                        ExternalFunction = Gm803C_ComB_Tx_Polarity_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+	EndScreen
+EndDevice   // Gm803CSerialPortB
+BeginDevice (Gm803CParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_GM803C_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_GM803C_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ShadeWhen (Q_GM803C_LPT_PORT) = "Disabled"
+			OptionSet = "Auto"
+			OptionSet = "N/A"
+			OptionSet = "5", "7"
+		EndQuestion
+	EndScreen
+EndDevice   // Gm803CParallelPort
+BeginDevice (Gm803CParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_GM803C_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			ExternalFunction = Gm803C_Lpt_Addr_Xfn
+			OptionBits = 3
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_GM803C_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = Gm803C_Lpt_Mode_Xfn
+			OptionBits = 2
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+		Question (Q_GM803C_LPT_EPPVER)
+			Text = "  EPP Version"
+			ExternalFunction = Gm803C_Lpt_EppVer_Xfn
+			OptionBits = 1
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_GM803C_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+			ExternalFunction = Gm803C_Lpt_Dma_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+		Question (Q_GM803C_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Gm803C_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice   // Gm803CParallelPortExt
+String (STR_GM803C_AUTO)
+	Text = "Auto"
+EndString
+String (STR_GM803C_DIS)
+	Text = "Disabled"
+EndString
+String (STR_GM803C_378)
+	Text = "378"
+EndString
+String (STR_GM803C_278)
+	Text = "278"
+EndString
+String (STR_GM803C_3BC)
+	Text = "3BC"
+EndString
+String (STR_GM803C_NORMAL)
+	Text = "Normal"
+EndString
+String (STR_GM803C_EPP)
+	Text = "EPP"
+EndString
+String (STR_GM803C_ECP)
+	Text = "ECP"
+EndString
+String (STR_GM803C_EPP19)
+	Text = "1.9"
+EndString
+String (STR_GM803C_EPP17)
+	Text = "1.7"
+EndString
+String (STR_GM803C_IRQ5)
+	Text = "5"
+EndString
+String (STR_GM803C_IRQ7)
+	Text = "7"
+EndString
+String (STR_GM803C_DMA0)
+	Text = "0"
+EndString
+String (STR_GM803C_DMA1)
+	Text = "1"
+EndString
+String (STR_GM803C_DMA2)
+	Text = "2"
+EndString
+String (STR_GM803C_DMA3)
+	Text = "3"
+EndString
+String (STR_GM803C_NA)
+	Text = "N/A"
+EndString
+String (STR_GM803C_RXTX)
+	Text = "IRRX,IRTX"
+EndString
+String (STR_GM803C_RX2TX2)
+	Text = "IRRX2,IRTX2"
+EndString
+String (STR_GM803C_FULL_DUPLEX)
+	Text = "Full Duplex"
+EndString	    
+String (STR_GM803C_HALF_DUPLEX)
+	Text = "Half Duplex"
+EndString
+String (STR_GM803C_NON_INVERTED)
+	Text = "Non-Inverted"
+EndString
+String (STR_GM803C_INVERTED)
+	Text = "Inverted"
+EndString
+//*****************************************************************;
+// $Header: /BIOS/PORTING/IO.112/IT8661F/IT8661F.SSP 1	98/06/04 12:00a $
+//
+// $Revision: 1 $
+//
+// $Date: 98/06/04 12:00a $
+//*****************************************************************;
+//*****************************************************************;
+// Revision History
+// ----------------
+// $Log: /BIOS/PORTING/IO.112/IT8661F/IT8661F.SSP $
+// 
+// 1    98/06/04 12:00a Chung
+// Initial release.
+// 
+//*****************************************************************;
+BeginDevice (IT8661FFloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8661F_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+//		Question (Q_IT8661F_FLOPPY_SWAP)
+//			Text = "  Floppy Drive Swap"
+//			ShadeWhen (Q_IT8661F_FLOPPY_CONTROLLER) = "Disabled"
+//			Options	= "Disabled":DEFAULT:POWERON,
+//				  "Enabled"
+//		EndQuestion
+//		Question (Q_IT8661F_FLOPPY_ACCESS)
+//			Text = "  Floppy Access Control"
+//			ShadeWhen (Q_IT8661F_FLOPPY_CONTROLLER) = "Disabled"
+//			Options	= "Normal":DEFAULT:POWERON,
+//				  "Read Only"
+//		EndQuestion
+	EndScreen
+EndDevice // IT8661FFloppyController
+BeginDevice (IT8661FSerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8661F_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice // IT8661FSerialPortA
+BeginDevice (IT8661FSerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8661F_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice // IT8661FSerialPortB
+BeginDevice (IT8661FIrPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8661F_IR_PORT)
+			Text = "OnBoard Ir Port"
+			Options = "Auto",
+				  "Disabled":DEFAULT:POWERON,
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_IT8661F_IR_MODE)
+			Text = "  Ir Mode"
+			ShadeWhen (Q_IT8661F_IR_PORT) = "Disabled"
+			Options = "HPSIR":DEFAULT:POWERON,
+				  "ASKIR"
+		EndQuestion
+//		Question (Q_IT8661F_Ir_DUPLEX)
+//			Text = "  Ir Duplex"
+//			ShadeWhen (Q_IT8661F_IR_PORT) = "Disabled"
+//			Options = "Full Duplex",
+//				  "Half Duplex":DEFAULT:POWERON
+//		EndQuestion
+		Question (Q_IT8661F_IR_IRQ)
+			Text = "  Ir Port IRQ"
+			ExternalFunction = IT8661F_Ir_Irq_Xfn
+			OptionBits = 4
+			Default = 9
+			PowerOn = 9
+		EndQuestion
+	EndScreen
+EndDevice // IT8661FIrPort
+BeginDevice (IT8661FParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8661F_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_IT8661F_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ShadeWhen (Q_IT8661F_LPT_PORT) = "Disabled"
+			OptionSet = "Normal"
+			OptionSet = "N/A"
+			OptionSet = "Normal"
+		EndQuestion
+		Question (Q_IT8661F_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = IT8661F_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice // IT8661FParallelPort
+BeginDevice (IT8661FParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8661F_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			ExternalFunction = IT8661F_Lpt_Addr_Xfn
+			OptionBits = 3
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_IT8661F_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = IT8661F_Lpt_Mode_Xfn
+			OptionBits = 2
+			Default = 2
+			PowerOn = 2
+		EndQuestion
+		Question (Q_IT8661F_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = IT8661F_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+		Question (Q_IT8661F_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+			ExternalFunction = IT8661F_Lpt_Dma_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+	EndScreen
+EndDevice // IT8661FParallelPortExt	   
+String(STR_IT8661F_NA)
+	Text = "N/A"
+EndString
+String(STR_IT8661F_AUTO)
+	Text = "Auto"
+EndString
+String(STR_IT8661F_378)
+	Text = "378"
+EndString
+String(STR_IT8661F_278)
+	Text = "278"
+EndString
+String(STR_IT8661F_3BC)
+	Text = "3BC"
+EndString
+String(STR_IT8661F_NORMAL)
+	Text = "Normal"
+EndString
+String (STR_IT8661F_EPP)
+	Text = "EPP"
+EndString
+String(STR_IT8661F_ECP)
+	Text = "ECP"
+EndString
+String(STR_IT8661F_EPPECP)
+	Text = "EPP+ECP"
+EndString
+String(STR_IT8661F_0)
+	Text = "0"
+EndString
+String(STR_IT8661F_1)
+	Text = "1"
+EndString
+String(STR_IT8661F_3)
+	Text = "3"
+EndString
+String(STR_IT8661F_4)
+	Text = "4"
+EndString
+String(STR_IT8661F_5)
+	Text = "5"
+EndString
+String(STR_IT8661F_7)
+	Text = "7"
+EndString
+String(STR_IT8661F_9)
+	Text = "9"
+EndString
+String(STR_IT8661F_10)
+	Text = "10"
+EndString
+String(STR_IT8661F_11)
+	Text = "11"
+EndString
+String(STR_IT8661F_12)
+	Text = "12"
+EndString
+//String(STR_IT8661F_FULL)
+//	Text = "Full Duplex"
+//EndString
+//String(STR_IT8661F_HALF)
+//	Text = "Half Duplex"
+//EndString
+String(STR_IT8661F_HIGH)
+	Text = "High"
+EndString
+String(STR_IT8661F_LOW)
+	Text = "Low"
+EndString
+BeginDevice (IT8680FloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8680_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+	EndScreen
+EndDevice   // IT8680FloppyController
+BeginDevice (IT8680SerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8680_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice   // IT8680SerialPortA
+BeginDevice (IT8680SerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8680_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_IT8680_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+			ShadeWhen (Q_IT8680_COMB_PORT) = "Disabled"
+			Optionset = "Normal", "IrDA", "ASKIR", "MIR 0.5 Mbps", "MIR 1.1 Mbps", "FIR"
+			Optionset = "N/A"
+			Optionset = "Normal", "IrDA", "ASKIR", "MIR 0.5 Mbps", "MIR 1.1 Mbps", "FIR"
+		EndQuestion
+		Question (Q_IT8680_COMB_DUPLEX)
+			Text = "  Duplex Mode"
+			ShadeWhen (Q_IT8680_COMB_PORT) = "Disabled"
+			OptionSet = "Full Duplex", "Half Duplex"
+			OptionSet = "N/A"
+			OptionSet = "Full Duplex", "Half Duplex"
+		EndQuestion
+	EndScreen
+EndDevice   // IT8680SerialPortB
+BeginDevice (IT8680ParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8680_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_IT8680_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = IT8680_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice	// IT8680ParallelPort
+BeginDevice (IT8680ParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8680_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+                        ExternalFunction = IT8680_Lpt_Addr_Xfn
+                        OptionBits = 3
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_IT8680_LPT_MODE)
+			Text = "  Parallel Port Mode"
+                        ExternalFunction = IT8680_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 2
+                        PowerOn = 2
+		EndQuestion
+		Question (Q_IT8680_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = IT8680_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+		Question (Q_IT8680_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+                        ExternalFunction = IT8680_Lpt_Dma_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+		EndQuestion
+	EndScreen
+EndDevice	// IT8680ParallelPortExt	   
+String(STR_IT8680_NA)
+	Text ="N/A"
+EndString
+String(STR_IT8680_AUTO)
+        Text ="Auto"
+EndString
+String(STR_IT8680_DIS)
+        Text ="Disabled"
+EndString
+String(STR_IT8680_378)
+        Text ="378"
+EndString
+String(STR_IT8680_278)
+        Text ="278"
+EndString
+String(STR_IT8680_3BC)
+        Text ="3BC"
+EndString
+String(STR_IT8680_NORMAL)
+        Text ="Normal"
+EndString
+String (STR_IT8680_EPP)
+	Text = "EPP"
+EndString
+String(STR_IT8680_ECP)
+        Text ="ECP"
+EndString
+String(STR_IT8680_IRQ5)
+        Text ="5"
+EndString
+String(STR_IT8680_IRQ7)
+        Text ="7"
+EndString
+String(STR_IT8680_DMA0)
+        Text ="0"
+EndString
+String(STR_IT8680_DMA1)
+        Text ="1"
+EndString
+String(STR_IT8680_DMA2)
+        Text ="2"
+EndString
+String(STR_IT8680_DMA3)
+        Text ="3"
+EndString
+BeginDevice (Nat306IdeController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_NAT306_IDE_CONTROLLER)
+			Text = "OnBoard IDE"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary":DEFAULT:POWERON,
+				  "Secondary"
+		EndQuestion
+	EndScreen
+EndDevice   // Nat306IdeController
+BeginDevice (Nat306FloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_NAT306_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+	EndScreen
+EndDevice   // Nat306FloppyController
+BeginDevice (Nat306SerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_NAT306_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice   // Nat306SerialPortA
+BeginDevice (Nat306SerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_NAT306_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_NAT306_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+			ShadeWhen (Q_NAT306_COMB_PORT) = "Disabled"
+			Optionset = "Normal", "IR"
+			Optionset = "N/A"
+			Optionset = "Normal", "IR"
+		EndQuestion
+		Question (Q_NAT306_COMB_IRMODE)
+			Text = "    IR Mode"
+			ExternalFunction = Nat306_ComB_IrMode_Xfn
+			OptionBits = 1
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_NAT306_COMB_DUPLEX)
+			Text = "    IR Duplex Mode"
+			ExternalFunction = Nat306_ComB_Duplex_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+		Question (Q_NAT306_COMB_PROTOCOL)
+			Text = "    IR Transmitter"
+			ExternalFunction = Nat306_ComB_Protocol_Xfn
+			OptionBits = 1
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+	EndScreen
+EndDevice   // Nat306SerialPortB
+BeginDevice (Nat306ParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_NAT306_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_NAT306_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = Nat306_Lpt_Mode_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+		Question (Q_NAT306_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Nat306_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice   // Nat306ParallelPort
+BeginDevice (Nat306ParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_NAT306_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			ExternalFunction = Nat306_Lpt_Addr_Xfn
+			OptionBits = 3
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_NAT306_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = Nat306_Lpt_Mode_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+		Question (Q_NAT306_LPT_EPPVER)
+			Text = "  EPP Version"
+			ExternalFunction = Nat306_Lpt_EppVer_Xfn
+			OptionBits = 1
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_NAT306_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+			ExternalFunction = Nat306_Lpt_Dma_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+		Question (Q_NAT306_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Nat306_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice   // Nat306ParallelPortExt
+String (STR_NAT306_ENCODED)
+	Text = "Encoded"
+EndString
+String (STR_NAT306_NONENCODED)
+	Text = "Non-Encoded"
+EndString
+String (STR_NAT306_FULL)
+	Text = "Full Duplex"
+EndString
+String (STR_NAT306_HALF)
+	Text = "Half Duplex"
+EndString
+String (STR_NAT306_16)
+	Text = "1.6 uS"
+EndString
+String (STR_NAT306_316)
+	Text = "3/16 Baud"
+EndString
+String (STR_NAT306_AUTO)
+	Text = "Auto"
+EndString
+String (STR_NAT306_DIS)
+	Text = "Disabled"
+EndString
+String (STR_NAT306_378)
+	Text = "378"
+EndString
+String (STR_NAT306_278)
+	Text = "278"
+EndString
+String (STR_NAT306_3BC)
+	Text = "3BC"
+EndString
+String (STR_NAT306_NORMAL)
+	Text = "Normal"
+EndString
+String (STR_NAT306_BIDIR)
+	Text = "Bi-Dir"
+EndString
+String (STR_NAT306_EPP)
+	Text = "EPP"
+EndString
+String (STR_NAT306_ECP)
+	Text = "ECP"
+EndString
+String (STR_NAT306_EPP19)
+	Text = "1.9"
+EndString
+String (STR_NAT306_EPP17)
+	Text = "1.7"
+EndString
+String (STR_NAT306_IRQ5)
+	Text = "5"
+EndString
+String (STR_NAT306_IRQ7)
+	Text = "7"
+EndString
+String (STR_NAT306_DMA0)
+	Text = "0"
+EndString
+String (STR_NAT306_DMA1)
+	Text = "1"
+EndString
+String (STR_NAT306_DMA3)
+	Text = "3"
+EndString
+String (STR_NAT306_NA)
+	Text = "N/A"
+EndString
+BeginDevice (Smc67xFloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC67X_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON
+				  "Disabled"
+				  "Enabled"
+		EndQuestion
+		Question (Q_SMC67X_FLOPPY_INTERFACE)
+			Text = "  Drive and Port Interface"
+			ShadeWhen (Q_SMC67X_FLOPPY_CONTROLLER) = "Disabled"
+			OptionSet = "A:FDC, B:FDC", "A:FDC, B:LPT", "A:LPT, B:LPT"
+			OptionSet = "N/A"
+			OptionSet = "A:FDC, B:FDC", "A:FDC, B:LPT", "A:LPT, B:LPT"
+			Default = 0
+			PowerOn = 0
+			PRESENT = NO
+		EndQuestion
+	EndScreen
+EndDevice   // Smc67xFloppyController
+BeginDevice (Smc67xSerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC67X_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice   // Smc67xSerialPortA
+BeginDevice (Smc67xSerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC67X_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+//		Question (Q_SMC67X_COMB_FIR_PORT)
+//			Text = "OnBoard Serial Port2 Fast IR"
+//			ExternalFunction = SMC67X_ComB_Fir_Xfn
+//                        OptionBits = 9
+//                        Default = 0
+//                        PowerOn = 0
+//			Present	= No
+//		EndQuestion
+		Question (Q_SMC67X_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+			ShadeWhen (Q_SMC67X_COMB_PORT) = "Disabled"
+////			OptionSet = "Normal", "IrDA SIR-A", "ASK-IR", "IrDA SIR-B", "IrDA HDLC", "IrDA 4PPM", "Consumer", "Raw IR"
+//			OptionSet = "Normal", "IrDA", "ASK-IR", Reserved, Reserved, Reserved, Reserved, Reserved
+//			OptionSet = "N/A"
+////			OptionSet = "Normal", "IrDA SIR-A", "ASK-IR", "IrDA SIR-B", "IrDA HDLC", "IrDA 4PPM", "Consumer", "Raw IR"
+//			OptionSet = "Normal", "IrDA", "ASK-IR", Reserved, Reserved, Reserved, Reserved, Reserved
+			Options = "Normal":DEFAULT:POWERON, "IrDA", "ASK-IR", Reserved, Reserved, Reserved, Reserved, Reserved
+//                        Default = 0
+//                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC67X_COMB_IR_DMA)
+			Text = "  Serial Port2 IR DMA Channel"
+			ExternalFunction = SMC67X_ComB_Dma_Xfn
+			OptionBits = 2
+                        Default = 1
+                        PowerOn = 1
+			Present	= No
+		EndQuestion
+		Question (Q_SMC67X_COMB_DUPLEX_MODE)
+			Text = "  Serial Port2 Duplex Mode"
+//			ShadeWhen (Q_SMC67X_COMB_PORT) = "Disabled"
+			ShadeWhen (Q_SMC67X_COMB_MODE) = "Normal"
+//			OptionSet = "Full Duplex", "Half Duplex"
+			OptionSet = "N/A" , "N/A"
+//			OptionSet = "N/A"
+			OptionSet = "Full Duplex", "Half Duplex"
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+		Question (Q_SMC67X_COMB_RECEIVER_POLARITY)
+			Text = "  Serial Port2 Receiver Polarity"
+//			ShadeWhen (Q_SMC67X_COMB_PORT) = "Disabled"
+			ShadeWhen (Q_SMC67X_COMB_MODE) = "Normal"
+//			OptionSet = "High", "Low"
+			OptionSet = "N/A", "N/A"
+//			OptionSet = "N/A", "N/A"
+			OptionSet = "High", "Low"
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC67X_COMB_TRANSMITTER_POLARITY)
+			Text = "  Serial Port2 Xmitter Polarity"
+//			ShadeWhen (Q_SMC67X_COMB_PORT) = "Disabled"
+			ShadeWhen (Q_SMC67X_COMB_MODE) = "Normal"
+//			OptionSet = "High", "Low"
+			OptionSet = "N/A", "N/A"
+//			OptionSet = "N/A", "N/A"
+			OptionSet = "High", "Low"
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+		Question (Q_SMC67X_COMB_IR_SIGNAL)
+			Text = "  Serial Port2 IR Interface"
+//			ShadeWhen (Q_SMC67X_COMB_PORT) = "Disabled"
+			ShadeWhen (Q_SMC67X_COMB_MODE) = "Normal"
+//			OptionSet = "RX2/TX2", "IRRX/IRTX"
+			OptionSet = "N/A", "N/A"
+//			OptionSet = "N/A"
+			OptionSet = "RX2/TX2", "IRRX/IRTX"
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+	EndScreen
+EndDevice   // Smc67xSerialPortB
+BeginDevice (SMC67xParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC67X_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_SMC67X_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ShadeWhen (Q_SMC67X_LPT_PORT) = "Disabled"
+			OptionSet = "Normal", "Bi-Dir"
+                        OptionSet = "N/A"
+			OptionSet = "Normal", "Bi-Dir"
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC67X_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = SMC67X_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice	// SMC67xParallelPort
+BeginDevice (SMC67xParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC67X_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+                        ExternalFunction = Smc67X_Lpt_Addr_Xfn
+                        OptionBits = 3
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC67X_LPT_MODE)
+			Text = "  Parallel Port Mode"
+                        ExternalFunction = Smc67X_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 2
+                        PowerOn = 2
+		EndQuestion
+		Question (Q_SMC67X_LPT_EPPVER)
+			Text = "  EPP Version"
+                        ExternalFunction = Smc67X_Lpt_EppVer_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC67X_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Smc67X_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+		Question (Q_SMC67X_LPT_ECP_DMA)
+			Text = "  Parallel Port ECP DMA Channel"
+                        ExternalFunction = Smc67X_Lpt_Dma_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+		EndQuestion
+		Question (Q_SMC67X_KEYB_WAKEUP)
+			Text = "K/B Wake-up function"
+			Options = "Disabled":DEFAULT:POWERON,
+				  "Enabled"
+		EndQuestion
+		Question (Q_SMC67X_MOUSE_WAKEUP)
+			Text = "Mouse Wake-up function"
+			Options = "Disabled":DEFAULT:POWERON,
+				  "Enabled"
+		EndQuestion
+	EndScreen
+EndDevice	// SMC67xParallelPortExt
+String(STR_SMC67X_NA)
+	Text ="N/A"
+EndString
+//String(STR_SMC67X_AUTO)
+//        Text ="Auto"
+//EndString
+//String(STR_SMC67X_NONE)
+//        Text ="None"
+//EndString
+//String(STR_SMC67X_DIS)
+//        Text ="Disabled"
+//EndString
+String(STR_SMC67X_378)
+        Text ="378"
+EndString
+String(STR_SMC67X_278)
+        Text ="278"
+EndString
+String(STR_SMC67X_3BC)
+        Text ="3BC"
+EndString
+String(STR_SMC67X_NORMAL)
+        Text ="Normal"
+EndString
+String(STR_SMC67X_EPP)
+        Text ="EPP"
+EndString
+String(STR_SMC67X_ECP)
+        Text ="ECP"
+EndString
+String(STR_SMC67X_EPP19)
+        Text ="1.9"
+EndString
+String(STR_SMC67X_EPP17)
+        Text ="1.7"
+EndString
+String(STR_SMC67X_IRQ5)
+        Text ="5"
+EndString
+String(STR_SMC67X_IRQ7)
+        Text ="7"
+EndString
+String(STR_SMC67X_DMA0)
+        Text ="0"
+EndString
+String(STR_SMC67X_DMA1)
+        Text ="1"
+EndString
+//String(STR_SMC67X_DMA2)
+//        Text ="2"
+//EndString
+String(STR_SMC67X_DMA3)
+        Text ="3"
+EndString
+BeginDevice (Smc68xFloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC68X_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+	EndScreen
+EndDevice   // Smc68xFloppyController
+BeginDevice (Smc68xSerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC68X_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice   // Smc68xSerialPortA
+BeginDevice (Smc68xSerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC68X_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_SMC68X_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+                        ExternalFunction = Smc68x_ComB_Mode_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC68X_COMB_DUPLEX_MODE)
+			Text = "    Duplex Mode"
+                        ExternalFunction = Smc68x_ComB_Duplex_Mode_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC68X_COMB_PORT_RECEIVER_POLARITY)
+			Text = "    Receiver Polarity"
+                        ExternalFunction = Smc68x_ComB_Ir_Recv_Pola_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC68X_COMB_PORT_TRANSMITTER_POLARITY)
+			Text = "    Transmitter Polarity"
+                        ExternalFunction = Smc68x_ComB_Ir_Trans_Pola_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+	EndScreen
+EndDevice   // Smc68xSerialPortB
+BeginDevice (SMC68xParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC68X_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+                        ExternalFunction = Smc68x_Lpt_Addr_Xfn
+                        OptionBits = 3
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC68X_LPT_MODE)
+			Text = "  Parallel Port Mode"
+                        ExternalFunction = Smc68x_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+		EndQuestion
+		Question (Q_SMC68X_LPT_EPPVER)
+			Text = "  EPP Version"
+                        ExternalFunction = Smc68x_Lpt_EppVer_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC68X_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Smc68x_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+		Question (Q_SMC68X_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+                        ExternalFunction = Smc68x_Lpt_Dma_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+		EndQuestion
+	EndScreen
+EndDevice	// SMC68xParallelPortExt	   
+String(STR_SMC68X_IRDA)
+	Text ="IrDA"
+EndString
+String(STR_SMC68X_ASKIR)
+	Text ="ASK IR"
+EndString
+String(STR_SMC68X_FULL_DUPLEX)
+	Text ="Full Duplex"
+EndString
+String(STR_SMC68X_HALF_DUPLEX)
+	Text ="Half Duplex"
+EndString
+String(STR_SMC68X_ACTIVE_HIGH)
+	Text ="Active High"
+EndString
+String(STR_SMC68X_ACTIVE_LOW)
+	Text ="Active Low"
+EndString
+String(STR_SMC68X_NA)
+	Text ="N/A"
+EndString
+String(STR_SMC68X_AUTO)
+        Text ="Auto"
+EndString
+String(STR_SMC68X_DIS)
+        Text ="Disabled"
+EndString
+String(STR_SMC68X_378)
+        Text ="378"
+EndString
+String(STR_SMC68X_278)
+        Text ="278"
+EndString
+String(STR_SMC68X_3BC)
+        Text ="3BC"
+EndString
+String(STR_SMC68X_NORMAL)
+        Text ="Normal"
+EndString
+String(STR_SMC68X_BIDIR)
+        Text ="Bi-Dir"
+EndString
+String(STR_SMC68X_EPP)
+        Text ="EPP"
+EndString
+String(STR_SMC68X_ECP)
+        Text ="ECP"
+EndString
+String(STR_SMC68X_EPP19)
+        Text ="1.9"
+EndString
+String(STR_SMC68X_EPP17)
+        Text ="1.7"
+EndString
+String(STR_SMC68X_IRQ5)
+        Text ="5"
+EndString
+String(STR_SMC68X_IRQ7)
+        Text ="7"
+EndString
+String(STR_SMC68X_DMA0)
+        Text ="0"
+EndString
+String(STR_SMC68X_DMA1)
+        Text ="1"
+EndString
+String(STR_SMC68X_DMA3)
+        Text ="3"
+EndString

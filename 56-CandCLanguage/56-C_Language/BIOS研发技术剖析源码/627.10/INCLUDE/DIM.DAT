@@ -1,0 +1,349 @@
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;
+;****************************************************************************;
+
+;---------------------------------------;
+	public	DIMDATASEG
+DIMDATASEG	equ 900h		;Data segment used to access this data
+
+;---------------------------------------;
+
+xdgroup	group	dseg
+dseg	segment	para	common	'DATA'
+	assume	ds:xdgroup
+
+	ORG	0000h
+;------------------------------------------------------------------------------;
+; Data for DIM                                                                 ;
+;------------------------------------------------------------------------------;
+
+		public NVRamWork
+NVRamWork	nvr_header <>	 	;NVRam workspace
+		db (NVRAM_MAX_SIZE - size nvr_header) dup (?)
+
+		public NVRamCheck
+NVRamCheck	db NVRAM_CHECK_SIZE dup (?)
+
+;RTShadowBlock	rt_shadow_block <>
+
+
+;------------------------------------------------------------------------------;
+; Data for RESMGR                                                              ;
+;------------------------------------------------------------------------------;
+
+		public ResMapStart
+	ResMapStart	dw ?		;Offset of 1st Resource Map entry
+		public ResMapEnd
+	ResMapEnd	dw ?		;Offset of last Resource Map entry
+		public ResMapActual
+	ResMapActual	dw ?		;Offset of first real Res Map entry
+
+		public RMWork
+	RMWork		resmap_entry <>
+
+		public ResMap
+	ResMap		resmap_entry RESMAP_MAX_ENTRIES dup (<>)
+end_of_res_map:
+
+		public SpecialESCDBuffer
+	SpecialESCDBuffer db 320 dup(?)	;Holds simulated ESCD data for
+					;  special devices
+
+		public ConMemStart
+	ConMemStart	dd ?		;Start addr of conflicting mem block
+		public ConMemEnd
+	ConMemEnd	dd ?		;End addr of conflicting mem block
+
+;------------------------------------------------------------------------------;
+; Data for DI-SYS                                                              ;
+;------------------------------------------------------------------------------;
+		public SysStatus
+SysStatus	dd ?			;Status flags for DI-SYS (see DIM.EQU)
+
+		public OwnerWork
+OwnerWork	owner_sys <>		;Workspace for building owner_sys struc
+					;  for calls to the Resource Manager
+
+		public DevNodeNum
+DevNodeNum	db ?			;Holds current device node number
+		public DummyDevNodeWork
+DummyDevNodeWork	db 100h dup (?)	;Wasn't big enough to hold any Device Node
+		public PeriScratchBuf
+PeriScratchBuf	db 40h dup (?)		;Scratch buffer for peripheral chip code
+
+		public InsideDF
+InsideDF	db ?			;Flag set when inside a dependent func
+
+		public FindDevID
+FindDevID	dd ?			;Holds device/vendor ID when searching
+		public FindDevSerial
+FindDevSerial	dd ?			;Holds device serial # when searching
+		public FindDevLogID
+FindDevLogID	dd ?			;Holds logical device num when searching
+		public FindDevType
+FindDevType	dd ?			;Holds base/sub type when searching
+		public FindDevTypeMask
+FindDevTypeMask	dd ?			;Holds base/sub type mask when searching
+		public FindDevInitAll
+FindDevInitAll	db ?			;If nonzero, init all devices found
+		public FindDevInitAllBoot
+FindDevInitAllBoot db ?			;If nonzero, init all boot capable devs
+
+		public ShadowState
+ShadowState	db 8 dup (?)		;Holds state of 8 shadow regions
+
+;------------------------------------------------------------------------------;
+; Data for DI-ISA                                                              ;
+;------------------------------------------------------------------------------;
+		public IsaStatus
+IsaStatus	dd ?			;Status flags for DI-ISA (see DIM.EQU)
+
+		public ISAResMap
+ISAResMap	cmos_used_isares <>	;Workspace for ISA used resource struc
+
+
+
+;------------------------------------------------------------------------------;
+; Data for DI-EISA                                                             ;
+;------------------------------------------------------------------------------;
+		public EisaStatus
+EisaStatus	dd ?			;Status flags for DI-EISA (see DIM.EQU)
+
+		public EisaInvalidCfg
+EisaInvalidCfg	db 8 dup (?)		;Slot invalid config flags, 1 bit/slot
+		public EisaNotReady
+EisaNotReady	db 8 dup (?)		;Slot not ready flags, 1 bit/slot
+		public EisaIDMismatch
+EisaIDMismatch	db 8 dup (?)		;Slot ID mismatch flags, 1 bit/slot
+
+		public EisaFuncInfo
+EisaFuncInfo	db 350 dup (?)		;Buffer for Int 15h D801 calls
+
+;------------------------------------------------------------------------------;
+; Data for DI-PNP                                                              ;
+;------------------------------------------------------------------------------;
+		public PnPStatus
+PnPStatus	dd ?			;Status flags for DI-PNP (see DIM.EQU)
+
+		public IsolationBits
+IsolationBits	db 9 dup (?)		;Holds 72 bit serial ID during isolation
+
+		public PnPFoundDevCSN
+PnPFoundDevCSN	db ?			;Holds CSN of device found
+		public PnPFoundDevID
+PnPFoundDevID	dd ?			;Holds device/vendor ID of device found
+		public PnPFoundDevSer
+PnPFoundDevSer	dd ?			;Holds serial number of device found
+		public PnPFoundDevLID
+PnPFoundDevLID	dd ?			;Holds logical dev ID of device found
+
+
+;------------------------------------------------------------------------------;
+; Data for DI-PCI                                                              ;
+;------------------------------------------------------------------------------;
+		public PciStatus
+PciStatus	dd ?			;Status flags for DI-PCI (see DIM.EQU)
+
+		public PciIOConflict
+PciIOConflict	dd ?			;I/O Port conflict flags, 1 bit/device
+		public PciMemConflict
+PciMemConflict	dd ?			;Memory conflict flags, 1 bit/device
+		public PciIRQConflict
+PciIRQConflict	dd ?			;IRQ conflict flags, 1 bit/device
+
+		public FindDevIncDev
+FindDevIncDev	db ?			;Holds -1/+1 for up/down dev search
+		public FindDevIncBus
+FindDevIncBus	db ?			;Holds -1/+1 for up/down bus search
+		public FindDevIndex
+FindDevIndex	db ?			;Holds index for rth_pci_search_xlat
+		public PCICommandValue
+PCICommandValue	dw ?			;Holds value to write to PCI cmd reg
+		public PCIDevNoEnable
+PCIDevNoEnable	db ?			;Flag that causes PCI device to be cfg'd
+					; but not enabled (i.e. 2nd VGA)
+
+		public PCIFoundDevID
+PCIFoundDevID	dd ?			;Holds device/vendor ID of device found
+		public PCIFoundDevFunc
+PCIFoundDevFunc	db ?			;Holds device/function num of dev found
+					;  Bits 7-3: PCI device number
+					;  Bits 2-0: Function number within dev
+		public PCIFoundDevBus
+PCIFoundDevBus	db ?			;Holds bus number of device found
+
+					;Keep these 2 bytes together!
+		public EscdFuncNum
+EscdFuncNum	db ?			;Holds ESCD function # of current board
+		public EscdSlotNum
+EscdSlotNum	db ?			;Holds ESCD slot # of current board
+		public EscdDevState
+EscdDevState	db ?			;Holds state of device (ESCD_ST_??? values)
+
+		public PortRegCount
+PortRegCount	db ?			;Holds counter of I/O port base add regs
+		public MemRegCount
+MemRegCount	db ?			;Holds counter of memory base add regs
+
+		public BaseAddMin
+BaseAddMin	dd ?			;Holds minimum base address of mem/port
+		public BaseAddMax
+BaseAddMax	dd ?			;Holds maximum base address of mem/port
+		public BaseAddSize
+BaseAddSize	dd ?			;Holds size of memory/port block
+		public PCIROMMinBase
+PCIROMMinBase	dd ?			;Holds min base address for PCI ROM
+		public PCIROMMaxBase
+PCIROMMaxBase	dd ?			;Holds max base address for PCI ROM
+
+		public PCIIRQPriMap
+PCIIRQPriMap	db 17 dup (?)		;Workspace for holding PCIIRQ priorities
+
+	even
+		public PCIExpRomGDT
+PCIExpRomGDT label fword		;GDT pointer used for PCI Exp ROM copy
+		public PCIGdtLimit
+PCIGdtLimit	dw ?
+		public PCIGdtBase
+PCIGdtBase	dd ?
+		public PCIGdtFiller
+PCIGdtFiller	dw ?
+
+		public MaxPCIBusNumber
+MaxPCIBusNumber	db ?			;Holds last PCI bus num
+		public CurPCIBusNumber
+CurPCIBusNumber	db ?			;Holds current PCI bus num
+
+		public PCIBusDummyMem
+PCIBusDummyMem	dd ?			;Dummy memory region start addr
+		public PCIBusIOBase
+PCIBusIOBase	dw ?			;Holds I/O base addr for bus
+		public PCIBusMemBase
+PCIBusMemBase	dd ?			;Holds mem base addr for bus
+		public PCIBusPfMemBase
+PCIBusPfMemBase	dd ?			;Holds pf mem base addr for bus
+
+		public PCIBusTable
+PCIBusTable	pci_bus_entry PCI_MAX_BUSSES dup (<>)
+
+		public PCIManualConfig
+PCIManualConfig	db ?			;Holds 0 during auto config / nonzero manual
+		public PCIManualBuf
+PCIManualBuf	pci_man_settings <>	;Holds manual override settings for a device
+
+		public PCIManOwner
+PCIManOwner	owner_sys <>		;Workspace for building owner struc for
+					;manually configured PCI devices
+
+		public PCIBmIdePtr
+PCIBmIdePtr	dw ?			;Holds pointer to current table entry
+		public PCIBmIdeTable
+PCIBmIdeTable	pci_buside_entry 8 dup (<>)
+		public PCIBmIdeTableEnd
+PCIBmIdeTableEnd label byte		;Marks end of table
+
+		public PCIPeriDevPtr
+PCIPeriDevPtr	dw ?			;Holds pointer to current table entry
+		public PCIPeriDevTable
+PCIPeriDevTable	dw 16 dup (?)
+		public PCIPeriDevTableEnd
+PCIPeriDevTableEnd label byte		;Marks end of table
+
+;------------------------------------------------------------------------------;
+; Scratch Data Area for DIH.ASM                                                ;
+;------------------------------------------------------------------------------;
+
+		public dih_manual_ide_id
+dih_manual_ide_id	dd ?		;Holds Vend/Dev ID of manually config'd PCI IDE
+
+		public bad_pci_device_flag
+bad_pci_device_flag	db ?		;Flag for bad PCI device init in PCI-NC
+					; bit-0 = 0 bad VGA not yet initilaised
+					;	  1 bad VGA already initilaised
+		public dih_scratch_data
+dih_scratch_data db 128 dup(?)
+
+
+;------------------------------------------------------------------------------;
+; Scratch Data Area for DI-CLOSE.ASM                                           ;
+;------------------------------------------------------------------------------;
+
+		public PupEscd
+PupEscd		db NVRAM_MAX_SIZE dup (?) ;Buffer for building ESCD
+
+
+;------------------------------------------------------------------------------;
+; Scratch Data Area for Peer Host Bridge Data                                  ;
+;------------------------------------------------------------------------------;
+
+		public SystemBusLimit
+SystemBusLimit	pci_bus_entry <>
+
+
+		public DevNodeWork
+DevNodeWork	db 400h dup (?)		;Big enough to hold any Device Node
+;-----------------------------------------------------------------------;
+;	Variables Used for Silent Boot (Screen Toggling)		;
+;-----------------------------------------------------------------------;
+	public SilentBootInfo
+SilentBootInfo	db	1 dup (?)	; Bit-7	= Not Used
+					; Bit-6 = OEM to BIOS display change information
+					;	0..OEM to BIOS display change not happened yet
+					;	1..OEM to BIOS display change happened at least once
+					; Bit-5 = BIOS key (e.g. ESC,DEL,TAB,etc.) information
+					;	0..BIOS keys (e.g. ESC,DEL,TAB, etc.) not pressed
+					;	1..at least one BIOS key pressed, hence stuck key will not be checked
+					; Bit-4 = INT10 trap information during add-on rom init
+					;	0..INT10 not trapped during add-on rom init
+					;	1..INT10 trapped during add-on rom init
+					; Bit-3 = display change status
+					;	0..display change complete
+					;	1..display change in progress
+					; Bit-2 = previous display information
+					;	0..previous display was BIOS
+					;	1..previous display was OEM
+					; Bit-1 = current display information
+					;	0..current display is BIOS
+					;	1..current display is OEM
+					; Bit-0 = screen toggle key information
+					;	0 = toggle key not pressed
+					;	1 = toggle key pressed
+	public CurrVdoMode
+CurrVdoMode	db	1 dup (?)	; current Video Mode
+	public CursorRowCol
+CursorRowCol	dw	1 dup (?)	; cursor row,col
+	public OemSegment
+OemSegment	dw	1 dup (?)	; OEM code segment
+	public VideoTextSegment
+VideoTextSegment dw	1 dup (?)	; Video Buffer Segment
+	public VideoTextBuffer
+VideoTextBuffer	db	1000h dup (?)	; 4K video buffer for holding 1page in text mode
+	public VideoOemData
+VideoOemData	db	10h dup (?)	; 16bytes data area to be used by OEM
+;-----------------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+dseg	ends

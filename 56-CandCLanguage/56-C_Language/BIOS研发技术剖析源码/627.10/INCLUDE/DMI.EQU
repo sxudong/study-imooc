@@ -1,0 +1,253 @@
+	subttl	DMI Data Structures Definitions
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------------------------------;
+;			SLOT TYPES					;
+;-----------------------------------------------------------------------;
+ISA_SLOT		equ	03h
+EISA_SLOT		equ	05h
+PCI_SLOT		equ	06h
+;-----------------------------------------------------------------------;
+;			STRUCTURE TYPES					;
+;-----------------------------------------------------------------------;
+BIOS_INFO_TYPE		equ	00	; Type 0
+SYS_INFO_TYPE		equ	01	; Type 1
+BASE_BOARD_INFO_TYPE	equ	02	; Type 2
+SYS_CHASIS_TYPE		equ	03	; Type 3
+PROC_INFO_TYPE		equ	04	; Type 4
+MEM_CNTRL_TYPE		equ	05	; Type 5
+MEM_MODULE_TYPE		equ	06	; Type 6
+CACHE_INFO_TYPE		equ	07	; Type 7
+PORT_CONNECTOR_TYPE	equ	08	; Type 8
+SYS_SLOT_TYPE		equ	09	; Type 9
+ON_BOARD_DEVICE_TYPE	equ	10	; Type 10
+OEM_STRING_TYPE		equ	11	; Type 11
+SYS_CONFIG_OPTION_TYPE	equ	12	; Type 12
+BIOS_LANGUAGE_TYPE	equ	13	; Type 13
+GROUP_ASSOCIATION_TYPE	equ	14	; Type 14
+SYS_EVENT_LOG_TYPE	equ	15	; Type 15
+;-----------------------------------------------------------------------;
+;			STRUCTURE FIXED LENGTH				;
+;-----------------------------------------------------------------------;
+BIOS_INFO_LENGTH	equ	12h	; Type 0	; modified
+SYS_INFO_LENGTH		equ	08h	; Type 1
+BASE_BOARD_INFO_LENGTH	equ	08h	; Type 2	; modified
+SYS_CHASIS_LENGTH	equ	09h	; Type 3
+PROC_INFO_LENGTH	equ	1Ah	; Type 4
+MEM_CNTRL_LENGTH	equ	1Fh	; Type 5 (length 31 = 15 + 2x8) for 8 memory sockets
+							; modified
+MEM_MODULE_LENGTH	equ	0Ch	; Type 6	; modified
+CACHE_INFO_LENGTH	equ	0Fh	; Type 7
+PORT_CONNECTOR_LENGTH	equ	09h	; Type 8	; modified
+SYS_SLOT_LENGTH		equ	0Ch	; Type 9	; modified
+ON_BOARD_DEVICE_LENGTH	equ	06h	; Type 10
+OEM_STRING_LENGTH	equ	05h	; Type 11
+SYS_CONFIG_OPTION_LENGTH equ	05h	; Type 12
+BIOS_LANGUAGE_LENGTH	equ	16h	; Type 13	; modified
+GROUP_ASSOCIATION_LENGTH equ	14	; Type 14 **************
+SYS_EVENT_LOG_LENGTH	equ	14h	; Type 15
+;-----------------------------------------------------------------------;
+;			STRUCTURE DEFINITIONS				;
+;-----------------------------------------------------------------------;
+BiosInfoStruc		struc		; BIOS INFORMATION (Type 0)
+	BiosInfoType		db	?
+	BiosInfoLength		db	?
+	BiosInfoHandle		dw	?
+	BiosVendor		db	?
+	BiosVersion		db	?
+	BiosStartSegment	dw	?
+	BiosReleaseDate		db	?
+	BiosRomSize		db	?	; modified
+	BiosCharacteristics	dq	?	; modified
+BiosInfoStruc		ends
+;-----------------------------------------------------------------------;
+SysInfoStruc		struc		; SYSTEM INFORMATION (Type 1)
+	SysInfoType		db	?
+	SysInfoLength		db	?
+	SysInfoHandle		dw	?
+	SysManufacturer		db	?
+	SysProductName		db	?
+	SysVersion		db	?
+	SysSerialNumber		db	?
+SysInfoStruc		ends
+;-----------------------------------------------------------------------;
+BaseBoardInfoStruc	struc		; BASE BOARD INFORMATION (Type 2)
+	BaseBoardInfoType	db	?
+	BaseBoardInfoLength	db	?
+	BaseBoardInfoHandle	dw	?
+	BaseBoardManufacturer	db	?
+	BaseBoardProductName	db	?
+	BaseBoardVersion	db	?
+	BaseBoardSerialNumber	db	?
+;;;;	BaseBoardPostErrorStatus dw	?	; modified
+BaseBoardInfoStruc	ends
+;-----------------------------------------------------------------------;
+SysChasisStruc	struc		; SYSTEM CHASIS (Type 3)
+	SysChasisType		db	?
+	SysChasisLength		db	?
+	SysChasisHandle		dw	?
+	SysChasisManufacturer	db	?
+	SysChasisEncType	db	?
+	SysChasisVersion	db	?
+	SysChasisSerialNumber	db	?
+	SysChasisTagNumber	db	?
+SysChasisStruc	ends
+;-----------------------------------------------------------------------;
+ProcInfoStruc		struc		; PROCESSOR INFORMATION (Type 4)
+	ProcInfoType		db	?
+	ProcInfoLength		db	?
+	ProcInfoHandle		dw	?
+	ProcInfoSocket		db	?
+	ProcInfoProcType	db	?
+	ProcInfoFamily		db	?
+	ProcInfoManufacturer	db	?
+	ProcInfoID		dq	?
+	ProcInfoVersion		db	?
+	ProcInfoVoltage		db	?
+	ProcInfoExternalClock	dw	?
+	ProcInfoMaxSpeed	dw	?
+	ProcInfoCurrentSpeed	dw	?
+	ProcInfoStatus		db	?
+	ProcInfoUpgrade		db	?
+ProcInfoStruc		ends
+;-----------------------------------------------------------------------;
+MemCntrlStruc		struc		; MEMORY CONTROLLER INFORMATION (Type 5)
+	MemCntrlType		db	?
+	MemCntrlLength		db	?
+	MemCntrlHandle		dw	?
+	MemCntrlErrorDetect	db	?
+	MemCntrlErrorCorrect	db	?
+	MemCntrlSupportInterleave db	?
+	MemCntrlCurrInterleave	db	?
+	MemCntrlMemModuleMaxSize db	?
+	MemCntrlSupportSpeed	dw	?	; modified
+	MemCntrlSupportMemType	dw	?
+	MemCntrlSupportVoltage	db	?
+	MemCntrlNumMemSlot	db	?
+MemCntrlStruc		ends
+;-----------------------------------------------------------------------;
+MemModuleStruc		struc		; MEMORY MODULE INFORMATION (Type 6)
+	MemModuleType		db	?
+	MemModuleLength		db	?
+	MemModuleHandle		dw	?
+	MemModuleSocket		db	?
+	MemModuleBankConnection	db	?
+	MemModuleCurrSpeed	db	?
+;;;;	MemModuleUpgradeSpeed	db	?	; modified
+	MemModuleCurrMemType	dw	?
+	MemModuleInstalledSize	db	?
+	MemModuleEnabledSize	db	?
+	MemModuleErrorStatus	db	?
+MemModuleStruc		ends
+;-----------------------------------------------------------------------;
+CacheInfoStruc		struc		; CACHE INFORMATION (Type 7)
+	CacheInfoType		db	?
+	CacheInfoLength		db	?
+	CacheInfoHandle		dw	?
+	CacheInfoSocket		db	?
+	CacheInfoConfig		dw	?
+	CacheInfoMaxSize	dw	?
+	CacheInfoInstalledSize	dw	?
+	CacheInfoSupportSramType dw	?
+	CacheInfoCurrSramType	dw	?
+CacheInfoStruc		ends
+;-----------------------------------------------------------------------;
+PortConnectorStruc	struc		; PORT CONNECTOR INFORMATION (Type 8)
+	PortConnType		db	?	; modified
+	PortConnLength		db	?	; modified
+	PortConnHandle		dw	?	; modified
+	PortConnIntRefDesig	db	?	; modified
+	PortConnIntConnType	db	?	; modified
+	PortConnExtRefDesig	db	?	; modified
+	PortConnExtConnType	db	?	; modified
+	PortConnPortType	db	?	; modified
+PortConnectorStruc	ends
+;-----------------------------------------------------------------------;
+SysSlotStruc		struc		; SYSTEM SLOTS (Type 9)
+	SysSlotType		db	?
+	SysSlotLength		db	?
+	SysSlotHandle		dw	?
+	SysSlotDesig		db	?
+	SysSlotSlotType		db	?
+	SysSlotDataBusWidth	db	?
+	SysSlotCurrUsage	db	?
+	SysSlotSlotLength	db	?
+	SysSlotSlotId		dw	?	; modified
+	SysSlotSlotCharacteristics db	?	; modified
+SysSlotStruc		ends
+;-----------------------------------------------------------------------;
+OnBoardDeviceStruc	struc		; ONBOARD DEVICES INFORMATION (Type 10)
+	OnBoardDevType		db	?
+	OnBoardDevLength	db	?
+	OnBoardDevHandle	dw	?
+	OnBoardDevDeviceType	db	?
+	OnBoardDevDescription	db	?
+OnBoardDeviceStruc	ends
+;-----------------------------------------------------------------------;
+OEMStringStruc		struc		; OEM STRINGS (Type 11)
+	OEMStringType		db	?
+	OEMStringLength		db	?
+	OEMStringHandle		dw	?
+	OEMStringCount		db	?
+OEMStringStruc		ends
+;-----------------------------------------------------------------------;
+SysConfigOptionStruc	struc		; SYSTEM CONFIGURATION OPTIONS (Type 12)
+	SysConfigOptionType	db	?
+	SysConfigOptionLength	db	?
+	SysConfigOptionHandle	dw	?
+	SysConfigOptionCount	db	?
+SysConfigOptionStruc	ends
+;-----------------------------------------------------------------------;
+BiosLanguageStruc	struc		; BIOS LANGUAGE INFORMATION (Type 13)
+	BiosLanguageType	db	?
+	BiosLanguageLength	db	?
+	BiosLanguageHandle	dw	?
+	BiosLanguageSupport	db	?
+	BiosLanguageReserved	db	16 dup (?)	; modified
+	BiosLanguageCurrent	db	?
+BiosLanguageStruc	ends
+;-----------------------------------------------------------------------;
+GroupAssocnStruc	struc		; GROUP ASSOCIATIONS (Type 14)
+	GroupAssocnType		db	?
+	GroupAssocnLength	db	?
+	GroupAssocnHandle	dw	?
+	GroupAssocnName		db	?
+	GroupAssocnItemType	db	?
+	GroupAssocnItemHandle	dw	?
+GroupAssocnStruc	ends
+;-----------------------------------------------------------------------;
+SysEventLogStruc	struc		; SYSTEM EVENT LOG (Type 15)
+	SysEventLogType		db	?
+	SysEventLogLength	db	?
+	SysEventLogHandle	dw	?
+	SysEventLogAreaLength	dw	?
+	SysEventLogHeaderOffset	dw	?
+	SysEventlogDataOffset	dw	?
+SysEventLogStruc	ends
+;-----------------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;

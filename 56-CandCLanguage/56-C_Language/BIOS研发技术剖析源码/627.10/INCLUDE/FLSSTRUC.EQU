@@ -1,0 +1,38 @@
+;-----------------------------------------------------------------------;
+;			FLASH STRUCTURE					;
+;-----------------------------------------------------------------------;
+flash_support_info	struc
+	flash_detail_ptr	dw	?	; ptr to Flash part details structure
+	start_nvram		dw	?	; NVRAM start address
+	start_boot_block	dw	?	; Boot Block start address
+flash_support_info	ends
+;-----------------------------------------------------------------------;
+flash_detail_info		struc
+	flash_id_routine	dw	?	; Flash ID routine address
+	flash_erase_routine	dw	?	; Flash Erase routine address
+	flash_write_routine	dw	?	; Flash Write routine address
+	flash_size		dw	?	; Flash size in unit of 1K
+	flash_string_ptr	dw	?	; ptr to ASCIIZ flash string
+	flash_blocks_ptr	dw	?	; ptr to Flash Blocks information
+	flash_misc_ptr		dw	?	; ptr to Flash misc information
+flash_detail_info		ends
+;-----------------------------------------------------------------------;
+flash_blocks_info		struc
+	total_blocks		dw	?	; total #of Blocks (1-based) in flash part
+	boot_blocks		dw	?	; #of Blocks (1-based) in boot block
+	block1_start		dd	?	; Block1 start address
+	block1_size		dd	?	; Block1 size in bytes
+;;	|	|	|	|	|
+;;	|	|	|	|	|
+;;	blockN_start		dd	?	; BlockN start address
+;;	blockN_size		dd	?	; BlockN size in bytes
+flash_blocks_info		ends
+;-----------------------------------------------------------------------;
+flash_misc_info		struc
+	total_blocks		dw	?	; total #of information blocks (1-based)
+	gpnv_start		dd	?	; GPNV start address
+	gpnv_size		dd	?	; GPNV size in bytes
+	escd_start		dd	?	; ESCD start address
+	escd_size		dd	?	; ESCD size in bytes
+flash_misc_info		ends
+;-----------------------------------------------------------------------;

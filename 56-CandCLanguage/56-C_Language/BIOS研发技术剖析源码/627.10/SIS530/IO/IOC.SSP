@@ -1,0 +1,53 @@
+
+// This AMI Setup Script Processor (SSP) file contains setup items for
+// all supported peripheral devices.
+
+
+Description = "Peripheral setup items"
+
+LanguageVersion = 1
+
+BeginDevice (SiS5513IdeController)
+
+        Screen (SCR_PERIPHERAL)
+
+                Question (Q_SIS5513_IDE_CONTROLLER)
+                        Text = "Onboard PCI IDE"
+                        Options = "Disabled",
+                                  "Primary",
+                                  "Secondary",
+                                  "Both":DEFAULT:POWERON
+                EndQuestion
+
+                Question (Q_SIS5513_PREFETCH_PM)
+                        Text = "  Primary Master Prefetch"
+                        ShadeWhen (Q_SIS5513_IDE_CONTROLLER) = "Disabled", "Secondary"
+                        Options = "Disable",
+                                  "Enable":DEFAULT:POWERON
+                EndQuestion
+
+                Question (Q_SIS5513_PREFETCH_PS)
+                        Text = "  Primary Slave Prefetch"
+                        ShadeWhen (Q_SIS5513_IDE_CONTROLLER) = "Disabled", "Secondary" 
+                        Options = "Disable",
+                                  "Enable":DEFAULT:POWERON
+                EndQuestion
+
+                Question (Q_SIS5513_PREFETCH_SM)
+                        Text = "  Secondary Master Prefetch"
+                        ShadeWhen (Q_SIS5513_IDE_CONTROLLER) = "Disabled", "Primary"
+                        Options = "Disable",
+                                  "Enable":DEFAULT:POWERON
+                EndQuestion
+
+                Question (Q_SIS5513_PREFETCH_SS)
+                        Text = "  Secondary Slave Prefetch"
+                        ShadeWhen (Q_SIS5513_IDE_CONTROLLER) = "Disabled", "Primary" 
+                        Options = "Disable",
+                                  "Enable":DEFAULT:POWERON
+                EndQuestion
+
+        EndScreen
+
+EndDevice   // SiS5513IdeController
+

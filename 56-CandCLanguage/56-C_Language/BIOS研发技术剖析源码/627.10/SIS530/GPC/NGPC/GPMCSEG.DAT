@@ -1,0 +1,168 @@
+;-----------------------------------------------;
+;	 BIOS POWER MANAGEMENT DATA AREA	;
+;  IN CODE SEGMENT USED BY GREEN PC CORE BIOS	;
+;	THE DATA AREA IS IN EQUATE FORM		;
+;		    GPMCSEG.DAT			;
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	     DECLARE FIXED ORG HERE		;
+;	THIS 'ORG' SHOULD NOT BE CHANGED	;
+;    smi_seg:0cc00h thru 0cfffh (400h bytes)	;
+;   available for usage as code seg data area	;
+; NOTE :					;
+;	As this cseg data area are in equate	;
+;	form, initialise this data area during	;
+;	SMRAM initialization.			; 
+;-----------------------------------------------;
+
+cseg_data_area_begin	equ	0cc00h		; 0cc00h THRU 0cfffh (0400H BYTES)
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	    CPU DETECT INFORMATION		;
+;-----------------------------------------------;
+
+misc_proc_info_cseg	equ	cseg_data_area_begin	; 1 byte..miscellaneous processor info
+							; bit 0 1...numeric co-processor present
+							; bit 1 reserved
+							; bit 7-2 reserved
+
+misc_proc_smi_info_cseg	equ	misc_proc_info_cseg + 01; 1 BYTE..miscellaneous processor SMI info
+							; bit 0 0..64KB or greater SMRAM
+							;	1..32KB SMRAM
+							; bit 1 RESERVED...USED INTERNALLY DURING SMI POST FOR SMBASE RELOCATION INFO
+							; b3 b2 ... SMI type
+							;  0  0 ... INTEL type SMI
+							;  0  1 ... CYRIX type SMI
+							;  1  0 ... AMD type SMI
+							;  1  1 ... reserved
+							; bit 4 0..single CPU board
+							;	1..dual/multiple CPU board
+							; bit 5 0..SMI based power management
+							;	1..IRQ based power management
+							; bit 6 0..Non-SMI CPU
+							;	1..SMI capable CPU
+							; bit 7 RESERVED...USED INTERNALLY DURING SMI POST FOR SMI POST STATUS
+
+no_of_sec_cpu_present_cseg	equ	misc_proc_smi_info_cseg + 01; 1 BYTE..# of CPU present on the board
+
+bios_detected_cpu_mfr_cseg equ	no_of_sec_cpu_present_cseg + 01; 1 word..CPU manufacturer (as detected by CORE BIOS)
+							; bit 0 1 INTEL
+							; bit 1 1 CYRIX
+							; bit 2 1 AMD
+							; bit 3 1 IBM
+							; bit 4 1 TI (TEXAS INSTRUMENTS)
+							; bit 5 1 UMC
+							; bit 15-6 reserved
+
+cpu_name_cseg	equ	bios_detected_cpu_mfr_cseg + 02	; 1 word..CPU model # as returned by desktop core bios
+							; for different CPU vendor
+
+;-----------------------------------------------;
+
+smbase_relocation_info_cseg	equ	cpu_name_cseg + 02; 1 byte..currently valid for INTEL 'S' series CPU only
+						; bit 0 1 SMBASE has been relocated
+						; bit 7-1 reserved
+
+;-----------------------------------------------;
+;	   CPU MAPPED SMI SEGMENT INFO		;
+;-----------------------------------------------;
+
+smi_code_seg_intel_amd_plus_cseg	equ	smbase_relocation_info_cseg + 01 ; 1 word..SMI mapped segment for INTEL/AMD PLUS CPUs
+smi_code_seg_cyrix_ti_cseg		equ	smi_code_seg_intel_amd_plus_cseg + 02 ; 1 word..SMI mapped segment for CYRIX/TI/IBM-CYRIX CPUs
+smi_code_seg_ibm_amd_non_plus_cseg	equ	smi_code_seg_cyrix_ti_cseg + 02 ; 1 word..SMI mapped segment for IBM/AMD non-PLUS/UMC CPUs
+
+smi_seg_size_cseg	equ	smi_code_seg_ibm_amd_non_plus_cseg + 02; 1 dword..SMI segment size
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;    DATA AREA USED FOR IRQ BASED POWER MGT.	;
+;-----------------------------------------------;
+
+irq_used_for_pm_cseg	equ	smi_seg_size_cseg + 04	; 1 BYTE...saves the information of IRQ used for IRQ based power management
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;     DATA AREA USED BY DUAL/MULTIPROCESSOR	;
+;     THIS DATA AREA IS IN CODE SEGMENT AND	;
+;	AVAILABLE IN EACH PROCESSOR'S CODE	;
+;		SEGMENT ADDRESS SPACE		;
+;-----------------------------------------------;
+
+bsp_code_seg_cseg	equ	irq_used_for_pm_cseg + 01; 1 WORD...keeps code segment address for boot strap processor(BSP)
+							 ; available in each processor's CSEG data area
+processor_in_smi_info_cseg equ	bsp_code_seg_cseg + 02; 1 WORD...keeps info about processor(s) currently in SMI
+						      ;	      ...one bit for each processor for BSP to nth processor
+						      ;	      ...(ONLY BSP processor data area used)
+current_processor_bit_cseg equ	processor_in_smi_info_cseg + 02; 1 WORD...keeps info about bit position for current processor
+							       ; available in each processor's CSEG data area
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+

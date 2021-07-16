@@ -1,0 +1,552 @@
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	 (C)Copyright 1985-1996, American Megatrends, Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**	      6145-F Northbelt Pkwy, Norcross, GA 30071 	**;
+;**								**;
+;**			Phone (770)-246-8600			**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;****************************************************************************;
+
+PERIPHERAL_DATA_VECT	equ 61h 	;Vector pointing to peripheral scratch
+
+PNP_NODE_CFG_DYNAMIC	equ 00000001b	;Flags for get/set dynamic config
+PNP_NODE_CFG_STATIC	equ 00000010b	;Flags for get/set static config
+
+
+
+; System Device Node Data Structure
+;------------------------------------------------------------------------------
+sd_node 	struc
+sdn_size	dw	?		;Size of this node in bytes
+sdn_node_num	db	?		;Node number
+sdn_device_id	dd	?		;Device ID of this node (see below)
+sdn_base_type	db	?		;Device base type code (see below)
+sdn_sub_type	db	?		;Device sub type code (see below)
+sdn_if_type	db	?		;Device interface type code (see below)
+sdn_attributes	dw	?		;Attribute flags (see below)
+;The currently active resource descriptors go here (variable length)
+;All possible resource descriptors go here (variable length)
+;Compatible device IDs go here (variable length)
+;Don't change the size of this struct, some code relies on the size to get
+; to the offset of these variable areas.
+sd_node 	ends
+
+
+; Values for sd_node.sdn_device_id
+; These IDs are define in the Plug and Play spec.
+;------------------------------------------------------------------------------
+; A=1, B=2, C=3, D=4, E=5, F=6, G=7, H=8, I=9, J=10, K=11, L=12, M=13, N=14
+; O=15, P=16, Q=17, R=18, S=19, T=20, U=21, V=22, W=23, X=24, Y=25, Z=26
+; ALI = 0 00001 01100 01001 = 0000 0101 1000 1001 = 0589
+; PNP = 0 10000 01110 10000 = 0100 0001 1101 0000 = 41D0
+; SIS = 0 10011 01001 10011 = 0100 1101 0011 0011 = 4D33
+; WEC = 0 10111 00101 00011 = 0101 1100 1010 0011 = 5CA3
+; 0C10 = 0000 1100 0001 0000 = 0 00011 00000 10000 = C0P
+; 3910 = 0011 1001 0001 0000 = 0 01110 01000 10000 = NHP
+ID_AT_PIC		equ	0000D041h	;AT interrupt controller
+ID_EISA_PIC		equ	0100D041h	;EISA interrupt controller
+ID_MCA_PIC		equ	0200D041h	;MCA interrupt controller
+ID_APIC 		equ	0300D041h	;APIC
+
+ID_AT_TIMER		equ	0001D041h	;AT Timer
+ID_EISA_TIMER		equ	0101D041h	;EISA Timer
+ID_MCA_TIMER		equ	0201D041h	;MCA Timer
+
+ID_AT_DMA		equ	0002D041h	;AT DMA controller
+ID_EISA_DMA		equ	0102D041h	;EISA DMA controller
+ID_MCA_DMA		equ	0302D041h	;MCA DMA controller
+
+ID_XT_KBDCONT		equ	0003D041h	;AT standard keyboard controller (no mouse)
+ID_AT_KBDCONT		equ	0103D041h	;PS/2 keyboard controller (supports mouse)
+ID_ENH_KBDCONT		equ	0303D041h	;IBM Enhanced (101/102-key, PS/2 mouse support)
+
+ID_LPT_PORT		equ	0004D041h	;Standard parallel printer port
+ID_ECP_PORT		equ	0104D041h	;ECP printer port
+
+ID_COM_PORT		equ	0005D041h	;Standard serial port
+ID_16550_PORT		equ	0105D041h	;16550 serial port
+ID_IR_PORT		equ	1005D041h	;IR serial port ; Chung 040897
+ID_WB_IR_PORT		equ	1105D041h	;WinBord 877/977 IrDA 1.0 serial port, Chung 010598
+;;;ID_WB_FIR_DMA_PORT	equ	1105D041h	;WinBord 877/977 FIR, IrDA 1.1, IR3.0 serial port for DMA, Chung 010598
+;;;ID_WB_FIR_PIO_PORT	equ	1005A35Ch	;WinBord 877/977 FIR, IrDA 1.1, IR3.0 serial port for PIO, Chung 082197
+ID_WB_FIR_PORT		equ	1005A35Ch	;WinBord 877/977 FIR, IrDA 1.1, IR3.0 serial port for DMA, Chung 050898
+ID_WB_CIR_PORT		equ	1205A35Ch	;WinBord 877/977 CIR, Chung 052598
+ID_ALI_FIR_PORT 	equ	23518905h	;ALI M5135F FIR serial port, Chung 122397
+
+ID_IDE_CONT		equ	0006D041h	;IDE / ATA compatible disk drive
+
+ID_FLOPPY_CONT		equ	0007D041h	;Standard floppy disk controller
+
+ID_AT_SPKR		equ	0008D041h	;AT style speaker
+ID_SND_BLASTER		equ	0108D041h	;Sound Blaster compatible sound device
+ID_MS_SOUND		equ	0208D041h	;Microsoft Sound System compatible sound device
+
+ID_VGA			equ	0009D041h	;VGA compatible display adapter
+ID_SVGA 		equ	0109D041h	;Super VGA compatible display adapter
+ID_XGA			equ	0209D041h	;XGA compatible display adapter
+ID_8514 		equ	0309D041h	;8514 compatible display adapter
+
+ID_ISA_BUS		equ	000AD041h	;ISA Bus
+ID_EISA_BUS		equ	010AD041h	;EISA Bus
+ID_MCA_BUS		equ	020AD041h	;MCA Bus
+ID_PCI_BUS		equ	030AD041h	;PCI Bus
+ID_VESA_BUS		equ	040AD041h	;VESA / VL Bus
+
+ID_AT_RTC		equ	000BD041h	;AT real time clock
+
+ID_PNP_BIOS		equ	000CD041h	;Plug and Play BIOS
+ID_SYSTEM_MEM		equ	010CD041h	;System memory
+ID_SYSTEM_RESOURCES	equ	020CD041h	;System resources (not device specific)
+ID_SYSTEM_MATH_CO	equ	040CD041h	;Math coprocessor
+
+ID_AHA_154X		equ	000DD041h	;Adaptec 154x compatible SCSI controller
+ID_AHA_174X		equ	010DD041h	;Adaptec 174x compatible SCSI controller
+ID_FUTURE_DOMAIN	equ	020DD041h	;Future Domain 16-700 compatible SCSI controller
+ID_PCMCIA_82365 	equ	000ED041h	;Intel 82365 compatible PCMCIA controller
+ID_PS2_MOUSE		equ	130FD041h	;PS/2 style mouse controller
+
+
+; Values for sd_node.sdn_base_type
+; Values for sd_node.sdn_sub_type
+; Values for sd_node.sdn_if_type
+;------------------------------------------------------------------------------
+BT_OLD_DEVICE		equ 00h 	;For old devices with no base type
+  ST_OLD_NON_VGA	equ 00h 	;For old non-VGA devices
+  ST_OLD_VGA		equ 01h 	;For old VGA devices
+
+BT_MASS_STORAGE 	equ 01h 	;Mass Storage Device
+  ST_SCSI		equ 00h 	;SCSI Controller
+  ST_IDE		equ 01h 	;IDE Controller (Standard ATA compatible)
+    IF_STD_IDE		equ 00h 	;Generic IDE
+  ST_FLOPPY		equ 02h 	;Floppy Controller (Standard 765 compatible)
+    IF_STD_FLOPPY	equ 00h 	;Generic Floppy
+  ST_IPI		equ 03h 	;IPI Controller
+    IF_STD_IPI		equ 00h 	;General IPI
+  ST_OTHER_MSD		equ 80h 	;Other Mass Storage Controller
+
+BT_NETWORK		equ 02h 	;Network Interface Controller
+  ST_ETHERNET		equ 00h 	;Ethernet
+    IF_STD_ETHERNET	equ 00h 	;General Ethernet
+  ST_TOKEN_RING 	equ 01h 	;Token Ring Controller
+    IF_STD_TOKEN	equ 00h 	;General Token Ring
+  ST_FDDI		equ 02h 	;FDDI Controller
+    IF_STD_FDDI 	equ 00h 	;General FDDI
+  ST_OTHER_NET		equ 80h 	;Other Network Interface Controller
+
+BT_DISPLAY		equ 03h 	;Display Controller
+  ST_VGA		equ 00h 	;VGA Controller (Standard VGA compatible)
+    IF_STD_VGA		equ 00h 	;Generic VGA compatible
+    IF_STD_VESA 	equ 01h 	;VESA SVGA Compatible Controller
+  ST_XGA		equ 01h 	;XGA Compatible Controller
+    IF_STD_XGA		equ 00h 	;General XGA Compatible Controller
+  ST_OTHER_DISP 	equ 80h 	;Other Display Controller
+
+BT_MULT_MEDIA		equ 04h 	;Multi-media Controller
+  ST_MM_VIDEO		equ 00h 	;Video Controller
+    IF_STD_VIDEO	equ 00h 	;General Video
+  ST_AUDIO		equ 01h 	;Audio Controller
+  ST_STD_AUDIO		equ 00h 	;General Audio Controller
+  ST_OTHER_MM		equ 80h 	;Other Multi-media Controller
+
+BT_MEMORY		equ 05h 	;Memory
+  ST_RAM		equ 00h 	;RAM
+  ST_STD_RAM		equ 00h 	;General RAM
+  ST_FLASH		equ 01h 	;FLASH Memory
+    IF_STD_FLASH	equ 00h 	;General FLASH Memory
+  ST_OTHER_MEM		equ 80h 	;Other Memory Device
+
+BT_BRIDGE		equ 06h 	;Bridge Controller
+  ST_HOST_PROC		equ 00h 	;Host Processor Bridge
+    IF_STD_HOST_BR	equ 00h 	;General Host Processor Bridge
+  ST_ISA_BR		equ 01h 	;ISA Bridge
+    IF_STD_ISA_BR	equ 00h 	;General ISA Bridge
+  ST_EISA_BR		equ 02h 	;EISA Bridge
+    IF_STD_EISA_BR	equ 00h 	;General EISA Bridge
+
+  ST_MCA_BR		equ 03h 	;MicroChannel Bridge
+    IF_STD_MCA_BR	equ 00h 	;General Micro-Channel Bridge
+  ST_PCI_BR		equ 04h 	;PCI Bridge
+    IF_STD_PCI_BR	equ 00h 	;General PCI Bridge
+  ST_PCMCIA_BR		equ 05h 	;PCMCIA Bridge
+
+    IF_STD_PCMCIA_BR	equ 00h 	;General PCMCIA Bridge
+  ST_OTHER_BR		equ 80h 	;Other Bridge Device
+
+BT_COMMUN		equ 07h 	;Communications Device
+  ST_RS232		equ 00h 	;RS-232 Device (XT-compatible COM)
+    IF_STD_RS232	equ 00h 	;Generic XT-compatible
+    IF_16450		equ 01h 	;16450-compatible
+    IF_16550		equ 02h 	;16550-compatible
+  ST_PARALLEL		equ 01h 	;AT-Compatible Parallel Port
+    IF_STD_PARALLEL	equ 00h 	;Generic AT Parallel Port
+    IF_MODEL30_BI	equ 01h 	;Model-30 Bidirectional Port
+    IF_ECP		equ 02h 	;ECP 1.? compliant port
+  ST_OTHER_COM		equ 80h 	;Other Communications Device
+
+BT_SYS_PERI		equ 08h 	;System Peripherals
+  ST_PIC		equ 00h 	;Programmable Interrupt Controller (8259 Compatible)
+    IF_STD_PIC		equ 00h 	;Generic 8259 PIC
+    IF_ISA_PIC		equ 01h 	;ISA PIC (8259 Compatible)
+    IF_EISA_PIC 	equ 02h 	;EISA PIC (8259 Compatible)
+  ST_DMA		equ 01h 	;DMA Controller (8237 Compatible)
+    IF_STD_DMA		equ 00h 	;Generic DMA Controller
+    IF_ISA_DMA		equ 01h 	;ISA DMA Controller
+    IF_EISA_DMA 	equ 02h 	;EISA DMA Controller
+  ST_TIMER		equ 02h 	;System Timer (8254 Compatible)
+    IF_STD_TIMER	equ 00h 	;Generic System Timer
+    IF_ISA_TIMER	equ 01h 	;ISA System Timer
+    IF_EISA_TIMER	equ 02h 	;EISA System Timers (2 Timers)
+  ST_RTC		equ 03h 	;Real Time Clock
+    IF_STD_RTC		equ 00h 	;Generic RTC Controller
+    IF_ISA_RTC		equ 01h 	;ISA RTC Controller
+  ST_OTHER_PERI 	equ 80h 	;Other System Peripheral
+
+BT_INPUT		equ 09h 	;Input Devices
+  ST_KBD_CTLR		equ 00h 	;Keyboard Controller
+  ST_PEN		equ 01h 	;Digitizer (Pen)
+  ST_MOUSE		equ 02h 	;Mouse Controller
+  ST_OTHER_IN		equ 80h 	;Other Input Controller
+
+BT_DOCKING		equ 0Ah 	;Docking Station
+  ST_GENERIC_DOCK	equ 00h 	;Generic Docking Station
+  ST_OTHER_DOCK 	equ 80h 	;Other type of Docking Station
+
+BT_CPU			equ 0Bh 	;CPU Type
+  ST_386		equ 00h 	;386-based processor
+    IF_STD_386		equ 00h 	;Generic 386
+    IF_386SX		equ 01h 	;386SX
+    IF_386DX		equ 02h 	;386DX
+    IF_386SL		equ 03h 	;386SL
+  ST_486		equ 01h 	;486-based processor
+    IF_STD_486		equ 00h 	;Generic 486
+    IF_486SX		equ 01h 	;486SX
+    IF_486DX		equ 02h 	;486DX
+    IF_486SL		equ 03h 	;486SL
+    IF_487SX		equ 04h 	;487SX
+    IF_486DX2		equ 05h 	;486DX2
+    IF_486OD		equ 06h 	;486 OverDrive
+  ST_586		equ 02h 	;Pentium-based processor
+    IF_STD_586		equ 00h 	;Generic Pentium
+
+
+; Values for sd_node.sdn_attributes
+;------------------------------------------------------------------------------
+SDN_ATTR_CANT_DISABLE	equ	0001h	;Bit 0: If set, node can't be disabled
+SDN_ATTR_CANT_CONFIG	equ	0002h	;Bit 1: If set, node can't be reconfigured
+SDN_ATTR_CAN_OUTPUT	equ	0004h	;Bit 2: If set, node can be boot output
+SDN_ATTR_CAN_INPUT	equ	0008h	;Bit 3: If set, node can be boot input
+SDN_ATTR_CAN_IPL	equ	0010h	;Bit 4: If set, node can be IPL device
+SDN_ATTR_DOCKING	equ	0020h	;Bit 5: If set, node is on docking station
+SDN_ATTR_REMOVABLE	equ	0040h	;Bit 6: If set, node is a removable dev
+SDN_ATTR_DYNAMIC_CFG	equ	0080h	;Bit 7: If set, node can be reconfig at runtime
+
+
+; IRQ Descriptor Structure (Length = 2 bytes after tag)
+;------------------------------------------------------------------------------
+IRQ_DESC_TAG	equ	22h
+
+irq_descriptor	struc
+ides_tag	db	?		;Set to IRQ_DESC_TAG
+ides_irq_mask	dw	?		;Mask, one bit for each IRQ level
+irq_descriptor	ends
+
+
+; Extended IRQ Descriptor Structure (Length = 3 bytes after tag)
+;------------------------------------------------------------------------------
+XIRQ_DESC_TAG	equ	23h
+
+xirq_descriptor struc
+xides_tag	db	?		;Set to XIRQ_DESC_TAG
+xides_irq_mask	dw	?		;Mask, one bit for each IRQ level
+xides_irq_flags db	?		;See below for bit definitions
+xirq_descriptor ends
+
+
+; Values for xirq_descriptor.xides_irq_flags
+;------------------------------------------------------------------------------
+XID_FLAG_TRIG_BITS	equ	0Fh	;Bit 0-3: IRQ trigger type bits
+XID_FLAG_TRIG_H_E	equ	01h	;Bit 0: Dev supports active high, edge
+XID_FLAG_TRIG_L_E	equ	02h	;Bit 1: Dev supports active low, edge
+XID_FLAG_TRIG_H_L	equ	04h	;Bit 2: Dev supports active high, level
+XID_FLAG_TRIG_L_L	equ	08h	;Bit 3: Dev supports active low, level
+
+
+; DMA Descriptor Structure (Length = 2 bytes after tag)
+;------------------------------------------------------------------------------
+DMA_DESC_TAG	equ	2Ah
+
+dma_descriptor	struc
+ddes_tag	db	?		;Set to DMA_DESC_TAG
+ddes_dma_mask	db	?		;Mask, one bit for each DMA channel
+ddes_dma_flags	db	?		;See below for bit definitions
+dma_descriptor	ends
+
+
+; Values for dma_descriptor.ddes_dma_flags
+;------------------------------------------------------------------------------
+DD_FLAG_WIDTH_BITS	equ	03h	;Bit 1-0: DMA transfer width preference
+DD_FLAG_WIDTH_8 	equ	00h	;Bit 1-0 = 00: 8 bit only
+DD_FLAG_WIDTH_8_16	equ	01h	;Bit 1-0 = 01: 8 or 16 bit
+DD_FLAG_WIDTH_16	equ	02h	;Bit 1-0 = 10: 16 bit only
+DD_FLAG_MASTER		equ	04h	;Bit 2: If set, device is bus master
+DD_FLAG_COUNT_BYTE	equ	08h	;Bit 3: If set, device may count by byte
+DD_FLAG_COUNT_WORD	equ	10h	;Bit 4: If set, device may count by word
+DD_FLAG_SPEED_BITS	equ	60h	;Bit 6-5: DMA speed supported
+DD_FLAG_SPEED_COMP	equ	00h	;Bit 6-5 = 00: Compatibility mode
+DD_FLAG_SPEED_A 	equ	20h	;Bit 6-5 = 01: Type A Timing
+DD_FLAG_SPEED_B 	equ	40h	;Bit 6-5 = 10: Type B Timing
+DD_FLAG_SPEED_F 	equ	60h	;Bit 6-5 = 11: Type F Timing
+
+
+; I/O Port Descriptor Structure (Length = 7 bytes after tag)
+;------------------------------------------------------------------------------
+PORT_DESC_TAG	equ	47h
+
+port_descriptor struc
+pdes_tag	db	?		;Set to PORT_DESC_TAG
+pdes_port_flags db	?		;See below for bit definitions
+pdes_min_base	dw	?		;Minimum base address
+pdes_max_base	dw	?		;Maximum base address
+pdes_alignment	db	?		;Required alignment needed
+pdes_length	db	?		;Number of contiguous I/O ports needed
+port_descriptor ends
+
+
+; Values for port_descriptor.pdes_port_flags
+;------------------------------------------------------------------------------
+PD_FLAG_DECODE_16	equ	01h	;Bit 0: If set, dev decodes all 16 bits
+
+
+; Fixed I/O Port Descriptor Structure (Length = 3 bytes after tag)
+;------------------------------------------------------------------------------
+FPORT_DESC_TAG	equ	4Bh
+
+fport_descriptor	struc
+fpdes_tag	db	?		;Set to FPORT_DESC_TAG
+fpdes_base	dw	?		;Base address
+fpdes_length	db	?		;Number of contiguous I/O ports
+fport_descriptor	ends
+
+
+; Plug and Play Version Descriptor Structure (Length = 2 bytes after tag)
+;------------------------------------------------------------------------------
+PNPVER_DESC_TAG equ	0Ah
+
+pnpver_descriptor	struc
+pvdes_tag	db	?		;Set to PNPVER_DESC_TAG
+pvdes_version	db	?		;PnP version (ex: v1.2 = 12h)
+pvdes_vendver	db	?		;Vendor defined version number
+pnpver_descriptor	ends
+
+
+; Logical Device ID Descriptor Structure (Length = 5 or 6 bytes after tag)
+;------------------------------------------------------------------------------
+LDEV1_DESC_TAG	equ	15h
+LDEV2_DESC_TAG	equ	16h
+
+ldev_descriptor struc
+lddes_tag	db	?		;Set to LDEV1_DESC_TAG/LDEV2_DESC_TAG
+lddes_logdevid	dd	?		;Logical device id
+lddes_dev_flags dw	?		;See below for bit definitions
+ldev_descriptor ends
+
+; Values for ldev_descriptor.lddes_dev_flags
+;------------------------------------------------------------------------------
+LD_FLAG_BOOTDEV equ	01h	;Bit 0: If set, dev is a boot device
+
+
+; Compatible Device ID Descriptor Structure (Length = 4 bytes after tag)
+;------------------------------------------------------------------------------
+COMPID_DESC_TAG equ	1Ch
+
+compid_descriptor	struc
+cmpdes_tag	db	?		;Set to COMPID_DESC_TAG
+cmpdes_devid	dd	?		;ID of compatible device
+compid_descriptor	ends
+
+
+; Memory Descriptor Structure (Length = 11 bytes after tag)
+;------------------------------------------------------------------------------
+MEM_DESC_TAG	equ	81h
+MEM_DESC_LEN	equ	09h
+
+mem_descriptor	struc
+mdes_tag	db	?		;Set to MEM_DESC_TAG
+mdes_size	dw	?		;Size of following data (set to MEM_DESC_LEN)
+mdes_mem_flags	db	?		;See below for bit definitions
+mdes_min_base	dw	?		;Minimum base address (divided by 100h)
+mdes_max_base	dw	?		;Maximum base address (divided by 100h)
+mdes_alignment	dw	?		;Required alignment needed (0 = 64k)
+mdes_length	dw	?		;Length of mem block (divided by 100h)
+mem_descriptor	ends
+
+; 32-Bit Memory Descriptor Structure (Length = 19 bytes after tag)
+;------------------------------------------------------------------------------
+MEM32_DESC_TAG	equ	85h
+MEM32_DESC_LEN	equ	11h
+
+mem32_descriptor	struc
+m32des_tag	 db	?		;Set to MEM32_DESC_TAG
+m32des_size	 dw	?		;Size of following data (set to MEM32_DESC_LEN)
+m32des_mem_flags db	?		;See below for bit definitions
+m32des_min_base  dd	?		;Minimum base address
+m32des_max_base  dd	?		;Maximum base address
+m32des_alignment dd	?		;Required alignment needed
+m32des_length	 dd	?		;Length of mem block in bytes
+mem32_descriptor	ends
+
+; 32-Bit Fixed Memory Descriptor Structure (Length = 11 bytes after tag)
+;------------------------------------------------------------------------------
+FMEM32_DESC_TAG equ	86h
+FMEM32_DESC_LEN equ	09h
+
+fmem32_descriptor	struc
+fm32des_tag	  db	?		;Set to FMEM32_DESC_TAG
+fm32des_size	  dw	?		;Size of following data (set to FMEM32_DESC_LEN)
+fm32des_mem_flags db	?		;See below for bit definitions
+fm32des_base	  dd	?		;Fixed base address
+fm32des_length	  dd	?		;Length of mem block in bytes
+fmem32_descriptor	ends
+
+; Values for mem_descriptor.mdes_mem_flags, mem32_descriptor.m32des_mem_flags
+; and fmem32_descriptor.fm32des_mem_flags
+;------------------------------------------------------------------------------
+MD_FLAG_WRITABLE	equ	01h	;Bit 0: If set, memory is writable
+MD_FLAG_CACHEABLE	equ	02h	;Bit 1: If set, memory is cacheable
+MD_FLAG_DECODE_HIGH	equ	04h	;Bit 2:
+MD_FLAG_WIDTH_BITS	equ	18h	;Bit 4-3: Memory width
+MD_FLAG_WIDTH_8 	equ	00h	;Bit 4-3 = 00: 8 bits wide
+MD_FLAG_WIDTH_16	equ	08h	;Bit 4-3 = 01: 16 bits wide
+MD_FLAG_WIDTH_8_16	equ	10h	;Bit 4-3 = 10: 8 or 16 bits wide
+MD_FLAG_WIDTH_32	equ	18h	;Bit 4-3 = 11: 32 bits wide
+MD_FLAG_SHADOWABLE	equ	20h	;Bit 5: If set, memory is shadowable
+MD_FLAG_OPTION_ROM	equ	40h	;Bit 6: If set, memory is an option ROM
+
+
+; Macros for marking the end of allocated resources, alternate resources,
+; compatible device ids., and dependent functions
+;------------------------------------------------------------------------------
+END_TAG 	equ  79h
+END_TAG_OLD	equ  78h		;Some PnP cards still use this
+DEPFUNC_TAG	equ  30h
+DEPFUNCP_TAG	equ  31h
+END_DEPFUN_TAG	equ  38h
+ANSI_STRING_TAG equ  82h
+
+END_OF_ALLOCATED_RESOURCES macro
+	db	END_TAG 		;PnP END_TAG value
+	db	00h			;Checksum (00 means assume csum is ok)
+endm
+
+END_OF_ALTERNATE_RESOURCES macro
+	db	END_TAG 		;PnP END_TAG value
+	db	00h			;Checksum (00 means assume csum is ok)
+endm
+
+END_OF_COMPATIBLE_DEV_IDS macro
+	db	END_TAG 		;PnP END_TAG value
+	db	00h			;Checksum (00 means assume csum is ok)
+endm
+
+DEPENDENT_FUNCTION_START macro
+	db	DEPFUNC_TAG
+endm
+
+DEPENDENT_FUNCTION_START_WITH_PRIORITY macro DFPriority
+	db	DEPFUNCP_TAG
+	db	DFPriority
+endm
+
+DF_PRIORITY_OPTIMAL	equ 00h
+DF_PRIORITY_ACCEPTABLE	equ 01h
+DF_PRIORITY_SUBOPTIMAL	equ 02h
+
+DEPENDENT_FUNCTION_END macro
+	db	38h
+endm
+
+
+
+MAKE_NODE_LABEL macro nn
+	NODE_NUMBER_&nn label near
+endm
+
+LABEL_DIST macro LabelA, LabelB
+	NODELEN = offset NODE_NUMBER_&LabelB - offset NODE_NUMBER_&LabelA
+endm
+
+SET_NODE_LEN macro
+	LABEL_DIST %CURNODE, %_NEXT_NODENUM_
+endm
+
+FIRST_NODE macro
+	_NEXT_NODENUM_ = 1
+	MAKE_NODE_LABEL %CURNODE
+	SET_NODE_LEN
+endm
+
+END_OF_NODE macro
+	_NEXT_NODENUM_ = _NEXT_NODENUM_ + 1
+	MAKE_NODE_LABEL %CURNODE
+	SET_NODE_LEN
+endm
+
+LAST_NODE macro
+	_NEXT_NODENUM_ = _NEXT_NODENUM_ + 1
+	MAKE_NODE_LABEL %CURNODE
+	dw 0
+endm
+
+
+; IF Type codes for PCI Busmaster IDEs
+;--------------------------------------------------------------
+IF_SING_PCI_BM_IDE	equ 0FEh
+IF_DUAL_PCI_BM_IDE	equ 0FFh
+
+
+; Format of Device Node Data for Single Channel Bus Master IDE
+;--------------------------------------------------------------
+BmIdeDevNodeData	struc
+  NodeData		sd_node 	 <>
+  PriPort1		fport_descriptor <>
+  PriPort2		fport_descriptor <>
+  PriIrq		irq_descriptor	 <>
+  BusPort		port_descriptor  <>
+BmIdeDevNodeData	ends
+
+
+; Format of Device Node Data for Dual Channel Bus Master IDE
+;------------------------------------------------------------
+DualBmIdeDevNodeData	struc
+  NodeData		sd_node 	 <>
+  PriPort1		fport_descriptor <>
+  PriPort2		fport_descriptor <>
+  PriIrq		irq_descriptor	 <>
+  SecPort1		fport_descriptor <>
+  SecPort2		fport_descriptor <>
+  SecIrq		irq_descriptor	 <>
+  BusPort		port_descriptor  <>
+DualBmIdeDevNodeData	ends
+
+
+
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	 (C)Copyright 1985-1996, American Megatrends, Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**	      6145-F Northbelt Pkwy, Norcross, GA 30071 	**;
+;**								**;
+;**			Phone (770)-246-8600			**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+

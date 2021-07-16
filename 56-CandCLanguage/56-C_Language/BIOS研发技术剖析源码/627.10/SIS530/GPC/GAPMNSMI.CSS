@@ -1,0 +1,709 @@
+Subttl.		Include file for GREEN PC support APM code...GAPMNSMI.CSS...GENERIC
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;	  RUN TIME CHIPSET SPECIFIC ROM APM HANDLER CODE	;
+;	  RUN TIME CHIPSET SPECIFIC ROM APM HANDLER CODE	;
+;	  RUN TIME CHIPSET SPECIFIC ROM APM HANDLER CODE	;
+;	  RUN TIME CHIPSET SPECIFIC ROM APM HANDLER CODE	;
+;---------------------------------------------------------------;
+;	  THIS MODULE WILL RESIDE IN F000 ROM SHADOW		;
+;	  THIS MODULE WILL RESIDE IN F000 ROM SHADOW		;
+;	  THIS MODULE WILL RESIDE IN F000 ROM SHADOW		;
+;	  THIS MODULE WILL RESIDE IN F000 ROM SHADOW		;
+;---------------------------------------------------------------;
+
+        include sis5599.equ
+        include makeflag.equ
+
+;;	public	rom_generate_sw_smi_for_apm	;
+
+;;	public	rom_set_pre_cpu_idle_environment;
+;;	public	rom_apm_cpu_idle_call		;
+;;	public	rom_set_post_cpu_idle_environment
+;;	public	rom_apm_cpu_busy_call		;
+
+;;	public	rom_get_ac_battery_status	;
+
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		   ROM_GENERATE_SW_SMI_FOR_APM			;
+;---------------------------------------------------------------;
+;	Input : NONE						;
+;		STACK PRESENT...OS STACK...RESTRICTED USAGE	;
+;	Output: (CY) flag & (AX),(DX) as returned by SMI handler;
+;	Register destroyed : (AX),(DX)				;
+; NOTE :							;
+;  *  Control comes here from rom apm handler.			;
+;  *  Software smi for APM info should should be written to	;
+;     scratch reg or to cmos or REG (SI) (preferably REG (SI) or;
+;     scratch reg if chipset has scratch reg to use) for later	;
+;     retrival in smi to detect software smi for APM.		;
+;  *  Clear the source in SMI handler & identify this source	;
+;     as APM source in 'GET_SMI_SOURCE' hook in GPM.CSS.	;
+;  *  Do not use any external routine here			;
+;  *  No data area is available at this point			;
+;  *  Implementation of this hook is mandatory			;
+;---------------------------------------------------------------;
+
+rom_generate_sw_smi_for_apm	proc	near
+
+	push	edx				;
+	push	eax				;
+	push	esi				;
+	shl	esi,16				; save (si) in upper word of (esi)
+
+	pushf					; save current interrupt enable/disable status
+	cli					; disable interrupts
+
+;-----------------------------------------------;
+; Write info about software smi for APM in cmos
+; or in chipset scratch register or in (SI).
+; Clear the source in SMI handler & identify this
+; source as APM source in 'GET_SMI_SOURCE' hook
+; in GPM.CSS....
+; Use register (EAX),(EDX),(SI).
+; (SI), if used, use only to send software SMI
+; for APM identification to SMI code. On return
+; from SMI APM code, (SI) will contain (CY) flag
+; information in bit 0, other bits will be cleared to 00.
+; Do not use any external routine here.
+;-----------------------------------------------;
+
+; CHIPSET SPECIFIC CODE HERE.....
+
+	mov	si,'AP'				; signature for software SMI for APM
+						; YOU CAN CHANGE (SI) TO A DIFFERENT VALUE ACCORDING TO YOUR NEED OR
+						; YOU CAN USE CHIPSET SCRATCH REGISTER OR SCRATCH CMOS.
+
+;-----------------------------------------------;
+; Put code here to generate software smi.
+; Use register (EAX),(EDX).
+; Clear the software smi source in SMI
+; handler & identify this source as APM source in
+; 'GET_SMI_SOURCE' hook in GPM.CSS....
+; (SI) is used only to send software SMI
+; identification to SMI code. On return from SMI
+; code, (SI) will contain (CY) flag information
+; in bit 0, other bits will be cleared to 00.
+; We are in CLI at this point.
+; Do not use any external routine here.
+;-----------------------------------------------;
+
+; CHIPSET SPECIFIC CODE HERE.....
+
+;	mov	dx,MKF_PM_BASE_ADDRESS+036h
+; 	mov	al,0a5h
+;	out	dx,al
+
+;	mov	dx,MKF_PM_BASE_ADDRESS+032h
+; 	mov	al,SMI_COMMAND_EN
+;	out	dx,al
+
+	mov	eax,80000964h			; Clear SMI Request Status
+	mov	dx,0cf8h
+	out	dx,eax
+	jmp	short $+2
+	mov	eax,0ffffffffh
+	mov	dl,0fch
+	out	dx,eax
+
+	mov	eax,80000960h			; Enable 10 Bit I/O Trap.
+	mov	dx,0cf8h
+	out	dx,eax
+	jmp	short $+2
+	mov	al,04h
+	mov	dl,0feh
+	out	dx,al
+
+	jmp	short $+2
+	jmp	short $+2
+	out	0b2h,al	 			; Generate S/W SMI.
+
+	mov	eax,80000960h			; Disable 10 Bit I/O Trap. 
+	mov	dx,0cf8h
+	out	dx,eax
+	jmp	short $+2
+	mov	al,00h
+	mov	dl,0feh
+	out	dx,al
+
+;-----------------------------------------------;
+; Execute dummy code here as it might take some
+; time before generating software SMI...
+; You might need to change 'cmp si,'AP' code
+; below if you are doing identification of software
+; smi for APM differently.
+;-----------------------------------------------;
+
+	mov	ax,0400h			;
+rom_generate_sw_smi_for_apm_00:
+	cmp	si,'AP'				; is control back from SMI code ?
+	jnz	short rom_generate_sw_smi_for_apm_01; yes...
+;===============================================;
+	dec	ax				;
+	jnz	short rom_generate_sw_smi_for_apm_00
+rom_generate_sw_smi_for_apm_01:
+
+;	mov	dx,MKF_PM_BASE_ADDRESS+036h
+; 	mov	al,000h
+;	out	dx,al
+
+;-----------------------------------------------;
+; Control from SMI handler comes back here....
+;-----------------------------------------------;
+
+;-----------------------------------------------;
+; Chipset specific code gets control here after
+; coming back from SMI handler....
+; Do if anything needs to be done.
+; Use register (EAX),(EDX).
+; (SI) contains (CY) flag information in bit 0
+; as returned from SMI code.
+; Do not use any external routine here
+;-----------------------------------------------;
+
+; CHIPSET SPECIFIC CODE HERE IF REQUIRED....
+
+;-----------------------------------------------;
+;     !!! DO NOT CHANGE FOLLOWING CODE !!!	;
+;-----------------------------------------------;
+
+	pop	dx				; store FLAG in (dx)
+	and	dl,11111110b			; clear (CY) flag
+	test	si,0000000000000001b		; is (CY) flag set ?
+	jz	short rom_generate_sw_smi_for_apm_02
+	or	dl,00000001b			; set (CY) flag
+rom_generate_sw_smi_for_apm_02:
+	pop	si				;
+	pop	si				; (si) contains original upper word of (esi)
+	ror	esi,16				; upper word of (si) restored and lower word of (si) contains returned value
+	pop	eax				;
+	mov	ax,bp				; (ax) as returned from SMI APM handler
+	shr	ebp,16				;
+	push	dx				; store FLAG in stack
+	popf					; restore FLAG
+	pop	edx				;
+	mov	dx,bp				; (dx) as returned from SMI APM handler
+	ret
+
+rom_generate_sw_smi_for_apm	endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		 ROM_SET_PRE_CPU_IDLE_ENVIRONMENT		;
+;---------------------------------------------------------------'
+;	Input : NONE						;
+;		STACK PRESENT...OS STACK...RESTRICTED USAGE	;
+;	Output: NONE						;
+;	Register destroyed : (EAX),(EDX)			;
+; NOTE :							;
+;  *  Control comes here from ROM apm handler.			;
+;  *  Control to this hook comes in response to APM CPU idle	;
+;     call (function# 05), if this APM function is implemented	;
+;     in ROM.							;
+;  *  This hook is identical to 'SET_PRE_CPU_IDLE_ENVIRONMENT'	;
+;     hook in GAPM.CSS (chipset specific APM function # 0c6h)	;
+;  *  Implement this hook if APM CPU idle call (APM func # 05	;
+;     is executed in ROM & APM CPU idle call stops CPU clock	;
+;     speed for your implementation & if you need to do	anything;
+;     before going to stop clock.				;
+;     Default implementation is 'RET'				;
+;  *  Put any chipset initialization code you need to do before	;
+;     going to stop clock.					;
+;  *  Do not use any external routine here.			;
+;  *  No data area is available at this point.			;
+;---------------------------------------------------------------;
+
+rom_set_pre_cpu_idle_environment	proc	near
+
+	ret
+
+rom_set_pre_cpu_idle_environment	endp
+
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;			ROM_APM_CPU_IDLE_CALL			;
+;---------------------------------------------------------------;
+;	Input : NONE						;
+;		STACK PRESENT...OS STACK...RESTRICTED USAGE	;
+;	Output: NONE						;
+;	Register destroyed : (EAX),(EDX)			;
+; NOTE :							;
+;  *  Control comes here from ROM apm handler.			;
+;  *  Control to this hook comes in response to APM CPU idle	;
+;     call (function# 05), if this APM function is implemented	;
+;     in ROM.							;
+;  *  This hook is identical to 'APM_CPU_IDLE_CALL' hook in	;
+;     GAPM.CSS (chipset specific APM function # 0c3h)		;
+;  *  Implementation of this hook is mandatory if APM CPU idle	;
+;     call (APM function # 05h) is executed in ROM.		;
+;     Default implementation is 'RET'				;
+;  *  You need to switch to slow/stop processor clock here.	;
+;  *  Do not use any external routine here.			;
+;  *  No data area is available at this point.			;
+;---------------------------------------------------------------;
+
+rom_apm_cpu_idle_call	proc	near
+
+;-----------------------------------------------;
+; Check for pending interrupts before going	;
+; to stop clock. If any interrupt is pending	;
+; do not goto stop clock......			;
+; If you are doing slow clock, you do not need	;
+; to check for pending interrupts....in this	;
+; case comment next 2 lines of code....		;
+;-----------------------------------------------;
+
+	call	rom_enquire_intr_pending_system	; any interrupt pending on slave/master ?
+	jnz	short int_15_ah53_al05_rom_11	; yes...EXIT
+
+;-----------------------------------------------;
+; Go to slow/stop clock here.....
+;-----------------------------------------------;
+
+; PUT CHIPSET SPECIFIC CODE HERE........
+
+;-----------------------------------------------;
+;	smsw	ax				;
+;	test	al,00000001b			; CPU in protected mode ?
+;	jz	short rom_apm_cpu_idle_call_01	; no...can do 'HLT'
+;	mov	ax,cs				; (ax) = CS selector...lower 2 bits has privilege level info
+;	test	al,00000011b			; current privilege level (CPL) is 00 ?
+;	jnz	short rom_apm_cpu_idle_call_02	; no...can't do 'HLT'
+;
+;rom_apm_cpu_idle_call_01:
+;	pushf					; save current interrupt status
+;	sti					; enable interrupts
+;	hlt					; put CPU in STOP GRANT state
+;	popf					; restore interrupt status
+;						;
+;rom_apm_cpu_idle_call_02:
+;-----------------------------------------------;
+
+
+
+
+
+
+
+
+
+
+
+;-----------------------------------------------;
+; Resume from stop clock here.........
+;-----------------------------------------------;
+
+; PUT CHIPSET SPECIFIC CODE HERE........
+
+
+
+
+
+
+
+
+
+;-----------------------------------------------;
+
+int_15_ah53_al05_rom_11:
+	ret
+
+rom_apm_cpu_idle_call	endp
+
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		 ROM_SET_POST_CPU_IDLE_ENVIRONMENT		;
+;---------------------------------------------------------------;
+;	Input : NONE						;
+;		STACK PRESENT...OS STACK...RESTRICTED USAGE	;
+;	Output: NONE						;
+;	Register destroyed : (EAX),(EDX)			;
+; NOTE :							;
+;  *  Control comes here from ROM apm handler.			;
+;  *  Control to this hook comes in response to APM CPU idle	;
+;     call (function# 05), if this APM function is implemented	;
+;     in ROM.							;
+;  *  This hook is identical to 'SET_POST_CPU_IDLE_ENVIRONMENT'	;
+;     hook in GAPM.CSS (chipset specific APM function # 0c7h)	;
+;  *  Implement this hook if APM CPU idle call (APM func # 05	;
+;     is executed in ROM & APM CPU idle call stops CPU clock	;
+;     speed for your implementation & if you need to do	anything;
+;     after coming out of stop clock.				;
+;     Default implementation is 'RET'				;
+;  *  Put any chipset initialization code you need to do after	;
+;     coming out of stop clock.					;
+;  *  Do not use any external routine here.			;
+;  *  No data area is available at this point.			;
+;---------------------------------------------------------------;
+
+rom_set_post_cpu_idle_environment	proc	near
+
+	ret
+
+rom_set_post_cpu_idle_environment	endp
+
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;			ROM_APM_CPU_BUSY_CALL			;
+;---------------------------------------------------------------;
+;	Input : NONE						;
+;		STACK PRESENT...OS STACK...RESTRICTED USAGE	;
+;	Output: NONE						;
+;	Register destroyed : (EAX),(EDX)			;
+; NOTE :							;
+;  *  Control comes here from ROM apm handler.			;
+;  *  Control to this hook comes in response to APM CPU busy	;
+;     call (function# 06), if this APM function is implemented	;
+;     in ROM.							;
+;  *  This hook is identical to 'APM_CPU_BUSY_CALL' hook in	;
+;     GAPM.CSS (chipset specific APM function # 0c2h)		;
+;  *  Implementation of this hook is mandatory if APM CPU busy	;
+;     call (APM function # 06h) is executed in ROM & APM CPU	;
+;     idle call slows CPU clock speed for your implementation.	;
+;     Default implementation is 'RET'				;
+;  *  You need to switch to full processor clock speed here.	;
+;  *  Do not use any external routine here.			;
+;  *  No data area is available at this point.			;
+;---------------------------------------------------------------;
+
+rom_apm_cpu_busy_call	proc	near
+
+	ret
+
+rom_apm_cpu_busy_call	endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;		HOOKS TO SUPPORT BATTERY FUNCTIONS		;
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		     ROM_GET_AC_BATTERY_STATUS			;
+;---------------------------------------------------------------;
+;	Input : NONE						;
+;		STACK PRESENT...OS STACK...RESTRICTED USAGE	;
+;	Output:	(BH) AC line status				;
+;		     00h Off-line				;
+;		     01h On-line				;
+;		     02h connected from backup battery		;
+;		     ffh unknown/info not available		;
+;		(BL) Battery status				;
+;		     00h High					;
+;		     01h Low					;
+;		     02h Critical				;
+;		     03h Charging				;
+;		     ffh unknown/info not available		;
+;		(CH) Battery flag				;
+;		     bit 0 = 1 High				;
+;		     bit 1 = 1 Low				;
+;		     Bit 2 = 1 Critical				;
+;		     Bit 3 = 1 Charging				;
+;		     Bit 6-4   reserved				;
+;		     Bit 7 = 1 No system battery		;
+;		     ffh  Unknown				;
+;		(CL) Remaining battery life			;
+;			percentage of charge			;
+;		     0 - 100 % of full charge			;
+;		     ffh unknown/info not available		;
+;		(DX) Remaining battery life in time units	;
+;		     Bit 15 = 0 time unit seconds		;
+;			    = 1 time unit minutes		;
+;		     Bit 14 - 0 # of secs/minutes		;
+;			0 - 7fffh for seconds			;
+;			0 - 7ffeh for minutes			;
+;		     ffffh unknown/info not available		;
+;	Register destroyed : (EAX),(BX),(ECX),(EDX)		;
+;								;
+; NOTE :							;
+;  *  Control comes here from core rom apm handler.		;
+;  *  Control to this hook comes in response to get power status;
+;     call (APM function # 0Ah), if this APM function is	;
+;     implemented in ROM.					;
+;  *  This hook is identical to 'GET_AC_BATTERY_STATUS'		;
+;     hook in GAPM.CSS.						;
+;  *  Implement this hook if get power status call (APM func #	;
+;     0Ah) is executed in ROM.					;
+;     Default implementation is 'MOV BX,001FFH'			;
+;				'MOV CX,080FFH'			;
+;				'MOV DX,0FFFFH'			;
+;				'RET'				;
+;---------------------------------------------------------------;
+
+rom_get_ac_battery_status	proc	near
+
+;-----------------------------------------------;
+; The code below should be used only if battery ;
+; status is not available thru chipset support	;
+;-----------------------------------------------;
+
+	mov	bx,001ffh			; (bh) = AC line status...On-line
+						; (bl) = Battery status (unknown/not available)
+	mov	cx,080ffh			; (ch) = Battery flag...no system battery
+						; (cl) = remaining battery life...percentage of charge
+						; (unknown/not available)
+	mov	dx,0ffffh			; remaining battery life...time units
+						; (unknown/not available)
+	ret
+
+rom_get_ac_battery_status	endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;	  ROUTINES TO SUPPORT NON-SMI DATA AREA FOR APM		;
+;---------------------------------------------------------------;
+;		    APM DATA AREA USED IN ROM			;
+; NOTE :							;
+;  * In 10-10-94 CORE 'ROM_APM_CONNECTION_INFO' is available at	;
+;    0f000:0f104h and named as 'ROM_FIXED_APM_CONNECTION_INFO'.	;
+;    'ROM_APM_STATE' is available at 0f000:0f105h and named as	;
+;    'ROM_FIXED_APM_STATE'.					;
+;    'ROM_PENDING_APM_EVENT' is available at 0f000:0f106h and	;
+;    named as 'ROM_FIXED_PENDING_APM_EVENT'.			;
+;  * If GREEN PC code is placed outside 0F000H segment, then only
+;    we need to use the above data area.			;
+;---------------------------------------------------------------;
+
+;;	public	get_rom_apm_connection_info	;
+;;	public	get_rom_apm_state		;
+;;	public	get_rom_pending_apm_event	;
+
+;-----------------------------------------------;
+
+;IF	CORE_BIOS_101094_ABOVE
+;-----------------------------------------------;
+rom_apm_connection_info	equ	0f104h		; FOM_FIXED_APM_CONNECTION_INFO
+rom_apm_state		equ	0f105h		; ROM_FIXED_APM_STATE
+rom_pending_apm_event	equ	0f106h		; ROM_FIXED_PENDING_APM_EVENT
+;-----------------------------------------------;
+;ELSE
+;-----------------------------------------------;
+;	public	rom_apm_connection_info		;
+;	public	rom_apm_state			;
+;	public	rom_pending_apm_event		;
+;
+;rom_apm_connection_info db	00h		; identical to APM_CONNECTION_INFO in SMI APM data area
+;rom_apm_state	db	apm_dev or pm_engaged_by_apm or pm_enabled_by_apm; identical to 'APM_STATE' in SMI APM data area
+;rom_pending_apm_event	dw	0000h		; identical to 'PENDING_APM_EVENT' in SMI APM data area
+;-----------------------------------------------;
+;ENDIF
+
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		   GET_ROM_APM_CONNECTION_INFO			;
+;---------------------------------------------------------------;
+;	Input : NONE						;
+;		STACK PRESENT...OS STACK...RESTRICTED USAGE	;
+;	Output:	(AL) current data...identical data as 'APM_	;
+;		     CONNECTION_INFO' in SMI APM data area	;
+;	Register destroyed : (AL)				;
+;  NOTE :							;
+;   *  This data is identical data as 'APM_CONNECTION_INFO' used;
+;      in SMI APM data area.					;
+;   *  Chipset porting may use scratch chipset register or F000	;
+;      shadow area for saving this info.			;
+;   *  This requires a BYTE of data area.			;
+;   *  The information will be written in 'SET_ROM_APM_		;
+;      CONNECTION_INFO' hook in GAPM.CSS module.		;
+;   *  This hook is mandatory. If F000 shadow area is used as	;
+;      APM data area, then you don't need to do anything.	;
+;---------------------------------------------------------------;
+
+get_rom_apm_connection_info	proc	near
+
+;-----------------------------------------------;
+;     USE ONE OF THE 2 BLOCKS OF CODE BELOW	;
+;-----------------------------------------------;
+;     IF F000 SHADOW USED AS APM DATA AREA	;
+;-----------------------------------------------;
+
+;;	mov	al,cs:rom_apm_connection_info	; (al) = current ROM_APM_CONNECTION_INFO
+
+;-----------------------------------------------;
+;	IF BIOS DATA AREA AT 40:0000h USED	;
+;		AS APM DATA AREA		;
+;-----------------------------------------------;
+
+	mov	al,xdgroup:bda_apm_connection_info; (al) = current ROM_APM_CONNECTION_INFO at bios data area at 40:0000h
+
+;-----------------------------------------------;
+
+	ret
+
+get_rom_apm_connection_info	endp
+
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		       GET_ROM_APM_STATE			;
+;---------------------------------------------------------------;
+;	Input : NONE						;
+;		STACK PRESENT...OS STACK...RESTRICTED USAGE	;
+;	Output:	(AL) current data...identical data as 'APM_	;
+;		     STATE' in SMI APM data area		;
+;	Register destroyed : (AL)				;
+;  NOTE :							;
+;   *  This data is identical data as 'APM_STATE' used in SMI	;
+;      APM data area.						;
+;   *  Chipset porting may use scratch chipset register or F000	;
+;      shadow area for saving this info.			;
+;   *  This requires a BYTE of data area.			;
+;   *  The information will be written in 'SET_ROM_APM_STATE'	;
+;      hook in GAPM.CSS module.					;
+;   *  This hook is mandatory. If F000 shadow area is used as	;
+;      APM data area, then you don't need to do anything.	;
+;---------------------------------------------------------------;
+
+get_rom_apm_state	proc	near
+
+;-----------------------------------------------;
+;     USE ONE OF THE 2 BLOCKS OF CODE BELOW	;
+;-----------------------------------------------;
+;     IF F000 SHADOW USED AS APM DATA AREA	;
+;-----------------------------------------------;
+
+;;	mov	al,cs:rom_apm_state		; (al) = current ROM_APM_STATE
+
+;-----------------------------------------------;
+;	IF BIOS DATA AREA AT 40:0000h USED	;
+;		AS APM DATA AREA		;
+;-----------------------------------------------;
+
+	mov	al,xdgroup:bda_apm_state	; (al) = current ROM_APM_STATE at bios data area at 40:0000h
+
+;-----------------------------------------------;
+
+	ret
+
+get_rom_apm_state	endp
+
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		    GET_ROM_PENDING_APM_EVENT			;
+;---------------------------------------------------------------;
+;	Input : NONE						;
+;		STACK PRESENT...OS STACK...RESTRICTED USAGE	;
+;	Output:	(AX) current...identical data as 'PENDING_	;
+;		     APM_EVENT' in SMI APM data area		;
+;	Register destroyed : (AX)				;
+;  NOTE :							;
+;   *  This data is identical data as 'PENDING_APM_EVENT' used	;
+;      in SMI APM data area.					;
+;   *  Chipset porting may use scratch chipset register or F000	;
+;      shadow area for saving this info.			;
+;   *  This requires a WORD of data area.			;
+;   *  The information will be written in 'SET_ROM_PENDING_APM_	;
+;      EVENT' hook in GAPM.CSS module.				;
+;   *  This hook is mandatory. If F000 shadow area is used as	;
+;      APM data area, then you don't need to do anything.	;
+;---------------------------------------------------------------;
+
+get_rom_pending_apm_event	proc	near
+
+;-----------------------------------------------;
+;     USE ONE OF THE 2 BLOCKS OF CODE BELOW	;
+;-----------------------------------------------;
+;     IF F000 SHADOW USED AS APM DATA AREA	;
+;-----------------------------------------------;
+
+;;	mov	ax,cs:rom_pending_apm_event	; (ax) = current ROM_PENDING_APM_EVENT
+
+;-----------------------------------------------;
+;	IF BIOS DATA AREA AT 40:0000h USED	;
+;		AS APM DATA AREA		;
+;-----------------------------------------------;
+
+	mov	ax,xdgroup:bda_pending_apm_event; (ax) = current ROM_PENDING_APM_EVENT at bios data area at 40:0000h
+
+;-----------------------------------------------;
+
+	ret
+
+get_rom_pending_apm_event	endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+

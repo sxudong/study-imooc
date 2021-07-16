@@ -1,0 +1,61 @@
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1997, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;**********************************************************************;
+
+;*****************************************************************;
+; Chipset specific ACPI Equates -- required for chipset porting   ;
+; Very important ... these MUST BE SETUP PROPERLY for OS to load  ;
+;*****************************************************************;
+
+DID_PM			equ	0009h		; PM Function, PCI Device ID
+VID_PM			equ	1039h		; PM Function, PCI Vendor ID
+;---------------------------------------;
+; set the data to be used for generating sofwtare SMI for Enabling/Disabling ACPI
+; these data are used in SMI handler to detect whether this SMI is meant for
+; ACPI Enable/Disable or S4BIOS
+ACPI_ENABLE		equ	000E1h	; Data to be written to generate Software SMI to enable ACPI
+ACPI_DISABLE		equ	0001Eh	; Data to be written to generate Software SMI to disable ACPI
+S4BIOS_REQ_VAL		equ	0001Fh	; Data to be written to generate Software SMI to request S4BIOS
+;---------------------------------------;
+FLUSH_SIZE		equ	1024d	; Define cache flush size (KB)
+					; (should be twice the max cache size)
+FLUSH_STRIDE		equ	16d	; Define min. cache line size (bytes)
+					; (16d is min. size for Pentium)
+
+DUTY_OFFSET		equ	1	; Bit Index for start of throttle enable value
+DUTY_WIDTH		equ	3	; Width (in bits) of throttle enable value
+
+;*****************************************************************;
+; Define any other chipset-specific equates here		  ;
+;*****************************************************************;
+
+;*****************************************************************;
+
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1997, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+

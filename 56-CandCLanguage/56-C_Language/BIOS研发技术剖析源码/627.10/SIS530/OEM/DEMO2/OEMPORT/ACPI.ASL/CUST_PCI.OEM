@@ -1,0 +1,25 @@
+// VGA Suspend control
+// Includer reference to PowerResource within North Bridge scope
+//
+	PowerResource(VGPR, 0, 0){	// Power Resource
+
+	Method(_STA)
+	{
+		Return(VGAS)
+	}
+
+	Method(_ON)  {                  // Set the VGA On
+// Resume VGA screen
+		Store(1, VGAS)
+	}
+	Method(_OFF) {                  // Set the VGA OFF
+// Suspend VGA screen
+		Store(0, VGAS)
+	}
+	}                               // End resource for VGA
+
+	Device(VGA)
+	{
+		Name(_ADR, 0x00020000)
+		Name(_PR0, Package(){VGAP})
+	}

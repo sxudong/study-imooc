@@ -1,0 +1,350 @@
+
+//;*****************************************************************;
+//;*****************************************************************;
+//;**                                                           **;
+//;**   (C)Copyright 1985-1996, American Megatrends Inc.        **;
+//;**                                                           **;
+//;**                   All Rights Reserved.                    **;
+//;**                                                           **;
+//;**           6145-F, Northbelt Parkway, Norcross,            **;
+//;**                                                           **;
+//;**           Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+//;**                                                           **;
+//;*****************************************************************;
+//;*****************************************************************;
+
+// This AMI Setup Script Processor (SSP) file contains setup items that
+// are related to PCI/PnP Setup.  This file is considered a core BIOS file
+// and should not be modified.
+
+
+Screen (SCR_PCI)
+
+        Question (Q_PNP_AWARE_OS)
+                Text    = "Plug and Play Aware O/S"
+                Options = "No":DEFAULT:POWERON
+                          "Yes"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_CLEAR_NVRAM)
+                Text    = "Clear NVRAM"
+                Options = "No":DEFAULT:POWERON,
+                          "Yes"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_ON_BOARD_DEVICE)
+                Text    = "On Board PCI SCSI/LAN Controller"
+                Options = "Disabled":POWERON,
+                          "Enabled":DEFAULT
+                Present = No
+        EndQuestion
+
+        Question (Q_PCI_LATENCY_TIMER)
+                Text    = "PCI Latency Timer (PCI Clocks)"
+                Options = "32"
+                          "64":DEFAULT:POWERON
+                          "96"
+                          "128"
+                          "160"
+                          "192"
+                          "224"
+                          "248"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PRI_DISPLAY_CARD)
+                Text    = "Primary Graphics Adapter"
+                Options = "PCI":DEFAULT:POWERON,
+                          "AGP",
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PCI_PALETTE_SNOOP)
+                Text    = "PCI VGA Palette Snoop"
+                Options = "Disabled":DEFAULT:POWERON
+                          "Enabled"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PCI_VGA_IRQ)
+                Text    = "Allocate IRQ to PCI VGA"
+                Options = "Yes":DEFAULT:POWERON
+                          "No"
+                Present = No
+        EndQuestion
+
+        Question (Q_PCI_IDE_BUS_MASTER)
+                Text    = "PCI IDE BusMaster"
+                Options = "Disabled",
+                          "Enabled":DEFAULT:POWERON
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PCI_OFFBOARD_IDE)
+                Text    = "Add-on PCI IDE Card"
+                Options = "Auto":DEFAULT:POWERON
+                          "Slot1"
+                          "Slot2"
+                          "Slot3"
+                          "Slot4"
+                          "Slot5"
+                          "Slot6"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PCI_OFFBOARD_IDE_PRI_IRQ)
+                Text    = "Add-on PCI IDE1 IRQ"
+                ShadeWhen (Q_PCI_OFFBOARD_IDE) = "Auto"
+                Options = "Disabled":DEFAULT:POWERON
+                          "INTA"
+                          "INTB"
+                          "INTC"
+                          "INTD"
+                          RESERVED
+                          RESERVED
+                          "Hardwired"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PCI_OFFBOARD_IDE_SEC_IRQ)
+                Text    = "Add-on PCI IDE2 IRQ"
+                ShadeWhen (Q_PCI_OFFBOARD_IDE) = "Auto"
+                Options = "Disabled":DEFAULT:POWERON
+                          "INTA"
+                          "INTB"
+                          "INTC"
+                          "INTD"
+                          RESERVED
+                          RESERVED
+                          "Hardwired"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_PCI_SLOT1_IRQ)
+                Text    = "PCI Slot1 IRQ Priority"
+                Options = "Auto":DEFAULT:POWERON
+                          RESERVED
+                          RESERVED
+                          "3"
+                          "4"
+                          "5"
+                          RESERVED
+                          "7"
+                          RESERVED
+                          "9"
+                          "10"
+                          "11"
+                          RESERVED
+                          RESERVED
+                          RESERVED
+                          RESERVED
+                Present = No
+        EndQuestion
+
+        Question (Q_PCI_SLOT2_IRQ)
+                Text    = "PCI Slot2 IRQ Priority"
+                Options = "Auto":DEFAULT:POWERON
+                          RESERVED
+                          RESERVED
+                          "3"
+                          "4"
+                          "5"
+                          RESERVED
+                          "7"
+                          RESERVED
+                          "9"
+                          "10"
+                          "11"
+                          RESERVED
+                          RESERVED
+                          RESERVED
+                          RESERVED
+                Present = No
+        EndQuestion
+
+        Question (Q_PCI_SLOT3_IRQ)
+                Text    = "PCI Slot3 IRQ Priority"
+                Options = "Auto":DEFAULT:POWERON
+                          RESERVED
+                          RESERVED
+                          "3"
+                          "4"
+                          "5"
+                          RESERVED
+                          "7"
+                          RESERVED
+                          "9"
+                          "10"
+                          "11"
+                          RESERVED
+                          RESERVED
+                          RESERVED
+                          RESERVED
+                Present = No
+        EndQuestion
+
+        Question (Q_PCI_SLOT4_IRQ)
+                Text    = "PCI Slot4 IRQ Priority"
+                Options = "Auto":DEFAULT:POWERON
+                          RESERVED
+                          RESERVED
+                          "3"
+                          "4"
+                          "5"
+                          RESERVED
+                          "7"
+                          RESERVED
+                          "9"
+                          "10"
+                          "11"
+                          RESERVED
+                          RESERVED
+                          RESERVED
+                          RESERVED
+                Present = No
+        EndQuestion
+
+        Question (Q_DMA0_USED_BY_ISA)
+                Text    = "DMA Channel 0"
+                Options = "PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_DMA1_USED_BY_ISA)
+                Text    = "DMA Channel 1"
+                Options = "PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_DMA3_USED_BY_ISA)
+                Text    = "DMA Channel 3"
+                Options = "PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_DMA5_USED_BY_ISA)
+                Text    = "DMA Channel 5"
+                Options = "PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_DMA6_USED_BY_ISA)
+                Text    = "DMA Channel 6"
+                Options = "PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_DMA7_USED_BY_ISA)
+                Text    = "DMA Channel 7"
+                Options = "PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_IRQ3_USED_BY_ISA)
+                Text    = "IRQ3"
+                Options = "PCI/PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_IRQ4_USED_BY_ISA)
+                Text    = "IRQ4"
+                Options = "PCI/PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_IRQ5_USED_BY_ISA)
+                Text    = "IRQ5"
+                Options = "PCI/PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_IRQ7_USED_BY_ISA)
+                Text    = "IRQ7"
+                Options = "PCI/PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_IRQ9_USED_BY_ISA)
+                Text    = "IRQ9"
+                Options = "PCI/PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_IRQ10_USED_BY_ISA)
+                Text    = "IRQ10"
+                Options = "PCI/PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_IRQ11_USED_BY_ISA)
+                Text    = "IRQ11"
+                Options = "PCI/PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_IRQ14_USED_BY_ISA)
+                Text    = "IRQ14"
+                Options = "PCI/PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_IRQ15_USED_BY_ISA)
+                Text    = "IRQ15"
+                Options = "PCI/PnP":DEFAULT:POWERON
+                          "ISA/EISA"
+                Present = Yes
+        EndQuestion
+
+        Question (Q_MEM_SIZE_USED_BY_ISA)
+                Text    = "Reserved Memory Size"
+                Options = "Disabled":DEFAULT:POWERON
+                          "16k"
+                          "32k"
+                          "64k"
+        EndQuestion
+
+        Question (Q_MEM_BASE_USED_BY_ISA)
+                Text    = "Reserved Memory Address"
+                ShadeWhen (Q_MEM_SIZE_USED_BY_ISA) = "Disabled"
+                Options = "C0000"
+                          "C4000"
+                          "C8000":DEFAULT:POWERON
+                          "CC000"
+                          "D0000"
+                          "D4000"
+                          "D8000"
+                          "DC000"
+        EndQuestion
+
+EndScreen
+
+
+//;*****************************************************************;
+//;*****************************************************************;
+//;**                                                           **;
+//;**   (C)Copyright 1985-1996, American Megatrends Inc.        **;
+//;**                                                           **;
+//;**                   All Rights Reserved.                    **;
+//;**                                                           **;
+//;**           6145-F, Northbelt Parkway, Norcross,            **;
+//;**                                                           **;
+//;**           Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+//;**                                                           **;
+//;*****************************************************************;
+//;*****************************************************************;

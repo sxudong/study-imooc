@@ -1,0 +1,808 @@
+;;;;	page	60,130
+;;;;	title	SMIBIOS 2.1 DATA STRUCTURE GENERATION MACROS
+;-----------------------------------------------------------------;
+;Do not change any structure defination unless otherwise specified;
+;-----------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1997, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------;
+
+CreateBiosInfo		macro	xHandle:REQ
+
+	LOCAL	hndl, xLabel, start_offset
+Start_offset:
+	hndl = xHandle
+	if BIOS_INFO
+		hndl = hndl+1
+		if DMI_VER
+		BIOSINFO_STRUC	{\
+				{ 0, sizeof(BIOSINFO_STRUC), xHandle },
+				1,
+				2,
+				BI_BIOS_START_ADDR,
+				3,
+				BIOS_SIZE_IN_KB(BI_BIOS_SIZE),
+				CALC_BIOS_CHAR(),
+				CALC_BIOS_EXTCHAR()\
+				}
+		else
+		BIOSINFO_STRUC20 {\
+				{ 0, sizeof(BIOSINFO_STRUC20), xHandle },
+				1,
+				2,
+				BI_BIOS_START_ADDR,
+				3,
+				BIOS_SIZE_IN_KB(BI_BIOS_SIZE),
+				CALC_BIOS_CHAR()\
+				}
+		endif
+		SCAN_PUT_STR %@biosVendor
+		SCAN_PUT_STR %@biosVersion
+		SCAN_PUT_STR %@biosDate
+		TERMINATOR
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+;	TOTAL_NUM_BIOS_INFORMATION = TOTAL_NUM_BIOS_INFORMATION+1
+	endif
+	EXITM	%hndl
+endm
+
+;===========================================================================;
+CreateSysInfo	macro	xHandle:REQ
+
+	LOCAL	length, hndl, xLabel, start_offset
+start_offset:
+	hndl = xHandle
+	length = 8h
+	if DMI_VER
+		length = 19h
+	endif
+	if SYSTEM_INFO
+		hndl = hndl+1
+		if DMI_VER
+		SYSINFO_STRUC	{\
+					{1, length, xHandle},
+					01h,
+					02h,
+					03h,
+					04h,
+					{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+					SYSTEM_WAKEUP_TYPE\
+				}
+		else
+		SYSINFO_STRUC20 {\
+					{1, length, xHandle},
+					01h,
+					02h,
+					03h,
+					04h\
+			}
+		endif
+		SCAN_PUT_STR %@manuFacturer
+		SCAN_PUT_STR %@productName
+		SCAN_PUT_STR %@systemVer
+		SCAN_PUT_STR %@srNumber
+		TERMINATOR
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	endif
+	EXITM	%hndl
+endm
+
+;===========================================================================;
+CreateBaseBoardInfo		macro	xHandle:REQ
+
+	LOCAL	length, hndl, xLabel, start_offset
+start_offset:
+	hndl = xHandle
+	length = 08h
+
+	if BASEBOARD_INFO
+	hndl = hndl+1
+	BASEBOARD_INFO_STRUC	{\
+				 {2, length, xHandle},
+				 01h,
+				 02h,
+				 03h,
+				 04h\
+				}
+				SCAN_PUT_STR %@boardManuFacturer
+				SCAN_PUT_STR %@boardProduct
+				SCAN_PUT_STR %@boardVer        ;askbefore
+				SCAN_PUT_STR %@boardsrNumber
+				TERMINATOR
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	endif
+	EXITM	%hndl
+endm
+
+;===========================================================================;
+
+CreateSysChassisInfo  macro	xHandle:REQ
+
+	LOCAL	length, LockPresence, hndl, xLabel, start_offset
+start_offset:
+	hndl = xHandle
+	LockPresence = 0
+	if SYSTEM_CHASSIS_LOCK
+		LockPresence = 80h
+	endif
+	length = 09h
+	if DMI_VER
+	length = 0Dh
+	endif
+	if SYSTEM_CHASSIS_INFO
+		hndl = hndl+1
+		if DMI_VER
+		SYSENC_STRUC	{\
+				{3, length, xHandle},
+				01h,
+				SYSTEM_CHASSIS_TYPE OR LockPresence,
+				02h,
+				03h,
+				04h,
+				SYSTEM_CHASSIS_STATE,
+				SYSTEM_POWER_SUPPLY_STATE,
+				SYSTEM_THERMAL_STATE,
+				SYSTEM_SECURITY_STATE\
+				}
+		else
+		SYSENC_STRUC20	{\
+				{3, length, xHandle},
+				01h,
+				SYSTEM_CHASSIS_TYPE,
+				02h,
+				03h,
+				04h\
+				}
+		endif
+		SCAN_PUT_STR %@chassisManufactruer
+		SCAN_PUT_STR %@chassisVer
+		SCAN_PUT_STR %@systemVer
+		SCAN_PUT_STR %@chassisSrnumber
+		TERMINATOR
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	endif
+	EXITM	%hndl
+endm
+
+;===========================================================================;
+CreateProcessorInfo macro	xHandle:REQ
+
+	LOCAL	length, hndl, xSi, xSv, rC, xN, xLabel, start_offset
+	PROCESSOR_START_HANDLE = xHandle
+	hndl = xHandle
+	xL1 = 0ffffh
+	xL2 = 0ffffh
+	xL3 = 0ffffh
+	xVt = 0
+	xMs = 0
+	xUg = 0
+	length = 01Ah
+	if DMI_VER
+		length = 20h
+			IF NUMBER_OF_PROC_CACHE GT 0
+				xL1 = hndl
+				xL1 = xL1+NUMBER_OF_PROCESSOR
+			ENDIF
+			IF NUMBER_OF_PROC_CACHE GT 1
+				xL2 = xL1+1
+			ENDIF
+			IF NUMBER_OF_PROC_CACHE GT 2
+				xL3 = xL2+1
+			ENDIF
+
+	endif
+	rC = 1
+	REPEAT	NUMBER_OF_PROCESSOR
+	LOCAL	start_offset
+start_offset:
+		xSi TEXTEQU @CATSTR(<PROCESSOR_INFO_>, <%rC>)
+		xSv TEXTEQU @CATSTR(<PROCESSOR_VOLTAGE_>, <%rC>)
+		if DMI_VER
+		PROC_STRUC	{\
+				 {4, length, hndl},
+				 01h,
+				 0,
+				 0,
+				 02h,
+				 0,
+				 03h,
+				 @PROC_VOLT(%xSv),
+				 0,
+				 @PROC_MAX_SPEED(%xSi),
+				 0,
+				 0,
+				 @PROC_UPGRADE(%xSi),
+				 xL1,
+				 xL2,
+				 xL3\
+				 }
+		else
+		PROC_STRUC20	{\
+				 {4, length, hndl},
+				 01h,
+				 0,
+				 0,
+				 02h,
+				 0,
+				 03h,
+				 @PROC_VOLT(%xSv),
+				 0,
+				 @PROC_MAX_SPEED(%xSi),
+				 0,
+				 0,
+				 @PROC_UPGRADE(%xSi)\
+				 }
+		endif
+		xN = @INSTR(1, %xSi, <,>)
+		xSi TEXTEQU @SUBSTR(%xSi, 1, (xN-1))
+		SCAN_PUT_STR %xSi
+		BYTE	"                ",0
+		BYTE	"                ",0
+		TERMINATOR
+		rC = rC+1
+		hndl = hndl+1
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	ENDM
+	if DMI_VER
+		hndl = CreateProcCacheInfo(xL1)
+	ENDIF
+	EXITM	%hndl
+ENDM
+
+;===========================================================================;
+
+CreateMemCtrlInfo macro 	xHandle:REQ, hStart:REQ
+
+	LOCAL	length, hMemMod, hndl, xLabel, start_offset
+start_offset:
+	hndl = xHandle
+	hMemMod = hStart
+	if	DMI_VER
+	length = (15 + (2 * NUMBER_OF_MEM_MODULE) + 1)
+	else
+	length = 15 + (2 * NUMBER_OF_MEM_MODULE)
+	endif
+	if MEM_CTRL_INFO
+	hndl = hndl+1
+	MEMCTRL_STRUC	{\
+			{5, length, xHandle},
+			MEM_CTRL_EDD,
+			MEM_CTRL_ECC(),
+			MEM_CTRL_INTRLV,
+			MEM_CTRL_INTRLV,
+			MEM_SIZE_IN_MB(MAX_MEM_MODULE_SIZE),
+			MEM_CTRL_SPEED(),
+			SUPPORTED_MEM_TYPE(),
+			MEM_MOD_VOLTAGE(),
+			NUMBER_OF_MEM_MODULE\
+			}
+		REPEAT	NUMBER_OF_MEM_MODULE
+			WORD	hMemMod
+			hMemMod = hMemMod + 1
+		ENDM
+		if DMI_VER
+			BYTE	MEM_CTRL_ECC()
+		endif
+					; (CORE0072+)>
+		TERMINATOR
+		TERMINATOR
+					; <(CORE0072+)
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	endif
+	EXITM	%hndl
+endm
+;===========================================================================;
+
+CreateMemModuleInfo  macro	xHandle:REQ
+
+	LOCAL	length, hndl, rC, xS, dS, xN, xL, xMs, xLabel, start_offset
+	hndl = xHandle
+	length = 0Ch
+	rC = 1
+	REPEAT	NUMBER_OF_MEM_MODULE
+	LOCAL	start_offset
+start_offset:
+
+		DMIHDR_STRUC	{6, length, hndl}
+		BYTE	1
+		xS TEXTEQU @CATSTR(<MEMORY_INFO_>, <%rC>)
+		xN = @INSTR(1, %xS, <,>)
+		dS TEXTEQU @SUBSTR(%xS, 1, (xN-1))
+		xL = @SIZESTR(%xS)
+		xL = xL -xN
+		xS TEXTEQU @SUBSTR(%xS, (xN+1), xL)
+		xMs = @MEMORY_INFO(%xS)
+		xS TEXTEQU @CATSTR(<MEMORY_TYPE_>, <%rC>)
+		@MEMORY_TYPE %xS
+		WORD	xMs
+		xS TEXTEQU @CATSTR(<MEMORY_ERR_STATUS_>, <%rC>)
+		@MEMORY_ERR_STATUS %xS
+		SCAN_PUT_STR	%dS
+		TERMINATOR
+		rC = rC+1
+		hndl = hndl+1
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	ENDM
+	EXITM	%hndl
+ENDM
+
+;===========================================================================;
+CreateCacheInfo 	macro	xHandle:REQ
+
+	LOCAL	length, hndl, rC, xS, dS, xN, xL, xLabel, start_offset
+	hndl = xHandle
+	length = 0Fh
+	if DMI_VER
+		length = 13h
+	endif
+start_offset:
+
+		DMIHDR_STRUC	{7, length, hndl}
+		BYTE		1
+		xS TEXTEQU <CACHE_CFG>
+		xN = @INSTR(1, %xS, <,>)
+		dS TEXTEQU @SUBSTR(%xS, 1, (xN-1))
+		xL = @SIZESTR(%xS)
+		xL = xL -xN
+		xS TEXTEQU @SUBSTR(%xS, (xN+1), xL)
+		@EXT_CACHE_CFG %xS
+		xS TEXTEQU <CACHE_INFO>
+		@CACHE_INFO %xS
+		IF DMI_VER
+			xS TEXTEQU <CACHE_CHAR>
+			@CACHE_CHAR %xS
+		ENDIF
+		SCAN_PUT_STR	%dS
+		TERMINATOR
+		hndl = hndl+1
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+	EXITM	%hndl
+ENDM
+;=============================================================================;
+CreateProcCacheInfo		macro	xHandle:REQ
+
+	LOCAL	length, hndl, rC, xS, dS, xN, xL
+	hndl = xHandle
+	length = 0Fh
+	if DMI_VER
+		length = 13h
+	endif
+	rC = 1
+	REPEAT	NUMBER_OF_PROC_CACHE
+		DMIHDR_STRUC	{7, length, hndl}
+		BYTE		1
+		xS TEXTEQU @CATSTR(<PROC_CACHE_CFG_L>, <%rC>)
+		xN = @INSTR(1, %xS, <,>)
+		dS TEXTEQU @SUBSTR(%xS, 1, (xN-1))
+		xL = @SIZESTR(%xS)
+		xL = xL -xN
+		xS TEXTEQU @SUBSTR(%xS, (xN+1), xL)
+		@CACHE_CFG %xS
+		xS TEXTEQU @CATSTR(<PROC_CACHE_INFO_L>, <%rC>)
+		@CACHE_INFO %xS
+		IF	DMI_VER
+			xS TEXTEQU @CATSTR(<PROC_CACHE_CHAR_L>, <%rC>)
+			@CACHE_CHAR %xS
+		ENDIF
+		SCAN_PUT_STR	%dS
+		TERMINATOR
+		rC = rC+1
+		hndl = hndl+1
+	ENDM
+	EXITM	%hndl
+ENDM
+
+;===========================================================================;
+CreateSystemSlotInfo	macro	xHandle:REQ
+
+	LOCAL	length, hndl, xS1, xS2, rC, xLabel, start_offset
+	LOCAL	xH, sD, sT, sW, cU, sL, sI, sc1, sc2, xC, xN, xS, rC
+	hndl = xHandle
+	length = 0Ch
+	if DMI_VER
+		length = 0Dh
+	endif
+	if NUMBER_OF_SYSTEM_SLOT GT 0
+		rC = 1
+		REPEAT NUMBER_OF_SYSTEM_SLOT
+		LOCAL	start_offset
+start_offset:
+			xN = 1
+			xS2 TEXTEQU @CATSTR(<SYSTEM_SLOT_CHAR_>, <%rC>)
+			xS TEXTEQU @CATSTR(<SYSTEM_SLOT_INFO_>, <%rC>)
+			xC = @INSTR(<%xN>, %xS, <,>)
+			sD TEXTEQU @SUBSTR(%xS, <%xN>, (xC-xN))
+			xN = xC+1
+			xC = @INSTR(<%xN>, %xS, <,>)
+			sT TEXTEQU @SUBSTR(%xS, <%xN>, (xC-xN))
+			xN = xC+1
+			xC = @INSTR(<%xN>, %xS, <,>)
+			sW TEXTEQU @SUBSTR(%xS, <%xN>, (xC-xN))
+			xN = xC+1
+			xC = @INSTR(<%xN>, %xS, <,>)
+			cU TEXTEQU @SUBSTR(%xS, <%xN>, (xC-xN))
+			xN = xC+1
+			xC = @INSTR(<%xN>, %xS, <,>)
+			sL TEXTEQU @SUBSTR(%xS, <%xN>, (xC-xN))
+			xN = @SIZESTR(%xS)
+			xN = xN-xC
+			xC = xC+1
+			sI TEXTEQU @SUBSTR(%xS, <%xC>, xN)
+
+			;xN = xC+1
+			;xC = @INSTR(<%xN>, %xS, <,>)
+
+			;sC1 TEXTEQU @SUBSTR(%xS, <%xN>, (xC-xN))
+			;xN = @SIZESTR(%xS)
+			;xN = xN-xC
+			;xC = xC+1
+			;sC2 TEXTEQU @SUBSTR(%xS, <%xC>, xN)
+
+			SYS_SLOT_INFO 9, length, hndl, sD, sT, sW, cU, sL, sI, xS2
+			TERMINATOR
+			hndl = hndl + 1
+			rC = rC+1
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	ENDM
+	endif
+	EXITM	%hndl
+endm
+
+;=============================================================;
+CreatePortConnectorInfo 	macro	handle:REQ
+
+	LOCAL	xH, iS, eS, iP, eP, pT, xC, xN, xS, rC, xLabel, start_offset
+	xH = handle
+
+	if NUMBER_OF_PORT_CONNECTOR GT 0
+		rC = 1
+		REPEAT	NUMBER_OF_PORT_CONNECTOR
+		LOCAL	start_offset
+start_offset:
+
+			xN = 1
+			DMIHDR_STRUC {8, 9, xH}
+			xS TEXTEQU @CATSTR(<PORT_CONNECTOR_>, <%rC>)
+			xC = @INSTR(<%xN>, %xS, <,>)
+			iS TEXTEQU @SUBSTR(%xS, <%xN>, (xC-xN))
+			xN = xC+1
+			xC = @INSTR(<%xN>, %xS, <,>)
+			iP TEXTEQU @SUBSTR(%xS, <%xN>, (xC-xN))
+			xN = xC+1
+			xC = @INSTR(<%xN>, %xS, <,>)
+			eS TEXTEQU @SUBSTR(%xS, <%xN>, (xC-xN))
+			xN = xC+1
+			xC = @INSTR(<%xN>, %xS, <,>)
+			eP TEXTEQU @SUBSTR(%xS, <%xN>, (xC-xN))
+			xN = @SIZESTR(%xS)
+			xN = xN-xC
+			xC = xC+1
+			pT TEXTEQU @SUBSTR(%xS, <%xC>, xN)
+			DEFINE_PORT_CONNECTOR %iS, %iP, %eS, %eP, %pT
+			TERMINATOR
+			xH = xH+1
+			rC = rC+1
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+		ENDM
+	endif
+	EXITM	%xH
+endm
+
+;==========================================================================;
+CreateOemStringInfo	macro	Handle:REQ
+
+	LOCAL	xHandle, xS, rC, xLabel, start_offset
+start_offset:
+	xHandle = handle
+	if OEM_STRING_INFO
+		OEM_STRING_STRUC {\
+				 {11, 5, xHandle},
+				 NUMBER_OF_OEM_STRING\
+				 }
+		rC = 1
+		REPEAT	NUMBER_OF_OEM_STRING
+			xS TEXTEQU @CATSTR(<OEM_STRING_>, <%rC>)
+		SCAN_PUT_STR	%xS
+		rC = rC+1
+		ENDM
+
+		TERMINATOR
+		xHandle = xHandle+1
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	endif
+	EXITM	%xHandle
+endm
+;==========================================================================;
+
+CreateSystemConfigOptionInfo	macro	xHandle:REQ
+
+	LOCAL	xHandle, xS, rC, xLabel, start_offset
+start_offset:
+	xHandle = handle
+	if SYSTEM_CONFIG_OPTION_INFO
+		SYSTEM_CONFIG_OPT_STRUC {\
+					 {12, 5, xHandle},
+					 NUMBER_OF_SYSTEM_CONFIG_STRING\
+					}
+		rC = 1
+		REPEAT	NUMBER_OF_SYSTEM_CONFIG_STRING
+			xS TEXTEQU @CATSTR(<SYSTEM_CONFIG_STRING_>, <%rC>)
+			SCAN_PUT_STR	%xS
+			rC = rC+1
+		ENDM
+
+		TERMINATOR
+		xHandle = xHandle+1
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	endif
+	EXITM	%xHandle
+endm
+;==========================================================================;
+
+CreateBiosLanguageInfo	macro	xHandle:REQ
+
+	LOCAL	 xHandle, xS, rC, xLabel, start_offset
+start_offset:
+	xHandle = Handle
+	if BIOS_LANGUAGE_INFO
+		BIOS_LANGUAGE_INFO_STRUC {\
+					 {13, 16h, xHandle},
+				 (NUMBER_OF_LANGUAGE_STRING),
+				 BIOS_LANGUAGE_FORMAT,
+				 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				 0\
+				}
+		rC = 1
+		REPEAT	NUMBER_OF_LANGUAGE_STRING
+			xS TEXTEQU @CATSTR(<INSTALLABLE_LANGUAGE_STRING_>, <%rC>)
+		SCAN_PUT_STR	%xS
+		rC = rC+1
+		ENDM
+		TERMINATOR
+		xHandle = xHandle+1
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	endif
+	EXITM	%xHandle
+
+
+endm
+;==========================================================================;
+
+CreateOnboardDeviceInfo macro	xHandle:REQ
+
+	LOCAL	length, hndl, xS, xE, xT, xN, rC, xD, xC, xLabel, start_offset
+start_offset:
+	hndl = xHandle
+	length = (4 + (2 * NUMBER_OF_ONBOARD_DEVICE))
+
+	if ONBOARD_DEVICE_INFO
+		DMIHDR_STRUC	{10, length, hndl}
+		rC = 1
+		REPEAT	NUMBER_OF_ONBOARD_DEVICE
+			xN = 1
+			xS TEXTEQU @CATSTR(<ONBOARD_DEVICE_>, <%rC>)
+			xC = @INSTR(<%xN>, %xS, <,>)
+			xE TEXTEQU @SUBSTR(%xS, <%xN>, (xC-xN))
+			xN = xC+1
+			xC = @INSTR(<%xN>, %xS, <,>)
+			xT TEXTEQU @SUBSTR(%xS, <%xN>, (xC-xN))
+			ONBOARD_DEV_SUB_STRUC	{((xE shl 7) OR xT), rC}
+			rC = rC+1
+		ENDM
+		rC = 1
+		REPEAT	NUMBER_OF_ONBOARD_DEVICE
+			xN = 1
+			xS TEXTEQU @CATSTR(<ONBOARD_DEVICE_>, <%rC>)
+			xC = @INSTR(<%xN>, %xS, <,>)
+			xN = xC+1
+			xC = @INSTR(<%xN>, %xS, <,>)
+			xN = @SIZESTR(%xS)
+			xN = xN-xC
+			xC = xC+1
+			xD TEXTEQU @SUBSTR(%xS, <%xC>, <%xN>)
+			SCAN_PUT_STR %xD
+			rC = rC+1
+		ENDM
+		TERMINATOR
+		hndl = hndl + 1
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	endif
+	EXITM	%hndl
+endm
+;============================================================================;
+
+CreateBuiltinPointingDeviceInfo macro	xHandle:REQ
+
+	LOCAL hndl, xLabel, start_offset
+start_offset:
+	hndl = xHandle
+	if BUILTIN_POINTING_DEVICE_INFO
+	hndl = hndl + 1
+	BUILTIN_POINT_DEV_STRUC {\
+					 {21, 07h, xHandle},
+					 POINTING_DEVICE_TYPE,
+					 POINTING_DEVICE_INTERFACE,
+					 NUMBER_OF_BUTTONS\
+				}
+
+					TERMINATOR
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	endif
+	EXITM	%hndl
+endm
+;============================================================================;
+
+CreatePortableBatteryInfo	macro	xHandle:REQ
+
+	LOCAL hndl, xLabel, start_offset
+start_offset:
+	hndl = xHandle
+	if PORTABLE_BATTERY_INFO
+	hndl = hndl + 1
+	PORTABLE_BATTERY_STRUC	{\
+				 {22, sizeof(PORTABLE_BATTERY_STRUC), xHandle},
+				 01h,
+				 02h,
+				 03h,
+				 04h,
+				 05h,
+				 PORTABLE_BATTERY_CHEMISTRY,
+				 DESIGN_CAPACITY,
+				 DESIGN_VOLTAGE,
+				 06,
+				 MAX_ERR_IN_BATT_DATA\
+				}
+		SCAN_PUT_STR %@locationofBattery
+		SCAN_PUT_STR %@porBatteryManufactruer
+		SCAN_PUT_STR %@manufacturerDate
+		SCAN_PUT_STR %@batterySerialNumber
+		SCAN_PUT_STR %@deviceName
+		SCAN_PUT_STR %@sbdsVersionNumber
+
+		TERMINATOR
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	endif
+	EXITM	%hndl
+
+endm
+;====================================================================;
+
+CreateGroupAssociationInfo	MACRO	xHandle:REQ
+
+	LOCAL	hndl, xLabel, start_offset
+start_offset:
+	hndl = xHandle
+	IF NUMBER_OF_PROCESSOR GT 1
+		hndl = SUB_GROUP_ASSOCIATION(hndl, NUMBER_OF_PROCESSOR, 4, PROCESSOR_START_HANDLE, PROCESSOR_GROUP)
+	ENDIF
+	IF NUMBER_OF_CACHE GT 1
+		hndl = SUB_GROUP_ASSOCIATION(hndl, NUMBER_OF_CACHE, 7, EXTERNAL_CACHE_START_HANDLE, EXTERNAL_CACHE_GROUP)
+	ENDIF
+	IF NUMBER_OF_SYSTEM_SLOT GT 1
+		hndl = SUB_GROUP_ASSOCIATION(hndl, NUMBER_OF_SYSTEM_SLOT, 9, SLOT_START_HANDLE, SLOT_GROUP)
+	ENDIF
+	IF NUMBER_OF_ONBOARD_DEVICE GT 1
+		hndl = SUB_GROUP_ASSOCIATION(hndl, NUMBER_OF_ONBOARD_DEVICE, 10, ONBOARD_DEVICE_START_HANDLE, ONBOARD_DEVICE_GROUP)
+	ENDIF
+
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	TERMINATOR
+	EXITM	%hndl
+ENDM
+;===================================================================;
+					; (CORE0218+)>
+CreateSystemEventLog	macro	xHandle:REQ
+
+	LOCAL	length, xHandle, rC, xLabel, start_offset
+start_offset:
+	xHandle = Handle
+	length = (17h + (NUMBER_OF_SUPPORTED_EVENT*DESCRIPTOR_LENGTH))
+	if SYSTEM_EVENT_LOG
+		EVENTLOG_INFO_STRUC {\
+					 {15, length, xHandle},
+				 LOG_AREA_LENGTH,
+				 0,
+				 0,
+				 4,
+				 1,
+				 0,
+				 1,
+				 0,
+				 NUMBER_OF_SUPPORTED_EVENT,
+				 DESCRIPTOR_LENGTH\
+				}
+		rC = 1
+		REPEAT	NUMBER_OF_SUPPORTED_EVENT
+			BYTE	@CATSTR(<SUPPORTED_LOG_TYPE_>, <%rC>)
+			BYTE	@CATSTR(<VARIABLE_DATA_TYPE_>, <%rC>)
+		rC = rC+1
+		ENDM
+		TERMINATOR
+		TERMINATOR
+		xHandle = xHandle+1
+	xLabel TEXTEQU @CATSTR(<STRUC_LABEL_>, <%TOTAL_NUM_STRUCS>)
+	xLabel = offset start_offset
+	TOTAL_NUM_STRUCS = TOTAL_NUM_STRUCS+1
+
+	endif
+	EXITM	%xHandle
+endm
+					; <(CORE0218+)
+;==========================================================================;
+
+;-----------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1997, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------------------------------;

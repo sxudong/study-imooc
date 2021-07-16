@@ -1,0 +1,399 @@
+
+
+;-----------------------------------------------------------------------------;
+;				ABOUT THIS FILE				      ;
+;-----------------------------------------------------------------------------;
+;	This file describes the user defined options to generate the	      ;
+;	AMIBIOS MultiCPU Module porting files. User can add upto 15	      ;
+;	new CPU in the market fro each vendor. This feature may be used	      ;
+;	temporarily while waiting for a new release of the CPU module.	      ;
+;-----------------------------------------------------------------------------;
+
+
+
+;-----------------------------------------------------------------------------;
+;				NEW CPU ADDITION			      ;
+;-----------------------------------------------------------------------------;
+;	This describes the info about the new CPUs to be added. Number of     ;
+;	group can be any (maximum 256). The Syntax is like tha following.     ;
+;-----------------------------------------------------------------------------;
+;									      ;
+;	SYNTAX:								      ;
+;	------								      ;
+;	Each vendor can have none or upto 15 new CPU support. So new CPU      ;
+;	addition can be divided under number heads equals to the number       ;
+;	of vendor supported in the current release.			      ;
+;	Each head will be described by @NEWCPU[GROUP]=vendor#. The Keyword    ;
+;	id case sensitive, only uppercase letters have to be used. The        ;
+;	group will end by @NEWCPU[ENDG]. Within "@NEWCPU[GROUP]" and	      ;
+;	"@NEWCPU[ENDG]" all text within <...> will be treated as valid	      ;
+;	user option. Each user options (new CPU support information)  has     ;
+;	to be given in one line. The line will begin with "<" and end with    ;
+;	">". Any comment has to be given by ";". All new CPU support for      ;
+;	a particular vendor has to be given in one place. As for example      ;
+;	if there are three new CPUs has to be supported for a vendor,	      ;
+;	then all three new CPU information has to be written in one group.    ;
+;	If they are written in several places then only first one will be     ;
+;	taken care. Others will be discarded.				      ;
+;									      ;
+;	VENDOR NUMBERS:							      ;
+;	--------------							      ;
+;	Intel		= 0						      ;
+;	Cyrix		= 1						      ;
+;	AMD		= 2						      ;
+;	IBM		= 3						      ;
+;	TI		= 4						      ;
+;	UMC		= 5						      ;
+;	SGS-THOMSON	= 6						      ;
+;									      ;
+;	CPU SUPPORT ENTRY SYNTAX:					      ;
+;	------------------------					      ;
+;	CPU support entries are within "<" and ">" in a line. Maximum 15      ;
+;	such line can be possible under a particular vendor group. The        ;
+;	entry syntax is as follows.					      ;
+;-----------------------------------------------------------------------------;
+;	þ resetid:	This describes the power-on/reset time value in DX    ;
+;			register. If the CPU does not support "CPUID"	      ;
+;			instruction (older CPU), then put stepping ID, i.e.   ;
+;			bit0-3 as 0 irrespective of actual stepping ID said   ;
+;			in the manual. If it supports "CPUID" instruction     ;
+;			then put bit0-3 will be all set to 1.		      ;
+;			e.g. for an older 486 CPU (which does not support     ;
+;			CPUID) resetid will be 0400h and for a new 486DX      ;
+;			(which supports CPUID) will be 040fh.		      ;
+;			** Note: ResetID value can be given as a decimal      ;
+;				 or a hexadecimal number. If hexadecimal      ;
+;				 then has to be followed by 'h'.	      ;
+;				 No need of giving leading '0' if the	      ;
+;				 first digit is A to F. Leading '0' will      ;
+;				 also be taken care.			      ;
+;									      ;
+;	þ cache:	This describes the cache information of the CPU.      ;
+;			The valid options are:				      ;
+;				1. no	(if CPU does not have internal cache) ;
+;				2. wt	(internal cache is WriteThrough)      ;
+;				3. wb	(internal cache is WriteBack)	      ;
+;				4. wbwt	(internal cache can be both)	      ;
+;									      ;
+;	þ clock:	This describes the clock information of the CPU.      ;
+;			The valid options are:				      ;
+;				1. 1x	(internal clock is not multiplied)    ;
+;				2. 2x	(internal clock is multiplied by 2)   ;
+;				2. 3x	(internal clock is multiplied by 3)   ;
+;									      ;
+;	þ bus:		This describes the Data Bus of the CPU.		      ;
+;			The valid options are:				      ;
+;				1. 16	(16-bit data bus)		      ;
+;				2. 32	(32-bit data bus)		      ;
+;				3. 64	(64-bit data bus)		      ;
+;									      ;
+;	þ smi:		This describes the SMI information of the CPU.	      ;
+;			The valid options are:				      ;
+;				1. no	    (CPU does not support SMI)	      ;
+;				2. intel    (CPU supports Intel style SMI)    ;
+;				3. cyrix    (CPU supports Cyrix style SMI)    ;
+;				4. amd	    (CPU supports AMD style SMI)      ;
+;									      ;
+;	þ fpu:		This describes the integrated FPU information.	      ;
+;			The valid options are:				      ;
+;				1. no	(CPU does not have built-in FPU)      ;
+;				2. yes	(CPU has built-in FPU)		      ;
+;									      ;
+;	þ cpuid:	This describes whether CPU supports the "CPUID"	      ;
+;			instruction. The valid options are:		      ;
+;				1. no	(CPU does not support "CPUID")	      ;
+;				2. yes	(CPU supports "CPUID")		      ;
+;									      ;
+;	þ init:		This describes the method of initialization of the    ;
+;			CPU. The valid options are:			      ;
+;									      ;
+;			    For Intel:					      ;
+;			    ----------					      ;
+;				1. noinit   (No initialization required)      ;
+;				2. init386  (386 style initialization)	      ;
+;				3. init486  (486 style initialization)	      ;
+;				4. initp5   (Pentium style initialization)    ;
+;				5. initp6   (P6 style initialization)	      ;
+;									      ;
+;			    For Cyrix:					      ;
+;			    ----------					      ;
+;				1. noinit   (No initialization required)      ;
+;				2. initxlc  (SLC/DLC style initialization)    ;
+;				3. inits    (486S style initialization)       ;
+;				4. initdx   (486DX style initialization)      ;
+;				5. initm    (M1 style initialization)	      ;
+;				6. initm1sc (M1sc style initialization)	      ;
+;									      ;
+;			    For AMD:					      ;
+;			    --------					      ;
+;				1. noinit   (No initialization required)      ;
+;				2. init386  (386 style initialization)	      ;
+;				3. init486  (486 style initialization)	      ;
+;									      ;
+;			    For IBM:					      ;
+;			    --------					      ;
+;				1. noinit   (No initialization required)      ;
+;				2. initibm1 (SLC/DLC/SLC2/DLC2 style init)    ;
+;				3. initibm2 (SLC/DLC 1X/2X/3X style init)     ;
+;				4. initdx   (Cyrix core CPU 486DX style init) ;
+;									      ;
+;			    For TI:					      ;
+;			    -------					      ;
+;				1. noinit   (No initialization required)      ;
+;				2. initxlc  (SLC/DLC style initialization)    ;
+;				3. initdx   (486DX style initialization)      ;
+;									      ;
+;			    For UMC:					      ;
+;			    --------					      ;
+;				1. noinit   (No initialization required)      ;
+;				2. init486  (486DX style initialization)      ;
+;									      ;
+;			    For SGS-THOMSON:				      ;
+;			    ---------------				      ;
+;				1. noinit   (No initialization required)      ;
+;				2. initdx   (486DX style initialization)      ;
+;									      ;
+;	þ $:		This is the ASCII string for the CPU name.	      ;
+;			The name string has to be written within single cote. ;
+;			Maximum length of the string is 10 character.	      ;
+;									      ;
+;-----------------------------------------------------------------------------;
+;	** ALL ENTRIES SHOULD BE PRESENT.				      ;
+;-----------------------------------------------------------------------------;
+;	EXAMPLE:							      ;
+;	-------								      ;
+;	The following is an example of adding new CPU support. First one is   ;
+;	two new CPU for Intel and second one is three new CPUs for TI.	      ;
+;									      ;
+;	Ex#1:								      ;
+;	----								      ;
+;@NEWCPU[GROUP]=0							      ;
+;<resetid=1234h, cache=wt, clock=2x, bus=32, smi=no, fpu=no, cpuid=no, init=initp5, $='NewCPU0'>;
+;<resetid=5678h, cache=wb, clock=3x, bus=64, smi=intel, fpu=yes, cpuid=yes, init=initp6, $='NewCPU1'>;
+;@NEWCPU[ENDG]
+;									      ;
+;	Ex#2:								      ;
+;	----								      ;
+;@NEWCPU[GROUP]=4							      ;
+;<resetid=1234h, cache=wt, clock=1x, bus=16, smi=no, fpu=no, cpuid=no, init=initdx, $='NewCPU2'>;
+;<resetid=5678h, cache=wb, clock=3x, bus=32, smi=cyrix, fpu=yes, cpuid=yes, init=initdx, $='NewCPU3'>;
+;<resetid=9abch, cache=wbwt, clock=3x, bus=64, smi=amd, fpu=yes, cpuid=yes, init=noinit, $='NewCPU4'>;
+;@NEWCPU[ENDG]								      ;
+;-----------------------------------------------------------------------------;
+;	Within @NEWCPU[GROUP] and @NEWCPU[ENDG] any number of blank lines     ;
+;	can be present. Whitespace characters are allowed any where. Each     ;
+;	options hastobe ended by "," except for the last one. There should    ;
+;	not be any delimeter for the last one. Any line can be commented      ;
+;	within this area by simply putting a ";" at the beginning of the      ;
+;	line. Keyword fro each option (resetid, clock...) can be written      ;
+;	in either uppercase or lowercase. Should be followed by a '=". 	      ;
+;	Whitespace character is allowed in between. The @NEWCPU[GROUP]	      ;
+;	can also be absent in this file or having no entry. Following	      ;
+;	situations are also valid.					      ;
+;									      ;
+;@NEWCPU[GROUP]								      ;
+;@NEWCPU[ENDG]								      ;
+;	or								      ;
+;@NEWCPU[GROUP]=0							      ;
+;@NEWCPU[ENDG]								      ;
+;	or								      ;
+;There is no @NEWCPU[GROUP] at all.					      ;
+;-----------------------------------------------------------------------------;
+
+
+;Add new CPUs for Intel here:
+;---------------------------
+@NEWCPU[GROUP]=0
+<resetid=1234h, cache=wt, clock=2x, bus=32, smi=no, fpu=no, cpuid=no, init=init486, $='NewCPU0'>
+@NEWCPU[ENDG]
+
+;Add new CPUs for Cyrix here:
+;---------------------------
+@NEWCPU[GROUP]=1
+<resetid=1234h, cache=wt, clock=2x, bus=32, smi=no, fpu=no, cpuid=no, init=initdx, $='NewCPU0'>
+@NEWCPU[ENDG]
+
+;Add new CPUs for AMD here:
+;-------------------------
+@NEWCPU[GROUP]=2
+@NEWCPU[ENDG]
+
+;Add new CPUs for IBM here:
+;-------------------------
+@NEWCPU[GROUP]=3
+@NEWCPU[ENDG]
+
+;Add new CPUs for TI here:
+;------------------------
+@NEWCPU[GROUP]=4
+@NEWCPU[ENDG]
+
+;Add new CPUs for UMC here:
+;-------------------------
+@NEWCPU[GROUP]=5
+@NEWCPU[ENDG]
+
+;Add new CPUs for SGS-THOMSON here:
+;---------------------------------
+@NEWCPU[GROUP]=6
+@NEWCPU[ENDG]
+
+;-----------------------------------------------------------------------------;
+;			ABSOLUTE VENDOR/CPU SELECTION			      ;
+;-----------------------------------------------------------------------------;
+;	This describes the absolute vendor selection. This means if there     ;
+;	is a new vendor in the market with a new CPU then we can support      ;
+;	the new CPU and the new vendor at least for the display purpose.      ;
+;	If special programming is needed for thet CPU, then that has to       ;
+;	be done seperately. MultiCPU module will not program it. Only one     ;
+;	CPU can be supported for such new vendor. While the information	      ;
+;	is asked through the Runtime routine "GET_PROCESSOR_INFO" both the    ;
+;	vendor# and CPU# will be returned as 255 (FFh).			      ;
+;	This may also be used to overwrite current detected vendor and        ;
+;	CPU by user defined names.					      ;
+;-----------------------------------------------------------------------------;
+;	SYNTAX:								      ;
+;	------								      ;
+;	The CPU information entry should be within @ABSCPUOVERWRITE[GROUP]    ;
+;	and @ABSCPUOVERWRITE[ENDG]. The entry is identical to new CPU	      ;
+;	addition. Only one such entry can be possible.			      ;
+;									      ;
+;	VENDOR NAME:							      ;
+;	-----------							      ;
+;	User defined vendor name can be given by the following syntax.	      ;
+;	@ABSCPUOVERWRITE[GROUP]='user defined vendor name'		      ;
+;				 |----------------------|		      ;
+;					     |				      ;
+;					     |				      ;
+;				     this is optional			      ;
+;									      ;
+;	Vendor name can be maximum of 5 characters.			      ;
+;	CPU entry is also optional. If CPU not to be overwritten then skip    ;
+;	CPU information entry. As for example, let say one particulat board   ;
+;	supports only Intel CPU. MultiCPU module by default will display      ;
+;	"i" for vendor name field. But if the customer wants to display	      ;
+;	"Intel" instead of "i", then it is possible by the following.	      ;
+;	Here CPU will be displayed as it is detected.			      ;
+;									      ;
+;	Ex#1:								      ;
+;	----								      ;
+;@ABSCPUOVERWRITE[GROUP]='Intel'					      ;
+;@ABSCPUOVERWRITE[ENDG]							      ;
+;									      ;
+;	If a board supports only one CPU for a particular vendor. If the      ;
+;	customer wants to display the name/feature of the CPU then the	      ;
+;	overwrite format will be like the following. Here the vendor	      ;
+;	name will be displayed as by the MultiCPU module.		      ;
+;									      ;
+;	Ex#2:								      ;
+;	----								      ;
+;@ABSCPUOVERWRITE[GROUP]						      ;
+;<resetid=1234h, cache=wbwt, clock=2x, bus=32, smi=intel, fpu=yes, cpuid=no, init=initdx, $='486-DX'>;
+;@ABSCPUOVERWRITE[ENDG]							      ;
+;-----------------------------------------------------------------------------;
+;	Within @ABSCPUOVERWRITE[GROUP] and @ABSCPUOVERWRITE[ENDG] if any      ;
+;	line has to be commented then use ";" at the beginning of the line.   ;
+;	The keywords are case sensitive and has to be written in uppercase    ;
+;	only. The group @ABSCPUOVERWRITE[GROUP] can be absent also in the     ;
+;	file.								      ;
+;-----------------------------------------------------------------------------;
+
+@ABSCPUOVERWRITE[GROUP]
+@ABSCPUOVERWRITE[ENDG]
+
+
+;-----------------------------------------------------------------------------;
+;		  CYRIX SPECIFIC REGISTER DEFAULT/SMI VALUES		      ;
+;-----------------------------------------------------------------------------;
+;	@CYRIXDEFAULTPARAM[GROUP]	: for default non SMI supported BIOS  ;
+;	@CYRIXSMIPARAM[GROUP]		: for SMI supported BIOS	      ;
+;-----------------------------------------------------------------------------;
+
+@CYRIXDEFAULTPARAM[GROUP]
+
+;CCR0	CCR1	CCR2	CCR3	CCR4	CCR5
+;----	----	----	----	----	----
+<021h,	010h,	001h,	000h,	000h,	000h>
+
+@CYRIXDEFAULTPARAM[ENDG]
+
+@CYRIXSMIPARAM[GROUP]
+
+;CCR0	CCR1	CCR2	CCR3	CCR4	CCR5
+;----	----	----	----	----	----
+<0A1h,	092h,	081h,	000h,	000h,	000h>
+
+@CYRIXSMIPARAM[ENDG]
+
+
+;-----------------------------------------------------------------------------;
+;		  TI SPECIFIC REGISTER DEFAULT/SMI VALUES		      ;
+;-----------------------------------------------------------------------------;
+;	@TIDEFAULTPARAM[GROUP]		: for default non SMI supported BIOS  ;
+;	@TISMIPARAM[GROUP]		: for SMI supported BIOS	      ;
+;-----------------------------------------------------------------------------;
+
+@TIDEFAULTPARAM[GROUP]
+
+;CCR0	CCR1	CCR2	CCR3	CCR4	CCR5
+;----	----	----	----	----	----
+<021h,	010h,	001h,	000h,	000h,	000h>
+
+@TIDEFAULTPARAM[ENDG]
+
+@TISMIPARAM[GROUP]
+
+;CCR0	CCR1	CCR2	CCR3	CCR4	CCR5
+;----	----	----	----	----	----
+<0A1h,	092h,	081h,	000h,	000h,	000h>
+
+@TISMIPARAM[ENDG]
+
+
+;-----------------------------------------------------------------------------;
+;		  IBM SPECIFIC REGISTER DEFAULT/SMI VALUES		      ;
+;-----------------------------------------------------------------------------;
+;	@IBMDEFAULTPARAM[GROUP]		: for default non SMI supported BIOS  ;
+;	@IBMSMIPARAM[GROUP]		: for SMI supported BIOS	      ;
+;-----------------------------------------------------------------------------;
+
+
+@IBMDEFAULTPARAM[GROUP]
+
+;CCR0	CCR1	CCR2	CCR3	CCR4	CCR5
+;----	----	----	----	----	----
+<021h,	010h,	001h,	000h,	000h,	000h>
+
+@IBMDEFAULTPARAM[ENDG]
+
+@IBMSMIPARAM[GROUP]
+
+;CCR0	CCR1	CCR2	CCR3	CCR4	CCR5
+;----	----	----	----	----	----
+<0A1h,	092h,	081h,	000h,	000h,	000h>
+
+@IBMSMIPARAM[ENDG]
+
+;-----------------------------------------------------------------------------;
+;		  SGS-THOMSON SPECIFIC REGISTER DEFAULT/SMI VALUES	      ;
+;-----------------------------------------------------------------------------;
+;	@SGSTHDEFAULTPARAM[GROUP]	: for default non SMI supported BIOS  ;
+;	@SGSTHSMIPARAM[GROUP]		: for SMI supported BIOS	      ;
+;-----------------------------------------------------------------------------;
+
+@SGSTHDEFAULTPARAM[GROUP]
+
+;CCR0	CCR1	CCR2	CCR3	CCR4	CCR5
+;----	----	----	----	----	----
+<021h,	010h,	001h,	000h,	000h,	000h>
+
+@SGSTHDEFAULTPARAM[ENDG]
+
+@SGSTHSMIPARAM[GROUP]
+
+;CCR0	CCR1	CCR2	CCR3	CCR4	CCR5
+;----	----	----	----	----	----
+<0A1h,	092h,	081h,	000h,	000h,	000h>
+
+@SGSTHSMIPARAM[ENDG]
+

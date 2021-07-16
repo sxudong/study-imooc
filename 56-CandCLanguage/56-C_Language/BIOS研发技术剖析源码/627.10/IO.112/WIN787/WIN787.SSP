@@ -1,0 +1,150 @@
+BeginDevice (WIN787IdeController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN787_IDE_CONTROLLER)
+			Text = "OnBoard IDE"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary":DEFAULT:POWERON,
+				  "Secondary"
+		EndQuestion
+	EndScreen
+EndDevice   // WIN787IdeController
+BeginDevice (WIN787FloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN787_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+	EndScreen
+EndDevice   // WIN787FloppyController
+BeginDevice (WIN787SerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN787_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+//				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice   // WIN787SerialPortA
+BeginDevice (WIN787SerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN787_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+//				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice   // WIN787SerialPortB
+BeginDevice (WIN787ParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN787_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_WIN787_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = Win787_Lpt_Mode_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+		Question (Q_WIN787_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Win787_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice   // WIN787ParallelPort
+BeginDevice (WIN787ParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN787_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			ExternalFunction = Win787_Lpt_Addr_Xfn
+			OptionBits = 3
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_WIN787_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = Win787_Lpt_Mode_Xfn
+			OptionBits = 2
+			Default = 2
+			PowerOn = 2
+		EndQuestion
+		Question (Q_WIN787_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+			ExternalFunction = Win787_Lpt_Dma_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+		Question (Q_WIN787_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Win787_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice   // WIN787ParallelPortExt
+String (STR_WIN787_AUTO)
+	Text = "Auto"
+EndString
+String (STR_WIN787_DIS)
+	Text = "Disabled"
+EndString
+String (STR_WIN787_378)
+	Text = "378"
+EndString
+String (STR_WIN787_278)
+	Text = "278"
+EndString
+String (STR_WIN787_3BC)
+	Text = "3BC"
+EndString
+String (STR_WIN787_NORMAL)
+	Text = "Normal"
+EndString
+String (STR_WIN787_BIDIR)
+	Text = "Bi-Dir"
+EndString
+String (STR_WIN787_SPP_EPP)
+	Text = "SPP(EPP)"
+EndString
+String (STR_WIN787_ECP)
+	Text = "ECP"
+EndString
+String (STR_WIN787_IRQ5)
+	Text = "5"
+EndString
+String (STR_WIN787_IRQ7)
+	Text = "7"
+EndString
+String (STR_WIN787_DMA0)
+	Text = "0"
+EndString
+String (STR_WIN787_DMA1)
+	Text = "1"
+EndString
+String (STR_WIN787_DMA3)
+	Text = "3"
+EndString
+String (STR_WIN787_NA)
+	Text = "N/A"
+EndString

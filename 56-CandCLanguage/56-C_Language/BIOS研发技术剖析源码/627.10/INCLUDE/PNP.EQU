@@ -1,0 +1,141 @@
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;****************************************************************************;
+
+PNP_INDEX_PORT		equ 0279h	;Index port for PnP ISA access
+PNP_WR_DATA_PORT	equ 0A79h	;Write data port for PnP ISA access
+PNP_RD_DATA_PORT_INIT	equ 020Bh	;Initial value for read data port
+PNP_RD_DATA_PORT_LIMIT	equ 03FFh	;Maximum value for read data port
+PNP_RD_DATA_PORT_RETRY	equ 8		;Number of different read data ports
+					; to try before giving up
+
+LFSR_INIT_VALUE		equ 6Ah		;Starting value for initiation key
+
+
+PNP_REG_RD_DATA_PORT	equ 00h		;Used to set PnP ISA read data port
+PNP_REG_ISOLATE		equ 01h		;Read to do serial isolation algorithm
+PNP_REG_CFG_CONTROL	equ 02h		;Various reset bits
+  PNP_CMD_RESET_DEV	equ 01h		;  Bit 0: Reset all logical devices
+  PNP_CMD_WAIT_FOR_KEY	equ 02h		;  Bit 1: Return to Wait for Key state
+  PNP_CMD_RESET_CSN	equ 04h		;  Bit 2: Reset dev's CSN to 00h
+PNP_REG_WAKE		equ 03h		;Wakes device when its CSN is written
+PNP_REG_RESOURCE_DATA	equ 04h		;Resource data is read serially here
+PNP_REG_STATUS		equ 05h		;Resource data status bit
+  PNP_STAT_RES_READY	equ 01h		;  Bit 0: If set, res data can be read
+PNP_REG_CSN		equ 06h		;Contains a device's CSN
+PNP_REG_LDN		equ 07h		;Selects a logical device number
+
+PNP_REG_ACTIVATE	equ 30h		;Used activate a logical device
+  PNP_ACTIVATE		equ 01h		;  Bit 0: 1 = Activate logical device
+PNP_REG_IO_CHECK	equ 31h		;Used to perform I/O range check
+
+PNP_REG_MEM_CFG		equ 40h		;Base address of memory cfg regs
+  PNP_MEM_BASE		equ 00h		;  Offset of base addr reg
+  PNP_MEM_CONTROL	equ 02h		;  Offset of control flags reg
+    PNP_MEM_FLAG_LIMIT	equ 01h		;    Bit 0: 1 = Upper limit
+    PNP_MEM_FLAG_16BIT	equ 02h		;    Bit 1: 1 = 16 bit memory
+    PNP_MEM_FLAG_8BIT	equ 00h		;    Bit 1: 0 = 8 bit memory
+  PNP_MEM_LIMIT		equ 03h		;  Offset of limit reg
+  PNP_MEM_NEXT		equ 08h		;  Offset of next memory cfg reg
+  PNP_MEM_COUNT		equ 04h		;  Maximum of 4 memory cfg regs
+  PNP_MEM_SHIFT		equ 03h
+
+PNP_REG_PORT_CFG	equ 60h		;Base address of I/O port cfg regs
+  PNP_PORT_NEXT		equ 02h		;  Offset of next I/O port cfg reg
+  PNP_PORT_COUNT	equ 08h		;  Maximum of 8 I/O port cfg regs
+  PNP_PORT_SHIFT	equ 01h
+  
+PNP_REG_IRQ_CFG		equ 70h		;Base address of IRQ cfg regs
+  PNP_IRQ_LEVEL		equ 00h		;  Offset of IRQ level reg
+  PNP_IRQ_CONTROL	equ 01h		;  Offset of IRQ control flags reg
+    PNP_IRQ_FLAG_EDGE	equ 00h		;    Bit 0: 0 = Edge trigger
+    PNP_IRQ_FLAG_LEVEL	equ 01h		;    Bit 0: 1 = Level trigger
+    PNP_IRQ_FLAG_LOW	equ 00h		;    Bit 1: 0 = Active low
+    PNP_IRQ_FLAG_HIGH	equ 02h		;    Bit 1: 1 = Active high
+  PNP_IRQ_NEXT		equ 02h		;  Offset of next IRQ cfg reg
+  PNP_IRQ_COUNT		equ 02h		;  Maximum of 2 IRQ cfg regs
+  PNP_IRQ_SHIFT		equ 01h
+
+PNP_REG_DMA_CFG		equ 74h		;Base address of DMA cfg regs
+  PNP_DMA_NEXT		equ 01h		;  Offset of next DMA cfg reg
+  PNP_DMA_COUNT		equ 02h		;  Maximum of 2 DMA cfg regs
+  PNP_DMA_SHIFT		equ 00h
+
+PNP_REG_MEM32_CFG	equ 76h		;Base address of 32-bit memory cfg regs
+  PNP_MEM32_BASE	equ 00h		;  Offset of base addr reg
+  PNP_MEM32_CONTROL	equ 04h		;  Offset of control flags reg
+  PNP_MEM32_LIMIT	equ 05h		;  Offset of limit reg
+  PNP_MEM32_NEXT	equ 10h		;  Offset of next 32-bit memory cfg reg
+  PNP_MEM32_COUNT	equ 04h		;  Maximum of 4 32-bit memory cfg regs
+  PNP_MEM32_SHIFT	equ 04h
+  PNP_MEM32_FIX0	equ 06h		;  Fix value for mem 32 regs 1, 2, & 3
+
+
+
+REFRESH_TICKS_IN_250us	equ 17		;Used to call fixed_delay
+					;   (17 * 15us = 250us)
+
+
+PNPROM_EXP_HEADER_PTR	equ 1Ah		;Offset of pointer to pnp_rom_exp_hdr struc
+PNPROM_EXP_HEADER_SIG	equ 506E5024h	;Signature '$PnP'
+PNPROM_EXP_HDR_VERSION	equ 01h		;Current version of pnp_rom_exp_hdr
+
+
+pnp_rom_exp_hdr		struc
+exphdr_signature	dd ?		;Set to '$PnP' (PNPROM_EXP_HEADER_SIG)
+exphdr_revision		db ?		;Set to PNPROM_EXP_HDR_VERSION
+exphdr_size		db ?		;Size of struc in paragraphs
+exphdr_next_hdr		dw ?		;Offset of next header
+exphdr_reserved		db ?
+exphdr_checksum		db ?		;Adjusted so struc adds to 0
+exphdr_dev_id		dd ?		;Device ID of PnP device
+exphdr_mfg_name_ptr	dw ?		;Offset of ASCIIZ manufacturer name
+exphdr_prod_name_ptr	dw ?		;Offset of ASCIIZ product name
+exphdr_base_type	db ?		;Base type code
+exphdr_sub_type		db ?		;Sub type code
+exphdr_if_type		db ?		;Interface type code
+exphdr_dev_flags	db ?		;See below for definition
+exphdr_boot_connect	dw ?		;Offset of boot connect routine
+exphdr_boot_disconnect	dw ?		;Offset of boot disconnect routine
+exphdr_boot_entry	dw ?		;Offset of bootstrap entry point
+exphdr_reserved2	dw ?
+exphdr_static_res_info	dw ?		;Offset of static resource information
+pnp_rom_exp_hdr		ends
+
+
+; Values for pnp_rom_exp_hdr.exphdr_dev_flags
+;-----------------------------------------------------------------------------
+PNP_EH_OUTPUT_DEV	equ 01h		;If set, device is boot output capable
+PNP_EH_INPUT_DEV	equ 02h		;If set, device is boot input capable
+PNP_EH_IPL_DEV		equ 04h		;If set, device is boot IPL capable
+PNP_EH_BOOT_ROM		equ 10h		;If set, ROM is only needed if boot dev
+PNP_EH_ROM_CACHEABLE	equ 20h		;If set, ROM is cacheable
+PNP_EH_ROM_SHADOWABLE	equ 40h		;If set, ROM is shadowable
+PNP_EH_ROM_DDIM		equ 80h		;If set, ROM supports DDIM
+
+
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+

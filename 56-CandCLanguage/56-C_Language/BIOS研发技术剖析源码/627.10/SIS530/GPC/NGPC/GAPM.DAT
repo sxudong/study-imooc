@@ -1,0 +1,177 @@
+;-----------------------------------------------;
+;	  APM POWER MANAGEMENT DATA AREA	;
+;	  USED BY GREEN PC APM CORE BIOS	;
+;	THE DATA AREA IS IN EQUATE FORM		;
+;		     GAPM.DAT			;
+;    DATA FILE COMMON FOR v1.0/v1.1/v1.2 APM	;
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;  
+;*****************************************************************;
+;-----------------------------------------------;
+;	     DECLARE FIXED ORG HERE		;
+;	THIS 'ORG' SHOULD NOT BE CHANGED	;
+;   smi_seg:0e700h thru 0e7ffh (100h bytes)	;
+;	available for usage as APM data area	;
+; NOTE :					;
+;	As this cseg data area are in equate	;
+;	form, initialise this data area during	;
+;	SMRAM initialization.			; 
+;-----------------------------------------------;
+
+apm_dseg_data_area_begin	equ	0e700h	; 0e700h THRU 0e7ffh (0100H BYTES)
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;     APM BIOS/DRIVER VERSION NO. DATA AREA	;
+;-----------------------------------------------;
+
+apm_bios_ver_no		equ	apm_dseg_data_area_begin ; 1 WORD..APM specification supported by BIOS currently v1.0/v1.1/v1.2 (in BCD format)
+
+;-----------------------------------------------;
+;	APM BIOS/DRIVER CONNECTION INFO		;
+;-----------------------------------------------;
+
+apm_connection_info	equ	apm_bios_ver_no + 02 ; 1 BYTE..APM BIOS/DRIVER connection information
+						     ; bit 0  = 1..APM real mode connection established
+						     ; bit 1  = 1..APM protected mode 16 bit connection established
+						     ; bit 2  = 1..APM protected mode 32 bit connection established
+						     ; bit 3 reserved
+						     ; bit 4  = 0..APM BIOS active version v1.0
+						     ;	      = 1..APM BIOS active version above v1.0
+						     ; bit 5  = 1..APM CPU idle call slows processor clock speed
+						     ;	      = 0..APM CPU idle call stops CPU clock
+						     ; bit 6  = 1..APM BIOS power management disabled
+						     ;	      = 0..APM BIOS power management enabled
+						     ; bit 7  = 1..APM BIOS active version v1.2
+						     ;	      = 0..APM BIOS active version v1.0/v1.1
+
+;-----------------------------------------------;
+;	   APM EVENT INFO DATA AREA		;
+;-----------------------------------------------;
+
+pending_apm_event	equ	apm_connection_info + 01 ; 1 WORD..info about pending APM events
+							 ; bit 0  = 1..system standby request notification
+							 ; bit 1  = 1..system suspend request notification
+							 ; bit 2  = 1..normal resume system notification
+							 ; bit 3  = 1..critical resume system notification
+							 ; bit 4  = 1..battery low notification
+
+							 ; bit 5  = 1..power status change notification (v1.1 only)
+							 ; bit 6  = 1..update time notification (v1.1 only)
+							 ; bit 7  = 1..critical system suspend notification (v1.1 only)
+							 ; bit 8  = 1..user system standby request notification (v1.1 only)
+							 ; bit 9  = 1..user system suspend request notification (v1.1 only)
+							 ; bit 10 = 1..system standby resume notification (v1.1 only)
+							 ; bit 11 = 1..capabilities change notification (v1.2 only)
+
+							 ; bit 12-15 = reserved
+
+;-----------------------------------------------;
+;	  APM PM CAPABILITIES DATA AREA		;
+;-----------------------------------------------;
+
+apm_pm_capabilities	equ	pending_apm_event + 02 ; 1 WORD..info about power management capabilities
+						       ; bit 0  = 1..system can enter global standby state (posts standby & standby resume events)
+						       ; bit 1  = 1..system can enter global suspend state (posts suspend & suspend resume events)
+						       ; bit 2  = 1..resume timer will wake up from standby
+						       ; bit 3  = 1..resume timer will wake up from suspend
+						       ; bit 4  = 1..resume on ring indicator (internal COM or modem) will wake up from standby
+						       ; bit 5  = 1..resume on ring indicator (internal COM or modem) will wake up from suspend
+						       ; bit 6  = 1..PCMCIA ring indicator will wake up from standby
+						       ; bit 7  = 1..PCMCIA ring indicator will wake up from suspend
+						       ; bit 15-8...reserved (must be 0)
+
+apm_no_of_battery_units	equ	apm_pm_capabilities + 02 ; 1 BYTE..# of battery units supported by system
+							 ; 000h means no system battery
+
+;-----------------------------------------------;
+;	MISCELLANEOUS APM USAGE DATA AREA	;
+;-----------------------------------------------;
+
+apm_misc_info	equ	apm_no_of_battery_units + 01	; 1 BYTE..miscellaneous APM information
+							; bit 0 = 0 .. resume timer is disabled by APM
+							;	= 1 .. resume timer is enabled by APM
+							; bit 1 = 0 .. resume on ring indicator is disabled by APM
+							;	= 1 .. resume on ring indicator is enabled by APM
+							; bit 2 = 0 .. timer based requests (standby/suspend timer) are disabled by APM
+							;	= 1 .. timer based requests (standby/suspend timer) are enabled by APM
+							; bit 7-3...reserved
+
+;-----------------------------------------------;
+;	  APM RESUME TIME SAVE DATA AREA	;
+;-----------------------------------------------;
+
+apm_12_resume_sec_bcd	equ	apm_misc_info + 01	; 1 BYTE..resume time (seconds)
+apm_12_resume_min_bcd	equ	apm_12_resume_sec_bcd + 01 ; 1 BYTE..resume time (minutes)
+apm_12_resume_hour_bcd	equ	apm_12_resume_min_bcd + 01 ; 1 BYTE..resume time (hours)
+
+apm_12_resume_day_bcd	equ	apm_12_resume_hour_bcd + 01; 1 BYTE..resume time (day)
+apm_12_resume_month_bcd	equ	apm_12_resume_day_bcd + 01 ; 1 BYTE..resume time (month)
+apm_12_resume_year_bcd	equ	apm_12_resume_month_bcd + 01 ; 1 BYTE..resume time (year)
+apm_12_resume_century_bcd equ	apm_12_resume_year_bcd + 01; 1 BYTE..resume time (century)
+
+;-----------------------------------------------;
+;	APM DEVICE STATE SAVE DATA AREA		;
+;-----------------------------------------------;
+
+;struc_apm_state	struc
+
+apm_sys_state		equ	00h					   ; SYSTEM
+apm_disp_state		equ	apm_sys_state + no_of_units_for_each_dev   ; DISPLAY
+apm_sec_storage_state	equ	apm_disp_state + no_of_units_for_each_dev  ; STORAGE UNITS
+apm_par_port_state	equ	apm_sec_storage_state + no_of_units_for_each_dev; PARALLEL PORT
+apm_ser_port_state	equ	apm_par_port_state + no_of_units_for_each_dev; SERIAL PORT
+
+apm_net_adapter_state	equ	apm_ser_port_state + no_of_units_for_each_dev;NETWORK ADAPTER (for v1.1 only)
+apm_pcmcia_socket_state	equ	apm_net_adapter_state + no_of_units_for_each_dev; PCMCIA SOCKET (for v1.1 only)
+
+;struc_apm_state	ends
+
+;-----------------------------------------------;
+
+struc_apm_state_size	equ	no_of_total_dev_v11 * no_of_units_for_each_dev
+
+apm_state	equ	apm_12_resume_century_bcd + 01	; 7 * no_of_units_for_each_dev BYTE ; APM STATE data
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;

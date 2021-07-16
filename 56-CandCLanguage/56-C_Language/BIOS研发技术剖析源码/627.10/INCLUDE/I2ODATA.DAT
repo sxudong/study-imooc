@@ -1,0 +1,108 @@
+	page	,132
+        title .                         I2O Data Area
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;
+;---------------------------------------;
+; I2O DATA SEGMENT                      ;
+;---------------------------------------;
+i2odgroup       group   _i2odata
+_i2odata        segment para common 'DATA'        
+
+        org     000h    ;;data start
+
+I2ODataSegStart label   word
+;-----------------------------------------------------------------------;
+
+I2ORealDataStart label   word
+
+;--------------------------------------------;
+io_processor    iop_struct      MaxIOP  dup ({})  ; create an array of MaxIOP structures
+no_of_iop               dw      ?
+MaxHiddenMemSize        dd      ?
+AllocatedHiddenMemSize  dd      ?
+HiddenMemBase           dd      ?
+MaxHiddenIOSize         dd      ?
+AllocatedHiddenIOSize   dd      ?
+HiddenIOBase            dd      ?
+
+;-------------------------------------------------------;
+; I2O Protect Device Table Array                        ;
+;-------------------------------------------------------;
+no_of_i2o_devices       dw      ?       ;; Number of devices that can be controlled by IOP
+
+I2OProtectDevInfo       DevInfo     MaxI2ODevices dup ({})
+
+;-------------------------------------------------------;
+; I2O Bloack Storage Device table arry                  ;
+;-------------------------------------------------------;
+
+no_of_bsa_devices       dw      ?
+
+I2OBsaDeviceInfo        BsaDevInfo      MaxI2OBsaDevices        dup ({})
+
+;-------------------------------------------------------;
+; Drive Parameter Table                                 ;
+;-------------------------------------------------------;
+;align   16
+DriveParameterTablesStart       label   word
+;
+;          org   DriveParameterTablesStart+(MaxI2OBsaDevices*48)
+DriveParameterTablesEnd         label   word
+;-------------------------------------------------------;
+; I2O Message Frames                                    ;
+;-------------------------------------------------------;
+align  16
+FirstOutboundMessageFrame       label   word
+
+        org     FirstOutboundMessageFrame+040h
+SecondOutboundMessageFrame      label   word
+
+        org     SecondOutboundMessageFrame+040h
+ThirdOutboundMessageFrame       label   word
+
+        org     ThirdOutboundMessageFrame+040h
+FourthOutboundMessageFrame      label   word
+
+        org     FourthOutboundMessageFrame+040h
+InboundMessageOffset            label   word
+
+        org     InboundMessageOffset+060h
+ReplyBufferOffset               label   word
+
+       org      ReplyBufferOffset+060h
+ScratchBuffer1Offset            label   word            ; 256 bytes
+
+       org     ScratchBuffer1Offset+0100h
+ScratchBuffer2Offset            label   word
+
+        org     I2ODSEG_SIZE
+I2ODataSegEnd   label   word
+;---------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------------------------;
+_i2odata   ends
+

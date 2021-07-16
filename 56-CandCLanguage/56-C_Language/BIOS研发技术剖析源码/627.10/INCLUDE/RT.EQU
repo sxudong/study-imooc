@@ -1,0 +1,142 @@
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;****************************************************************************;
+
+
+;CALL_RT_FUNCTION macro
+;	call	rt_entry
+;endm
+
+CALL_RT_FUNCTION macro
+	db	9Ah			;Call far F000:E008
+	dw	0E008h, 0F000h
+endm
+
+CALL_PCI_ROM_UNCOMP macro
+	db	9Ah			;Call far F000:EEDB
+	dw	0EEDBh, 0F000h
+endm
+
+CALL_PCI_ROM_SEARCH macro
+	db	9Ah			;Call far F000:EEDE
+	dw	0EEDEh, 0F000h
+endm
+
+
+; Run Time Functions
+;------------------------------------------------------------------------------
+RT_PNP_FUNCTION		equ	00h
+RT_SET_8042_A20		equ	01h
+RT_NVR_READ_BLOCK	equ	02h
+RT_NVR_WRITE		equ	03h
+RT_EISA_NEW_ESCD	equ	04h
+RT_NVR_READ_BYTE	equ	05h
+RT_NVR_READ_WORD	equ	06h
+RT_NVR_GET_ESCD_INFO	equ	07h
+RT_PCI_GET_BUS_COUNT	equ	08h
+RT_GET_ISA_RESMAP	equ	09h
+RT_EISA_READABLE_ID	equ	0Ah
+RT_EISA_CHECK_READY	equ	0Bh
+RT_EISA_GENERATE_ZC80	equ	0Ch
+RT_NODE_GET_AUTOSTATUS	equ	0Dh
+RT_PERIPERAL_INIT	equ	0Eh
+RT_FIXED_DELAY		equ	0Fh
+
+RT_PCI_BIOS_PRESENT	equ	11h
+RT_PCI_FIND_DEVICE	equ	12h
+RT_PCI_FIND_CLASS	equ	13h
+RT_PCI_SPECIAL_CYCLE	equ	16h
+RT_PCI_READ_CFG_BYTE	equ	18h
+RT_PCI_READ_CFG_WORD	equ	19h
+RT_PCI_READ_CFG_DWORD	equ	1Ah
+RT_PCI_WRITE_CFG_BYTE	equ	1Bh
+RT_PCI_WRITE_CFG_WORD	equ	1Ch
+RT_PCI_WRITE_CFG_DWORD	equ	1Dh
+RT_PCI_GET_IRQ_OPTIONS	equ	1Eh
+RT_PCI_SET_PCI_IRQ	equ	1Fh
+
+RT_PCI_LAST_ONBOARD_BUS	equ	20h
+RT_NVR_GET_ESCD_SIZE	equ	21h
+RT_NVR_READ_ESCD	equ	22h
+RT_NVR_WRITE_ESCD	equ	23h
+RT_PCI_SEARCH_XLAT	equ	24h
+RT_PCI_GET_IRQ_PRI_MAP	equ	25h
+RT_PCI_ROUTE_IRQ	equ	26h
+RT_PCI_GET_IRQ_REG	equ	27h
+RT_PCI_SLOT_TO_DEV	equ	28h
+
+RT_USB_API		equ	2Fh
+
+RT_FB_GET_CMOS_DATA	equ	30h
+RT_FB_SET_CMOS_DATA	equ	31h
+RT_FB_GET_SUP_BANKS	equ	32h
+RT_FB_SET_SIZE		equ	33h
+RT_FB_MAKE_VISIBLE	equ	34h
+RT_FB_MAKE_INVISIBLE	equ	35h
+
+; Run Time Function Return Codes
+;------------------------------------------------------------------------------
+RT_NO_ERROR		equ	00h
+RT_INVALID_FUNC		equ	81h
+RT_NVR_READ_ERROR	equ	82h
+RT_CMOS_READ_ERROR	equ	82h
+RT_PCI_BAD_VENDOR_ID	equ	83h
+RT_PCI_DEV_NOT_FOUND	equ	86h
+RT_PCI_BAD_REG_ADD	equ	87h
+RT_PCI_SET_FAILED	equ	88h
+RT_PCI_BUF_TOO_SMALL	equ	89h
+
+RT_PNP_UNSUPPORTED	equ	82h
+RT_PNP_INVALID_NODE	equ	83h
+RT_PNP_BAD_PARAMETER	equ	84h
+RT_PNP_SET_FAILED	equ	85h
+RT_PNP_USE_ESCD		equ	8Dh
+
+RT_ESCD_READ_ERROR	equ	55h
+RT_ESCD_INVALID		equ	56h
+
+; $$$CORE0072+ >>>
+;RT_DMI_NO_EVENTS_PENDING equ	86h
+RT_DMI_SUCCESS			equ	00h
+RT_DMI_UNKNOWN_FUNCTION		equ	81h
+RT_DMI_FUNCTION_NOT_SUPPORTED	equ	82h
+RT_DMI_INVALID_HANDLE		equ	83h
+RT_DMI_BAD_PARAMETER		equ	84h
+RT_DMI_INVALID_SUBFUNCTION	equ	85h
+RT_DMI_NO_CHANGE		equ	86h
+  RT_DMI_NO_EVENTS_PENDING	equ	86h
+RT_DMI_ADD_STRUCTURE_FAILED	equ	87h
+						; 88h-8Ch..not defined
+RT_DMI_READ_ONLY		equ	8Dh
+						; 8Eh-8Fh..not defined
+RT_DMI_LOCK_NOT_SUPPORTED	equ	90h
+RT_DMI_CURENTLY_LOCKED		equ	91h
+RT_DMI_INVALID_LOCK		equ	92h
+; $$$CORE0072+ <<<
+
+
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+

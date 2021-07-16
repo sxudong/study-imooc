@@ -1,0 +1,544 @@
+subttl.		Include file for GREEN PC support runtime APM SMI/IRQ code...GAPM12.OEM...GENERIC
+
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;	RUN TIME OEM SPECIFIC APM 1.2 SMI/IRQ HANDLER CODE	;
+;	RUN TIME OEM SPECIFIC APM 1.2 SMI/IRQ HANDLER CODE	;
+;	RUN TIME OEM SPECIFIC APM 1.2 SMI/IRQ HANDLER CODE	;
+;	RUN TIME OEM SPECIFIC APM 1.2 SMI/IRQ HANDLER CODE	;
+;---------------------------------------------------------------;
+
+;;	public	get_ac_battery_status_v12	;
+
+;;	public	get_pcmcia_socket_power_down_info
+;;	public	get_pm_capabilities		;
+;;	public	enable_disable_resume_on_ring_indicator
+;;	public	enable_disable_timer_based_req	;
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;	        GENERAL NOTES FOR APM v1.2 USAGE		;
+;---------------------------------------------------------------;
+;								;
+; <01> Post 'power status change notification' event, if system's
+;      AC line status (AC/primary battery/secondary battery)	;
+;      OR battery status (high/low/critical) OR number of	;
+;      currently installed battery units values changes.	;
+;								;
+; <02> Once the APM driver receives the 'critical system suspend;
+;      notification' event, BIOS must wait at least 5 seconds	;
+;      from the time that the APM driver receives the notification
+;      for it to call set power state to suspend.		;
+;								;
+; <03> The APM BIOS must send 'battery low notification' event	;
+;      while the battery contains enough power to suspend or	;
+;      shutdown the computer. It is recommended that this	;
+;      notification be sent with at least 10 minutes of battery	;
+;      power remaining to provide the user sufficient advance	;
+;      warning to complete any tasks in progress.		;
+;								;
+; <04> The power management capabilities of a system may change	;
+;      as a result of changes via setup utility or by the arrival
+;      or removal of devices (eg. batteries in DOCK). If these	;
+;      capabilities change, the APM BIOS must post a 'capabilit-;
+;      ies change notification' event. Upon receiving the	;
+;      capabilities change notification, the APM driver will	;
+;      call get capabilities (fn# 10h) to determine the new	;
+;      capabilities. The APM driver should also call get power	;
+;      status (fn# 0ah) to determine any status changes caused	;
+;      by the capabilities changes.				;
+;								;
+; <05> If an APM driver disables the resume timer via get/set/	;
+;      disable resume timer call (fn# 11h) and then disconnects	;
+;      from the APM BIOS, the APM BIOS must not re-enable the	;
+;      resume timer simply because the APM driver has disconnected.
+;      Otherwise it would be possible that the machine would	;
+;      spontaneously power-on and reboot with no specific task	;
+;      to be executed, leading to unnecessary power consumption.;
+;								;
+; <06> If an APM driver disables the timer based requests via	;
+;      enable/disable timer based requests call (fn# 13h), the	;
+;      APM BIOS must not generate any more standby or suspend	;
+;      requests based on inactivity timers. This is desirable	;
+;      for the operating system to use its own techniques to	;
+;      determine inactivity and to generate such low power	;
+;      requests of its own.					;
+;      Once disabled, the APM BIOS may still post normal system	;
+;      or user standby or user suspend requests only in the	;
+;      event of a user-initiated action, such as lid closings,	;
+;      suspend button pushes, etc. Critical suspend requests due;
+;      to imminent battery failure are also still allowed.	;
+;								;
+; <07> If a machine always does the zero volt suspend in response
+;      to the set power state = suspend call, then the designer	;
+;      must decide if the machine can support wake on ring, or	;
+;      wake on resume functionality while in this mode and set	;
+;      the power capabilities bit accordingly. If the machine	;
+;      implements both suspend and zero volt suspend (ie. enters;
+;      the zero volt suspend mode automatically after being in	;
+;      suspend for some amount of time) then the BIOS is	;
+;      responsible for ensuring that the transition to zero volt;
+;      suspend does not occur if the OS has set the resume on	;
+;      timer or resume on ring functionality.			;
+;								;
+; <08> The policy about powering PCMCIA sockets is moved into	;
+;      the OS. Since the power for each slot is independently	;
+;      controlled by the driver, the system BIOS and hardware	;
+;      should not do any control of PCMCIA slot power. The slot	;
+;      power should remain in the state that it is placed into	;
+;      by the OS.						;
+;								;
+; <09> If the user schedules an alarm, the OS will call the set	;
+;      resume timer function (fn# 11h) before it enters standby	;
+;      or suspend state. The BIOS then should set the timer and	;
+;      may need to cache the current setting of the timer if it	;
+;      is set at a later time than the wake-up time (ie. there	;
+;      is already an alarm set via the BIOS or DOS apps).	;
+;								;
+; <10> For a set power state call for standby or suspend	;
+;      (fn# 07h), the APM BIOS must not return the usual success;
+;      sequence (carry clear followed by posting a resume event);
+;      if the requested power state was never actually entered.	;
+;      In this case they must return with carry set to indicate	;
+;      the failure to enter the low power state. Returning with	;
+;      the normal success sequence is likely to cause lengthy	;
+;      operations in the APM driver and the layers above related;
+;      to normal resume.					;
+;								;
+; <11> The APM BIOS must allow the APM driver to enter the low	;
+;      power states without the APM BIOS first requesting the 	;
+;      state change. For example, the APM BIOS must allow the	;
+;      APM driver to put the system in the global suspend state	;
+;      even though the APM BIOS has not posted a System Suspend	;
+;      Request Notification based on system inactivity, hardware;
+;      switches, or other logic.				;
+;								;
+; <12> There are couple of guidelines provided by hardware design
+;      guide supplement for microsoft WINDOWS 95...		;
+;      00. While waking up from a power managed state, leave	;
+;	   display in standby state (monitor off) for system-	;
+;	   initiated wake up and turn on the monitor for a user-;
+;	   initiated wake up.					;
+;      01. While waking up from a power managed state, leave	;
+;	   hard drive in standby state (don't spin the disk) for;
+;	   either system-initiated wake up or user-initiated	;
+;	   wake up.						;
+;      02. While waking up from a power managed state, leave	;
+;	   PCMCIA controllers in current state (that is however	;
+;	   operating system left it) for either system-initiated;
+;	   wake up or user-initiated wake-up.			;
+;      03. PCMCIA socket power during suspend remains in the	;
+;	   that the operating system left it in (OS manages	;
+;	   socket power).					;
+;      04. Battery low notification (PM event code 0005h) should;
+;	   be posted with at least 2 minutes of battery power	;
+;	   remaining, if battery powered so that operating system
+;	   can shutdown properly.				;
+;      05. Don't return from set power state call (fn# 07h) to	;
+;	   set a particular power state unless resuming or	;
+;	   returning an error code.				;
+;      06. Set power state (fn# 07h) to 'OFF' should turn the	;
+;	   computer 'OFF'.					;
+;								;
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;		HOOKS TO SUPPORT BATTERY FUNCTIONS		;
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		   GET_AC_BATTERY_STATUS_V12			;
+;---------------------------------------------------------------;
+;	Input : (DS) PM BIOS data segment			;
+;		(BL) 01h for battery unit 1			;
+;		     02h for battery unit 2			;
+;		     ....and so on....				;
+;		STACK PRESENT					;
+;	Output:	(BH) AC line status				;
+;		     00h Off-line				;
+;		     01h On-line				;
+;		     02h connected from backup battery		;
+;		     ffh unknown/info not available		;
+;		(BL) Battery status				;
+;		     00h High					;
+;		     01h Low					;
+;		     02h Critical				;
+;		     03h Charging				;
+;		     ffh unknown/info not available		;
+;		(CH) Battery flag				;
+;		     bit 0 = 1 High				;
+;		     bit 1 = 1 Low				;
+;		     Bit 2 = 1 Critical				;
+;		     Bit 3 = 1 Charging				;
+;		     Bit 4 = 1 selected battery not present	;
+;		     Bit 6-5   reserved (must be 0)		;
+;		     Bit 7 = 1 No system battery		;
+;		     ffh  Unknown				;
+;		(CL) Remaining battery life			;
+;			percentage of charge			;
+;		     0 - 100 % of full charge			;
+;		     ffh unknown/info not available		;
+;		(DX) Remaining battery life in time units	;
+;		     Bit 15 = 0 time unit seconds		;
+;			    = 1 time unit minutes		;
+;		     Bit 14 - 0 # of secs/minutes		;
+;			0 - 7fffh for seconds			;
+;			0 - 7ffeh for minutes			;
+;		     ffffh unknown/info not available		;
+;		(SI) # of battery units currently installed in	;
+;		     the machine				;
+;	Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+;								;
+; NOTE :							;
+;  *  Control comes here from core smi/irq apm handler.		;
+;  *  Control to this hook comes in response to get power status;
+;     call (APM function # 0Ah), if this APM function is	;
+;     implemented in SMI/IRQ and individual battery info is	;
+;     required (valid for v1.2 APM).				;
+;  *  The hook 'GET_AC_BATTERY_STATUS' hook in GAPM.CSS is	;
+;     still being used for APM v1.0, v1.1 and v1.2 in older	;
+;     interface.						;
+;  *  If the system supports multiple battery units and you need;
+;     to provide info for that in 'GET_AC_BATTERY_STATUS' hook	;
+;     in OEMAPM.ASM, return aggregate of all currently installed;
+;     battery units.						;
+;  *  If the # of battery units currently present changes, post	;
+;     power status change notification.				;
+;  *  If you return (CH) with 10h, return with (CL),(BL) &	;
+;     (DX) with FFFFh.						;
+;  *  Implement this hook if get power status call (APM func #	;
+;     0Ah) is executed in SMI.					;
+;     IF IRQ BASED POWER MANAGEMENT IS ACTIVE & IF APM IS 	;
+;     CONNECTED, THIS HOOK MUST BE IMPLEMENTED.			;
+;     Default implementation is 'MOV BX,001FFH'			;
+;				'MOV CX,080FFH'			;
+;				'MOV DX,0FFFFH'			;
+;				'MOV SI,0'			;
+;				'RET'				;
+;---------------------------------------------------------------;
+
+get_ac_battery_status_v12	proc	near
+
+;-----------------------------------------------;
+; The code below should be used only if battery ;
+; status is not available thru chipset support	;
+;-----------------------------------------------;
+
+	mov	bx,001ffh			; (bh) = AC line status...On-line
+						; (bl) = Battery status (unknown/not available)
+	mov	cx,080ffh			; (ch) = Battery flag...no system battery
+						; (cl) = remaining battery life...percentage of charge
+						; (unknown/not available)
+	mov	dx,0ffffh			; (dx) = remaining battery life...time units
+						; (unknown/not available)
+	mov	si,0				; no battery unit present
+	ret
+
+get_ac_battery_status_v12	endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		GET_PCMCIA_SOCKET_POWER_DOWN_INFO		;
+;---------------------------------------------------------------;
+;	Input : (DS) PM BIOS data segment			;
+;		(BX) PM event being posted (according to APM specs)
+;		(DX) bit map for PM event being posted		;
+;		STACK PRESENT					;
+;	Output: (CX) for normal system resume notification (bx =;
+;		     0003h) or critical resume system notificat-;
+;		     ion (bx = 0004h)......			;
+;		     bit 0 0...pcmcia socket was powered on in	;
+;			       suspend state			;
+;		     bit 0 1...pcmcia socket was powered off in	;
+;			       suspend state			;
+;		     bits 15-1...reserved (must be 0)		;
+;		(CX) ignore for any other event posting		;
+;	Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :							;
+;  *  Control comes here from core smi/irq apm handler.		;
+;  *  Control to this hook comes in response to apm get pm event;
+;     call (APM function # 0Bh).				;
+;  *  It's a notification from core apm handler about the APM	;
+;     event being posted to APM driver to return PCMCIA socket	;
+;     power on/off condition in suspend state.			;
+;  *  Knowing whether the socket was powered on or off during	;
+;     the suspend state allows the APM driver or operating system
+;     to optimize its resume handling of PCMCIA devices. This can
+;     be particularly important if a PCMCIA modem device is used;
+;     to resume the system via the resume-on-ring-indicator feature
+;  *  You need to implement this hook for APM 1.2 compatability.;
+;     Default implementation is 'XOR CX,CX'			;
+;				'RET'				;
+;---------------------------------------------------------------;
+
+get_pcmcia_socket_power_down_info	proc	near
+
+	xor	cx,cx				; PCMCIA socket was powered on in the suspend state
+	ret
+
+get_pcmcia_socket_power_down_info	endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;			GET_PM_CAPABILITIES			;
+;---------------------------------------------------------------;
+;	Input : (DS) PM BIOS data segment			;
+;		STACK PRESENT					;
+;	Output: (CX) bit 0 1 ... system can enter global standby;
+;				 (posts standby & standby resume)
+;		     bit 1 1 ... system can enter global suspend;
+;				 (posts suspend & suspend resume)
+;		     bit 2 1 ... resume timer will wake up from	;
+;				 standby state			;
+;		     bit 3 1 ... resume timer will wake up from	;
+;				 suspend state			;
+;		     bit 4 1 ... resume on ring indicator (inter-
+;				 nal COM or modem) will wake up	;
+;				 from standby			;
+;		     bit 5 1 ... resume on ring indicator (inte-;
+;				 rnal COM or modem) will wake up;
+;				 from suspend			;
+;		     bit 6 1 ... PCMCIA Ring indicator will wake;
+;				 up from standby		;
+;		     bit 7 1 ... PCMCIA Ring indicator will wake;
+;				 up from suspend		;
+;		     bit 15-8... reserved (must be set to 0)	;
+;		(BL) # of system batteries this machine supports;
+;		     000h means no system battery		;
+;		     001h means 1 system battery		;
+;		     002h means 2 system battery		;
+;		     and so on					;
+;	Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :							;
+;  *  Control comes here from core smi/irq apm handler.		;
+;  *  Control to this hook comes in response to apm get		;
+;     capabilities call (APM function # 10h).			;
+;  *  Information returned in this hook should return the	;
+;     capabilities currently in effect, and not capabilities	;
+;     which have been selected but require a system restart	;
+;     before taking effect.					;
+;  *  Capabilities may change as a result of changes via a setup;
+;     utility or by the arrival or removal of devices. If power	;
+;     capabilities change, the APM BIOS must post a capabilities;
+;     change notification.					;
+;  *  If APM BIOS returns from this function saying that it	;
+;     supports global standby or global suspend power states, the
+;     BIOS must post the appropriate request and resume events	;
+;     when entering and leaving the supported power states.	;
+;  *  If a system does not support a resume timer (ALARM resume);
+;     the APM BIOS must not set any resume timer capability bits;
+;     (bits 2,3). Similarly, if the system does not support	;
+;     resume on ring indicator, the APM BIOS must not set any of;
+;     the resume on ring indicator capability bits (bits 4,5,6,7)
+;  *  You need to implement this hook for APM 1.2 compatability.;
+;     Default implementation is 'MOV CX,000Bh'			;
+;				'XOR BL,BL'			;
+;				'RET'				;
+;---------------------------------------------------------------;
+
+get_pm_capabilities	proc	near
+
+	mov	cx,0000000000111111b		; system can enter global standby state
+						; system can enter global suspend state
+						; resume timer will wake up from suspend
+	xor	bl,bl				; no system battery
+	ret
+
+get_pm_capabilities	endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;	     ENABLE_DISABLE_RESUME_ON_RING_INDICATOR		;
+;---------------------------------------------------------------;
+;	Input : (DS) PM BIOS data segment			;
+;		(CX) 0000h disable resume on ring indicator	;
+;		     0001h enable resume on ring indicator	;
+;		STACK PRESENT					;
+;	Output: NONE						;
+;	Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :							;
+;  *  Control comes here from core smi/irq apm handler.		;
+;  *  Control to this hook comes in response to apm enable/disable
+;     Resume on Ring indicator call (APM function # 12h).	;
+;  *  If resume on ring is disabled, it should disable all resume
+;     on ring functionality, regardless of whether the ring	;
+;     indication comes from mother board serial ports or modems,;
+;     modems inserted into PCMCIA slots, or any other modem ring;
+;     which the system is wired to accept as a wake up event.	;
+;  *  You need to implement this hook for APM 1.2 compatability.;
+;     Default implementation is 'RET'				;
+;---------------------------------------------------------------;
+
+enable_disable_resume_on_ring_indicator	proc	near
+;;;;;;;;;;;;;; Note >>>>
+	mov	byte ptr ds:[modem_ring],cl
+;;;;;;;;;;;;; <<<<<<
+	ret
+
+enable_disable_resume_on_ring_indicator	endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;		HOOK HOOK HOOK HOOK HOOK HOOK HOOK		;
+;---------------------------------------------------------------;
+;		  ENABLE_DISABLE_TIMER_BASED_REQ		;
+;---------------------------------------------------------------;
+;	Input : (DS) PM BIOS data segment			;
+;		(CX) 0000h disable timer based request		;
+;		     0001h enable timer based request		;
+;		STACK PRESENT					;
+;	Output: NONE						;
+;	Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :							;
+;  *  Control comes here from core smi/irq apm handler.		;
+;  *  Control to this hook comes in response to apm enable/disable
+;     timer based request (APM function # 13h).			;
+;  *  If timer based request is disabled, then APM BIOS must not;
+;     generate any more standby or suspend request based on	;
+;     inactivity timers. This is desirable for the operating	;
+;     system to use its own techniques to determine inactivity	;
+;     and to generate such low power requests of its own.	;
+;     Once disabled, APM BIOS may still post normal system or	;
+;     user standby or suspend requests only in the event of a	;
+;     user initiated action, such as lid closings, suspend button
+;     pushes etc. Critical suspend requests due to imminent	;
+;     battery failure are also still allowed.			;
+;  *  You need to implement this hook for APM 1.2 compatability.;
+;     Default implementation is 'RET'				;
+;---------------------------------------------------------------;
+
+enable_disable_timer_based_req	proc	near
+	test	cx,1
+	jz	disable_ide_timer
+  
+        mov	al,q_ide_time_out
+	call	check_cmos_data_far
+	mov	ah,0ch					; in 5 second units - so multiply with 12 to make minutes
+	mul	ah
+	jnz	@f
+	dec	ax					; disabled
+@@:
+	mov	byte ptr ds:gpm_ide_idle_timeout,al
+	jmp	short @f
+disable_ide_timer:
+	mov	byte ptr ds:gpm_ide_idle_timeout,-1
+@@:
+	ret
+
+enable_disable_timer_based_req	endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;

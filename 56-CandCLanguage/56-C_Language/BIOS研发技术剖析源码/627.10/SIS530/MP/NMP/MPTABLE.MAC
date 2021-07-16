@@ -1,0 +1,340 @@
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+; 
+;*****************************************************************;
+;
+;	MPTABLE.MAC
+;
+;	Macro definitions for MultiProcessing Table 
+;
+;	DO NOT CHANGE THIS MACRO FILE UNLESS YOU KNOW
+;	WHAT IS HAPPENING.  REALLY.... !!!!
+;
+;*****************************************************************;
+
+Declare_IO_APIC	MACRO	IOApicBaseAddress:REQ, IOApicID, \
+			IOApicVersion, IOApicFlags:=<IO_APIC_ENBLD>
+
+	mov	al,IO_APIC_ENTRY_TYPE
+	stosb						; create entry type
+
+	push	ds
+	
+	push	0
+	pop	ds
+
+IFB <IOApicID>
+	mov	eax,(IOApicBaseAddress + IO_APIC_REGISTER_SELECT)
+	mov	dword ptr ds:[eax],IO_APIC_ID_REGISTER
+	mov	eax,(IOApicBaseAddress + IO_APIC_REGISTER_WINDOW) 
+	mov	eax,ds:[eax]
+	shr	eax,24
+	stosb
+ELSE
+	push	esi
+
+	mov	esi,(IOApicBaseAddress + IO_APIC_REGISTER_SELECT)
+	mov	dword ptr ds:[esi],IO_APIC_ID_REGISTER
+	mov	esi,(IOApicBaseAddress + IO_APIC_REGISTER_WINDOW) 
+	mov	eax,(IOApicID shl 24)
+	mov	ds:[esi],eax
+	mov	eax,ds:[esi]
+	shr	eax,24
+	stosb
+
+        pop	esi
+ENDIF
+
+IFB <IOApicVersion>
+	mov	eax,(IOApicBaseAddress + IO_APIC_REGISTER_SELECT)
+	mov	dword ptr ds:[eax],IO_APIC_VERSION_REGISTER
+	mov	eax,(IOApicBaseAddress + IO_APIC_REGISTER_WINDOW) 
+	mov	eax,ds:[eax]
+	stosb
+ELSE      
+        mov	al,IOApicVersion			; IO APIC version
+        stosb
+ENDIF        
+
+	pop	ds
+        
+        mov	al,IOApicFlags				; APIC flags
+        stosb
+        
+        mov	eax,IOApicBaseAddress			; APIC base address
+        stosd
+
+	inc	word ptr es:[MP_Header.Entry_Count]	; increment number of entries
+
+	ENDM
+	
+
+COMMENT~
+*****************************************************************************************
+
+       SET_OEM_ID
+
+
+       Description:            This macro generates code for inserting the OEM ID
+                               string into the MP table header
+
+
+
+       Input:                  OEMIdentificationString
+                                       Upto 8 characters of OEM ID string
+
+       Output:                 None
+
+       Stack:                  Available
+
+       Registers destroyed:    EAX
+
+
+*****************************************************************************************
+~
+Set_OEM_ID	MACRO	OEMIdentificationString
+	local	OEMStringPad, ReversedOEMString, Counter
+	local	String1, String2
+IFB <OEMIdentificationString>
+	xor	eax,eax					; Zero OEM ID
+	stosd						; Store two blank DWORDS
+	stosd
+ELSE
+	OEMStringPad		TEXTEQU	<>
+	Counter = @SizeStr(OEMIdentificationString)
+
+	.ERRNZ	(Counter GT 8),	<OEM ID cannot be longer than 8 characters.>
+	
+	WHILE Counter LT 8
+		OEMStringPad		CATSTR	OEMStringPad, < >
+		Counter = Counter + 1
+	ENDM
+		
+	ReversedOEMString	TEXTEQU	OEMStringPad
+	Counter = @SizeStr(OEMIdentificationString)
+
+	WHILE Counter GT 0
+		ReversedOEMString	CATSTR	ReversedOEMString, @Substr(OEMIdentificationString,Counter,1)
+		Counter = Counter - 1
+	ENDM
+
+	String1		SUBSTR		ReversedOEMString,5,4
+	String1		CATSTR		<">,String1,<">
+	String2		SUBSTR		ReversedOEMString,1,4
+	String2		CATSTR		<">,String2,<">
+
+	
+	mov	eax,String1			; Store OEM ID in DWORD format
+	stosd
+
+	IF (String1 EQ String2)
+		stosd
+	ELSE
+		mov	eax,String2
+		stosd
+	ENDIF
+
+
+ENDIF
+	ENDM
+
+COMMENT~
+*****************************************************************************************
+       
+       SET_PRODUCT_ID       
+
+
+       Description:            This macro generates code for inserting the Product ID
+                               string into the MP table header
+
+
+
+       Input:                  ProductIdentificationString
+                                       Upto 12 characters of Product ID string
+
+       Output:                 None
+
+       Stack:                  Available
+
+       Registers destroyed:    EAX
+
+
+*****************************************************************************************
+~
+Set_Product_ID	MACRO	ProductIdentificationString
+	local	ProductStringPad, ReversedProductString, Counter
+	local	String1, String2, String3
+IFB <ProductIdentificationString>
+	xor	eax,eax					; Zero Product ID
+	stosd						; Write 3 DWORDS
+	stosd
+	stosd
+ELSE
+	ProductStringPad		TEXTEQU	<>
+	Counter = @SizeStr(ProductIdentificationString)
+
+	.ERRNZ	(Counter GT 12),	<Product ID cannot be longer than 12 characters.>
+	
+	WHILE Counter LT 12
+		ProductStringPad	CATSTR	ProductStringPad, < >
+		Counter = Counter + 1
+	ENDM
+		
+	ReversedProductString	TEXTEQU	ProductStringPad
+	Counter = @SizeStr(ProductIdentificationString)
+
+	WHILE Counter GT 0
+		ReversedProductString	CATSTR	ReversedProductString, @Substr(ProductIdentificationString,Counter,1)
+		Counter = Counter - 1
+	ENDM
+
+	String1		SUBSTR		ReversedProductString,9,4
+	String1		CATSTR		<">,String1,<">
+	String2		SUBSTR		ReversedProductString,5,4
+	String2		CATSTR		<">,String2,<">
+	String3		SUBSTR		ReversedProductString,1,4
+	String3		CATSTR		<">,String3,<">
+
+	mov	eax,String1		; Store PRODUCT ID in DWORD format
+	stosd
+
+	IF (String1 EQ String2)
+		stosd
+	ELSE
+		mov	eax,String2
+		stosd
+	ENDIF
+
+	IF (String2 EQ String3)
+		stosd
+	ELSE
+		mov     eax,String3
+		stosd
+	ENDIF
+
+ENDIF
+	ENDM
+
+COMMENT~
+*****************************************************************************************
+
+       DECLARE_BUS
+
+
+       Description:            This macro declares a bus in the MPS table.
+
+
+
+       Input:                  BusNumber (BYTE) (REQUIRED)
+                                       Bus number
+                               BusType (STRING) (REQUIRED)
+                                       Bus type string in double quotes padded to
+                                       six characters.
+                                       e.g. "PCI   "
+
+       Output:                 None
+
+       Stack:                  Available
+
+       Registers destroyed:    EAX
+
+
+*****************************************************************************************
+~
+Declare_Bus	MACRO	BusNumber:REQ, BusType:REQ
+	local	BusString, ReversedBusString, TempString, Counter
+
+	mov	al,BUS_ENTRY_TYPE
+	stosb						; create entry type
+	mov	al,BusNumber				; bus number
+	stosb
+
+	BusString		SUBSTR	BusType,2,6
+	ReversedBusString	TEXTEQU	<>
+	Counter = @SizeStr(BusString)
+
+	WHILE Counter GT 0
+		TempString		SUBSTR	BusString,Counter,1
+		ReversedBusString	CATSTR	ReversedBusString, TempString
+		Counter = Counter - 1
+	ENDM
+
+	String1		SUBSTR		ReversedBusString,3,4
+	String1		CATSTR		<">,String1,<">
+	String2		SUBSTR		ReversedBusString,1,2
+	String2		CATSTR		<">,String2,<">
+
+	mov	eax,String1		; Store Bus type string format
+	stosd
+
+	mov	ax,String2
+	stosw
+
+	inc	word ptr es:[MP_Header.Entry_Count]	; increment number of entries
+
+
+	ENDM
+	
+
+COMMENT~
+*****************************************************************************************
+
+       DECLARE_OEM_TABLE
+
+
+       Description:            This macro creates a pointer to an OEM table if present.
+
+
+
+       Input:                  OEMTablePointer (DWORD)
+                                       OEM table pointer in flat mode
+                               OEMTableSize    (WORD)
+                                       OEM table size in bytes
+
+       Output:                 None
+
+       Stack:                  Available
+
+       Registers destroyed:    EAX
+
+
+*****************************************************************************************
+~
+Declare_OEM_Table	MACRO	    OEMTablePointer, OEMTableSize
+
+IFB <OEMTablePointer>
+	xor	eax,eax					; OEM table pointer
+	stosd						; table pointer in flat mode
+	stosw						; table size in bytes
+ELSE
+     	mov	eax,OEMTablePointer
+     	stosd						; save pointer
+     	mov	ax,OEMTableSize
+     	stosw						; save size
+ENDIF
+	ENDM
+	
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;

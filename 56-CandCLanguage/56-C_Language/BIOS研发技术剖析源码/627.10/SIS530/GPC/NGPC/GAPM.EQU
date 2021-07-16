@@ -1,0 +1,333 @@
+;-----------------------------------------------;
+;	  APM POWER MANAGEMENT EQUATES		;
+;		     GAPM.EQU			;
+;   EQUATE FILE COMMON FOR v1.0/v1.1/v1.2 APM	;
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	APM_CONNECTION_INFO BIT EQUATES		;
+;-----------------------------------------------;
+
+apm_real_mode_connect_est	equ	00000001b; APM real mode connection established
+apm_16bit_mode_connect_est	equ	00000010b; APM 16 bit protected mode connection established
+apm_32bit_mode_connect_est	equ	00000100b; APM 32 bit protected mode connection established
+
+apm_bios_active_ver_above_v10	equ	00010000b; APM BIOS active version above v1.0
+apm_cpu_idle_slow_speed		equ	00100000b; APM CPU idle call slows processor clock speed
+apm_bios_power_management_disabled equ	01000000b; APM BIOS power management disabled
+apm_bios_active_ver_v12		equ	10000000b; APM BIOS active version v1.2
+
+;-----------------------------------------------;
+;	  PENDING_APM_EVENT BIT EQUATES		;
+;-----------------------------------------------;
+
+sys_standby_req_bit	equ	00000001b	; system standby request notification
+sys_suspend_req_bit	equ	00000010b	; system suspend request notification
+normal_resume_sys_bit	equ	00000100b	; normal resume system notification
+critical_resume_sys_bit	equ	00001000b	; critical resume system notification 
+battery_low_bit		equ	00010000b	; battery low notification
+
+valid_v10_event_mask	equ	00011111b	;
+
+;-----------------------------------------------;
+
+power_status_change_bit	equ	00100000b	; power status change notification (v1.1 only)
+update_time_bit		equ	01000000b	; update time notification (v1.1 only)
+critical_sys_suspend_bit equ	10000000b	; critical suspend system notification (v1.1 only)
+user_sys_standby_req_bit equ 00100000000b	; system standby request notification (v1.1 only)
+user_sys_suspend_req_bit equ 01000000000b	; system suspend request notification (v1.1 only)
+sys_standby_resume_bit	equ  10000000000b	; system standby resume notification (v1.1 only)
+
+valid_v11_event_mask	equ  11111111111b	;
+
+;-----------------------------------------------;
+
+capabilities_change_bit	equ 100000000000b	; capabilities change notification (v1.2 only)
+
+valid_v12_event_mask	equ 111111111111b	;
+
+;-----------------------------------------------;
+;	 APM_PM_CAPABILITIES BIT EQUATES	;
+;-----------------------------------------------;
+
+apm_sys_support_standby		equ 00000001b	; bit 0  = 1..system can enter global standby state (posts standby & standby resume events)
+apm_sys_support_suspend		equ 00000010b	; bit 1  = 1..system can enter global suspend state (posts suspend & suspend resume events)
+apm_resume_timer_standby	equ 00000100b	; bit 2  = 1..resume timer will wake up from standby
+apm_resume_timer_suspend	equ 00001000b	; bit 3  = 1..resume timer will wake up from suspend
+apm_resume_ring_standby		equ 00010000b	; bit 4  = 1..resume on ring indicator (internal COM or modem) will wake up from standby
+apm_resume_ring_suspend		equ 00100000b	; bit 5  = 1..resume on ring indicator (internal COM or modem) will wake up from suspend
+apm_resume_pcmcia_ring_standby	equ 01000000b	; bit 6  = 1..PCMCIA ring indicator will wake up from standby
+apm_resume_pcmcia_ring_suspend	equ 10000000b	; bit 7  = 1..PCMCIA ring indicator will wake up from suspend
+
+;-----------------------------------------------;
+;	    APM_MISC_INFO BIT EQUATES		;
+;-----------------------------------------------;
+
+resume_timer_enabled_by_apm	equ 00000001b	; resume timer is enabled by APM
+resume_on_ring_enabled_by_apm	equ 00000010b	; resume on ring indicator is enabled by APM
+timer_based_req_enabled_by_apm	equ 00000100b	; timer based requests are enabled by APM
+
+;-----------------------------------------------;
+;	      ERROR CODE EQUATES		;
+;-----------------------------------------------;
+
+unsupported_func		equ	86h	; unsupported function
+apm_absent			equ	86h	; APM not present
+power_management_disabled	equ	01h	; power management functionality disabled
+real_mode_connect_present	equ	02h	; real mode interface connection already established
+interface_not_connected		equ	03h	; APM driver interface not connected
+prot_mode_16bit_connect_present	equ	05h	; 16 bit protected mode interface already established
+prot_mode_16bit_not_supported	equ	06h	; 16 bit protected mode interface not supported
+prot_mode_32bit_connect_present	equ	07h	; 32 bit protected mode interface already established
+prot_mode_32bit_not_supported	equ	08h	; 32 bit protected mode interface not supported
+invalid_device_id		equ	09h	; unrecognized device ID
+parameter_out_of_range		equ	0ah	; parameter value out of range
+no_pm_event_pending		equ	80h	; no power management event pending
+unable_to_enter_req_state	equ	60h	; unable to enter requested state
+
+;-----------------------------------------------;
+
+interface_not_engaged		equ	0bh	; APM interface not engaged (v1.1 only)
+
+;-----------------------------------------------;
+
+apm_12_func_not_supported	equ	0ch	; APM special function not supported (v1.2 only)
+apm_resume_timer_disabled	equ	0dh	; resume timer disabled
+
+;-----------------------------------------------;
+;	  APM DEFINED DEVICE ID EQUATES		;
+;-----------------------------------------------;
+
+system_bios_device_id		equ	0000h	; system BIOS
+all_power_managed_device_id	equ	0001h	; all devices power managed by APM BIOS
+all_pm_device_id_v10		equ	0ffffh	; all devices power managed by APM BIOS for v1.0
+
+system_device_id		equ	00h	; system device
+display_device_id		equ	01h	; display device
+sec_storage_device_id		equ	02h	; secondary storage
+parallel_port_device_id		equ	03h	; parallel port
+serial_port_device_id		equ	04h	; serial port
+
+display_class_device_id		equ	01ffh	; all devices in display class
+sec_storage_class_device_id	equ	02ffh	; all devices in secondary storage class
+parallel_port_class_device_id	equ	03ffh	; all devices in parallel port class
+serial_port_class_device_id	equ	04ffh	; all devices in serial port class
+
+no_of_total_dev_v10		equ	5	;
+
+;-----------------------------------------------;
+
+net_adapter_device_id		equ	05h	; network adapter (v1.1 only)
+pcmcia_socket_device_id		equ	06h	; pcmcia sockets (v1.1 only)
+
+net_adapter_class_device_id	equ	05ffh	; all devices in network adapter class (v1.1 only)
+pcmcia_socket_class_device_id	equ	06ffh	; all devices in pcmcia socket class (v1.1 only)
+
+no_of_total_dev_v11		equ	7	;
+
+;-----------------------------------------------;
+
+no_of_units_for_each_dev	equ	4	;
+
+;-----------------------------------------------;
+;    POWER MANAGEMENT EVENT EQUATES FOR APM	;
+;-----------------------------------------------;
+
+sys_standby_req_notify		equ	0001h	; system standby request notification
+sys_suspend_req_notify		equ	0002h	; system suspend request notification
+normal_resume_sys_notify	equ	0003h	; normal resume system notification
+critical_resume_sys_notify	equ	0004h	; critical resume system notification
+battery_low_notify		equ	0005h	; battery low notification
+
+;-----------------------------------------------;
+
+power_status_change_notify	equ	0006h	; power status change notification (v1.1 only)
+update_time_notify		equ	0007h	; update time notification (v1.1 only)
+critical_sys_suspend_notify	equ	0008h	; critical system suspend notification (v1.1 only)
+user_sys_standby_req_notify	equ	0009h	; user system standby request notification (v1.1 only)
+user_sys_suspend_req_notify	equ	000ah	; user system suspend request notification (v1.1 only)
+sys_standby_resume_notify	equ	000bh	; system standby resume notification (v1.1 only)
+
+;-----------------------------------------------;
+
+capabilities_change_notify	equ	000ch	; capabilities change notification (v1.2 only)
+
+;-----------------------------------------------;
+;	   APM_SYSTEM_STATE BIT EQUATES		;
+;	   APM_DISPLAY_STATE BIT EQUATES	;
+;	APM_SEC_STORAGE_STATE BIT EQUATES	;
+;	APM_PARALLEL_PORT_STATE BIT EQUATES	;
+;	APM_SERIAL_PORT_STATE BIT EQUATES	;
+;  APM_NET_ADAPTER_STATE BIT EQUATES(v1.1 only)	;
+;APM_PCMCIA_SOCKET_STATE BIT EQUATES (v1.1 only);
+;-----------------------------------------------;
+
+apm_enabled_state	equ	00000000b	; bits 2 1 0 = 000
+apm_standby_state	equ	00000001b	; bits 2 1 0 = 001
+apm_suspend_state	equ	00000010b	; bits 2 1 0 = 010
+apm_off_state		equ	00000011b	; bits 2 1 0 = 011
+apm_on_state		equ	00000111b	; bits 2 1 0 = 111
+apm_dev_state		equ	00000111b	; APM device state
+
+apm_dev			equ	00001000b	; bit 3 ... APM controlled device (v1.1 only)
+apm_fn0c_enabled	equ	00100000b	; bit 5 ... APM fn# 0Ch currently enabled for this device (v1.1 only)
+pm_engaged_by_apm	equ	01000000b	; bit 6 ... co-operative power mgt between APM BIOS & APM DRIVER enabled for this device (v1.1 only)
+pm_enabled_by_apm	equ	10000000b	; bit 7 ... power mgt functionality is enabled by APM
+
+;-----------------------------------------------;
+;	  APM CODE/DATA SEGMENT EQUATES		;
+;-----------------------------------------------;
+
+apm_16_32_bit_code_seg		equ	0f000h	; APM 16 bit/32 bit protected mode code segment
+
+;;apm_16_32_bit_data_seg	equ	0f000h	; APM 16 bit/32 bit protected mode data segment
+apm_16_32_bit_data_seg		equ	00040h	; APM 16 bit/32 bit protected mode data segment
+
+apm_bios_code_seg_len		equ	0ffffh	; 64KB...APM BIOS code segment length (v1.1 only)
+
+;;apm_bios_data_seg_len		equ	0ffffh	; 64KB...APM BIOS data segment length (v1.1 only)
+apm_bios_data_seg_len		equ	00100h	; 256B...APM BIOS data segment length (v1.1 only)
+
+;-----------------------------------------------;
+;    APM CHIPSET SPECIFIC FUNCTIONS EQUATES	;
+;-----------------------------------------------;
+
+off_enable_dev_pm_fn		equ	0000h	; enable device power management (APM FN# 08h,0Dh)
+off_disable_dev_pm_fn		equ	0001h	; disable device power management (APM FN# 08h,0Dh)
+off_set_apm_enabled_fn		equ	0002h	; set APM Enabled (APM FN# 07h)
+off_set_apm_standby_fn		equ	0003h	; set APM standby (APM FN# 07h)
+off_set_apm_suspend_fn		equ	0004h	; set APM suspend (APM FN# 07h)
+off_set_apm_off_fn		equ	0005h	; set APM off (APM FN# 07h)
+
+no_of_apm_func_v10		equ	005	; no. of chipset specific APM functios called
+
+;-----------------------------------------------;
+
+off_engage_pm_fn		equ	0006h	; engage power management (APM FN# 0Fh) (v1.1 only)
+off_disengage_pm_fn		equ	0007h	; disengage power management (APM FN# 0Fh) (v1.1 only)
+off_get_power_state		equ	0008h	; get power state (APM FN# 0Ch) (v1.1 only)
+
+no_of_apm_func_v11		equ	008	; no. of chipset specific APM functios called
+
+;-----------------------------------------------;
+
+process_apm_connect		equ	0c0h	;
+process_apm_disconnect		equ	0c1h	;
+apm_cpu_busy_call		equ	0c2h	;
+apm_cpu_idle_call		equ	0c3h	;
+set_power_on_defaults		equ	0c4h	;
+notify_pm_event_posted		equ	0c5h	;
+set_pre_cpu_idle_environment	equ	0c6h	;
+set_post_cpu_idle_environment	equ	0c7h	;
+
+maxm_apm_css_func_supported_v10	equ	0c7h	;
+
+;-----------------------------------------------;
+
+processing_last_pm_req_notify	equ	0c8h	; (v1.1 only)
+last_pm_req_rejected		equ	0c9h	; (v1.1 only)
+notify_add_v11_apm_dev		equ	0cah	; (v1.1 only)
+notify_del_v11_apm_dev		equ	0cbh	; (v1.1 only)
+
+maxm_apm_css_func_supported_v11	equ	0cbh	;
+
+;-----------------------------------------------;
+;  APM FUNCTIONS INPUT/OUTPUT PARAMETER EQUATES	;
+;-----------------------------------------------;
+
+enable_power_management		equ	0001h	;
+disable_power_management	equ	0000h	;
+apm_enabled			equ	0000h	;
+apm_standby			equ	0001h	;
+apm_suspend			equ	0002h	;
+apm_off				equ	0003h	;
+
+;-----------------------------------------------;
+
+engage_power_management		equ	0001h	; (v1.1 only)
+disengage_power_management	equ	0000h	; (v1.1 only)
+apm_last_req_processing_notify	equ	0004h	; (v1.1 only)
+apm_last_req_rejected		equ	0005h	; (v1.1 only)
+
+;-----------------------------------------------;
+
+disable_resume_on_ring		equ	0000h	; (v1.2 only)
+enable_resume_on_ring		equ	0001h	; (v1.2 only)
+get_status_resume_on_ring	equ	0002h	; (v1.2 only)
+
+;-----------------------------------------------;
+
+disable_timer_based_req		equ	0000h	; (v1.2 only)
+enable_timer_based_req		equ	0001h	; (v1.2 only)
+get_status_timer_based_req	equ	0002h	; (v1.2 only)
+
+;-----------------------------------------------;
+
+disable_resume_timer		equ	0000h	; (v1.2 only)
+get_resume_timer		equ	0001h	; (v1.2 only)
+set_resume_timer		equ	0002h	; (v1.2 only)
+
+;-----------------------------------------------;
+;	     MISCELLANEOUS  EQUATES		;
+;-----------------------------------------------;
+
+apm_func_07			equ	07h	;
+apm_func_08			equ	08h	;
+maxm_apm_v10_func_supported	equ	0bh	;
+
+;-----------------------------------------------;
+
+apm_func_05			equ	05h	;
+apm_func_06			equ	06h	;
+apm_func_0a			equ	0ah	;
+apm_func_0b			equ	0bh	;
+apm_func_0c			equ	0ch	; (v1.1 only)
+apm_func_0d			equ	0dh	; (v1.1 only)
+apm_func_0e			equ	0eh	; (v1.1 only)
+apm_func_0f			equ	0fh	; (v1.1 only)
+apm_func_oem			equ	80h	; (v1.1 only)
+maxm_apm_v11_func_supported	equ	0fh	;
+
+;-----------------------------------------------;
+
+apm_func_10			equ	10h	; (v1.2 only)
+apm_func_11			equ	11h	; (v1.2 only)
+apm_func_12			equ	12h	; (v1.2 only)
+apm_func_13			equ	13h	; (v1.2 only)
+maxm_apm_v12_func_supported	equ	13h	;
+
+;-----------------------------------------------;
+;	ROM APM 16/32 BIT MODE ENTRY POINT	;
+;-----------------------------------------------;
+
+apm_16bit_prot_mode_entry_fixed	equ	0ef4dh	; APM 16 bit protected mode entry
+apm_32bit_prot_mode_entry_fixed	equ	0ef50h	; APM 32 bit protected mode entry
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;

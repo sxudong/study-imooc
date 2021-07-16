@@ -1,0 +1,94 @@
+//**********************************************************************;
+//     *****************************************************************;
+//     *****************************************************************;
+//     **                                                             **;
+//     **      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+//     **                                                             **;
+//     **                     All Rights Reserved.                    **;
+//     **                                                             **;
+//     **           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+//     **                                                             **;
+//     **                     Phone (770)-246-8600                    **;
+//     **                                                             **;
+//     *****************************************************************;
+//     *****************************************************************;
+//**********************************************************************;
+// 	PCI IRQ ROUTING TABLE (PRT)
+//**********************************************************************;
+//	PURPOSE. To provide ACPI module with correct PCI IRQ routing table.
+//**********************************************************************;
+// 	PRT provides a mapping table from PCI interrupt pins to the interrupt
+// 	vectors the pins are connected to. PRT is a package that contains a
+// 	list of packages, each of which describes the mapping of an interrupt
+//	pin. These mapping packages have the following fields:
+//  ________________________________________________________________________
+// | Address | DWORD| The address of the device ( 0xYYYYZZZZ see above )    |
+// |	     |	    | Note:FFFF in address means all functions including    |
+// |_________|______|_______________________________________________________|
+// | Pin     | BYTE | The PCI pin number of the device                      |
+// |	     |	    |	(0=INTA, 1=INTB, 2=INTC, 3=INTD)                    |
+// |_________|______|_______________________________________________________|
+// | Source  | Name | Name of the device that allocates the interrupt the   |
+// |	     |	    | above pin is connected to. If this field is null,     |
+// |         |      | then the interrupt is allocated from the global       |
+// |         |      | interrupt vector pool.                                |
+// |_________|______|_______________________________________________________|
+// | Source  | BYTE | An index that indicates which resource descriptor in  |
+// | Index   |      | the resource template of the device pointed to in     |
+// |         |      | Source this interrupt is allocated from. If Source    |
+// |         |      | is null, this field is the interrupt vector number    |
+// |         |      | the pin is connected to.                              |
+// |_________|______|_______________________________________________________|
+//	For example :
+//
+//		Package(){0x0011ffff,|  0, | LNKA, | 0},
+//                          Address  | Pin | Source| Source Index
+//
+//		Address : Device #11, incude all device subfunctions
+//		Pin	: Pin #0
+//		Source	: Reserved Name of ASL Control Method LNKA
+//			: Basically matches to IRQ Control Registers names
+//			: In case of PIIX4 it is Function #0,
+//			: register offset #0x60 - 0x63
+//
+//	Note : Basically all we need is update Package fields with
+//	       IRQ routing information taken from OEMRPCI.ASM table file.
+//**********************************************************************;
+	Name(_PRT, Package(){
+//**********************************************************************;
+// South bridge devices
+
+// PIIX4, Fun3, USB only
+			Package(){0x0007ffff, 3, \_SB.LNKD, 0},
+// AGP Slot
+			Package(){0x0001ffff, 0, \_SB.LNKA, 0},
+			Package(){0x0001ffff, 1, \_SB.LNKB, 0},
+			Package(){0x0001ffff, 2, \_SB.LNKC, 0},
+			Package(){0x0001ffff, 3, \_SB.LNKD, 0},
+// PCI Slot 1
+			Package(){0x0008ffff, 0, \_SB.LNKA, 0},
+			Package(){0x0008ffff, 1, \_SB.LNKB, 0},
+			Package(){0x0008ffff, 2, \_SB.LNKC, 0},
+			Package(){0x0008ffff, 3, \_SB.LNKD, 0},
+// PCI Slot 2
+			Package(){0x0009ffff, 0, \_SB.LNKB, 0},
+			Package(){0x0009ffff, 1, \_SB.LNKC, 0},
+			Package(){0x0009ffff, 2, \_SB.LNKD, 0},
+			Package(){0x0009ffff, 3, \_SB.LNKA, 0},
+// PCI Slot 3
+			Package(){0x000affff, 0, \_SB.LNKC, 0},
+			Package(){0x000affff, 1, \_SB.LNKD, 0},
+			Package(){0x000affff, 2, \_SB.LNKA, 0},
+			Package(){0x000affff, 3, \_SB.LNKB, 0},
+// PCI Slot 4
+			Package(){0x000bffff, 0, \_SB.LNKD, 0},
+			Package(){0x000bffff, 1, \_SB.LNKA, 0},
+			Package(){0x000bffff, 2, \_SB.LNKB, 0},
+			Package(){0x000bffff, 3, \_SB.LNKC, 0},
+// PCI Slot 5
+			Package(){0x000cffff, 0, \_SB.LNKA, 0},
+			Package(){0x000cffff, 1, \_SB.LNKB, 0},
+			Package(){0x000cffff, 2, \_SB.LNKC, 0},
+			Package(){0x000cffff, 3, \_SB.LNKD, 0},
+//**********************************************************************;
+ } )

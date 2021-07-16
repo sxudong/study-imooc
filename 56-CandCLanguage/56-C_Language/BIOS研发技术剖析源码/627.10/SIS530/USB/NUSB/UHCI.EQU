@@ -1,0 +1,206 @@
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;****************************************************************************;
+
+; Global equates for UHCI
+;-------------------------------------------------------------------------
+
+ifdef DOS_DEBUG
+USB_HC_CLASS_CODE	equ 0C0300h	;Class code for UHCI host controllers
+endif
+
+HID_DEVICE_LIMIT	equ 8		;Maximum number of HID devices supported
+HUB_DEVICE_LIMIT	equ 8		;Maximum number of Hub devices supported
+
+
+
+FRAME_LIST_SIZE		equ 1024	;Number of DWORDs in frame list
+
+IDLE_FRAMES		equ 1		;Number of idle frames inserted between
+					; active frames in schedule of HIDs
+
+ACTIVE_FRAMES		equ 4		;Number of frames used to implement
+					; the schedule for HIDs
+					
+TDS_PER_FRAME		equ HID_DEVICE_LIMIT / ACTIVE_FRAMES
+			 		;Number of HID TDs to schedule per frame
+
+CONTROL_DATA_TD_COUNT	equ MAX_CONTROL_DATA_SIZE / 8
+					;Total number of ControlDataTds that
+					; may be used to send/receive data
+					; in control transfers.
+
+MAX_DEVICES		equ HID_DEVICE_LIMIT + HUB_DEVICE_LIMIT
+					;Maximum number of devices allowed in
+					; the schedule
+
+MIN_HID_DEVICE_ADDR	equ 1
+MAX_HID_DEVICE_ADDR	equ MIN_HID_DEVICE_ADDR + HID_DEVICE_LIMIT - 1
+MIN_HUB_DEVICE_ADDR	equ MAX_HID_DEVICE_ADDR + 1
+MAX_HUB_DEVICE_ADDR	equ MIN_HUB_DEVICE_ADDR + HUB_DEVICE_LIMIT - 1
+DUMMY_DEVICE_ADDR	equ MAX_DEVICES	;Addr that is garanteed not to be used
+
+FRAME_REPEAT		equ ACTIVE_FRAMES + (ACTIVE_FRAMES * IDLE_FRAMES)
+					;The schedule repeats this often
+
+DEFAULT_PACKET_LENGTH	equ 8		;Max size of packet data
+
+
+; General Equates
+;-------------------------------------------------------------------------
+TRUE	equ -1
+FALSE	equ 0
+
+
+; Transfer Descriptor (TD) Structure
+;-------------------------------------------------------------------------
+Transfer_Descriptor	struc
+
+	TD_Link_Pointer		dd ?	;This part of the TD is defined
+	TD_Control_Status	dd ?	; by the Intel Universal Host
+	TD_Token		dd ?	; Controller Interface (UHCI)
+	TD_Buffer_Pointer	dd ?	; specification
+
+	CSReloadValue		dd ?	;Value to reload into TD_Control_Status
+	pCallback		dw ?	;Offset of routine to call on completion
+	ActiveFlag		db ?	;If nonzero, TD is active
+	Reserved		db ?
+	DataArea		db 8 dup (?)	;Data buffer for TD
+
+Transfer_Descriptor	ends
+
+
+; Queue Head (QH) Structure
+;-------------------------------------------------------------------------
+Q_Head		struc
+	Q_Head_Link_Pointer	dd ?	;Pointer to next Q_Head
+	Q_Element_Link_Pointer	dd ?	;Pointer to first TD in this Q
+Q_Head		ends
+
+
+;
+; Equates for Host Controller I/O mapped registers (offsets from base address)
+;
+USB_COMMAND_REG		equ		00h
+USB_STATUS_REG		equ		02h
+USB_INTERRUPT_ENABLE	equ		04h
+USB_FRAME_NUM		equ		06h
+USB_FRAME_LIST_BASE	equ		08h
+USB_SOF_MODIFY		equ		0Ch
+USB_PORT1_CONTROL	equ		10h
+USB_PORT2_CONTROL	equ		12h
+
+;
+; Equates for USB specific registers in the PCI config space
+;
+USB_BASE_ADDRESS	equ		20h
+USB_IRQ_LEVEL		equ		3Ch
+USB_RELEASE_NUM		equ		60h
+
+;
+; Bit definitions for USB command register
+;
+HOST_CONTROLLER_RUN	equ		01h
+HOST_CONTROLLER_RESET	equ		02h
+GLOBAL_RESET  		equ		04h
+ENTER_SUSPEND		equ		08h
+FORCE_RESUME		equ		10h
+CONFIGURE_FLAG		equ		40h
+MAX_PACKET_64_BYTE	equ		80h
+
+;
+; Bit definitions for USB status register
+;
+USB_INTERRUPT		equ		01h
+USB_ERROR_INTERRUPT	equ		02h
+RESUME_RECEIVED		equ		04h
+PCI_BUS_ERROR		equ		08h
+HC_PROCESS_ERROR	equ		10h
+HC_HALTED		equ		20h
+
+;
+; Bit definitions for USB interrupt enable register
+;
+TIMEOUT_CRC_ENABLE	equ		01h
+RESUME_ENABLE		equ		02h
+IOC_ENABLE		equ		04h
+SHORT_PACKET_ENABLE	equ		08h
+
+;
+; Bit definitions for Port Status and Control
+;
+CONNECT_STATUS		equ		0001h
+CONNECT_STATUS_CHANGE	equ		0002h
+PORT_ENABLE		equ		0004h
+PORT_ENABLE_CHANGE	equ		0008h
+LINE_STATUS		equ		0030h
+LINE_STATUS_CHANGE	equ		0040h
+LOW_SPEED_ATTACHED	equ		0100h
+PORT_RESET		equ		0200h
+PORT_SUSPEND		equ		0400h
+
+;
+; Bit definitions for a generic pointer
+;
+TERMINATE		equ		000000001h
+QUEUE_HEAD		equ		000000002h
+VERTICAL_FLAG		equ		000000004h
+LINK_POINTER		equ		0FFFFFFF0h
+
+;
+; Bit definitions for transfer descriptor control and status
+;
+ACTUAL_LENGTH		equ		0000007FFh
+STATUS_FIELD		equ		000FE0000h
+BITSTUFF_ERROR		equ		000020000h
+CRC_TIMEOUT_ERROR	equ		000040000h
+NAK_RECEIVED		equ		000080000h
+BABBLE_DETECTED		equ		000100000h
+DATA_BUFFER_ERROR	equ		000200000h
+STALLED			equ		000400000h
+ACTIVE			equ		000800000h
+INTERRUPT_ON_COMPLETE	equ		001000000h
+ISOCHRONOUS_SELECT	equ		002000000h
+LOW_SPEED_DEVICE	equ		004000000h
+ERROR_COUNTER		equ		018000000h
+ONE_ERROR		equ		008000000h
+TWO_ERRORS		equ		010000000h
+THREE_ERRORS		equ		018000000h
+SHORT_PACKET_DETECT	equ		020000000h
+
+;
+; Bit definitions for transfer descriptor token
+;
+PACKET_ID		equ		0000000ffh
+	IN_PACKET	equ		01101001b
+	OUT_PACKET	equ		11100001b
+	SETUP_PACKET	equ		00101101b
+DEVICE_ADDRESS 		equ		000007f00h	
+ENDPOINT		equ		000078000h
+DATA_TOGGLE		equ		000080000h
+MAX_LENGTH		equ		0FFE00000h
+
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;

@@ -1,0 +1,233 @@
+BeginDevice (WIN877AFIdeController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877AF_IDE_CONTROLLER)
+			Text = "OnBoard IDE"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary":DEFAULT:POWERON,
+				  "Secondary"
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877AFIdeController
+BeginDevice (WIN877AFFloppyController)
+	Screen (SCR_PERIPHERAL)
+		 Question (Q_WIN877AF_FLOPPY_CONTROLLER)
+			 Text = "OnBoard FDC"
+			 Options = "Auto":DEFAULT:POWERON,
+				   "Disabled",
+				   "Enabled"
+		 EndQuestion
+	EndScreen
+EndDevice	// WIN877AFFloppyController
+BeginDevice (WIN877AFSerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877AF_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877AFSerialPortA
+BeginDevice (WIN877AFSerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877AF_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_WIN877AF_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+// 			ShadeWhen (Q_WIN877AF_COMB_PORT) = "Disabled"
+// 			Options = "Normal":DEFAULT:POWERON,
+// 		    		  "IrDA"
+// 		    		  "Fast IR"
+			ExternalFunction = Win877AF_ComB_Ir_Mode_Xfn
+            OptionBits = 2
+            Default = 0
+         	PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877AF_COMB_DUPLEX_MODE)
+			Text = "    IR Duplex Mode"
+//			ShadeWhen (Q_WIN877AF_COMB_MODE) = "Normal"
+//			Options = "Full Duplex"
+//			    	  "Half Duplex":DEFAULT:POWERON
+			ExternalFunction = Win877AF_ComB_Ir_Duplex_Xfn
+            OptionBits = 1
+            Default = 1
+         	PowerOn = 1
+		EndQuestion
+		Question (Q_WIN877AF_COMB_PROTOCOL)
+			Text = "    IrDA Protocol"
+//			ShadeWhen (Q_WIN877AF_COMB_MODE) = "Normal"
+//			Options = "1.6 uS":DEFAULT:POWERON,
+//    				  "3/16 Baud"
+			ExternalFunction = Win877AF_ComB_Ir_Protocol_Xfn
+            OptionBits = 1
+            Default = 0
+         	PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877AF_COMB_FIR_DMA)
+			Text = "    Fast IR DMA"
+			RuntimeFunction = Win877AF_ComB_Fir_Dma_Xrfn
+			ExternalFunction = Win877AF_ComB_Fir_Dma_Xfn
+            OptionBits = 3
+            Default = 1
+         	PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877AFSerialPortB
+BeginDevice (WIN877AFParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877AF_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_WIN877AF_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			Present = NO
+                        ExternalFunction = Win877AF_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877AF_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Win877AF_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877AFParallelPort
+BeginDevice (WIN877AFParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877AF_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+                        ExternalFunction = Win877AF_Lpt_Addr_Xfn
+                        OptionBits = 3
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877AF_LPT_MODE)
+			Text = "  Parallel Port Mode"
+                        ExternalFunction = Win877AF_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 2
+                        PowerOn = 2
+		EndQuestion
+		Question (Q_WIN877AF_LPT_EPPVER)
+			Text = "  EPP Version"
+                        ExternalFunction = Win877AF_Lpt_EppVer_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877AF_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Win877AF_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+		Question (Q_WIN877AF_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+                        ExternalFunction = Win877AF_Lpt_Dma_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877AFParallelPortExt	   
+String(STR_WIN877AF_NA)
+	Text ="N/A"
+EndString
+String(STR_WIN877AF_AUTO)
+        Text ="Auto"
+EndString
+String(STR_WIN877AF_DIS)
+        Text ="Disabled"
+EndString
+String(STR_WIN877AF_378)
+        Text ="378"
+EndString
+String(STR_WIN877AF_278)
+        Text ="278"
+EndString
+String(STR_WIN877AF_3BC)
+        Text ="3BC"
+EndString
+String(STR_WIN877AF_NORMAL)
+        Text ="Normal"
+EndString
+String(STR_WIN877AF_IRDA)
+        Text ="IrDA"
+EndString
+String(STR_WIN877AF_FIR)
+        Text ="Fast IR"
+EndString
+String(STR_WIN877AF_FULL)
+        Text ="Full Duplex"
+EndString
+String(STR_WIN877AF_HALF)
+        Text ="Half Duplex"
+EndString
+String(STR_WIN877AF_16US)
+        Text ="1.6 uS"
+EndString
+String(STR_WIN877AF_316)
+        Text ="3/16 Baud"
+EndString
+String(STR_WIN877AF_EPP)
+        Text ="EPP"
+EndString
+String(STR_WIN877AF_EPP19)
+        Text ="1.9"
+EndString
+String(STR_WIN877AF_EPP17)
+        Text ="1.7"
+EndString
+String(STR_WIN877AF_SPP_EPP)
+        Text ="SPP/EPP"
+EndString
+String(STR_WIN877AF_ECP)
+        Text ="ECP"
+EndString
+String(STR_WIN877AF_IRQ5)
+        Text ="5"
+EndString
+String(STR_WIN877AF_IRQ7)
+        Text ="7"
+EndString
+String(STR_WIN877AF_DMA0)
+        Text ="0"
+EndString
+String(STR_WIN877AF_DMA1)
+        Text ="1"
+EndString
+String(STR_WIN877AF_DMA3)
+        Text ="3"
+EndString
+String(STR_WIN877AF_DMAA)
+        Text ="DMA_A"
+EndString
+String(STR_WIN877AF_DMAB)
+        Text ="DMA_B"
+EndString
+String(STR_WIN877AF_DMAC)
+        Text ="DMA_C"
+EndString
+String(STR_WIN877AF_DMAD)
+        Text ="DMA_D"
+EndString

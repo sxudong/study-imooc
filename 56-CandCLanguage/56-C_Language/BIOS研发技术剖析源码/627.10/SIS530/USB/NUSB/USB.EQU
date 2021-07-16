@@ -1,0 +1,363 @@
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;****************************************************************************;
+
+USB_BIOS_MAJOR_VERSION	equ 01h		;Major version (02h means 2.XX)
+USB_BIOS_MINOR_VERSION	equ 30h		;Minor version (13h means X.13)
+
+;-----------------------------------------------------------------------------
+; Set this flag to -1 if ALPS early keyboard dated Aug 1996 to be supported.
+; PLEASE NOTE THAT setting this flag to -1 MAY CAUSE OTHER COMPLIANT USB
+;					   DEVICES MALFUNCTION
+ALPS_KBD_0896		equ 00		;-1 = ALPS Keyboard dated Aug 1996 support
+;-----------------------------------------------------------------------------
+
+ifdef DOS_DEBUG
+DOS_DEBUG_DATA_AREA	equ 8000h
+endif
+
+MAX_CONTROL_DATA_SIZE	equ 100h	;Maximum amount of data to transfer in
+					; one control transaction
+
+
+; USB Initialization Flags - passed in when USB is initialized
+;-------------------------------------------------------------------------------
+INIT_FLAG_MANUAL	equ 07h		;Bit 2-0: 000 = Auto enum
+					;         001 = KB on port 1
+					;         ...   ...          
+					;         111 = KB on port 7
+INIT_FLAG_ENUM_DISABLE	equ 08h		;Bit 3: If set, do not enum the USB
+INIT_FLAG_BEEP_DISABLE	equ 10h		;Bit 4: If set, do not beep on new devices
+
+
+; DeviceTableEntry Structure (one for each device that is given an address)
+;-------------------------------------------------------------------------------
+DeviceTableEntry	struc
+
+	Present		db ?	;Set to: TRUE if this entry is used
+				;        FALSE if this entry is free
+	LowSpeedFlag	db ?	;Device's speed (01h/00h for low/high)
+
+	VendorId	dw ?	;Device's vendor ID
+	DeviceId	dw ?	;Device's product ID
+
+	HubDeviceNumber	db ?	;Device address of hub that device is connected to
+	HubPortNumber	db ?	;Port number within the hub that device is connected to
+
+	Endp0MaxPacket	dw ?	;End point 0's max packet size (8/16/32/64)
+
+	NumConfigs	db ?	;Number of configurations supported by device
+	ConfigNum	db ?	;Configuration number in use by BIOS
+	InterfaceNum	db ?	;Interface number in use by BIOS
+	AltSettingNum	db ?	;Interface alternate setting number in use by BIOS
+	EndpointNum	db ?	;Endpoint number in use by BIOS by polling
+	pDeviceCallback	dw ?	;Offset of routine to call with polling data
+
+	BiosDeviceType	db ?	;Set to one of BIOS_DEV_TYPE_xxx
+	DeviceAddress	db ?	;Device address assigned to this device
+	TdPoolPtr	dw ?	;Ptr to this device's entry in TdPool array
+	EdPoolPtr	dw ?	;Ptr to this device's entry in EdPool array (OHCI only)
+
+				;Fields below are valid only for hubs
+	HubNumPorts	db ?	;  Number of ports on this hub
+	HubPowerOnDelay	db ?	;  Time to delay after turning on power to port (in 2ms units)
+	HubEnumFlag	db ?	;Set to TRUE if hub has been enumerated
+DeviceTableEntry	ends
+
+
+; Device Type Constants for BIOS internal use
+;-------------------------------------------------------------------------------
+BIOS_DEV_TYPE_KEYBOARD		equ 01h	;HID Boot keyboard
+BIOS_DEV_TYPE_MOUSE		equ 02h	;HID Boot mouse
+BIOS_DEV_TYPE_HUB		equ 03h	;Downstream hub
+BIOS_DEV_TYPE_FLOPPY		equ 04h	;USB floppy
+
+
+; DeviceRequest Structure
+;-------------------------------------------------------------------------------
+DeviceRequest	struc
+
+	RequestType	db ?	;See USB_RQ_xxx constants below that
+	RequestCode	db ?	; combine these two bytes
+	
+	Value		dw ?	;Meaning varies with request type
+	Index		dw ?	;Meaning varies with request type
+	DataLength	dw ?	;Number of bytes of data to transfer
+
+DeviceRequest	ends
+
+
+; Bit definitions for DeviceRequest.RequestType
+;-------------------------------------------------------------------------------
+				; Bit 7:   Data direction
+USB_REQ_TYPE_OUTPUT	equ 00h	;            0 = Host sending data to device
+USB_REQ_TYPE_INPUT	equ 80h	;            1 = Device sending data to host
+
+				; Bit 6-5: Type
+USB_REQ_TYPE_STANDARD	equ 00h	;            00 = Standard USB request
+USB_REQ_TYPE_CLASS	equ 20h	;            01 = Class specific
+USB_REQ_TYPE_VENDOR	equ 40h	;            10 = Vendor specific
+
+				; Bit 4-0: Recipient
+USB_REQ_TYPE_DEVICE	equ 00h	;            00000 = Device
+USB_REQ_TYPE_INTERFACE	equ 01h	;            00001 = Interface
+USB_REQ_TYPE_ENDPOINT	equ 02h	;            00010 = Endpoint
+USB_REQ_TYPE_OTHER	equ 03h	;            00011 = Other
+
+
+; Values for DeviceRequest.RequestType and DeviceRequest.RequestCode fields
+; combined as a word value.
+;-------------------------------------------------------------------------------
+USB_RQ_SET_ADDRESS		equ (05d shl 8) or USB_REQ_TYPE_OUTPUT or USB_REQ_TYPE_STANDARD or USB_REQ_TYPE_DEVICE
+USB_RQ_GET_DESCRIPTOR		equ (06d shl 8) or USB_REQ_TYPE_INPUT  or USB_REQ_TYPE_STANDARD or USB_REQ_TYPE_DEVICE
+USB_RQ_GET_CONFIGURATION	equ (08d shl 8) or USB_REQ_TYPE_INPUT  or USB_REQ_TYPE_STANDARD or USB_REQ_TYPE_DEVICE
+USB_RQ_SET_CONFIGURATION	equ (09d shl 8) or USB_REQ_TYPE_OUTPUT or USB_REQ_TYPE_STANDARD or USB_REQ_TYPE_DEVICE
+USB_RQ_SET_INTERFACE		equ (11d shl 8) or USB_REQ_TYPE_OUTPUT or USB_REQ_TYPE_STANDARD or USB_REQ_TYPE_INTERFACE
+
+USB_RQ_GET_CLASS_DESCRIPTOR	equ (06d shl 8) or USB_REQ_TYPE_INPUT  or USB_REQ_TYPE_CLASS or USB_REQ_TYPE_DEVICE
+HID_RQ_SET_PROTOCOL		equ (11d shl 8) or USB_REQ_TYPE_OUTPUT or USB_REQ_TYPE_CLASS or USB_REQ_TYPE_ENDPOINT
+HID_RQ_SET_REPORT		equ (09d shl 8) or USB_REQ_TYPE_OUTPUT or USB_REQ_TYPE_CLASS or USB_REQ_TYPE_ENDPOINT
+HUB_RQ_GET_PORT_STATUS		equ (00d shl 8) or USB_REQ_TYPE_INPUT  or USB_REQ_TYPE_CLASS or USB_REQ_TYPE_OTHER
+HUB_RQ_SET_PORT_FEATURE		equ (03d shl 8) or USB_REQ_TYPE_OUTPUT or USB_REQ_TYPE_CLASS or USB_REQ_TYPE_OTHER
+HUB_RQ_CLEAR_PORT_FEATURE	equ (01d shl 8) or USB_REQ_TYPE_OUTPUT or USB_REQ_TYPE_CLASS or USB_REQ_TYPE_OTHER
+
+
+; Descriptor Type Values
+;-------------------------------------------------------------------------------
+DESC_TYPE_DEVICE	equ 1	;Device Descriptor (Type 1)
+DESC_TYPE_CONFIG	equ 2	;Configuration Descriptor (Type 2)
+DESC_TYPE_STRING	equ 3	;String Descriptor (Type 3)
+DESC_TYPE_INTERFACE	equ 4	;Interface Descriptor (Type 4)
+DESC_TYPE_ENDPOINT	equ 5	;Endpoint Descriptor (Type 5)
+
+DESC_TYPE_CLASS_HUB	equ 0	;Hub Class Descriptor (Type 0)
+
+
+; DeviceDescriptor structure
+;-------------------------------------------------------------------------------
+DeviceDescriptor	struc
+
+	DescLength	db ?	;Length of this descriptor (12h bytes)
+	DescType	db ?	;Type code of this descriptor (01h)
+
+	UsbSpecVersion	dw ?	;Release of USB spec (0210h = rev 2.10)
+
+	BaseClass	db ?	;Device's base class code
+	SubClass	db ?	;Device's sub class code
+	Protocol	db ?	;Device's protocol type code
+
+	Endp0MaxPacket	db ?	;End point 0's max packet size (8/16/32/64)
+
+	VendorId	dw ?	;Vendor ID for device
+	DeviceId	dw ?	;Product ID for device
+	DeviceRev	dw ?	;Revision level of device
+	MfgStr		db ?	;Index of manufacturer name string desc
+	ProductStr	db ?	;Index of product name string desc
+	SerialStr	db ?	;Index of serial number string desc
+
+	NumConfigs	db ?	;Number of configurations supported
+
+DeviceDescriptor	ends
+
+
+; ConfigDescriptor structure
+;-------------------------------------------------------------------------------
+ConfigDescriptor	struc
+
+	DescLength	db ?	;Length of this descriptor (9h bytes)
+	DescType	db ?	;Type code of this descriptor (02h)
+
+	TotalLength	dw ?	;Size of this config desc plus all interface,
+				; endpoint, class, and vendor descriptors
+
+	NumInterfaces	db ?	;Number of interfaces in this config
+	ConfigValue	db ?	;Value to use in SetConfiguration command
+	ConfigString	db ?	;Index of string desc describing this config
+	ConfigFlags	db ?	;See CFG_DESC_FLAG_xxx values below
+	ConfigPower	db ?	;Power used by this config in 2mA units
+
+ConfigDescriptor	ends
+
+
+; Bit definitions for ConfigDescriptor.ConfigFlags
+;-------------------------------------------------------------------------------
+CFG_DESC_FLAG_BUS_POWERED	equ 80h	;Bit 7: If set, device is bus powered
+CFG_DESC_FLAG_SELF_POWERED	equ 40h	;Bit 6: If set, device is self powered
+CFG_DESC_FLAG_REMOTE_WAKE	equ 20h	;Bit 5: If set, device supports remote wakeup
+
+
+; InterfaceDescriptor structure
+;-------------------------------------------------------------------------------
+InterfaceDescriptor	struc
+
+	DescLength	db ?	;Length of this descriptor (9h bytes)
+	DescType	db ?	;Type code of this descriptor (04h)
+
+	InterfaceNum	db ?	;Zero based index of interface in the configuration
+	AltSettingNum	db ?	;Alternate setting number of this interface
+	NumEndpoints	db ?	;Number of endpoints in this interface
+	
+	BaseClass	db ?	;Interface's base class code
+	SubClass	db ?	;Interface's sub class code
+	Protocol	db ?	;Interface's protocol type code
+
+	InterfaceString	db ?	;Index of string desc describing this interface
+
+InterfaceDescriptor	ends
+
+
+; Values for InterfaceDescriptor.BaseClass
+;-------------------------------------------------------------------------------
+BASS_CLASS_HID			equ 03h	;Human Interface Device Class
+BASE_CLASS_HUB			equ 09h	;Hub Device Class?
+
+
+; Values for InterfaceDescriptor.SubClass
+;-------------------------------------------------------------------------------
+SUB_CLASS_BOOT_DEVICE		equ 01h	;Boot device sub-class
+SUB_CLASS_HUB			equ 01h	;Hub Device Sub Class?
+
+
+; Values for InterfaceDescriptor.Protocol
+;-------------------------------------------------------------------------------
+PROTOCOL_KEYBOARD		equ 01h	;Keyboard device protocol
+PROTOCOL_MOUSE			equ 02h	;Mouse device protocol?
+
+
+; EndpointDescriptor structure
+;-------------------------------------------------------------------------------
+EndpointDescriptor	struc
+
+	DescLength	db ?	;Length of this descriptor (7h bytes)
+	DescType	db ?	;Type code of this descriptor (05h)
+
+	EndpointAddr	db ?	;See EP_DESC_ADDR_xxx values below
+	EndpointFlags	db ?	;See EP_DESC_FLAG_xxx value below
+	MaxPacketSize	dw ?	;Max packet size of endpoint
+	PollInterval	db ?	;Polling interval of endpoint in milliseconds
+
+EndpointDescriptor	ends
+
+
+; Bit definitions for EndpointDescriptor.EndpointAddr
+;-------------------------------------------------------------------------------
+EP_DESC_ADDR_EP_NUM	equ 0Fh	;Bit 3-0: Endpoint number
+EP_DESC_ADDR_DIR_BIT	equ 80h	;Bit 7: Direction of endpoint, 1/0 = In/Out
+
+
+; Bit definitions for EndpointDescriptor.EndpointFlags
+;-------------------------------------------------------------------------------
+EP_DESC_FLAG_TYPE_BITS	equ 03h	;Bit 1-0: Indicate type of transfer on endpoint
+EP_DESC_FLAG_TYPE_CONT	equ 00h	;Bit 1-0: 00 = Endpoint does control transfers
+EP_DESC_FLAG_TYPE_ISOC	equ 01h	;Bit 1-0: 01 = Endpoint does isochronous transfers
+EP_DESC_FLAG_TYPE_BULK	equ 02h	;Bit 1-0: 10 = Endpoint does bulk transfers
+EP_DESC_FLAG_TYPE_INT	equ 03h	;Bit 1-0: 11 = Endpoint does interrupt transfers
+
+
+; HubDescriptor structure
+;-------------------------------------------------------------------------------
+HubDescriptor	struc
+
+	DescLength	db ?	;Length of this descriptor (variable)
+	DescType	db ?	;Type code of this descriptor (00h)
+
+	NumPorts	db ?	;Number of downstream ports on hub
+	HubFlags	dw ?	;See HUB_FLAG_xxx bit definitions below
+	PowerOnDelay	db ?	;Time to delay after turning on power to port (in 2ms units)
+	HubControlAmps	db ?	;Milliamps of current needed by hub controller
+
+	DeviceRemovable	db ?	;Variable size array of bits (one for each port)
+				; if set, device at that port is not removable
+
+	;NOTE: Fields below here have variable offsets
+
+	;PortPowerCtrl	db ?	;Variable size array of bits (one for each port)
+				; if set, port is not affected by gang-mode power
+				; commands, only individual port command affect port
+HubDescriptor	ends
+
+
+; Bit definitions for HubDescriptor.HubFlags
+;-------------------------------------------------------------------------------
+HUB_FLAG_PWR_MODE_BITS	equ 03h	;Bit 1-0: Power switching mode used by hub
+HUB_FLAG_PWR_MODE_GANG	equ 00h	;    =00: All ports power on/off together
+HUB_FLAG_PWR_MODE_INDIV	equ 01h	;    =01: Ports power on/off individually
+HUB_FLAG_PWR_MODE_FIXED	equ 02h	;    =1x: Ports power is always on
+HUB_FLAG_COMPOUND_DEV	equ 04h	;Bit 2: If set, hub is part of a compound device
+HUB_FLAG_OVR_CUR_BITS	equ 18h	;Bit 4-3: Over-current protection mode used by hub
+HUB_FLAG_OVR_CUR_GLOBAL	equ 00h	;    =00: Hub reports only global over-current status
+HUB_FLAG_OVR_CUR_INDIV	equ 08h	;    =01: Hub reports individual over-current status
+HUB_FLAG_OVR_CUR_NONE	equ 10h	;    =1x: Hub has no over-current protection
+
+
+; Hub Class Feature Selectors
+;-------------------------------------------------------------------------------
+HUB_FEATURE_PORT_ENABLE		equ 01h	;Hub port enable feature
+HUB_FEATURE_PORT_RESET		equ 04h	;Hub port reset feature
+HUB_FEATURE_PORT_POWER		equ 08h	;Hub port power feature
+HUB_FEATURE_PORT_LOW_SPEED	equ 09h	;Hub port low speed feature
+HUB_FEATURE_PORT_CONNECT_CHANGE	equ 10h	;Hub port connect change feature
+HUB_FEATURE_PORT_ENABLE_CHANGE	equ 11h	;Hub port enable change feature
+HUB_FEATURE_PORT_RESET_CHANGE	equ 14h	;Hub port reset change feature
+
+; Hub Port Status Bit Definitions
+;-------------------------------------------------------------------------------
+HUB_PORT_STATUS_DEVICE_PRESENT	equ 0001h ;Bit 0: Set if device present
+HUB_PORT_STATUS_ENABLED		equ 0002h ;Bit 1: Set if port is enabled
+HUB_PORT_STATUS_SUSPEND		equ 0004h ;Bit 2: Set if device on port is suspended
+HUB_PORT_STATUS_OVERCURRENT	equ 0008h ;Bit 3: Set if port has been powered down due to over-current
+HUB_PORT_STATUS_RESET		equ 0010h ;Bit 4: Set if reset sigaling is active
+HUB_PORT_STATUS_POWER		equ 0100h ;Bit 8: Set if port is enabled
+HUB_PORT_STATUS_LOW_SPEED	equ 0200h ;Bit 9: Set if a low speed device is attached
+HUB_PORT_STATUS_CHANGE_CONNECT	equ 0001h ;Bit 0: Set if device has been attached/removed
+HUB_PORT_STATUS_CHANGE_ENABLE	equ 0002h ;Bit 1: Set if port has been enabled/disabled by hardware in hub
+HUB_PORT_STATUS_CHANGE_SUSPEND	equ 0004h ;Bit 2: Set if device has entered/left suspend state
+HUB_PORT_STATUS_CHANGE_OVERCURRENT equ 0008h; Bit 3: Set if over current indicator has changed
+HUB_PORT_STATUS_CHANGE_RESET	equ 0010h ;Bit 4: Set when port reset sequence is complete
+
+
+ifdef	DOS_DEBUG
+cpu_gen_purpose_reg_entry	equ	0
+orgbase				equ	0h
+;struc_cpu_gen_purpose_reg	struc
+reg_eax		equ	00h			; 1 DWORD...EAX
+reg_ebx		equ	reg_eax + 04		; 1 DWORD...EBX
+reg_ecx		equ	reg_ebx + 04		; 1 DWORD...ECX
+reg_edx		equ	reg_ecx + 04		; 1 DWORD...EDX
+reg_esi		equ	reg_edx + 04		; 1 DWORD...ESI
+reg_edi		equ	reg_esi + 04		; 1 DWORD...EDI
+reg_ebp		equ	reg_edi + 04		; 1 DWORD...EBP
+reg_eflags	equ	reg_ebp + 04		; 1 DWORD...EFLAGS
+reg_cr0		equ	reg_eflags + 04		; 1 DWORD...CR0
+;struc_cpu_gen_purpose_reg	ends
+
+else
+	include	gpm.equ
+	include gpm.dat
+	include gpmcpu.equ
+endif
+
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;

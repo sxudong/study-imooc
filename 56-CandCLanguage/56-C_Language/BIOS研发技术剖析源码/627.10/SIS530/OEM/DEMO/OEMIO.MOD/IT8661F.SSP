@@ -1,0 +1,207 @@
+BeginDevice (IT8661FFloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8661F_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+//		Question (Q_IT8661F_FLOPPY_SWAP)
+//			Text = "  Floppy Drive Swap"
+//			ShadeWhen (Q_IT8661F_FLOPPY_CONTROLLER) = "Disabled"
+//			Options	= "Disabled":DEFAULT:POWERON,
+//				  "Enabled"
+//		EndQuestion
+//		Question (Q_IT8661F_FLOPPY_ACCESS)
+//			Text = "  Floppy Access Control"
+//			ShadeWhen (Q_IT8661F_FLOPPY_CONTROLLER) = "Disabled"
+//			Options	= "Normal":DEFAULT:POWERON,
+//				  "Read Only"
+//		EndQuestion
+	EndScreen
+EndDevice // IT8661FFloppyController
+BeginDevice (IT8661FSerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8661F_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice // IT8661FSerialPortA
+BeginDevice (IT8661FSerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8661F_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice // IT8661FSerialPortB
+BeginDevice (IT8661FIrPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8661F_IR_PORT)
+			Text = "OnBoard Ir Port"
+			Options = "Auto",
+				  "Disabled":DEFAULT:POWERON,
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_IT8661F_IR_MODE)
+			Text = "  Ir Mode"
+			ShadeWhen (Q_IT8661F_IR_PORT) = "Disabled"
+			Options = "HPSIR":DEFAULT:POWERON,
+				  "ASKIR"
+		EndQuestion
+//		Question (Q_IT8661F_Ir_DUPLEX)
+//			Text = "  Ir Duplex"
+//			ShadeWhen (Q_IT8661F_IR_PORT) = "Disabled"
+//			Options = "Full Duplex",
+//				  "Half Duplex":DEFAULT:POWERON
+//		EndQuestion
+		Question (Q_IT8661F_IR_IRQ)
+			Text = "  Ir Port IRQ"
+			ExternalFunction = IT8661F_Ir_Irq_Xfn
+			OptionBits = 4
+			Default = 9
+			PowerOn = 9
+		EndQuestion
+	EndScreen
+EndDevice // IT8661FIrPort
+BeginDevice (IT8661FParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8661F_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_IT8661F_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ShadeWhen (Q_IT8661F_LPT_PORT) = "Disabled"
+			OptionSet = "Normal"
+			OptionSet = "N/A"
+			OptionSet = "Normal"
+		EndQuestion
+		Question (Q_IT8661F_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = IT8661F_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice // IT8661FParallelPort
+BeginDevice (IT8661FParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8661F_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			ExternalFunction = IT8661F_Lpt_Addr_Xfn
+			OptionBits = 3
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_IT8661F_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = IT8661F_Lpt_Mode_Xfn
+			OptionBits = 2
+			Default = 2
+			PowerOn = 2
+		EndQuestion
+		Question (Q_IT8661F_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = IT8661F_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+		Question (Q_IT8661F_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+			ExternalFunction = IT8661F_Lpt_Dma_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+	EndScreen
+EndDevice // IT8661FParallelPortExt	   
+String(STR_IT8661F_NA)
+	Text = "N/A"
+EndString
+String(STR_IT8661F_AUTO)
+	Text = "Auto"
+EndString
+String(STR_IT8661F_378)
+	Text = "378"
+EndString
+String(STR_IT8661F_278)
+	Text = "278"
+EndString
+String(STR_IT8661F_3BC)
+	Text = "3BC"
+EndString
+String(STR_IT8661F_NORMAL)
+	Text = "Normal"
+EndString
+String (STR_IT8661F_EPP)
+	Text = "EPP"
+EndString
+String(STR_IT8661F_ECP)
+	Text = "ECP"
+EndString
+String(STR_IT8661F_EPPECP)
+	Text = "EPP+ECP"
+EndString
+String(STR_IT8661F_0)
+	Text = "0"
+EndString
+String(STR_IT8661F_1)
+	Text = "1"
+EndString
+String(STR_IT8661F_3)
+	Text = "3"
+EndString
+String(STR_IT8661F_4)
+	Text = "4"
+EndString
+String(STR_IT8661F_5)
+	Text = "5"
+EndString
+String(STR_IT8661F_7)
+	Text = "7"
+EndString
+String(STR_IT8661F_9)
+	Text = "9"
+EndString
+String(STR_IT8661F_10)
+	Text = "10"
+EndString
+String(STR_IT8661F_11)
+	Text = "11"
+EndString
+String(STR_IT8661F_12)
+	Text = "12"
+EndString
+//String(STR_IT8661F_FULL)
+//	Text = "Full Duplex"
+//EndString
+//String(STR_IT8661F_HALF)
+//	Text = "Half Duplex"
+//EndString
+String(STR_IT8661F_HIGH)
+	Text = "High"
+EndString
+String(STR_IT8661F_LOW)
+	Text = "Low"
+EndString

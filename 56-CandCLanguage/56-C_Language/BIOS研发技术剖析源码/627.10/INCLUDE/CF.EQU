@@ -1,0 +1,38 @@
+;*****************************************************************;
+;*****************************************************************;
+;------------- MISC_INFO ---------------;
+green_pc_bit		equ	10000000b; 1 = GreenPC BIOS
+green_pc_logo_bit	equ	01000000b; 1 = GreenPC Logo display
+apm_pen_ss_bit		equ	00100000b; 1 = APM/PEN/SS support present
+ami_logo_bit		equ	00010000b; 1 = AMI Logo display
+ide_param_validate_bit	equ	00001000b; 1 = IDE parameter validate enabled
+hot_key_setup_bit	equ	00000100b; 1 = hot key setup enabled
+remote_setup_bit	equ	00000010b; 1 = remote setup enabled
+fast_gate_a20_bit	equ	00000001b; 1 = fast gateA20 enabled
+;----------- SYSTEM_FLAG_X -------------;
+cmos_mem_error_bitx	equ	00000001b*256; 1 = cmos memory mismatch error
+post_error_bitx		equ	10000000b; 1 = do all post diag
+cmos_init_bitx		equ	01000000b; 1 = init cmos in every boot
+pin_23_24_block_bitx	equ	00100000b; 1 = 8042 pin 23,24 is blocked
+mouse_bitx		equ	00010000b; 1 = ps/2 mouse present
+wait_for_f1_bitx	equ	00001000b; 1 = wait for "F1" key
+floppy_bitx		equ	00000100b; 1 = floppy installed
+video_bitx		equ	00000010b; 1 = display installed
+keyboard_bitx		equ	00000001b; 1 = keyboard installed
+;----------- SYSTEM_FLAG_Y --------------;
+eval_bios_bity		equ	10000000b; 1 = EVALUATION BIOS
+two86_cpu_bity		equ	01000000b; 1 = 80286 CPU
+;----------- SYSINFO_FLAG  --------------;
+cpu_clock_bitz		equ	00000001b; 1 = display CPU Clock
+ext_cache_bitz		equ	00000010b; 1 = display ext cache
+apm_bitz		equ	00000100b; 1 = display APM inof
+;----------- _MODULE_BIT_MAP ------------;
+boot_block_bitm		equ	00000001b; 1 = boot block module
+dim_bitm		equ	00000010b; 1 = DIM module
+sui_bitm		equ	00000100b; 1 = Setup Binary Module
+remote_bitm		equ	00001000b; 1 = remote module
+dmi_bitm		equ	00010000b; 1 = DMI module
+gpc_bitm		equ	00100000b; 1 = GreenPC module
+mp_bitm			equ	01000000b; 1 = MP module
+int10_bitm		equ	10000000b; 1 = INT10 module
+;----------------------------------------;

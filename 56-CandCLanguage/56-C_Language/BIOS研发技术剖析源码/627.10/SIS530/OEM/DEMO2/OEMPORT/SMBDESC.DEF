@@ -1,0 +1,1027 @@
+	page	60,130
+        title   SMIBIOS 2.1 DATA STRUCTURE
+;-----------------------------------------------------------------;
+;Do not change any structure defination unless otherwise specified;
+;-----------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------------------------;
+; History
+;-----------------------------------------------------------------;
+; Symbols:
+;
+; >>>	Modification START
+; <<<	Modification END
+; +	Code Added
+; -	Code Removed
+;
+; (CORE0218) James Wed 02-24-1999
+; Event log handle added.
+;-----------------------------------------------------------------;
+; $Header: /BIOS/COREBIN/631/CHIPSET/SYS/SMBDESC.DEF 1     1/05/98 11:20a Debkumar $
+;
+; $Revision: 1 $
+;
+; $Date: 1/05/98 11:20a $
+;*****************************************************************;
+;*****************************************************************;
+; Revision History
+; ----------------
+; $Log: /BIOS/COREBIN/631/CHIPSET/SYS/SMBDESC.DEF $
+;
+; 1     1/05/98 11:20a Debkumar
+; New files for SMBIOS 2.1.
+;
+;*****************************************************************;
+;------------------;
+; BIOS INFORMATION ;
+;------------------;----------------------------------------------------;
+;	Following Bit fields describes BIOS Information. At any		;
+;	given time more than  one value can be selected. Use		;
+;	left-hand-side key word to describe:				;
+;		BIOS Information					;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+
+BIOS_INFO	= present
+
+        BI_ISA             		= 1
+        BI_MCA             		= 0
+        BI_EISA            		= 0
+        BI_PCI             		= 1
+        BI_PCMCIA          		= 0
+        BI_PnP             		= 1
+        BI_APM             		= 1
+        BI_BIOS_Flash      		= 1
+        BI_BIOS_Shadow     		= 1
+        BI_VL_VESA         		= 0
+        BI_ESCD            		= 1
+        BI_CDROM_BOOT      		= 1
+        BI_SELECTABLE_BOOT 		= 1
+        BI_BIOS_ROM_SOCKET 		= 1
+        BI_PCMCIA_BOOT     		= 0
+        BI_EDD             		= 1
+        BI_INT13_NEC9800   		= 0
+        BI_INT13_TOSHIBA   		= 0
+        BI_INT13_5point25_360 		= 1
+        BI_INT13_5point25_1point2	= 1
+        BI_INT13_3point5_720		= 1
+        BI_INT13_3point5_2point88 	= 1
+        BI_INT5_PRINT_SCRN 		= 1
+        BI_INT9_8042_KBD   		= 1
+        BI_INT14_SERIAL_SVC		= 1
+        BI_INT17_PRN_SVC   		= 1
+        BI_INT10_CGA_MONO  		= 1
+        BI_NEC_PC_98       		= 0
+
+	BI_BIOS_START_ADDR		= 0F000h
+	BI_BIOS_SIZE			= 256KB
+
+;---------------------------------;
+; BIOS EXTENSION CHARACTERISTICS  ;
+;------------------ --------------;--------------------------------------;
+;	Following enumerates describes BIOS Extension Characteristics	 ;
+;	type. At any given time only one value can be selected. Use      ;
+;	left-hand-side key word to describe:			         ;
+;		System enclosure or chassis type		         ;
+;------------------------------------------------------------------------;
+
+        BI_ACPI_SUPPORT    		= 1
+        BI_USB_LEGACY_SUP  		= 1
+        BI_AGP_SUPPORT     		= 1
+        BI_I2O_BOOT_SUP    		= 0
+        BI_LS120_BOOT_SUP  		= 1
+        BI_ATAPI_ZIP_SUP   		= 1
+        BI_IEEE_1394_SUP   		= 0
+        BI_SMART_BAT_SUP		= 0
+        BI_BIOS_VENDOR_$                American Megatrends Inc.
+        BI_BIOS_VERSION_$               62710
+        BI_BIOS_RELEASE_DATE_$          07/15/97
+
+;--------------------;
+; SYSTEM WAKE-UP TYPE;
+;--------------------;--------------------------------------------------;
+;	Following enumerates describes System Wake-up type.		;
+;	At any given time only one value can be selected.		;
+;	Use left-hand-side key word to describe:			;
+;		System Wake-up type Information				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;       ---------------                 -----------			;
+;        SI_OTHER...................... Other			   	;
+;        SI_UNKNOWN....................	Unknown			     	;
+;        SI_APM_TIMER.................. Apm-Timer wake-up type	     	;
+;        SI_MODEM_RING................. Modem ring wake-up type	     	;
+;        SI_LAN_REMOTE................. Lan Remote wake-up type	     	;
+;        SI_POWER_SWITCH............... Power Switch		     	;
+;        SI_PCI_PME.................... PCI-PME signal		     	;
+;-----------------------------------------------------------------------;
+
+SYSTEM_INFO     = Present
+
+        SYSTEM_WAKEUP_TYPE      	= SI_MODEM_RING
+        SYSTEM_MANUFACTRUER_$             
+        SYSTEM_PRODUCT_NAME_$             
+	SYSTEM_VERSION_$                  1.0
+        SYSTEM_SERIAL_NUMBER_$            00000000
+
+;----------------------;
+; BASEBOARD INFORMATION;
+;----------------------;------------------------------------------------;
+;	Following description is for Baseboard information.		;
+;			Baseboard Information				;
+;-----------------------------------------------------------------------;
+
+BASEBOARD_INFO  = Present
+
+        BASE_BOARD_MANUFACTURER_$	  Silicon Integrated System Corp. 
+        BASE_BOARD_PRODUCT_NAME_$	  SiS 530
+        BASE_BOARD_VERSION_$    	  1.0
+        BASE_BOARD_SERIAL_NUMBER_$	  00000000
+
+;------------------;
+; SYSTEM ENCLOSURE ;
+;------------------;----------------------------------------------------;
+;	Following enumerates describes System Enclosure or Chasis	;
+;	type. At any given time only one value can be selected. Use	;
+;	left-hand-side key word to describe:				;
+;		System enclosure or chassis type			;
+;-----------------------------------------------------------------------;
+;			SYSTEM_CHASSIS_TYPE				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;        SE_OTHER...................... Other 				;
+;        SE_UNKNOWN.................... Unknown				;
+;        SE_DESKTOP.................... Desktop machine			;
+;        SE_LOW_PROFILE_DTP............ Low profile desktop		;
+;        SE_PIZZA_BOX.................. If desktop is Pizza Box type	;
+;	 SE_MINI_TOWER................. MiniTower type 			;
+;        SE_TOWER...................... Tower type chassis		;
+;        SE_PORTABLE................... Portable type			;
+;        SE_LAPTOP..................... Laptop type chassis		;
+;        SE_NOTEBOOK................... Notebook type chassis		;
+;        SE_HAND_HELD.................. Handheld type chassis		;
+;        SE_DOCKING_STATION............ Docking station			;
+;        SE_ALL_IN_ONE................. All in one type of chassis	;
+;        SE_SUB_NOTEBOOK............... Sub-notebook type chassis	;
+;        SE_SPACE_SAVING............... Space saving			;
+;        SE_LUNCH_BOX.................. Lunch box type chassis		;
+;        SE_MAIN_SER_CHASIS............ Main server chassis		;
+;        SE_EXP_CHASIS................. Expansion chassis		;
+;        SE_SUB_CHASIS................. Sub chassis			;
+;        SE_BUS_EXP_CHASIS............. Bus expansion chassis		;
+;        SE_PERPL_CHASIS............... Peripheral chassis		;
+;        SE_RAID_CHASIS................ RAID chassis			;
+;        SE_ROCK_MOUNT_CHSI............ Rock Mount chassis		;
+;-----------------------------------------------------------------------;
+;			SYSTEM_CHASSIS_STATE				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;       SCS_OTHER...................... Other chassis state  		;
+;       SCS_UNKNOWN.................... Unknown chassis state		;
+;       SCS_SAFE....................... Safe state           		;
+;       SCS_WARNING.................... Warning state        		;
+;       SCS_CRITICAL................... Critical state       		;
+;       SCS_NON_RECOVERABLE............ Non-recoverable state		;
+;-----------------------------------------------------------------------;
+;			SYSTEM_POWER_SUPPLY_STATE			;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;       SPS_OTHER...................... Other      			;
+;       SPS_UNKNOWN.................... Unknown   			;
+;       SPS_SAFE....................... Safe         			;
+;       SPS_WARNING.................... Warning        			;
+;       SPS_CRITICAL................... Critical     			;
+;       SPS_NON_RECOVERABLE............ Recoverable  			;
+;-----------------------------------------------------------------------;
+;			SYSTEM_THERMAL_STATE				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;  									;
+;       STS_OTHER...................... Other                           ;
+;       STS_UNKNOWN.................... Unknown           		;
+;       STS_SAFE....................... Safe thermal state		;
+;       STS_WARNING.................... Warning thermal state		;
+;       STS_CRITICAL................... Critical thermal state		;
+;       STS_NON_RECOVERABLE............ Non-recoverable thermal state	;
+;-----------------------------------------------------------------------;
+;			SYSTEM_SECURITY_STATE				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;       SSS_OTHER...................... Other				;
+;       SSS_UNKNOWN.................... Unknown				;
+;       SSS_NONE....................... None   				;
+;       SSS_EXT_INTE_LOCKED............ External interface locked out	;
+;       SSS_EXT_INTE_ENABLE............ External interface enabled	;
+;-----------------------------------------------------------------------;
+
+SYSTEM_CHASSIS_INFO   = Present
+
+        SYSTEM_CHASSIS_TYPE		= SE_DESKTOP
+	SYSTEM_CHASSIS_LOCK		= Absent
+        SYSTEM_CHASSIS_STATE		= SCS_UNKNOWN
+        SYSTEM_POWER_SUPPLY_STATE	= SPS_UNKNOWN
+        SYSTEM_THERMAL_STATE		= STS_UNKNOWN
+        SYSTEM_SECURITY_STATE		= SSS_UNKNOWN
+        SYSTEM_CHASSIS_MANUFACTRUER_$	  
+        SYSTEM_CHASSIS_VERSION_$	  
+        SYSTEM_CHASSIS_SERIAL_NUM_$	  0000000
+        SYSTEM_CHASSIS_ASSET_TAG_NUM_$	  0000000
+
+;---------------;
+; PROCESSOR TYPE;
+;---------------;-------------------------------------------------------;
+;	Following enumerates describes Processor Type. At 		;
+;	any given time only one value can be selected. Use		;
+;	left-hand-side key word to describe:				;
+;		Processor Type						;
+;-----------------------------------------------------------------------;
+
+;-----------------;
+; PROCESSOR FAMILY;
+;-----------------;-----------------------------------------------------;
+;	Processor Family is a runtime information. During POST 		;
+;	it will return the correct family.				;
+;-----------------------------------------------------------------------;
+
+
+;------------------------------;
+; PROCESSOR UPGRADE INFORMATION;
+;------------------------------;----------------------------------------;
+;	Following enumerates describes Processor Upgrade. At 		;
+;	any given time only one value can be selected. Use		;
+;	left-hand-side key word to describe:				;
+;		Processor Upgrade Information				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;	UPG_OTHER......................	Other				;
+;	UPG_UNKNOWN.................... Unknown				;
+;	UPG_DAUGHTER_BOARD............. Daughter Board			;
+;	UPG_ZIF_SOCKET................. ZIF Socket			;
+;	UPG_REPLACEABLE_PIGGY_BACK..... Replaceable Piggyback		;
+;	UPG_NONE....................... None				;
+;	UPG_LIF_SOCKET................. Lif Socket			;
+;	UPG_SLOT1...................... Slot1				;
+;	UPG_SLOT2...................... Slot2				;
+;	UPG_S370....................... Socket 370				;
+;-----------------------------------------------------------------------;
+
+;Processor general info:
+;-----------------------
+PROCESSOR_INFO	= Present
+NUMBER_OF_PROCESSOR		= 1
+	PROCESSOR_INFO_1	DEFINE	<Socket 7, 300MHz, UPG_S370>
+	PROCESSOR_VOLTAGE_1	DEFINE	<USER_DEFINED, 20>
+
+;	PROCESSOR_INFO_2	DEFINE	<J203, 800MHz, UPG_LIF_SOCKET>
+;	PROCESSOR_VOLTAGE_2	DEFINE	<USER_DEFINED, 18>
+;
+;	PROCESSOR_INFO_3	DEFINE	<J204, 800MHz, UPG_SLOT1>
+;	PROCESSOR_VOLTAGE_3	DEFINE	<USER_DEFINED, 22>
+;
+;	PROCESSOR_INFO_4	DEFINE	<J205, 800MHz, UPG_LIF_SOCKET>
+;	PROCESSOR_VOLTAGE_4	DEFINE	<USER_DEFINED, 24>
+;Processor cache info
+;--------------------
+NUMBER_OF_PROC_CACHE	= 1
+	PROC_CACHE_INFO_L1	DEFINE <32KB, 32KB, CH_SYNCHRONOUS>
+	PROC_CACHE_CFG_L1	DEFINE <L1 Cache, CACHE_ENABLED, WRITE_BACK, INTERNAL, L1>
+	PROC_CACHE_CHAR_L1	DEFINE <40, SR_NONE, SCT_UNIFIED, CA_4WAY_ASSOC>
+
+;----------------------------------------;
+; MEMORY CONTROLLER ERRORDETECTING METHOD;
+;----------------------------------------;------------------------------;
+;	Following enumerates describes Memory Controller error		;
+;	detecting method. At any given time only one value can be	;
+;	selected. Use left-hand-side key word to describe:		;
+;		Memory controller error detecting method		;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;       MC_OTHER....................... Other   			;
+;       MC_UNKNOWN..................... Unknown          		;
+;       MC_NONE........................ None             		;
+;       MC_8BIT_PARITY................. 8-bit Parity type		;
+;       MC_32BIT_ECC................... 32-bit ECC type			;
+;       MC_64BIT_ECC................... 64-bit ECC type			;
+;       MC_128BIT_ECC.................. 128-bit ECC type		;
+;       MC_CRC......................... CRC type			;
+;-----------------------------------------------------------------------;
+
+        MEM_CTRL_EDD      	=       MC_None
+
+;----------------------;
+; MEMORY CONTROLLER ECC;
+;----------------------;------------------------------------------------;
+;	Following bit fields describes Memory Controller error		;
+;	correcting capability. At any given time more than on		;
+;	e value	can be selected. set right-hand-side flags to		;
+;	describe:							;
+;		Memory controller error correcting capability		;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+
+        MCE_OTHER          	      = 0	; Other
+        MCE_UNKNOWN         	      = 0	; Unknown
+        MCE_NONE            	      = 1	; None
+        MCE_SINGLE_BIT_ECC  	      = 0	; Single bit ECC
+        MCE_DOUBLE_BIT_ECC  	      = 0	; Double bit ECC
+        MCE_ERROR_SCRUBBING 	      = 0	; Error scrubbing
+
+;-------------------------------------;
+; MEMORY CONTROLLER INTERLEAVE SUPPORT;
+;-------------------------------------;---------------------------------;
+;	Following enumerates describes Memory Controller		;
+;	interleave support. At any given time only one			;
+;	value can be selected. Use left-hand-side keyword		;
+; 	to describe:							;
+;		Memory Controller Interleave support			;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;       IS_OTHER....................... Other				;
+;       IS_UNKNOWN..................... Unknown				;
+;       IS_ONEWAY_INTLEAVE............. Oneway interleave support	;
+;       IS_TWOWAY_INTLEAVE............. Twoway interleave support	;
+;       IS_FORWAY_INTLEAVE............. Fourway interleave support	;
+;       IS_EHTWAY_INTLEAVE............. Eightway interleave support	;
+;       IS_STNWAY_INTLEAVE............. Sixtenway interleave support	;
+;-----------------------------------------------------------------------;
+
+        MEM_CTRL_INTRLV   	 =      IS_ONEWAY_INTLEAVE
+
+
+;------------------------;
+; MEMORY CONTROLLER SPEED;
+;------------------------;----------------------------------------------;
+;	Following bit fields describes Memory Controller speed.		;
+;	At any given time more than one value can be selected.		;
+;	set right-hand-side flags to describe:				;
+;		Memory controller speed					;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+
+        SS_OTHER          	      = No
+        SS_UNKNOWN         	      = Yes
+        SS_70NS            	      = No
+        SS_60NS           	      = No
+        SS_50NS           	      = No
+
+;-----------------------------;
+; MEMORY MODULE VOTAGE SUPPORT;
+;-----------------------------;-----------------------------------------;
+;	Following bit fields describes Memory Module voltage.		;
+;	At any given time more than one value can be selected.		;
+;	set right-hand-side flags to describe:				;
+;		Memory module voltage support				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+
+	MM_VOLTAGE_29V	  	      = 0
+	MM_VOLTAGE_33V	  	      = 1
+	MM_VOLTAGE_5V	  	      = 0
+;-----------------------------------------------------------------------;
+
+MEM_CTRL_INFO	      = Present
+
+	NUMBER_OF_MEM_MODULE		= 3
+	MAX_MEM_MODULE_SIZE		= 512MB
+
+
+;-----------------------------;
+; MEMORY MODULE SUPPORTED TYPE;
+;-----------------------------;-----------------------------------------;
+;	Following bit fields describes Memory Module supported		;
+;	type. At any given time more than one value can be selected.	;
+;	set right-hand-side flags to describe:				;
+;		Memory module supported type				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+        MM_TYPE_OTHER	   	      =	0	; Other type
+        MM_TYPE_UNKNOWN              =	0	; Unknown type
+ 	MM_TYPE_STANDARD             =	0	; Standard type
+        MM_TYPE_FAST_PAGE_MODE       =	0	; Fast page mode type
+        MM_TYPE_EDO                  =	0	; EDO type
+        MM_TYPE_PARITY               =	0	; Parity type
+        MM_TYPE_ECC                  =	0	; ECC type
+        MM_TYPE_SIMM                 =	0	; SIMM type
+        MM_TYPE_DIMM                 =	1	; DIMM type
+        MM_TYPE_BURST_EDO            =	0	; BURST EDO type
+	MM_TYPE_SDRAM                =	1	; SDRAM type
+;-----------------------------------------------------------------------;
+
+MEM_MODULE_INFO	= Present
+
+	MEMORY_TYPE_1		DEFINE	<MM_TYPE_DIMM>
+	MEMORY_INFO_1		DEFINE	<DIMM1, RAS_1, RAS_2, 60ns, 64MB, 64MB, MM_SINGLE_BANK>
+	MEMORY_ERR_1		DEFINE	<0>
+
+	MEMORY_TYPE_2		DEFINE	<MM_TYPE_DIMM>
+	MEMORY_INFO_2		DEFINE	<DIMM2, RAS_3, RAS_4, 50ns,128MB, 128MB, MM_DOUBLE_BANK>
+	MEMORY_ERR_2		DEFINE	<0>
+
+	MEMORY_TYPE_3		DEFINE	<MM_TYPE_DIMM>
+	MEMORY_INFO_3		DEFINE	<DIMM3, RAS_5, RAS_6, 60ns, 64MB, 64MB, MM_DOUBLE_BANK>
+	MEMORY_ERR_3		DEFINE	<0>
+
+;	MEMORY_TYPE_4		DEFINE	<MM_TYPE_DIMM>
+;	MEMORY_INFO_4		DEFINE	<DIMM4, RAS_7, RAS_8, 70ns, 64MB, 64MB, MM_SINGLE_BANK>
+;	MEMORY_ERR_4		DEFINE	<0>
+
+;------------;
+; CACHE TYPE ;
+;------------;----------------------------------------------------------;
+;	Following bit fields describes Supported Cache tpye.		;
+;	At any given time more than one value can be selected.		;
+;	set right-hand-side flags to describe:				;
+;		Cache Type Suppoted					;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;
+;       CH_OTHER          	      = 0	; Other type of Cache
+;       CH_UNKNOWN                    = 0	; Unknown type
+;       CH_NON_BURST                  = 0	; Non Burst type
+;	CH_BURST          	      = 1	; Burst type
+;       CH_PIPELINE_BURST 	      = 0	; Pipeline Burst
+;       CH_SYNCHRONOUS    	      = 0	; Synchronous type
+;       CH_ASYNCHRONOUS    	      = 0	; Asynchronous type
+;----------;------------------------------------------------------------;
+;	Following enumerates describes Cache Error Correcting		;
+;	capability. At any given time only one value can be		;
+;	selected. Use right-hand-side keywords to describe:		;
+;		Cache error correcting capability			;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;       SR_OTHER....................... Other				;
+;       SR_UNKNOWN..................... Unknown				;
+;       SR_NONE........................ None				;
+;       SR_PARITY...................... Parity type 			;
+;       SR_SINGLEBIT_ECC............... Single bit ECC			;
+;       SR_MULTIBIT_ECC................ Multibit ECC			;
+;------------------;----------------------------------------------------;
+;	Following enumerates describes System Cache Type. At		;
+;	any given time only one value can be selected. Use		;
+;	left-hand-side keywords to describe:				;
+;		Memory controller error correcting capability		;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;       SCT_OTHER...................... Other       			;
+;       SCT_UNKNOWN.................... Unknown      		   	;
+;       SCT_INSTRUCTION................ Instruction type 		;
+;       SCT_DATA....................... Data type   		   	;
+;       SCT_UNIFIED.................... Unified type		   	;
+;-----------------------------------------------------------------------;
+;	Following enumerates describes Cache Associativity		;
+;	At any given time only one value can be selected.		;
+;	Use left-hand-side keywords to	describe:			;
+;		Cache Associativity					;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;       CA_OTHER....................... Other  				;
+;       CA_UNKNOWN..................... Unknown 			;
+;       CA_DIRECT_MAPPED............... Direct mapped			;
+;       CA_2WAY_ASSOC.................. Two-way type	   		;
+;       CA_4WAY_ASSOC.................. Four-way type	   		;
+;       CA_FULLY_ASSOC................. Fully associate  		;
+;-----------------------------------------------------------------------;
+
+CACHE_INFORMATION      =       Present
+
+	CACHE_INFO	DEFINE <2048KB, 512KB, CH_SYNCHRONOUS>
+	CACHE_CFG	DEFINE <L2 Cache, CACHE_ENABLED, WRITE_BACK, SOCKETED, 00>
+	CACHE_CHAR	DEFINE <40, SR_PARITY, SCT_UNIFIED, CA_4WAY_ASSOC>
+
+;---------------------------;
+; PORT CONNECTOR INFORMATION;
+;---------------------------;-------------------------------------------;
+;	Following enumerates describes Port Connector Information	;
+;	At any given time more than one value can be selected.To	;
+;	describe:							;
+;		Port Connector Information				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;      PC_NONE......................... None				;
+;      PC_CENTRONICS................... Centronic type			;
+;      PC_MINI_CENTRONIC............... Mini-Centronic type		;
+;      PC_PROPRIETARY.................. Proprietary type 		;
+;      PC_DB25_PIN_MALE................ DB-25 pin male typ		;
+;      PC_DB25_PIN_FEMALE.............. DB-25 pin female type		;
+;      PC_DB15_PIN_MALE................ DB-15 pin male type		;
+;      PC_DB15_PIN_FEMALE.............. DB-15 pin female type		;
+;      PC_DB9_PIN_MALE................. DB-9 pin male type		;
+;      PC_DB9_PIN_FEMALE............... DB-9 pin female type		;
+;      PC_RJ_11........................ RJ-11 type 		    	;
+;      PC_RJ_45........................ RJ-45 type 		    	;
+;      PC_50_PINMINI_SCSI.............. 50 pin mini scsi type		;
+;      PC_MINI_DIN..................... Mini-DIN type    		;
+;      PC_MICRO_DIN.................... Micro_DIN type   		;
+;      PC_PS_2......................... PS/2 type  		    	;
+;      PC_INFRARED..................... Infrared type   		;
+;      PC_HP_HIL....................... HP-HIL type		    	;
+;      PC_ACCESS_BUS_USB............... USB type   		    	;
+;      PC_SSA_SCSI..................... SSA SCSI type   		;
+;      PC_CIR_DIN8_MALE................ Circular DIN-8 male type	;
+;      PC_CIR_DIN8_FEMALE.............. Circular DIN-8 female type	;
+;      PC_ONBOARD_IDE.................. Onboard IDE type 		;
+;      PC_ONBOARD_FLOPPY............... Onboard floppy type		;
+;      PC_DUAL_INLINE_9PIN............. 9 pin dual in line type		;
+;      PC_DUL_INLINE_25PIN............. 25 pin dual in line type	;
+;      PC_DUL_INLINE_50PIN............. 50 pin dual in line type	;
+;      PC_DUL_INLINE_68PIN............. 68 pin dual in line type	;
+;      PC_ONBRD_SND_INPUT.............. Onboard sound input from CDROM	;
+;      PC_CENTRONIC_TYPE14............. Mini Centronic type 14		;
+;      PC_CENTRONIC_TYPE26............. Mini cesntronic type 26		;
+;      PC_MINI_JACK.................... Mini Jack (headphones)		;
+;      PC_BNC.......................... BNC type     		    	;
+;      PC_IEEE_1394.................... 1394 bus type    		;
+;      PC_PC_98........................ PC-98 type  		    	;
+;      PC_PC_98_HIRESO................. PC-98 Hireso type		;
+;      PC_PC_H98....................... PC-H98 type		    	;
+;      PC_PC_98_NOTE................... PC-98 Notetype   		;
+;      PC_PC_98_FULL................... Fully PC-98 type 		;
+;      PC_OTHER........................ Other     		    	;
+;-----------------------------------------------------------------------;
+
+
+	NUMBER_OF_PORT_CONNECTOR = 9
+
+	PORT_CONNECTOR_1	DEFINE	<COM Port, PC_NONE, Serial Port A, EXT_PC_DB9_PIN_MALE, PT_SR_PORT_16550A>
+	PORT_CONNECTOR_2	DEFINE	<COM Port, PC_NONE, Serial Port B, EXT_PC_DB9_PIN_MALE, PT_SR_PORT_16550A>
+	PORT_CONNECTOR_3	DEFINE	<LPT Port, PC_NONE, Parallel Port, EXT_PC_DB25_PIN_FEMALE, PT_PARL_ECP_EPP>
+	PORT_CONNECTOR_4	DEFINE	<Keyboard, PC_NONE, Keyboard, EXT_PC_PS_2, PT_KEYBOARD_PORT>
+	PORT_CONNECTOR_5	DEFINE	<Mouse, PC_NONE, PS/2 Mouse, EXT_PC_PS_2, PT_MOUSE_PORT>
+	PORT_CONNECTOR_6	DEFINE	<Floppy, PC_ONBOARD_FLOPPY, Floppy, EXT_PC_NONE, PT_NONE>
+	PORT_CONNECTOR_7	DEFINE	<Primary IDE, PC_ONBOARD_IDE, IDE-1, EXT_PC_NONE, PT_NONE>
+	PORT_CONNECTOR_8	DEFINE	<Secondary IDE, PC_ONBOARD_IDE, IDE-2, EXT_PC_NONE, PT_NONE>
+	PORT_CONNECTOR_9	DEFINE	<USB Port, PC_NONE, USB, EXT_PC_ACCESS_BUS_USB, PT_USB>
+
+;-----------------------------------;
+; EXTERNAL PORT CONNECTOR INFOMATION;
+;-----------------------------------;-----------------------------------;
+;	Following bit fields describes External Port Connector		;
+;	information. At any given time more than one value can		;
+;	be selected. Use left-hand-side keywords to describe:		;
+;		External Port Connector Information			;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;      EXT_PC_NONE..................... None                            ;
+;      EXT_PC_CENTRONICS............... Centronic type            	;
+;      EXT_PC_MINI_CENTRONIC........... Mini Centronic type   		;
+;      EXT_PC_PROPRIETARY.............. Proprietary type         	;
+;      EXT_PC_DB25_PIN_MALE............ DB-25 pin male type    		;
+;      EXT_PC_DB25_PIN_FEMALE.......... DB-25 pin female type		;
+;      EXT_PC_DB15_PIN_MALE............ DB-15 pin male type    		;
+;      EXT_PC_DB15_PIN_FEMALE.......... DB-15 pin female type		;
+;      EXT_PC_DB9_PIN_MALE............. DB-9 pin male type      	;
+;      EXT_PC_DB9_PIN_FEMALE........... Db-9 pin female type  		;
+;      EXT_PC_RJ_11.................... RJ-11 type                     	;
+;      EXT_PC_RJ_45.................... RJ-45 type                     	;
+;      EXT_PC_50_PINMINI_SCSI.......... 50 pin mini SCSI type		;
+;      EXT_PC_MINI_DIN................. Mini DIN type               	;
+;      EXT_PC_MICRO_DIN................ Micro DIN type             	;
+;      EXT_PC_PS_2..................... PS/2 type                       ;
+;      EXT_PC_INFRARED................. Infrared type               	;
+;      EXT_PC_HP_HIL................... HP-HIL type                    	;
+;      EXT_PC_ACCESS_BUS_USB........... USB type             		;
+;      EXT_PC_SSA_SCSI................. SSA SCSI type               	;
+;      EXT_PC_CIR_DIN8_MALE............ Circular DIN-8 pin male type 	;
+;      EXT_PC_CIR_DIN8_FEMALE.......... Circular DIN-8 pin female type	;
+;      EXT_PC_ONBOARD_IDE.............. Onboard IDE type		;
+;      EXT_PC_ONBOARD_FLOPPY........... Onboard floppy type   		;
+;      EXT_PC_DUAL_INLINE_9PIN......... 9 pin Dual in line type		;
+;      EXT_PC_DUL_INLINE_25PIN......... 25 pin dual in line type	;
+;      EXT_PC_DUL_INLINE_50PIN......... 50 pin dual in line type	;
+;      EXT_PC_DUL_INLINE_68PIN......... 68 pin dual in line type	;
+;      EXT_PC_ONBRD_SND_INPUT.......... Onboard sound input   		;
+;      EXT_PC_CENTRONIC_TYPE14......... Centronic type-14  		;
+;      EXT_PC_CENTRONIC_TYPE26......... Centronic type-26   		;
+;      EXT_PC_MINI_JACK................ Mini Jack type              	;
+;      EXT_PC_BNC...................... BNC type                        ;
+;      EXT_PC_IEEE_1394................ 1394 Bus type              	;
+;      EXT_PC_PC_98.................... PC-98 type                     	;
+;      EXT_PC_PC_98_HIRESO............. PC-98Hireso type        	;
+;      EXT_PC_PC_H98................... PC-H98 type                    	;
+;      EXT_PC_PC_98_NOTE............... PC-98-Note type           	;
+;      EXT_PC_PC_98_FULL............... Fully PC-98 type          	;
+;      EXT_PC_OTHER.................... Other                           ;
+;-----------------------------------------------------------------------;
+
+
+;-------------------------;
+; TYPE OF PORT  INFOMATION;
+;-------------------------;---------------------------------------------;
+;	Following bit fields describes Type of Port information.	;
+;	At any given time more than one value can be selected.		;
+;	Use left-hand-side keywords to describe:			;
+;		 Port  Information					;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;       PT_NONE........................ None       		    	;
+;       PT_PARL_XT_AT.................. Parallel XT/AT Compatible	;
+;       PT_PARL_PORT_PS2............... Parallel PS/2 type		;
+;       PT_PARL_PORT_ECP............... Parallel port ECP		;
+;       PT_PARL_PORT_EPP............... Parallel port EPP		;
+;       PT_PARL_ECP_EPP................ Parallel ECC/EPP type		;
+;       PT_SR_PORT_XT_AT............... Serial port XT/AT compatible	;
+;       PT_SR_PORT_16450............... Serial port 16450 compatible 	;
+;       PT_SR_PORT_16550............... Serial port 16550 compatible  	;
+;       PT_SR_PORT_16550A.............. Serial port 16550A compatible 	;
+;       PT_SCSI_PORT................... SCSI port    		  	;
+;       PT_MIDI_PORT................... MIDI port           	   	;
+;       PT_JOY_STIC_PORT............... Joystick port          	    	;
+;       PT_KEYBOARD_PORT............... Keyboard port               	;
+;       PT_MOUSE_PORT.................. Mouse port     		    	;
+;       PT_SSA_SCSI.................... SSA SCSI port 		    	;
+;       PT_USB......................... USB port      		    	;
+;       PT_FIREWIRE_1394............... 1394 type     		    	;
+;       PT_PCMCIA_TYPE2................ PCMCIA type 2 		    	;
+;       PT_PCMCIA_TYPE2................ PCMCIA type 2  		    	;
+;       PT_PCMCIA_TYPE3................ PCMCIA type 3    	    	;
+;       PT_CARDBUS..................... Cardbus type            	;
+;       PT_ACCESS_BUS_PORT............. Access bus type           	;
+;       PT_SCSI2....................... SCSI 2 type           		;
+;       PT_SCSI_WIDE................... SCSI wide type           	;
+;       PT_PC_98....................... PC-98 type           		;
+;       PT_PC_98_HIRESO................ PC-98Hireso type           	;
+;       PT_PC_H98...................... PC-H98 type           		;
+;       PT_VIDEO_PORT.................. Video type            		;
+;       PT_AUDIO_PORT.................. Audio type           		;
+;       PT_MODEM_PORT.................. Modem type            		;
+;       PT_NETWORK_PORT................ Network type          		;
+;       PT_8251_COMPATIBLE............. 8251 Compatible type          	;
+;       PT_8251_FIFO_COMP.............. 8251 FIFO compatible           	;
+;       PT_OTHER....................... Other            		;
+;-----------------------------------------------------------------------;
+
+
+
+;-----------------------------;
+; SYSTEM SLOT TYPE INFORMATION;
+;-----------------------------;-----------------------------------------;
+;	Following enumerates describes System Slot Type			;
+;	information. At any given time more than one value can		;
+;	be selected. Use left-hand-side keywords to describe:		;
+;		System Slot Type Information				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;        ST_OTHER...................... Other       		    	;
+;        ST_UNKNOWN.................... Unknown     	    	    	;
+;        ST_ISA........................ ISA type    		    	;
+;        ST_MCA........................ MCA type   		    	;
+;        ST_EISA....................... EISA type  		    	;
+;        ST_PCI........................ PCI type  		    	;
+;        ST_PCMCIA..................... PCMCIA type		    	;
+;        ST_VL_VESA.................... VL-VESA type		  	;
+;        ST_PROPRIETARY................ Proprietary type		;
+;        ST_PROC_CARD_SLOT............. Processor card slot		;
+;        ST_PROP_CARD_SLOT............. Proprietary memory card slot	;
+;        ST_IO_RISER_SLOT.............. I/O Riser cardslot		;
+;        ST_NU_BUS..................... NU bus type		   	;
+;        ST_PCI_66MHZ.................. PCI-66MHz type		 	;
+;        ST_AGP........................ AGP type  		    	;
+;        ST_AGP_2X..................... AGP 2X type 		    	;
+;        ST_AGP_4X..................... AGP 4X type		    	;
+;        ST_PC98_C20................... PC-98-C20 type			;
+;        ST_PC98_C24................... PC-98-C24 type		 	;
+;        ST_PC98_E..................... PC-98/E type		   	;
+;        ST_PC98_LOCAL................. PC-98 Local type		;
+;        ST_PC98_CARD.................. PC-98/Card type			;
+;-----------------------------------------------------------------------;
+
+
+
+;--------------------------;
+; SYSTEM SLOT DATA BUSWIDTH;
+;--------------------------;--------------------------------------------;
+;	Following enumerates describes System Slot Data Bus		;
+;	width information. At any given time more than one value can	;
+;	be selected. Use left-hand-side keywords to describe:		;
+;		System Slot DataBus Width Information			;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;        DBW_OTHER..................... Other       		    	;
+;        DBW_UNKNOWN................... Unknown     		    	;
+;        DBW_8BIT...................... 8-Bit wide 		    	;
+;        DBW_16BIT.....................	16-bit wide			;
+;        DBW_32BIT..................... 32-bit wide    		    	;
+;        DBW_64BIT..................... 64-bit wide    		    	;
+;        DBW_128BIT.................... 128-bit wide   		    	;
+;-----------------------------------------------------------------------;
+
+
+
+;-------------------------------;
+; SYSTEM SLOT LENGTH INFORMATION;
+;-------------------------------;---------------------------------------;
+;	Following enumerates describes System Slot length		;
+;	information. At any given time more than one value can		;
+;	be selected. Use left-hand-side keywords to describe:		;
+;		System Slot Length Information				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;        SL_OTHER...................... Other      		    	;
+;        SL_UNKNOWN.................... Unknown     		    	;
+;        SL_SHORT_LENGTH............... Short length slot		;
+;        SL_LONG_LENGTH................ Long length slot	 	;
+;-----------------------------------------------------------------------;
+
+
+
+;------------------------------;
+; SYSTEM SLOT USAGE INFORMATION;
+;------------------------------;----------------------------------------;
+;	Following bit fields describes System Slot usage		;
+;	information. At any given time only one value can		;
+;	be selected. Use left-hand-side keywords to describe:		;
+;		System Slot Usage Information				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+
+	 SL_OTHER		      = 0	 ; Other
+	 SL_UNKNOWN     	      =	0        ; Unknown
+	 SL_AVAILABLE		      = 0        ; Available
+	 SL_IN_USE     		      = 1        ; Inuse
+;-----------------------------------------------------------------------;
+
+	NUMBER_OF_SYSTEM_SLOT 	      =	6
+
+SYSTEM_SLOT_INFO_1	DEFINE	<PCI1, SYS_SLOT_PCI, DBW_32BIT, SL_IN_USE, SL_LONG_LENGTH, 1>
+SYSTEM_SLOT_CHAR_1	DEFINE	<SCH_33V, SCH_SHARED, SCH_PME>
+
+SYSTEM_SLOT_INFO_2	DEFINE	<PCI2, SYS_SLOT_PCI, DBW_32BIT, SL_IN_USE, SL_LONG_LENGTH, 2>
+SYSTEM_SLOT_CHAR_2	DEFINE	<SCH_33V, SCH_PME, SCH_SHARED>
+
+SYSTEM_SLOT_INFO_3	DEFINE	<PCI3, SYS_SLOT_PCI, DBW_32BIT, SL_IN_USE, SL_LONG_LENGTH, 3>
+SYSTEM_SLOT_CHAR_3	DEFINE	<SCH_33V, SCH_PME, SCH_SHARED>
+
+;SYSTEM_SLOT_INFO_4	DEFINE	<PCI4, SYS_SLOT_PCI, DBW_32BIT, SL_IN_USE, SL_LONG_LENGTH, 4>
+;SYSTEM_SLOT_CHAR_4	DEFINE	<SCH_33V, SCH_PME, SCH_SHARED>
+
+;SYSTEM_SLOT_INFO_5	DEFINE	<PCI5, SYS_SLOT_PCI, DBW_32BIT, SL_IN_USE, SL_LONG_LENGTH, 5>
+;SYSTEM_SLOT_CHAR_5	DEFINE	<SCH_33V, SCH_PME, SCH_SHARED>
+
+SYSTEM_SLOT_INFO_4	DEFINE	<ISA1, SYS_SLOT_ISA, DBW_16BIT, SL_UNKNOWN, SL_LONG_LENGTH, 6>
+SYSTEM_SLOT_CHAR_4	DEFINE	<SCH_5V>
+
+SYSTEM_SLOT_INFO_5	DEFINE	<ISA2, SYS_SLOT_ISA, DBW_16BIT, SL_UNKNOWN, SL_LONG_LENGTH, 7>
+SYSTEM_SLOT_CHAR_5	DEFINE	<SCH_5V>
+
+SYSTEM_SLOT_INFO_6	DEFINE	<AGP, SYS_SLOT_AGP_2X, DBW_32BIT, SL_IN_USE, SL_LONG_LENGTH, 8>
+SYSTEM_SLOT_CHAR_6	DEFINE	<SCH_33V, SCH_PME, SCH_SHARED>
+
+
+
+
+;----------------------------------;
+; SYSTEM ONBOARD DEVICESINFORMATION;
+;----------------------------------;------------------------------------;
+;	Following enumerates describes System Onboard Devices		;
+;	information. At any given time more than one value can		;
+;	be selected. Use left-hand-side keywords to describe:		;
+;		System Slot Length Information				;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;       OBD_OTHER...................... Other Device		  	;
+;       OBD_UNKNOWN.................... Unknown Device			;
+;       OBD_VIDEO...................... Video Device		   	;
+;       OBD_SCSI....................... SCSI Device 		   	;
+;       OBD_ETHERNET................... Ethernet Device			;
+;       OBD_TOKEN_RING................. Token-Ring Device		;
+;       OBD_SOUND...................... Sound Device			;
+;-----------------------------------------------------------------------;
+
+ONBOARD_DEVICE_INFO	= Present
+
+        NUMBER_OF_ONBOARD_DEVICE      = 1
+	ONBOARD_DEVICE_1	DEFINE	<DISABLED, OBD_VIDEO,	SiS Video>
+;	ONBOARD_DEVICE_2	DEFINE	<DISABLED, OBD_SCSI, Adaptec SCSI>
+;	ONBOARD_DEVICE_3	DEFINE	<DISABLED, OBD_ETHERNET, 3COM Ethernet link>
+;	ONBOARD_DEVICE_4	DEFINE	<DISABLED, OBD_TOKEN_RING, Novell compatible>
+;	ONBOARD_DEVICE_5	DEFINE	<DISABLED, OBD_SOUND, Creative Labs>
+;	ONBOARD_DEVICE_6	DEFINE	<DISABLED, OBD_OTHER, AMI RAID Controller Card>
+;	ONBOARD_DEVICE_7	DEFINE	<DISABLED, OBD_UNKNOWN, Unknown device>
+
+
+
+;-----------;
+; OEM String;
+;-----------;-----------------------------------------------------------;
+;	Following description is for OEM String information. 		;
+;			OEM String					;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+
+OEM_STRING_INFO		= Present 
+
+	NUMBER_OF_OEM_STRING	=	5
+
+	OEM_STRING_1		DEFINE	<1>
+	OEM_STRING_2		DEFINE	<2>
+	OEM_STRING_3		DEFINE	<3>
+	OEM_STRING_4		DEFINE	<4>
+	OEM_STRING_5		DEFINE	<5>
+
+
+;----------------------------;
+; SYSTEM CONFIGURATION OPTION;
+;----------------------------;------------------------------------------;
+;	Following description is for System configuration option	;
+;			System Configuration option			;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+
+SYSTEM_CONFIG_OPTION_INFO = Absent
+
+	NUMBER_OF_SYSTEM_CONFIG_STRING	= 3
+
+	SYSTEM_CONFIG_STRING_1		DEFINE	<System Management BIOS from BIOS Group>
+	SYSTEM_CONFIG_STRING_2		DEFINE	<SMBIOS from AMI>
+	SYSTEM_CONFIG_STRING_3		DEFINE	<SMBIOS 3.0 with ACPI>
+
+;--------------------------;
+; BIOS LANGUAGE INFORMATION;
+;--------------------------;--------------------------------------------;
+;	Following description is for BIOS Language information.		;
+;			BIOS Language Information			;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+
+BIOS_LANGUAGE_INFO		= Present
+
+	NUMBER_OF_LANGUAGE_STRING	= 1
+	INSTALLABLE_LANGUAGE_STRING_1	DEFINE	<English>
+	INSTALLABLE_LANGUAGE_STRING_2	DEFINE	<Spanish>
+	INSTALLABLE_LANGUAGE_STRING_3	DEFINE	<German>
+	INSTALLABLE_LANGUAGE_STRING_4	DEFINE	<French>
+	BIOS_LANGUAGE_FORMAT		=	ABBRIVIATED_FORMAT
+	CURRENT_LANGUAGE		DEFINE	< >
+
+;------------------------------------------------------;
+;Following Structure is for Group Association	       ;
+;------------------------------------------------------;
+
+GROUP_ASSOCIATION_INFO		=	Absent
+
+;----------------------------;
+; POINTING DEVICE INFORMATION;
+;----------------------------;------------------------------------------;
+;	Following enumerates describes System Pointing Device		;
+;	information. At any given time only one value can be		;
+;	selected. Use left-hand-side keywords to describe:		;
+;		Built-in Pointing Device Information			;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;	POR_OTHER......................	Other				;
+;	POR_UNKNOWN....................	Unknown				;
+;	POR_MOUSE......................	Mouse type	             	;
+;	POR_TRACK_BALL.................	Track Ball type		     	;
+;	POR_TRACK_POINT................	Track Point type		;
+;	POR_GLIDE_POINT................	Glide point type	     	;
+;	POR_TOUCH_PAD..................	Touch Pad type		     	;
+;-----------------------------------------------------------------------;
+
+	POINTING_DEVICE_TYPE	      =	POR_TRACK_BALL
+
+;----------------------------;
+; POINTING DEVICE INFORMATION;
+;----------------------------;------------------------------------------;
+;	Following enumerates describes Pointing Device Interface	;
+;	information.At any given time only one value can be		;
+;	selected. Use left-hand-side keywords to describe:		;
+;		Pointing Device Interface Information			;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;	---------------			-----------			;
+;									;
+;	PDI_OTHER...................... Other				;
+;	PDI_UNKNOWN....................	Unknown			     	;
+;	PDI_SERIAL.....................	Serial type		     	;
+;	PDI_PS2........................	PS/2			     	;
+;	PDI_INFRARED...................	Infrared type		     	;
+;	PDI_HP_HIL.....................	HP-HIL			     	;
+;	PDI_BUS_MOUSE..................	Bus-mouse		     	;
+;	PDI_APPLE_DESKTOP_BUS..........	Apple desktop bus	     	;
+;	PDI_BUS_MOUSE_DB9..............	Mouse DB9		     	;
+;	PDI_BUS_MOUSE_MICRO_DIN........	Micro DIN		     	;
+;	PDI_USB........................	USB type		     	;
+;-----------------------------------------------------------------------;
+
+BUILTIN_POINTING_DEVICE_INFO	      = Absent
+
+	POINTING_DEVICE_INTERFACE     = PDI_INFRARED
+	NUMBER_OF_BUTTONS	      = 3
+
+
+;----------------------------;
+; PORTABLE BATTERY CHEMISTRY ;
+;----------------------------;------------------------------------------;
+;	Following enumerates describes Portable Battery			;
+;	Chemistry information.At any given time only			;
+;	one value can be selected. Use left-hand-side			;
+;	keywords to describe:						;
+;		Portable Battery Chemistry Information			;
+;-----------------------------------------------------------------------;
+;	Keywords to use			Description			;
+;       ---------------			-----------			;
+;									;
+;	PBC_OTHER...................... Other				;
+;	PBC_UNKNOWN.................... Unknown				;
+;	PBC_LEAD_ACID.................. Lead Acid type			;
+;	PBC_NICKEL_CAD.................	Cadmium type			;
+;	PBC_NICKEL_HYDRIDE.............	Nickle Hydride type		;
+;	PBC_LITHIUM_ION................	Lithum Ion type			;
+;	PBC_ZINC_AIR...................	Zinc Air type			;
+;	PBC_LITHIUM_POLYMER............	Lithium Polymer type		;
+;-----------------------------------------------------------------------;
+
+	PORTABLE_BATTERY_CHEMISTRY	= PBC_NICKEL_CAD
+
+PORTABLE_BATTERY_INFO			= Absent
+
+	LOCATION_OF_BATTERY_$		Left side of System
+	PORTABLE_BAT_MANUFACTURER_$	Nikon Battery
+	MANUFACTURER_DATE_$		08/11/97
+	BATTERY_SERIAL_NUMBER_$		NI00123
+	DEVICE_NAME_$			Nikon Ultra Plus
+	SBDS_VERSION_NUMBER_$		SMART Ver 0123
+	DESIGN_CAPACITY			= 3
+	DESIGN_VOLTAGE			= 5
+	MAX_ERR_IN_BATT_DATA		= 0FFh
+
+;----------------------------;		; (CORE0218+)
+; SYSTEM EVENT LOG	     ;
+;----------------------------;------------------------------------------;
+SYSTEM_EVENT_LOG			= Present
+
+	DESCRIPTOR_LENGTH		= 2
+	LOG_AREA_LENGTH			= 4096
+	NUMBER_OF_SUPPORTED_EVENT	= 2
+	SUPPORTED_LOG_TYPE_1		= 08h
+	VARIABLE_DATA_TYPE_1		= 4
+	SUPPORTED_LOG_TYPE_2		= 16h
+	VARIABLE_DATA_TYPE_2		= 0
+;-----------------------------------------------------------------------------;
+
+PROCESSOR_GROUP		DEFINE	<Processor Group>
+EXTERNAL_CACHE_GROUP	DEFINE	<External Cache Group>
+SLOT_GROUP		DEFINE	<Slot Group Information>
+ONBOARD_DEVICE_GROUP	DEFINE	<Onboard Device Group Information>
+;-----------------------------------------------------------------------------;

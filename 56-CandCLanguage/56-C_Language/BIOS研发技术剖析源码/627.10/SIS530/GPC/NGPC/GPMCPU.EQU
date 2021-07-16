@@ -1,0 +1,279 @@
+;-----------------------------------------------;
+;	  GREEN PC BIOS CPU EQUATE FILE		;
+;		   GPMCPU.EQU			;
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	CPU STATE DUMP AREA FOR INTEL 'S'	;
+;	SERIES CPU & 386SL/486SL EQUATES	;
+;-----------------------------------------------;
+
+cpu_dump_cr0_intl		equ	0fffch	; CR0
+cpu_dump_eflags_intl		equ	0fff4h	; EFLAGS
+cpu_dump_eip_intl		equ	0fff0h	; EIP
+cpu_dump_edi_intl		equ	0ffech	; EDI
+cpu_dump_esi_intl		equ	0ffe8h	; ESI
+cpu_dump_ebp_intl		equ	0ffe4h	; EBP
+cpu_dump_esp_intl		equ	0ffe0h	; ESP
+cpu_dump_ebx_intl		equ	0ffdch	; EBX
+cpu_dump_edx_intl		equ	0ffd8h	; EDX
+cpu_dump_ecx_intl		equ	0ffd4h	; ECX
+cpu_dump_eax_intl		equ	0ffd0h	; EAX
+
+;-----------------------------------------------;
+
+cpu_dump_halt_auto_restart_intl	equ	0ff02h	; HALT Auto Restart Slot (word) (NOT AVAILABLE IN 386SL)
+cpu_dump_smbase_slot_intl	equ	0fef8h	; SMBASE Slot (NOT AVAILABLE IN 386SL/486SL)
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;    CPU STATE DUMP AREA FOR AMD CPU EQUATES	;
+;	  Am386SXLV/Am386DXLV/Am486DXLV		;
+;-----------------------------------------------;
+;    CPU STATE DUMP AREA FOR IBM CPU EQUATES	;
+;	IBM 486SLC2,BLUE LIGHTNING,386SLC	;
+;-----------------------------------------------;
+
+cpu_dump_cr0_amd_ibm		equ	0000h	; CR0
+cpu_dump_eflags_amd_ibm		equ	0004h	; EFLAGS
+cpu_dump_edi_amd_ibm		equ	000ch	; EDI
+cpu_dump_esi_amd_ibm		equ	0010h	; ESI
+cpu_dump_ebp_amd_ibm		equ	0014h	; EBP
+cpu_dump_esp_amd_ibm		equ	0018h	; ESP
+cpu_dump_ebx_amd_ibm		equ	001ch	; EBX
+cpu_dump_edx_amd_ibm		equ	0020h	; EDX
+cpu_dump_ecx_amd_ibm		equ	0024h	; ECX
+cpu_dump_eax_amd_ibm		equ	0028h	; EAX
+
+cpu_dump_dr6_amd_ibm		equ	002ch	; DR6
+cpu_dump_dr7_amd_ibm		equ	0030h	; DR7
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+; CPU STATE DUMP AREA FOR CYRIX/TI CPU EQUATES	;
+;    Cx486SLCe,Cx486SLC2e,Cx486DLCe,Cx486DLC2e	;
+;	Cx486Se,Cx486S2e,Cx486DX,Cx486DX2	;
+;	 TI POTOMAC TI486SLCe,TI486SLC2e	;
+;	 TI POTOMAC TI486DLCe,TI486DLC2e	;
+;	     TI 486SXLCe,TI 486SXLC2e		;
+;	      TI 486SXLe,TI 486SXL2e		;
+;-----------------------------------------------;
+;	TEMPORARY CPU DUMP AREA USED BY PM	;
+;	  BIOS TO SAVE FEW CPU REGISTERS	;
+;	NOTE : INTERNAL TO PM CORE BIOS		;
+;-----------------------------------------------;
+
+temp_cpu_dump_eax_crx_ti	equ	0fe00h	; save (EAX) temporarily
+temp_cpu_dump_ebx_crx_ti	equ	0fe04h	; save (EBX) temporarily
+temp_cpu_dump_ecx_crx_ti	equ	0fe08h	; save (ECX) temporarily
+temp_cpu_dump_edx_crx_ti	equ	0fe0ch	; save (EDX) temporarily
+temp_cpu_dump_esi_crx_ti	equ	0fe10h	; save (ESI) temporarily
+temp_cpu_dump_edi_crx_ti	equ	0fe14h	; save (EDI) temporarily
+temp_cpu_dump_ebp_crx_ti	equ	0fe18h	; save (EBP) temporarily
+temp_cpu_dump_esp_crx_ti	equ	0fe1ch	; save (ESP) temporarily
+
+temp_cpu_dump_es_desc_low_crx_ti  equ	0fe20h	; save (ES) descriptor temporarily
+temp_cpu_dump_es_desc_high_crx_ti equ	0fe24h	; save (ES) descriptor temporarily
+temp_cpu_dump_es_sel_crx_ti	equ	0fe28h	; save (ES) selector temporarily (upper word reserved)
+temp_cpu_dump_ss_desc_low_crx_ti  equ	0fe2ch	; save (SS) descriptor temporarily
+temp_cpu_dump_ss_desc_high_crx_ti equ	0fe30h	; save (SS) descriptor temporarily
+temp_cpu_dump_ss_sel_crx_ti	equ	0fe34h	; save (SS) selector temporarily (upper word reserved)
+temp_cpu_dump_ds_desc_low_crx_ti  equ	0fe38h	; save (DS) descriptor temporarily
+temp_cpu_dump_ds_desc_high_crx_ti equ	0fe3ch	; save (DS) descriptor temporarily
+temp_cpu_dump_ds_sel_crx_ti	equ	0fe40h	; save (DS) selector temporarily (upper word reserved)
+
+temp_cpu_dump_gdt_desc_low_crx_ti  equ	0fe5ch	; save (GDT) descriptor temporarily
+temp_cpu_dump_gdt_desc_high_crx_ti equ	0fe60h	; save (GDT) descriptor temporarily
+temp_cpu_dump_idt_desc_low_crx_ti  equ	0fe64h	; save (IDT) descriptor temporarily
+temp_cpu_dump_idt_desc_high_crx_ti equ	0fe68h	; save (IDT) descriptor temporarily
+
+;-----------------------------------------------;
+
+cpu_dump_cr0_crx_ti		equ	0fff4h	; CR0
+cpu_dump_eflags_crx_ti		equ	0fff8h	; EFLAGS
+
+;-----------------------------------------------;
+;	   CYRIX CPU REGISTERS EQUATES		;
+;    Cx486SLCe,Cx486SLC2e,Cx486DLCe,Cx486DLC2e	;
+;	Cx486Se,Cx486S2e,Cx486DX,Cx486DX2	;
+;	 TI POTOMAC TI486SLCe,TI486SLC2e	;
+;	 TI POTOMAC TI486DLCe,TI486DLC2e	;
+;	     TI 486SXLCe,TI 486SXLC2e		;
+;	      TI 486SXLe,TI 486SXL2e		;
+;-----------------------------------------------;
+
+crx_ti_index_reg		equ	022h	; index register
+crx_ti_data_reg			equ	023h	; data register
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	  CPU REGISTER CR0 BIT EQUATES		;
+;-----------------------------------------------;
+
+cr0_pe_bit		equ	00000001b	; Protection enable (PE) bit
+
+;-----------------------------------------------;
+;	  MISC_PROC_INFO  BIT  EQUATES		;
+;      MISC_PROC_INFO_CSEG  BIT  EQUATES	;
+;-----------------------------------------------;
+
+npx_present		equ	00000001b	; numeric co-processor present
+						; bits 7-1 ... reserved
+
+;-----------------------------------------------;
+;	MISC_PROC_SMI_INFO  BIT  EQUATES	;
+;      MISC_PROC_SMI_INFO_CSEG  BIT  EQUATES	;
+;-----------------------------------------------;
+
+smram_size_32kb		equ	00000001b	; 32KB SMRAM
+early_post_init_smram_done equ	00000010b	; RESERVED...USED INTERNALLY IN SMI POST...init_smram_early_post done
+						;	  ...NOT AVAILABLE FOR CHIPSET PORTING USAGE UNLESS SPECIFIED IN CHIPSET HOOK
+smbase_reloc_reqd	equ	00000010b	; RESERVED...USED INTERNALLY IN SMI POST...SMBASE relocation required
+						;	  ...NOT AVAILABLE FOR CHIPSET PORTING USAGE UNLESS SPECIFIED IN CHIPSET HOOK
+smi_type_mask		equ	00001100b	; SMI type mask
+smi_type_cyrix		equ	00000100b	; CYRIX type SMI
+smi_type_amd		equ	00001000b	; AMD type SMI
+dual_cpu_present	equ	00010000b	; dual/multiple CPU present on the board
+irq_power_management	equ	00100000b	; IRQ based power management
+smi_capable_cpu		equ	01000000b	; current CPU has SMI support
+smi_init_early_post	equ	10000000b	; RESERVED...USED INTERNALLY IN SMI POST...SMI INIT was called during early post
+						;	  ...NOT AVAILABLE FOR CHIPSET PORTING USAGE UNLESS SPECIFIED IN CHIPSET HOOK
+smi_post_failure	equ	10000000b	; RESERVED...USED INTERNALLY IN SMI POST...SMI POST was unsuccessful
+						;	  ...NOT AVAILABLE FOR CHIPSET PORTING USAGE UNLESS SPECIFIED IN CHIPSET HOOK
+
+;-----------------------------------------------;
+;	     CPU_VENDOR  BIT  EQUATES		;
+;	BIOS_DETECTED_CPU_MFR BIT EQUATES	;
+;     BIOS_DETECTED_CPU_MFR_CSEG BIT EQUATES	;
+;-----------------------------------------------;
+
+intel_cpu_bit	equ		00000001b	; INTEL CPU
+cyrix_cpu_bit	equ		00000010b	; CYRIX CPU
+amd_cpu_bit	equ		00000100b	; AMD CPU
+ibm_cpu_bit	equ		00001000b	; IBM CPU
+ti_cpu_bit	equ		00010000b	; TI CPU
+umc_cpu_bit	equ		00100000b	; UMC CPU
+
+;-----------------------------------------------;
+;    CPU VENDOR# AS RETURNED BY THE ROUTINE	;
+;	   get_vendor_name EQUATES		;
+;-----------------------------------------------;
+
+cpu_vendor_intel	equ	00h		; INTEL CPU
+cpu_vendor_cyrix	equ	01h		; CYRIX CPU
+cpu_vendor_amd		equ	02h		; AMD CPU
+cpu_vendor_ibm		equ	03h		; IBM CPU
+cpu_vendor_ti		equ	04h		; TI CPU
+cpu_vendor_umc		equ	05h		; UMC CPU
+
+;-----------------------------------------------;
+;     CPU NUMBER AS RETURNED BY THE ROUTINE	;
+;	       get_cpu_id EQUATES		;
+;-----------------------------------------------;
+
+amd_plus_cpus		equ	12		; AMD PLUS CPU
+amd_plus_cpus_end	equ	31		; AMD PLUS CPU (12-31)
+
+ibm_crx_cpu		equ	16		; IBM-CYRIX CPU (16 onwards)
+
+;-----------------------------------------------;
+;    SMBASE_RELOCATION_INFO_CSEG BIT EQUATES	;
+;-----------------------------------------------;
+
+smbase_relocated	equ	00000001b	; SMBASE has been relocated
+
+;-----------------------------------------------;
+;	   CPU DUMP AREA SIZE EQUATES		;
+;-----------------------------------------------;
+
+cpu_dump_area_size_intl		equ	128	; # of DWORDs
+
+cpu_dump_area_size_amd		equ	128	; # of DWORDs
+
+cpu_dump_area_size_ibm		equ	128	; # of DWORDs
+
+cpu_dump_area_size_crx		equ	12	; # of DWORDs
+
+cpu_dump_area_size_ti		equ	12	; # of DWORDs
+
+cpu_dump_area_size_umc		equ	128	; # of DWORDs
+
+;-----------------------------------------------;
+;	MISCELLANEOUS CPU RELATED EQUATES	;
+;-----------------------------------------------;
+
+maxm_cpu_func_supported		equ	05h	; currently 5 functions supported
+no_of_cpu_vendor_supported	equ	06h	; currently 6 CPU manufacturer supported
+						; should match with CPU_VENDOR in GPM.DAT
+
+pm_cpu_func_00			equ	00h	; get general purpose registers
+pm_cpu_func_01			equ	01h	; set general purpose registers
+pm_cpu_func_04			equ	04h	; save complete CPU state
+pm_cpu_func_05			equ	05h	; restore complete CPU state
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;

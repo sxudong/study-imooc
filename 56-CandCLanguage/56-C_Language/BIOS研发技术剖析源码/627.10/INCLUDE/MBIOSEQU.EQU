@@ -1,0 +1,256 @@
+.xlist
+
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------;
+;	BIOS MEMORY USAGE EQUATES	;
+;---------------------------------------;
+bios_stack_end		equ	2000h	; 0000:0700-0000:1FFF is BIOS stack 6K
+;---------------------------------------;
+;	COMPRESSED BIOS EQUATES		;
+;---------------------------------------;
+module_header_length	equ	0ch	; module header length in bytes
+post_module_id		equ	00h	; POST identifier
+setup_ifc_module_id	equ	01h	; SETUP interface identifier
+runtime_module_id	equ	02h	; RUNTIME identifier
+dim_module_id		equ	03h	; DIM identifier
+setup_binary_module_id	equ	04h	; SETUP Binary identifier
+remote_module_id	equ	05h	; Remote Module identifier
+dmi_data_module_id	equ	06h	; SMBIOS Data Module identifier
+dmi_module_id		equ	06h	; DMI Module identifier	; used 627.02
+gpc_module_id		equ	07h	; GPC Module identifier
+bblk_runtime_interface_module_id equ 08h; Module containing uncompress routine
+mps_module_id		equ	09h	; MPS Module identifier
+notebook_module_id	equ	0Ah	; NoteBook BIOS Module identifier
+int10_module_id		equ	0Bh	; INT10 Module identifier
+romid_module_id		equ	0Ch	; ROMID Module identifier
+int13_module_id		equ	0Dh	; INT13 Module identifier
+; $$$CORE0060 >>>
+acpi_table_module_id	equ	0fh	; ACPI Table Module identifier
+acpi_aml_module_id	equ	10h	; ACPI AML Code Module identifier
+; $$$CORE0060 <<<
+micro_code_module_id	equ	11h	; P6 Micro Code Module identifier
+  micro_code_patch_length 	equ 08h	; #of bytes added to Micro code..this
+					; helps us update BIOS checksum when
+					; micro code gets updated in runtime
+					; IF THIS EUQATE GETS CHANGED, NECESSARY
+					; CHANGES NEEDS TO BE DONE IN CORE.MAK FILE
+display_config_module_id  equ	12h	; System Configuration Display Module Identifier
+dmi_code_module_id	equ	13h	; SMBIOS Code Module identifier
+health_module_id	equ	14h	; System Health Module identifier
+					; 15-1F..Reserved for future use
+					; 20-2F..For User defined module
+pci_option_rom_id	equ	20h	; PCI Option ROM identifier
+multi_language_module_id equ	21h	; Multi Language identifier
+; $$$CORE0037+ >>>
+font_module_id		equ	030h	; Chinese (2 bytes language) font bitmap ;$$$CORE0008
+epa_module_id		equ	031h	; $$$CORE0018+
+graphic_logo_code_id	equ	032h	; graphic logo module ID for code
+graphic_logo_data_id	equ	033h	; graphic logo module ID for data
+animated_logo_code_id	equ	034h	; animated logo module ID for code
+animated_logo_data_id	equ	035h	; animated logo module ID for data
+trend_module_id		equ	036h	; Trend ChipAwayVirus module ID
+; $$$CORE0037+ <<<
+					; 30-3F..Reserved for future use
+;---------------------------------------;
+;	MISCELLANEOUS EQUATES		;
+;---------------------------------------;
+level_1_int		equ	70h	; master int controller base
+level_2_int		equ	08	; slave  int controller base
+num_proc_port		equ	0f1h	; 80287 math processor port
+beep_one_on_time	equ	0e0h	; speaker on time
+beep_one_off_time	equ	0d0h	; speaker off time
+beep_one_envelope_time	equ	080h	; envelope time for single beep
+beep_error_off_time	equ	6	; silence period for error beep
+;---------------------------------------;
+;	FATAL ERROR BEEP COUNT		;
+;---------------------------------------;
+refresh_err_beep_count	equ	1	; refresh failure
+parity_err_beep_count	equ	2	; parity cant be reset
+memory_err_beep_count	equ	3	; first 64k memory failure
+timer_err_beep_count	equ	4	; timer not operational
+proc_err_beep_count	equ	5	; processor failure
+gate_a20_err_beep_count	equ	6	; 8042 gate a20 is off (v_mode)
+except_err_beep_count	equ	7	; exception interrupt error
+crt_mem_err_beep_count	equ	8	; display memory r/w error
+checksum_err_beep_count	equ	9	; ROM checksum error
+cmos_error_beep_count	equ	10	; shutdown reg. r/w error
+bios_err_beep_count	equ	11	; invalid BIOS
+;---------------------------------------;
+;	1ST SET OF ERROR BITS		;
+;---------------------------------------;
+timer_err_bit		equ	00000001b; ch_2 timer not functional
+int_cntlr_1_err_bit	equ	00000010b; 8259 (#1) cntlr not okay
+int_cntlr_2_err_bit	equ	00000100b; 8259 (#2) cntlr not okay
+cmos_bat_err_bit	equ	00001000b; CMOS battery failure
+cmos_opt_err_bit	equ	00010000b; CMOS system options not set
+cmos_csum_err_bit	equ	00100000b; CMOS checksum error
+cmos_conf_err_bit	equ	01000000b; CMOS configuration error
+;;;;crt_jumper_err_bit	equ	10000000b; crt jumper switch not ok
+					 ; removed for MEGAKEY
+ins_key_err_bit		equ	10000000b; <INS> key pressed during power-on
+kb_lock_err_bit		equ	00000001b*256; keyboard is locked
+keyboard_err_bit	equ	00000010b*256; keyboard not functional
+kb_controller_err_bit	equ	00000100b*256; 8042 kb cntlr not functional
+cmos_mem_err_bit	equ	00001000b*256; CMOS memory size diff
+power_on_bit		equ	00010000b*256; power-on
+end_key_err_bit		equ	00100000b*256; <END> key pressed during power-on
+cache_memory_err_bit	equ	01000000b*256; CACHE memory error (same)
+soft_reset_bit		equ	10000000b*256; (1234)
+;---------------------------------------;
+;	2ND SET OF ERROR BITS		;
+;---------------------------------------;
+floppy_disk_ctl_err_bit	equ	00000001b; floppy controller failure
+floppy_disk_0_err_bit	equ	00000010b; floppy drive 0 error
+floppy_disk_1_err_bit	equ	00000100b; floppy drive 1 error
+hard_disk_0_err_bit	equ	00001000b; hard disk 0 error
+hard_disk_1_err_bit	equ	00010000b; hard disk 1 error
+hard_disk_2_err_bit	equ	00100000b; hard disk 2 error
+hard_disk_3_err_bit	equ	01000000b; hard disk 3 error
+cdrom_0_err_bit		equ	10000000b; CDROM 0 error
+cdrom_1_err_bit		equ	00000001b*256; CDROM 1 error
+cdrom_2_err_bit		equ	00000010b*256; CDROM 2 error
+cdrom_3_err_bit		equ	00000100b*256; CDROM 3 error
+cmos_time_err_bit	equ	00001000b*256; CMOS time not set
+power_on_bit		equ	00010000b*256; power-on
+unused_bit_13		equ	00100000b*256; UNUSED
+cache_memory_err_bit	equ	01000000b*256; CACHE memory error (same)
+soft_reset_bit		equ	10000000b*256; (1234)
+;---------------------------------------;
+;	8254 TIMER EQUATES		;
+;---------------------------------------;
+timer_control_port	equ	43h	; 8254 control register
+timer_2_port		equ	42h	; 8254 ch_2 select
+timer_1_port		equ	41h	; 8254 ch_1 select
+timer_0_port		equ	40h	; 8254 ch_0 select
+timer_delta_wait_time	equ	10h	; time for delta count test
+timer_delta_count_diff	equ	10	; tollerable delta count diff
+timer_delta_1_data	equ	0ffh	; data for delta count 1 test
+timer_delta_2_data	equ	0eeh	; data for delta count 2 test
+refresh_delta_count_diff	equ	10 ; refresh duty tolerance.
+
+;---------------------------------------;
+;	8042 KB CONTROLLER EQUATES	;
+;---------------------------------------;
+kb_stat_port		equ	64h	; keyboard status port
+sound_port		equ	61h	; parity,refresh,sound,timer ..
+kb_data_port		equ	60h	; keyboard data port
+kb_buffer_wait_time	equ	12	; kb buffer full loop count
+
+;---------------------------------------;
+;	CMOS EQUATES			;
+;---------------------------------------;
+cmos_addr_port		equ	70h	; address selection port
+cmos_data_port		equ	71h	; data r/w port
+shutdown_code_1		equ	01	; shutdown after memory error
+shutdown_code_2		equ	02	; v_mode exception shut code
+shutdown_code_3		equ	03	; shutdown after memory test
+shutdown_code_6		equ	06	; to display memory size
+
+;---------------------------------------;
+;	VIRTUAL MODE EQUATES		;
+;---------------------------------------;
+v_mode_msw		equ	0001h	; virtual mode machine status
+v_mode_idt_size		equ	0100h	; virtual mode IDT segment size
+v_mode_dum_size		equ	0000h	; virtual mode dummy seg size
+v_mode_dum_offs		equ	0000h	; virtual mode dummy offset
+v_mode_ds_size		equ	0fc00h	; virtual mode (DS) seg size
+v_mode_ds_offs		equ	0400h	; virtual mode (DS) offset
+v_mode_es_size		equ	0ffffh	; virtual mode (ES) seg size
+v_mode_es_offs		equ	0000h	; virtual mode (ES) offset
+v_mode_ss_size		equ	0100h	; virtual mode (SS) seg size
+v_mode_ss_offs		equ	0300h	; virtual mode (SS) offset
+v_mode_cs_size		equ	0ffffh	; virtual mode (CS) seg size
+v_mode_cs_offs		equ	0000h	; virtual mode (CS) offset
+v_mode_es_entry		equ	40h	; virtual mode (ES) entry  ,,
+
+;---------------------------------------;
+;	8237 DMA CONTROLLER EQUTES	;
+;---------------------------------------;
+dma_1_byte_ptr_ff_reset	equ	0ch	; DMA unit 1 byte ptr f/f clear
+dma_unit_1_command_port	equ	08h	; DMA unit 1 command port
+dma_unit_1_base		equ	00h	; DMA unit 1 base
+dma_unit_1_mask_clear	equ	0eh	; DMA unit 1 mask clear
+dma_unit_1_mode		equ	0bh	; DMA unit 1 mode
+dma_unit_1_master_clear	equ	0dh	; DMA unit 1 reset port
+dma_2_byte_ptr_ff_reset	equ	0d8h	; DMA unit 2 byte ptr f/f clear
+dma_unit_2_master_clear	equ	0dah	; DMA unit 2 reset port
+dma_unit_2_command_port	equ	0d0h	; DMA unit 2 command port
+dma_unit_2_base		equ	0c0h	; DMA unit 2 base
+dma_unit_2_mask_clear	equ	0dch	; DMA unit 2 mask clear
+dma_unit_2_mode		equ	0d6h	; DMA unit 2 mode
+dma_unit_2_writ_req_reg	equ	0d2h	; DMA unit 2 write request
+dma_unit_2_mask_s_r_reg	equ	0d4h	; DMA unit 2 mask set reset
+dma_page_base		equ	80h	; DMA page register base
+dma_page_ch_1		equ	87h	; DMA page channel 1
+dma_page_ch_2		equ	83h	; DMA page channel 2
+dma_page_registers	equ	16	; DMA page registers count
+dma_channel_registers	equ	8	; DMA channel registers count
+
+;---------------------------------------;
+;	8259 INTERRUPT CNTLR EQUATES	;
+;---------------------------------------;
+i_m_m_port		equ	21h	; interrupt master mask port
+i_s_m_port		equ	0a1h	; interrupt slave mask port
+i_c_m_port		equ	20h	; interrupt cntlr master port
+i_c_s_port		equ	0a0h	; interrupt cntlr slave port
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;----------------------------------------;
+e820_info_struc	struc
+	start_addr	dd	(?)	; 32-bit start address
+	size_bytes	dd	(?)	; size in bytes
+	mem_type	db	(?)	; memory type
+e820_info_struc	ends
+
+ram_os			equ	01h	; memory type available to OS
+ram_res			equ	02h	; memory type reserved by system and
+					; must not be used by OS
+ram_acpi_data		equ	03h	; ACPI Reclaim data area
+ram_acpi_nvs		equ	04h	; ACPI NVS area
+;---------------------------------------;
+;  FDD/HDD Access Control Equates	;
+;  in 40:EA (OEM_SUPPORT_BYTE)		;
+;---------------------------------------;
+password_used_bit	equ	00000001b; Bit-0 = 0..No Password or Supervisor Password used
+					;	   1..User Password used
+fdd_remove_bit		equ	00000010b; Bit-1 = 0..FDD is present
+					;	   1..FDD is removed
+fdd_access_control_bit	equ	00000100b; Bit-2 = 0..FDD R/W
+					;	   1..FDD R/O
+hdd_access_control_bit	equ	00001000b; Bit-3 = 0..HDD R/W
+					;	   1..HDD R/O
+					; Bit7-4 = Not Used
+;---------------------------------------;
+;	ARMD Device Emulation Type	;
+;---------------------------------------;
+armd_fdd_emulation	equ	00h	; 00 -> ARMD to be emulated as Floppy
+armd_hdd_emulation	equ	01h	; 01 -> ARMD to be emulated as Hard Disk
+;---------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------;
+.list

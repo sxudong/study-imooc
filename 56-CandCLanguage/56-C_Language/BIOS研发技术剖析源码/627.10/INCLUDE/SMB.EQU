@@ -1,0 +1,722 @@
+        title   SMIBIOS 2.1 DATA STRUCTURE
+;-----------------------------------------------------------------;
+;Do not change any structure defination unless otherwise specified;
+;-----------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------------------------;
+;*****************************************************************;
+
+	Present		EQU	1
+	Absent		EQU	0
+	Yes		EQU	1
+	No		EQU	0
+
+	KB	TEXTEQU	<*1024>
+	K	TEXTEQU <*1024>
+	MB	TEXTEQU	<*(1024*1024)>
+	ns	TEXTEQU	< >
+	MHz	TEXTEQU	< >
+	DEFINE	TEXTEQU <TEXTEQU>
+
+	ENABLED		= 1
+	DISABLED	= 0
+
+	TOTAL_NUM_STRUCS = 0
+;------------------------------------------------;
+MAXM_SMBIOS_STRUCTURE_TYPE	equ	22	; structure type 00-22 (decimal) is defined
+IEPS_LENGTH			equ	10h	; length of IEPS
+;-----------------------------------------------;
+;	DIFFERENT STRUCTURE TYPE EQUATES	;
+;-----------------------------------------------;
+BIOS_INFORMATION_TYPE		equ	00h	; type 00
+SYSTEM_INFORMATION_TYPE		equ	01h	; type 01
+BASE_BOARD_INFORMATION_TYPE	equ	02h	; type 02
+SYSTEM_ENCLOSER_CHASIS_TYPE	equ	03h	; type 03
+PROCESSOR_INFORMATION_TYPE	equ	04h	; type 04
+MEMORY_CONTROLLER_INFORMATION_TYPE  equ	05h	; type 05
+MEMORY_MODULE_INFORMATION_TYPE	equ	06h	; type 06
+CACHE_INFORMATION_TYPE		equ	07h	; type 07
+PORT_CONNECTOR_INFORMATION_TYPE	equ	08h	; type 08
+SYSTEM_SLOT_INFORMATION_TYPE	equ	09h	; type 09
+ONBOARD_DEVICE_INFORMATION_TYPE	equ	0Ah	; type 10
+OEM_STRING_INFORMATION_TYPE	equ	0Bh	; type 11
+SYSTEM_CONFIGURATION_TYPE	equ	0Ch	; type 12
+BIOS_LANGUAGE_INFORMATION_TYPE	equ	0Dh	; type 13
+GROUP_ASSOCIATION_TYPE		equ	0Eh	; type 14
+SYSTEM_EVENT_LOG_TYPE		equ	0Fh	; type 15	; (CORE0218+)
+
+BUILTIN_POINTING_DEVICE_TYPE	equ	15h	; type 21
+PORTABLE_BATTERY_TYPE		equ	16h	; type 22
+;------------------------------------------------;
+;             WAKEUP_TYPE   EQUATES              ;
+;------------------------------------------------;
+        SI_OTHER           =       01h
+        SI_UNKNOWN         =       02h
+        SI_APM_TIMER       =       03h
+        SI_MODEM_RING      =       04h
+        SI_LAN_REMOTE      =       05h
+        SI_POWER_SWITCH    =       06h
+        SI_PCI_PME         =       07h
+
+;------------------------------------------------;
+;       SYSTEM_CHASIS_TYPE  EQUATES              ;
+;------------------------------------------------;
+        SE_OTHER           =        01h
+        SE_UNKNOWN         =        02h
+        SE_DESKTOP         =        03h
+        SE_LOW_PROFILE_DTP =        04h
+        SE_PIZZA_BOX       =        05h
+        SE_MINI_TOWER      =        06h
+        SE_TOWER           =        07h
+        SE_PORTABLE        =        08h
+        SE_LAPTOP          =        09h
+        SE_NOTEBOOK        =        0Ah
+        SE_HAND_HELD       =        0Bh
+        SE_DOCKING_STATION =        0Ch
+        SE_ALL_IN_ONE      =        0Dh
+        SE_SUB_NOTEBOOK    =        0Eh
+        SE_SPACE_SAVING    =        0Fh
+        SE_LUNCH_BOX       =        10h
+        SE_MAIN_SER_CHASIS =        11h
+        SE_EXP_CHASIS      =        12h
+        SE_SUB_CHASIS      =        13h
+        SE_BUS_EXP_CHASIS  =        14h
+        SE_PERPL_CHASIS    =        15h
+        SE_RAID_CHASIS     =        16h
+        SE_ROCK_MOUNT_CHSI =        17h
+;-------------------------------------------------;
+;    SYSTEM CHASIS BOOTUP STATE  EQUATES          ;
+;-------------------------------------------------;
+        SCS_OTHER           =       01h
+        SCS_UNKNOWN         =       02h
+        SCS_SAFE            =       03h
+        SCS_WARNING         =       04h
+        SCS_CRITICAL        =       05h
+        SCS_NON_RECOVERABLE =       06h
+;-------------------------------------------------;
+;    SYSTEM CHASIS POWER SUPPLY STATE  EQUATES    ;
+;-------------------------------------------------;
+        SPS_OTHER           =       01h
+        SPS_UNKNOWN         =       02h
+        SPS_SAFE            =       03h
+        SPS_WARNING         =       04h
+        SPS_CRITICAL        =       05h
+        SPS_NON_RECOVERABLE =       06h
+;-------------------------------------------------;
+;    SYSTEM CHASIS THERMAL STATE  EQUATES         ;
+;-------------------------------------------------;
+        STS_OTHER           =       01h
+        STS_UNKNOWN         =       02h
+        STS_SAFE            =       03h
+        STS_WARNING         =       04h
+        STS_CRITICAL        =       05h
+        STS_NON_RECOVERABLE =       06h
+
+;-------------------------------------------------;
+;           SYSTEM CHASIS SECURITY EQUATES        ;
+;-------------------------------------------------;
+       SSS_OTHER            =       01h
+       SSS_UNKNOWN          =       02h
+       SSS_NONE             =       03h
+       SSS_EXT_INTE_LOCKED  =       04h
+       SSS_EXT_INTE_ENABLE  =       05h
+
+;-----------------------------------------------------------------------;
+; Following Equates are for Processor Type				;
+;-----------------------------------------------------------------------;
+	CPU_OTHER	    =	    01h
+	CPU_UNKNOWN	    =	    02h
+	CPU_CENTRAL_PROCESSOR=	    03h
+	CPU_MATH_PROCESSOR  =	    04h
+	CPU_DSP_PROCESSOR   =	    05h
+	CPU_VIDEO_PROCESSOR =	    06h
+;-----------------------------------------------------------------------;
+
+
+	FA_OTHER	    =	    01h
+	FA_UNKNOWN	    =	    02h
+	FA_8086		    =	    03h
+	FA_80286	    =       04h
+	FA_80386	    =       05h
+	FA_80486	    =	    06h
+	FA_8087		    =	    07h
+	FA_80287 	    =	    08h
+	FA_80387	    =	    09h
+	FA_80487	    =	    0Ah
+	FA_PENTIUM_FAMILY   =	    0Bh
+	FA_PENTIUM_PRO_FAMILY=	    0Ch
+	FA_PENTIUM_II_FAMILY=	    0Dh
+	FA_PENTIUM_MMX	    =	    0Eh
+	FA_CELERON_FAMILY   =	    0Fh
+	FA_RESERVED_PENTIUM =	    10h
+	FA_RESERVED_PENTIUM =	    11h
+	FA_FAMILY_M1	    =	    12h
+	FA_RESERVED_M1	    =	    13h
+	FA_RESERVED_M1	    =	    14h
+	FA_RESERVED_M1	    =	    15h
+	FA_RESERVED_M1	    =	    16h
+	FA_RESERVED_M1	    =	    17h
+	FA_RESERVED_M1	    =	    18h
+	FA_FAMILY_K5	    =	    19h
+	FA_RESERVED_K5	    =	    1Ah
+	FA_RESERVED_K5	    =	    1Bh
+	FA_RESERVED_K5	    =	    1Ch
+	FA_RESERVED_K5	    =	    1Dh
+	FA_RESERVED_K5	    =	    1Eh
+	FA_RESERVED_K5	    =	    1Fh
+	FA_POWER_PC_FAMILY    =	    20h
+	FA_POWER_PC_601	    =	    21h
+	FA_POWER_PC_603     =	    22h
+	FA_POWER_PC_603_PLUS=	    23h
+	FA_POWER_PC_604	    =	    24h
+	FA_ALPHA_FAMILY	    =	    30h
+	FA_MIPS_FAMILY	    =	    40h
+	FA_SPARC_FAMILY	    =	    50h
+	FA_68040_FAMILY	    =	    60h
+	FA_68xxx_FAMILY	    =	    61h
+	FA_68000	    =	    62h
+	FA_68010	    =	    63h
+	FA_68020	    =	    64h
+	FA_68030	    =	    65h
+	FA_HOBBIT_FAMILY    =	    70h
+	FA_WEITEK_FAMILY    =	    80h
+	FA_RISC_FAMILY      = 	    90h
+	FA_V30_FAMILY       =	    0A0h
+;-----------------------------------------------------------------------;
+;		 Processor Upgrade Equates				;
+;-----------------------------------------------------------------------;
+	UPG_OTHER	    =	    01h
+	UPG_UNKNOWN	    =	    02h
+	UPG_DAUGHTER_BOARD  =	    03h
+	UPG_ZIF_SOCKET	    =	    04h
+	UPG_REPLACEABLE_PIGGY_BACK= 05h
+	UPG_NONE	    =	    06h
+	UPG_LIF_SOCKET	    =	    07h
+	UPG_SLOT1	    =	    08h
+	UPG_SLOT2	    =	    09h
+	UPG_S370	    = 	    0ah
+;-----------------------------------------------------------------------;
+;		Processor Voltage Eqates				;
+;-----------------------------------------------------------------------;
+	VOLT_5		    =	    01h
+	VOLT_33		    = 	    02h
+	VOLT_29		    =	    04h
+;-----------------------------------------------------------------------;
+;		Processor Voltage Equates				;
+;-----------------------------------------------------------------------;
+	STANDARD	    = 	    00h
+	USER_DEFINED	    = 	    01h
+;-------------------------------------------------;
+;      MEMORY_CONTROLLER_EDD  EQUATES             ;
+;-------------------------------------------------;
+       MC_OTHER             =       01h
+       MC_UNKNOWN           =       02h
+       MC_NONE              =       03h
+       MC_8BIT_PARITY       =       04h
+       MC_32BIT_ECC         =       05h
+       MC_64BIT_ECC         =       06h
+       MC_128BIT_ECC        =       07h
+       MC_CRC               =       08h
+;------------------------------------------------------;
+;      MEMORY_CONTROLLER_INTERLEAVE  EQUATES           ;
+;------------------------------------------------------;
+       IS_OTHER             =       01h
+       IS_UNKNOWN           =       02h
+       IS_ONEWAY_INTLEAVE   =       03h
+       IS_TWOWAY_INTLEAVE   =       04h
+       IS_FORWAY_INTLEAVE   =       05h
+       IS_EHTWAY_INTLEAVE   =       06h
+       IS_STNWAY_INTLEAVE   =       07h
+;------------------------------------------------------;
+;      MEMORY_CONTROLLER_CURRENT_INTERLEAVE  EQUATES   ;
+;------------------------------------------------------;
+       ICS_OTHER             =       01h
+       ICS_UNKNOWN           =       02h
+       ICS_ONEWAY_INTLEAVE   =       03h
+       ICS_TWOWAY_INTLEAVE   =       04h
+       ICS_FORWAY_INTLEAVE   =       05h
+       ICS_EHTWAY_INTLEAVE   =       06h
+       ICS_STNWAY_INTLEAVE   =       07h
+;------------------------------------------------------;
+;       MEMORY_MODULE_INFO       EQUATES               ;
+;------------------------------------------------------;
+        MM_NO_BANK_CONNECTION		= 0Fh
+	MM_SIZE_NOT_DETERMINABLE	= 07Dh
+	MM_NOT_ENABLED			= 07Eh
+	MM_NOT_INSTALLED		= 07Fh
+	MM_SINGLE_BANK			= 00h
+	MM_DOUBLE_BANK			= 80h
+	MM_SPEED_UNKNOWN		= 00h
+;------------------------------------------------------;
+;Following Equates are for Bank Connections	       ;
+;------------------------------------------------------;
+	RAS_1				= 00
+	RAS_2				= 01
+	RAS_3				= 02
+	RAS_4				= 03
+	RAS_5				= 04
+	RAS_6				= 05
+	RAS_7				= 06
+	RAS_8				= 07
+	RAS_9				= 08
+	RAS_10				= 09
+	RAS_11				= 10
+	RAS_12				= 11
+	RAS_13				= 12
+	RAS_14				= 13
+	RAS_15				= 14
+	RAS_16				= 15
+;------------------------------------------------------;
+;	MEMORY_MODULE_INFO	EQUATES		       ;
+;------------------------------------------------------;
+        MM_TYPE_OTHER	   	      = 0001h	; Other type
+        MM_TYPE_UNKNOWN	              =	0002h	; Unknown type
+	MM_TYPE_STANDARD              =	0004h	; Standard type
+        MM_TYPE_FAST_PAGE_MODE        =	0008h	; Fast page mode type
+        MM_TYPE_EDO                   =	0010h	; EDO type
+        MM_TYPE_PARITY                =	0020h	; Parity type
+        MM_TYPE_ECC                   =	0040h	; ECC type
+        MM_TYPE_SIMM                  =	0080h	; SIMM type
+        MM_TYPE_DIMM                  =	0100h	; DIMM type
+        MM_TYPE_BURST_EDO             =	0200h	; BURST EDO type
+ 	MM_TYPE_SDRAM                 =	0400h	; SDRAM type
+;------------------------------------------------------;
+
+
+;------------------------------------------------------;
+;      CACHE_ECC             EQUATES                   ;
+;------------------------------------------------------;
+       SR_OTHER             =       01h
+       SR_UNKNOWN           =       02h
+       SR_NONE              =       03h
+       SR_PARITY            =       04h
+       SR_SINGLEBIT_ECC     =       05h
+       SR_MULTIBIT_ECC      =       06h
+;------------------------------------------------------;
+;      SRAM_TYPE       EQUATES                         ;
+;------------------------------------------------------;
+       SCT_OTHER            =       01h
+       SCT_UNKNOWN          =       02h
+       SCT_INSTRUCTION      =       03h
+       SCT_DATA             =       04h
+       SCT_UNIFIED          =       05h
+;------------------------------------------------------;
+;      CACHE_ASSOCIATIVITY   EQUATES                   ;
+;------------------------------------------------------;
+       CA_OTHER             =       01h
+       CA_UNKNOWN           =       02h
+       CA_DIRECT_MAPPED     =       03h
+       CA_2WAY_ASSOC        =       04h
+       CA_4WAY_ASSOC        =       05h
+       CA_FULLY_ASSOC       =       06h
+;------------------------------------------------------;
+;	CACHE_TYPE		EQUATES		       ;
+;------------------------------------------------------;
+	CH_OTHER	    =	    01h
+	CH_UNKNOWN	    =	    02h
+	CH_NON_BURST	    =	    04h
+	CH_BURST	    = 	    08h
+	CH_PIPELINE_BURST   =	    10h
+	CH_SYNCHRONOUS	    =	    20h
+	CH_ASYNCHRONOUS	    =	    40h
+
+;------------------------------------------------------;
+;      CACHE_CONFIG	OPERATIONAL   EQUATES          ;
+;------------------------------------------------------;
+	WRITE_THROUGH	    =	    0000h
+	WRITE_BACK	    =	    0100h
+	VARIES_WITH_MEM	    =	    0200h
+	UNKNOWN		    =	    0300h
+;------------------------------------------------------;
+;      CACHE_CONFIG	BOOTTIME   EQUATES             ;
+;------------------------------------------------------;
+       CACHE_ENABLED	    = 	    0080h
+       CACHE_DISABLED	    =	    0000h
+
+;------------------------------------------------------;
+;      CACHE_CONFIG	LOCATION  EQUATES              ;
+;------------------------------------------------------;
+	INTERNAL	=	0000h
+	EXTERNAL	=	0020h
+	RESERVED	=	0040h
+	UNKNOWN		=	0060h
+
+;------------------------------------------------------;
+;      CACHE_CONFIG	SOCKET   EQUATES               ;
+;------------------------------------------------------;
+	SOCKETED	=	0008h
+	NOT_SOCKETED	=	0000h
+
+;------------------------------------------------------;
+;      CACHE_CONFIG	LEVEL   EQUATES                ;
+;------------------------------------------------------;
+
+	L1		=	0000h
+	L2		=	0001h
+	L3		=	0002h
+	L4		=	0003h
+	L5		=	0004h
+	L6		=	0005h
+	L7		=	0006h
+	L8		=	0007h
+
+;------------------------------------------------------;
+;       PORT_CONNECTOR       EQUATES                   ;
+;------------------------------------------------------;
+       PC_NONE              =       00h
+       PC_CENTRONICS        =       01h
+       PC_MINI_CENTRONIC    =       02h
+       PC_PROPRIETARY       =       03h
+       PC_DB25_PIN_MALE     =       04h
+       PC_DB25_PIN_FEMALE   =       05h
+       PC_DB15_PIN_MALE     =       06h
+       PC_DB15_PIN_FEMALE   =       07h
+       PC_DB9_PIN_MALE      =       08h
+       PC_DB9_PIN_FEMALE    =       09h
+       PC_RJ_11             =       0Ah
+       PC_RJ_45             =       0Bh
+       PC_50_PINMINI_SCSI   =       0Ch
+       PC_MINI_DIN          =       0Dh
+       PC_MICRO_DIN         =       0Eh
+       PC_PS_2              =       0Fh
+       PC_INFRARED          =       10h
+       PC_HP_HIL            =       11h
+       PC_ACCESS_BUS_USB    =       12h
+       PC_SSA_SCSI          =       13h
+       PC_CIR_DIN8_MALE     =       14h
+       PC_CIR_DIN8_FEMALE   =       15h
+       PC_ONBOARD_IDE       =       16h
+       PC_ONBOARD_FLOPPY    =       17h
+       PC_DUAL_INLINE_9PIN  =       18h
+       PC_DUL_INLINE_25PIN  =       19h
+       PC_DUL_INLINE_50PIN  =       1Ah
+       PC_DUL_INLINE_68PIN  =       1Bh
+       PC_ONBRD_SND_INPUT   =       1Ch
+       PC_CENTRONIC_TYPE14  =       1Dh
+       PC_CENTRONIC_TYPE26  =       1Eh
+       PC_MINI_JACK         =       1Fh
+       PC_BNC               =       20h
+       PC_IEEE_1394         =       21h
+       PC_PC_98             =       0A0h
+       PC_PC_98_HIRESO      =       0A1h
+       PC_PC_H98            =       0A2h
+       PC_PC_98_NOTE        =       0A3h
+       PC_PC_98_FULL        =       0A4h
+       PC_OTHER             =       0FFh
+;------------------------------------------------------;
+;      EXT_PORT_CONNECTOR       EQUATES                ;
+;------------------------------------------------------;
+       EXT_PC_NONE              =   00h
+       EXT_PC_CENTRONICS        =   01h
+       EXT_PC_MINI_CENTRONIC    =   02h
+       EXT_PC_PROPRIETARY       =   03h
+       EXT_PC_DB25_PIN_MALE     =   04h
+       EXT_PC_DB25_PIN_FEMALE   =   05h
+       EXT_PC_DB15_PIN_MALE     =   06h
+       EXT_PC_DB15_PIN_FEMALE   =   07h
+       EXT_PC_DB9_PIN_MALE      =   08h
+       EXT_PC_DB9_PIN_FEMALE    =   09h
+       EXT_PC_RJ_11             =   0Ah
+       EXT_PC_RJ_45             =   0Bh
+       EXT_PC_50_PINMINI_SCSI   =   0Ch
+       EXT_PC_MINI_DIN          =   0Dh
+       EXT_PC_MICRO_DIN         =   0Eh
+       EXT_PC_PS_2              =   0Fh
+       EXT_PC_INFRARED          =   10h
+       EXT_PC_HP_HIL            =   11h
+       EXT_PC_ACCESS_BUS_USB    =   12h
+       EXT_PC_SSA_SCSI          =   13h
+       EXT_PC_CIR_DIN8_MALE     =   14h
+       EXT_PC_CIR_DIN8_FEMALE   =   15h
+       EXT_PC_ONBOARD_IDE       =   16h
+       EXT_PC_ONBOARD_FLOPPY    =   17h
+       EXT_PC_DUAL_INLINE_9PIN  =   18h
+       EXT_PC_DUL_INLINE_25PIN  =   19h
+       EXT_PC_DUL_INLINE_50PIN  =   1Ah
+       EXT_PC_DUL_INLINE_68PIN  =   1Bh
+       EXT_PC_ONBRD_SND_INPUT   =   1Ch
+       EXT_PC_CENTRONIC_TYPE14  =   1Dh
+       EXT_PC_CENTRONIC_TYPE26  =   1Eh
+       EXT_PC_MINI_JACK         =   1Fh
+       EXT_PC_BNC               =   20h
+       EXT_PC_IEEE_1394         =   21h
+       EXT_PC_PC_98             =   0A0h
+       EXT_PC_PC_98_HIRESO      =   0A1h
+       EXT_PC_PC_H98            =   0A2h
+       EXT_PC_PC_98_NOTE        =   0A3h
+       EXT_PC_PC_98_FULL        =   0A4h
+       EXT_PC_OTHER             =   0FFh
+
+;-------------------------------------------------------;
+;      PORT TYPE  EQUATES                               ;
+;-------------------------------------------------------;
+       PT_NONE              =       00h
+       PT_PARL_XT_AT        =       01h
+       PT_PARL_PORT_PS2     =       02h
+       PT_PARL_PORT_ECP     =       03h
+       PT_PARL_PORT_EPP     =       04h
+       PT_PARL_ECP_EPP      =       05h
+       PT_SR_PORT_XT_AT     =       06h
+       PT_SR_PORT_16450     =       07h
+       PT_SR_PORT_16550     =       08h
+       PT_SR_PORT_16550A    =       09h
+       PT_SCSI_PORT         =       0Ah
+       PT_MIDI_PORT         =       0Bh
+       PT_JOY_STIC_PORT     =       0Ch
+       PT_KEYBOARD_PORT     =       0Dh
+       PT_MOUSE_PORT        =       0Eh
+       PT_SSA_SCSI          =       0Fh
+       PT_USB               =       10h
+       PT_FIREWIRE_1394     =       11h
+       PT_PCMCIA_TYPE2      =       12h
+       PT_PCMCIA_TYPE2      =       13h
+       PT_PCMCIA_TYPE3      =       14h
+       PT_CARDBUS           =       15h
+       PT_ACCESS_BUS_PORT   =       16h
+       PT_SCSI2             =       17h
+       PT_SCSI_WIDE         =       18h
+       PT_PC_98             =       19h
+       PT_PC_98_HIRESO      =       1Ah
+       PT_PC_H98            =       1Bh
+       PT_VIDEO_PORT        =       1Ch
+       PT_AUDIO_PORT        =       1Dh
+       PT_MODEM_PORT        =       1Eh
+       PT_NETWORK_PORT      =       1Fh
+       PT_8251_COMPATIBLE   =       0A0h
+       PT_8251_FIFO_COMP    =       0A1h
+       PT_OTHER             =       0A2h
+;-----------------------------------------------------;
+;      TYPE OF SLOT EQUATES                           ;
+;-----------------------------------------------------;
+       SYS_SLOT_OTHER      	  =       01h
+       SYS_SLOT_UNKNOWN           =       02h
+       SYS_SLOT_ISA               =       03h
+       SYS_SLOT_MCA               =       04h
+       SYS_SLOT_EISA              =       05h
+       SYS_SLOT_PCI               =       06h
+       SYS_SLOT_PCMCIA            =       07h
+       SYS_SLOT_VL_VESA           =       08h
+       SYS_SLOT_PROPRIETARY       =       09h
+       SYS_SLOT_PROC_CARD_SLOT    =       0Ah
+       SYS_SLOT_PROP_CARD_SLOT    =       0Bh
+       SYS_SLOT_IO_RISER_SLOT     =       0Ch
+       SYS_SLOT_NU_BUS            =       0Dh
+       SYS_SLOT_PCI_66MHZ         =       0Eh
+       SYS_SLOT_AGP               =       0Fh
+       SYS_SLOT_AGP_2X            =       10h
+       SYS_SLOT_AGP_4X            =       11h
+       SYS_SLOT_PC98_C20          =       0A0h
+       SYS_SLOT_PC98_C24          =       0A1h
+       SYS_SLOT_PC98_E            =       0A2h
+       SYS_SLOT_PC98_LOCAL        =       0A3h
+       SYS_SLOT_PC98_CARD         =       0A4h
+;-----------------------------------------------------;
+;      SLOT DATABUS WIDTH EQUATES                     ;
+;-----------------------------------------------------;
+       DBW_OTHER            =       01h
+       DBW_UNKNOWN          =       02h
+       DBW_8BIT             =       03h
+       DBW_16BIT            =       04h
+       DBW_32BIT            =       05h
+       DBW_64BIT            =       06h
+       DBW_128BIT           =       07h
+;-----------------------------------------------------;
+;      SLOT CURRENT USAGE EQUATES		      ;
+;-----------------------------------------------------;
+	SCU_OTHER	= 01h
+	SCU_UNKNOWN	= 02h
+	SCU_AVAILABLE	= 03h
+	SCU_IN_USE	= 04h
+;-----------------------------------------------------;
+;      SLOT LENGTH EQUATES                            ;
+;-----------------------------------------------------;
+       SL_OTHER           =       01h
+       SL_UNKNOWN         =       02h
+       SL_SHORT_LENGTH    =       03h
+       SL_LONG_LENGTH     =       04h
+;-----------------------------------------------------;
+	SCH_UNKNOWN	= 1h
+	SCH_5V		= 2h
+	SCH_33V		= 4h
+	SCH_SHARED	= 8h
+	SCH_PCCARD16	= 10h
+	SCH_CARDBUS	= 20h
+	SCH_ZOOMVIDEO	= 40h
+	SCH_MODEMRING	= 80h
+
+	SCH_PME		= 0100h
+;-----------------------------------------------------;
+;Following structure is for OnBoard Devices           ;
+;-----------------------------------------------------;
+       OBD_OTHER          =       01h
+       OBD_UNKNOWN        =       02h
+       OBD_VIDEO          =       03h
+       OBD_SCSI           =       04h
+       OBD_ETHERNET       =       05h
+       OBD_TOKEN_RING     =       06h
+       OBD_SOUND          =       07h
+;-----------------------------------------------------;
+;Following Equates are for Bios Language Information  ;
+;-----------------------------------------------------;
+	LONG_FORMAT	   =	  00h
+	ABBRIVIATED_FORMAT =	  01h
+
+;-----------------------------------------------------;
+;Following Equates are for Physical Memory Array      ;
+;-----------------------------------------------------;
+	ARRAY_LOC_OTHER			= 001h
+	ARRAY_LOC_UNKNOWN		= 002h
+	ARRAY_LOC_MOTHERBD		= 003h
+	ARRAY_LOC_ISAADDONCARD		= 004h
+	ARRAY_LOC_EISAADDONCARD		= 005h
+	ARRAY_LOC_PCIADDONCARD		= 006h
+	ARRAY_LOC_MCAADDONCARD		= 007h
+	ARRAY_LOC_PCMCIAADDONCARD	= 008h
+	ARRAY_LOC_PROPADDONCARD		= 009h
+	ARRAY_LOC_NuBus			= 00Ah
+	ARRAY_LOC_PC98_C20		= 0A0h
+	ARRAY_LOC_PC98_C24		= 0A1h
+	ARRAY_LOC_PC98_E		= 0A2h
+	ARRAY_LOC_PC98_LOCALBUS		= 0A3h
+;-----------------------------------------------------;
+;Following Structure is for Memory Array Use          ;
+;-----------------------------------------------------;
+	MEMORY_ARRAY_OTHER =	  01h
+	MEMORY_ARRAY_UNKNOWN=     02h
+	MEMORY_ARRAY_SYSMEMORY=	  03h
+	MEMORY_ARRAY_VIDEOMEMORY= 04h
+	MEMORY_ARRAY_FLASHMEMORY= 05h
+	MEMORY_ARRAY_NONVOLMEMORY=06h
+	MEMORY_ARRAY_CACHEMEMORY= 07h
+;------------------------------------------------------;
+;      ARRAY_ECC             EQUATES                   ;
+;------------------------------------------------------;
+       MEM_ARR_OTHER       =     01h
+       MEM_ARR_UNKNOWN     =     02h
+       MEM_ARR_NONE        =     03h
+       MEM_ARR_PARITY      =     04h
+       MEM_ARR_SINGLEBIT_ECC=    05h
+       MEM_ARR_MULTIBIT_ECC=     06h
+       MEM_ARR_CRC	   =	 07H
+;-----------------------------------------------------;
+;Following Structure is for Memory Device	      ;
+;-----------------------------------------------------;
+	DEVICE_FORMFACTOR_OTHER = 01h
+	DEVICE_FORMFACTOR_UNKNOWN = 02h
+	DEVICE_FORMFACTOR_SIMM = 03h
+	DEVICE_FORMFACTOR_SIP  = 04h
+	DEVICE_FORMFACTOR_CHIP = 05h
+	DEVICE_FORMFACTOR_DIP  = 06h
+	DEVICE_FORMFACTOR_ZIP  = 07h
+	DEVICE_FORMFACTOR_PROPCARD= 08h
+	DEVICE_FORMFACTOR_DIMM = 09h
+	DEVICE_FORMFACTOR_TSOP = 0Ah
+	DEVICE_FORMFACTOR_ROWOFCHIP= 0Bh
+;-----------------------------------------------------;
+;Following Structure is for Memory Array Error	      ;
+;-----------------------------------------------------;
+	ERR_TYP_OTHER	=	01h
+	ERR_TYP_UNKNOWN	=	01h
+	ERR_TYP_OK	=	01h
+	ERR_TYP_BADREAD	=	01h
+	ERR_TYP_PARITYERROR=	01h
+	ERR_TYP_SINGLEBITERROR	=	01h
+	ERR_TYP_OTHER	=	01h
+	ERR_TYP_OTHER	=	01h
+	ERR_TYP_OTHER	=	01h
+	ERR_TYP_OTHER	=	01h
+	ERR_TYP_OTHER	=	01h
+	ERR_TYP_OTHER	=	01h
+	ERR_TYP_OTHER	=	01h
+	ERR_TYP_OTHER	=	01h
+	ERR_TYP_OTHER	=	01h
+	ERR_TYP_OTHER	=	01h
+
+;-----------------------------------------------------;
+;Following Structure is for Pointing Device type      ;
+;-----------------------------------------------------;
+	POR_OTHER	  =	  01h
+	POR_UNKNOWN	  =	  02h
+	POR_MOUSE	  =	  03h
+	POR_TRACK_BALL	  =	  04h
+	POR_TRACK_POINT	  =	  05h
+	POR_GLIDE_POINT	  =	  06h
+	POR_TOUCH_PAD	  =	  07h
+
+
+;-------------------------------------------------------;
+;Following Structure is for pointing device interface	;
+;-------------------------------------------------------;
+	PDI_OTHER	 =	 01h
+	PDI_UNKNOWN	 =	 02h
+	PDI_SERIAL	 = 	 03h
+	PDI_PS2		 = 	 04h
+	PDI_INFRARED	 =	 05h
+	PDI_HP_HIL	 =	 06h
+	PDI_BUS_MOUSE	 =	 07h
+	PDI_APPLE_DESKTOP_BUS =	 08h
+	PDI_BUS_MOUSE_DB9	=0A0h
+	PDI_BUS_MOUSE_MICRO_DIN	= 0A1h
+	PDI_USB		 =	 0A2h
+;-------------------------------------------------------;
+
+;-----------------------------------------------------;
+;Following Structure is for Portable Battery Chemistry;
+;-----------------------------------------------------;
+	PBC_OTHER	  =	  01h
+	PBC_UNKNOWN	  =	  02h
+	PBC_LEAD_ACID	  =	  03h
+	PBC_NICKEL_CAD	  =	  04h
+	PBC_NICKEL_HYDRIDE=	  05h
+	PBC_LITHIUM_ION	  =	  06h
+	PBC_ZINC_AIR	  =	  07h
+	PBC_LITHIUM_POLYMER=	  08h
+;-----------------------------------------------------;
+
+PROCESSOR_START_HANDLE 	= 0
+
+SLOT_START_HANDLE	= 0
+
+EXTERNAL_CACHE_START_HANDLE = 0
+
+ONBOARD_DEVICE_START_HANDLE = 0
+;-----------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;		EQUATES USED IN SMBIOS FUNCTION 53H		;
+;---------------------------------------------------------------;
+; equates used in SMBIOS Change Status
+SMBIOS_NO_CHANGE		equ	00h	; 00h..SMBIOS No Change
+SMBIOS_OTHER_CHANGE		equ	01h	; 01h..SMBIOS Other Change
+SMBIOS_UNKNOWN_CHANGE		equ	02h	; 02h..SMBIOS Unknown Change
+SMBIOS_SINGLE_STRUCTURE_AFFECTED equ	03h	; 03h..SMBIOS Single Structure Affected
+SMBIOS_MULTIPLE_STRUCTURE_AFFECTED equ	04h	; 04h..SMBIOS Multiple Structure Affected
+; equates used in SMBIOS Change Type
+SMBIOS_ONE_MORE_STRUCTURE_CHANGED equ	00000001b; Bit-0 = 1, One/More Structure was changed
+SMBIOS_ONE_MORE_STRUCTURE_ADDED	equ	00000010b; Bit-1 = 1, One/More Structure was added
+						 ; Bit7-2.....Reserved
+;---------------------------------------------------------------;

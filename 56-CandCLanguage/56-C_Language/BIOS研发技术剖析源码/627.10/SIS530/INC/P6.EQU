@@ -1,0 +1,157 @@
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1995, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(404)-263-8181.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+
+;----------------------------------------------------------------------
+
+;Local APIC default addresses.
+
+APICBaseAddress		Equ	0FEE00000h
+SVR			equ	0FEE000F0H
+APICP6SVR		Equ	APICBaseAddress + 00F0h
+APICP6LINT0		Equ	APICBaseAddress + 0350h
+LVT1			equ	0FEE00350H
+APICP6LINT1		Equ	APICBaseAddress + 0360h
+LVT2			equ	0FEE00360H
+ERRINT			equ	0FEE00370H
+
+APIC_ENABLED		equ	000000100H
+
+;------------------------------------------------------------------------
+;P6 MTRR  Equates.
+
+MTRRcap			Equ	0feh
+MTRRdefType		Equ	2ffh
+MTRRfix64k_00000	Equ	250h
+MTRRfix16k_80000	Equ	258h
+MTRRfix16k_A0000	Equ	259h
+MTRRfix4k_C0000		Equ	268h
+MTRRfix4k_C8000		Equ	269h
+MTRRfix4k_D0000		Equ	26Ah
+MTRRfix4k_D8000		Equ	26Bh
+MTRRfix4k_E0000		Equ	26Ch
+MTRRfix4k_E8000		Equ	26Dh
+MTRRfix4k_F0000		Equ	26Eh
+MTRRfix4k_F8000		Equ	26Fh
+
+MTRRphysBase		Equ	200h
+
+MTRRphysBase0		Equ	MTRRphysBase+00h
+MTRRphysMask0		Equ	MTRRphysBase+01h
+
+MTRRphysBase1		Equ	MTRRphysBase+02h
+MTRRphysMask1		Equ	MTRRphysBase+03h
+
+MTRRphysBase2		Equ	MTRRphysBase+04h
+MTRRphysMask2		Equ	MTRRphysBase+05h
+
+MTRRphysBase3		Equ	MTRRphysBase+06h
+MTRRphysMask3		Equ	MTRRphysBase+07h
+
+MTRRphysBase4		Equ	MTRRphysBase+08h
+MTRRphysMask4		Equ	MTRRphysBase+09h
+
+MTRRphysBase5		Equ	MTRRphysBase+0Ah
+MTRRphysMask5		Equ	MTRRphysBase+0Bh
+
+MTRRphysBase6		Equ	MTRRphysBase+0Ch
+MTRRphysMask6		Equ	MTRRphysBase+0Dh
+
+MTRRphysBase7		Equ	MTRRphysBase+0Eh
+MTRRphysMask7		Equ	MTRRphysBase+0Fh
+
+;Values above this are reserved.
+
+
+; MTRR Structures, Records, Unions, etc...
+;--------------------------------------------------------------------
+mtrr_capl_field RECORD res0:21, uswc:1, res1:1, fix:1, vcnt:8 
+mtrr_defTypel_field RECORD res2:20, e:1, fe:1, res3:2, deftype:8 
+mtrr_varbasel_field RECORD phybasel:20, res5:4, vartype:8
+mtrr_varbaseu_field RECORD res4:28, phybaseu:4
+mtrr_varmaskl_field RECORD phymaskl:20, v:1, res7:11
+mtrr_varmasku_field RECORD res6:28, phymasku:4
+
+mtrr_buffer		struc
+mtrr_capl		mtrr_capl_field {0, 0, 0, 0, 0}
+mtrr_capu		dd	0
+mtrr_phy_base0l		mtrr_varbasel_field {0, 0, 0}
+mtrr_phy_base0u		mtrr_varbaseu_field {0, 0}
+mtrr_phy_mask0l		mtrr_varmaskl_field {0, 0, 0}
+mtrr_phy_mask0u		mtrr_varmasku_field {0, 0}
+mtrr_phy_base1l		mtrr_varbasel_field {0, 0, 0}
+mtrr_phy_base1u		mtrr_varbaseu_field {0, 0}
+mtrr_phy_mask1l		mtrr_varmaskl_field {0, 0, 0}
+mtrr_phy_mask1u		mtrr_varmasku_field {0, 0}
+mtrr_phy_base2l		mtrr_varbasel_field {0, 0, 0}
+mtrr_phy_base2u		mtrr_varbaseu_field {0, 0}
+mtrr_phy_mask2l		mtrr_varmaskl_field {0, 0, 0}
+mtrr_phy_mask2u		mtrr_varmasku_field {0, 0}
+mtrr_phy_base3l		mtrr_varbasel_field {0, 0, 0}
+mtrr_phy_base3u		mtrr_varbaseu_field {0, 0}
+mtrr_phy_mask3l		mtrr_varmaskl_field {0, 0, 0}
+mtrr_phy_mask3u		mtrr_varmasku_field {0, 0}
+mtrr_phy_base4l		mtrr_varbasel_field {0, 0, 0}
+mtrr_phy_base4u		mtrr_varbaseu_field {0, 0}
+mtrr_phy_mask4l		mtrr_varmaskl_field {0, 0, 0}
+mtrr_phy_mask4u		mtrr_varmasku_field {0, 0}
+mtrr_phy_base5l		mtrr_varbasel_field {0, 0, 0}
+mtrr_phy_base5u		mtrr_varbaseu_field {0, 0}
+mtrr_phy_mask5l		mtrr_varmaskl_field {0, 0, 0}
+mtrr_phy_mask5u		mtrr_varmasku_field {0, 0}
+mtrr_phy_base6l		mtrr_varbasel_field {0, 0, 0}
+mtrr_phy_base6u		mtrr_varbaseu_field {0, 0}
+mtrr_phy_mask6l		mtrr_varmaskl_field {0, 0, 0}
+mtrr_phy_mask6u		mtrr_varmasku_field {0, 0}
+mtrr_phy_base7l		mtrr_varbasel_field {0, 0, 0}
+mtrr_phy_base7u		mtrr_varbaseu_field {0, 0}
+mtrr_phy_mask7l		mtrr_varmaskl_field {0, 0, 0}
+mtrr_phy_mask7u		mtrr_varmasku_field {0, 0}
+mtrr_fix_64k_0000	dd	0
+mtrr_fix_64k_4000	dd	0
+mtrr_fix_16k_8000	dd	0
+mtrr_fix_16k_9000	dd	0
+mtrr_fix_16k_A000	dd	0
+mtrr_fix_16k_B000	dd	0
+mtrr_fix_4k_C000	dd	0
+mtrr_fix_4k_C400	dd	0
+mtrr_fix_4k_C800	dd	0
+mtrr_fix_4k_CC00	dd	0
+mtrr_fix_4k_D000	dd	0
+mtrr_fix_4k_D400	dd	0
+mtrr_fix_4k_D800	dd	0
+mtrr_fix_4k_DC00	dd	0
+mtrr_fix_4k_E000	dd	0
+mtrr_fix_4k_E400	dd	0
+mtrr_fix_4k_E800	dd	0
+mtrr_fix_4k_F000	dd	0
+mtrr_fix_4k_F400	dd	0
+mtrr_fix_4k_F800	dd	0
+mtrr_fix_4k_FC00	dd	0
+mtrr_def_typel		mtrr_defTypel_field {0, 0, 0, 0, 0}
+mtrr_def_typeu		db	0
+mtrr_buffer		ends
+
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1995, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(404)-263-8181.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;

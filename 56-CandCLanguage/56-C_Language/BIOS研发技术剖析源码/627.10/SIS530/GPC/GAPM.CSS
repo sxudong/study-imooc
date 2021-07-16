@@ -1,0 +1,1882 @@
+subttl.         Include file for GREEN PC support runtime APM SMI/IRQ code...GAPM.CSS...GENERIC
+.386
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;       RUN TIME CHIPSET SPECIFIC APM SMI/IRQ HANDLER CODE      ;
+;       RUN TIME CHIPSET SPECIFIC APM SMI/IRQ HANDLER CODE      ;
+;       RUN TIME CHIPSET SPECIFIC APM SMI/IRQ HANDLER CODE      ;
+;       RUN TIME CHIPSET SPECIFIC APM SMI/IRQ HANDLER CODE      ;
+;---------------------------------------------------------------;
+
+;;      public  get_apm_cpu_idle_speed          ;
+
+;;      public  apm_css_entry                   ;
+
+;;      public  get_ac_battery_status           ;
+;;      public  exec_oem_apm_func               ; THIS WILL SUPPORT OEM FUNCTIONS WITH (AL) = 80H
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                    GET_APM_CPU_IDLE_SPEED                     ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for STOP clock                          ;
+;               (CY) 01 for SLOW clock                          ;
+;       Register destroyed : NONE                               ;
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler in response
+;     to APM installation check call (APM function # 00h).      ;
+;  *  You should return the information whether you are doing   ;
+;     stop clock or slow clock for APM CPU idle call (APM       ;
+;     function # 05h).                                          ;
+;  *  Implementation of this hook is mandatory.                 ;
+;     Default implementation is 'CLC'                           ;
+;                               'RET'                           ;
+;---------------------------------------------------------------;
+
+get_apm_cpu_idle_speed  proc    near
+
+        clc                                     ; (cy) = 00 for STOP clock
+        ret
+
+get_apm_cpu_idle_speed  endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;               HOOKS TO SUPPORT BATTERY FUNCTIONS              ;
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       GET_AC_BATTERY_STATUS                   ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               STACK PRESENT                                   ;
+;       Output: (BH) AC line status                             ;
+;                    00h Off-line                               ;
+;                    01h On-line                                ;
+;                    02h connected from backup battery          ;
+;                    ffh unknown/info not available             ;
+;               (BL) Battery status                             ;
+;                    00h High                                   ;
+;                    01h Low                                    ;
+;                    02h Critical                               ;
+;                    03h Charging                               ;
+;                    ffh unknown/info not available             ;
+;               (CH) Battery flag                               ;
+;                    bit 0 = 1 High                             ;
+;                    bit 1 = 1 Low                              ;
+;                    Bit 2 = 1 Critical                         ;
+;                    Bit 3 = 1 Charging                         ;
+;                    Bit 6-4   reserved                         ;
+;                    Bit 7 = 1 No system battery                ;
+;                    ffh  Unknown                               ;
+;               (CL) Remaining battery life                     ;
+;                       percentage of charge                    ;
+;                    0 - 100 % of full charge                   ;
+;                    ffh unknown/info not available             ;
+;               (DX) Remaining battery life in time units       ;
+;                    Bit 15 = 0 time unit seconds               ;
+;                           = 1 time unit minutes               ;
+;                    Bit 14 - 0 # of secs/minutes               ;
+;                       0 - 7fffh for seconds                   ;
+;                       0 - 7ffeh for minutes                   ;
+;                    ffffh unknown/info not available           ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+;                                                               ;
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to get power status;
+;     call (APM function # 0Ah), if this APM function is        ;
+;     implemented in SMI/IRQ.                                   ;
+;  *  This hook is identical to 'ROM_GET_AC_BATTERY_STATUS'     ;
+;     hook in GAPMNSMI.CSS.                                     ;
+;  *  Implement this hook if get power status call (APM func #  ;
+;     0Ah) is executed in SMI.                                  ;
+;     IF IRQ BASED POWER MANAGEMENT IS ACTIVE & IF APM IS       ;
+;     CONNECTED, THIS HOOK MUST BE IMPLEMENTED.                 ;
+;     Default implementation is 'MOV BX,001FFH'                 ;
+;                               'MOV CX,080FFH'                 ;
+;                               'MOV DX,0FFFFH'                 ;
+;                               'RET'                           ;
+;---------------------------------------------------------------;
+
+get_ac_battery_status   proc    near
+
+;-----------------------------------------------;
+; The code below should be used only if battery ;
+; status is not available thru chipset support  ;
+;-----------------------------------------------;
+
+        mov     bx,001ffh                       ; (bh) = AC line status...On-line
+                                                ; (bl) = Battery status (unknown/not available)
+        mov     cx,080ffh                       ; (ch) = Battery flag...no system battery
+                                                ; (cl) = remaining battery life...percentage of charge
+                                                ; (unknown/not available)
+        mov     dx,0ffffh                       ; remaining battery life...time units
+                                                ; (unknown/not available)
+        ret
+
+get_ac_battery_status   endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;               OEM APM FUNCTION IMPLEMENTATION                 ;
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                           EXEC_OEM_APM_FUNC                   ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (AX),(EBX),(ECX),(DX),(SI) & (EDI) has on       ;
+;               entry values when APM call was made.            ;
+;               (BP) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error                            ;
+;               (CY) 01 for error & (AH) has error code         ;
+;               Registers as specified in function. Possible    ;
+;               registers are (AX),(EBX),(ECX),(DX),(SI) & (EDI);
+;       Register destroyed : NONE except returned parameters in ;
+;                            (AX),(EBX),(ECX),(DX),(SI) & (EDI) ;
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm module to support;
+;     oem defined apm function(s).                              ;
+;  *  PM BIOS data segment is available at this point.          ;
+;  *  Ignore this hook if you do not intend to provide oem apm  ;
+;     extension function(s).                                    ;
+;     Default implementation is 'MOV AH,UNSUPPORTED_FUNC'       ;
+;                               'STC'                           ;
+;                               'RET'                           ;
+;---------------------------------------------------------------;
+
+exec_oem_apm_func       proc    near
+
+        mov     ah,unsupported_func             ; unsupported function
+        stc                                     ; (cy) = 01 for error
+        ret
+
+exec_oem_apm_func       endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                       APM_CSS_ENTRY                           ;
+;---------------------------------------------------------------;
+;   FOR func # 00h thru 08h....                                 ;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               (DI) pointer to dev state...currently SYSTEM    ;
+;               (DH) device #...currently SYSTEM                ;
+;               (DL) unit #, 0ffh means all units               ;
+;               (CL) # of units for each device                 ;
+;               (AL) function #                                 ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error & for func # 08h (get power;
+;                    state), (AX) has power state               ;
+;               (CY) 01 for error & for func # 02, 03, 04, 05   ;
+;                    (AH) has error code which is 60H (means    ;
+;                         unable to enter requested state.      ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+;                                                               ;
+;   FOR func # 0C0h thru 0CBh....                               ;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (BX) PM event posted (according to APM specs)   ;
+;                    (only for func # 0C5h)                     ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error                            ;
+;               (CY) 01 for error                               ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+;                                                               ;
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Interface between apm core module and chipset module is   ;
+;     through function calls.                                   ;
+;  *  Functions are defined as follows....                      ;
+;       00. Enable system/devicve power mgt. (apm fn# 08h,0dh)  ;
+;       01. Disable system/device power mgt. (apm fn# 08h,0dh)  ;
+;       02. Set apm enabled system/device (apm fn# 07h)         ;
+;       03. Set apm standby system/device (apm fn# 07h)         ;
+;       04. Set apm suspend system/device (apm fn# 07h)         ;
+;       05. Set apm off system/device (apm fn# 07h)             ;
+;       06. Engage system/device power mgt. (apm fn# 0fh...v1.1);
+;       07. Disengage system/dev power mgt. (apm fn# 0fh...v1.1);
+;       08. Get power state system/device (apm fn# 0ch...v1.1)  ;
+;                                                               ;
+;       c0. process_apm_connect (apm fn# 01,02,03)              ;
+;       c1. process_apm_disconnect (apm fn# 04)                 ;
+;       c2. apm_cpu_busy_call (apm fn# 06h)                     ;
+;       c3. apm_cpu_idle_call (apm fn# 05h)                     ;
+;       c4. set_power_on_defaults (apm fn# 09h)                 ;
+;       c5. notify_pm_event_posted (apm fn# 0Bh)                ;
+;       c6. set_pre_cpu_idle_environment (apm fn# 05h)          ;
+;       c7. set_post_cpu_idle_environment (apm fn# 06h)         ;
+;       c8. processing_last_pm_req_notify (apm fn# 07h...v1.1)  ;
+;       c9. last_pm_req_rejected (apm fn# 07h...v1.1)           ;
+;       ca. notify_add_v11_apm_dev (apm fn# 07h...v1.1)         ;
+;       cb. notify_del_v11_apm_dev (apm fn# 07h...v1.1)         ;
+;                                                               ;
+;  *  Devices are defined as follows....                        ;
+;       00. System                                              ;
+;       01. Display                                             ;
+;       02. Secondary storage                                   ;
+;       03. Parallel port                                       ;
+;       04. Serial port                                         ;
+;       05. Network adapter (v1.1 only)                         ;
+;       06. Pcmcia socket (v1.1 only)                           ;
+;---------------------------------------------------------------;
+
+apm_css_entry   proc    near
+        movzx   si,al                           ; (si) = function #
+        cmp     al,maxm_apm_css_func_supported_v11; valid function ?
+        ja      short apm_css_entry_00          ; no...
+        cmp     al,process_apm_connect          ; standard non device function ?
+        jb      short apm_css_entry_10          ; no...
+        sub     si,process_apm_connect          ;
+        shl     si,1                            ;
+        call    word ptr cgroup:[si+cgroup:apm_css_std_func_jmp_table - cgroup:smi_code_begin + orgbase]; execute the function
+apm_css_entry_00:
+        clc                                     ; (cy) = 00 for no error
+        ret
+
+apm_css_entry_10:
+        cmp     al,no_of_apm_func_v11           ; valid function ?
+        ja      short apm_css_entry_00          ; no...
+
+IF      HANDLE_APM_DEV_CALLS
+        CMP     DH,SEC_STORAGE_DEVICE_ID        ; REQUEST FOR SECONDARY STORAGE ?
+        JZ      SHORT APM_CSS_ENTRY_30          ; YES...
+        JA      SHORT APM_CSS_ENTRY_00          ; NOT FOR SYSTEM/DISPLAY/SECONDARY STORAGE...IGNORE CURRENTLY
+        CMP     DH,DISPLAY_DEVICE_ID            ; REQUEST FOR DISPLAY ?
+        JZ      SHORT APM_CSS_ENTRY_20          ; YES...
+ELSE
+        CMP     DH,SYSTEM_DEVICE_ID             ; REQUEST FOR SYSTEM ?
+        JNZ     SHORT APM_CSS_ENTRY_00          ; NO...IGNORE CURRENTLY
+ENDIF
+
+        shl     si,1                            ;
+        call    word ptr cgroup:[si+cgroup:apm_css_dev_func_jmp_table - cgroup:smi_code_begin + orgbase]; execute the function
+        ret
+
+IF      HANDLE_APM_DEV_CALLS
+
+;-----------------------------------------------;
+;       DISPLAY DEVICE APM SET POWER STATE      ;
+;-----------------------------------------------;
+
+apm_css_entry_20:
+        mov     bx,04ffh                        ; (bh) = 04h for 'OFF' &
+                                                ; (bl) = 0ffh for set power state call
+        cmp     al,off_set_apm_enabled_fn       ; apm function enabled/standby/suspend/off ?
+        jb      short apm_css_entry_00          ; no...
+        cmp     al,off_set_apm_off_fn           ;
+        ja      short apm_css_entry_00          ; no...
+        jz      short apm_css_entry_21          ; apm function 'off'
+        sub     al,2                            ; align for VESA request
+        mov     bh,al                           ; (bh) = requested state
+apm_css_entry_21:
+        xor     cx,cx                           ; select primary controller
+        call    vesa_low_power_request          ;
+        clc                                     ; (cy) = 00 for no error even if VESA support was not available
+        ret
+
+;-----------------------------------------------;
+;    SEC STORAGE DEVICE APM SET POWER STATE     ;
+;-----------------------------------------------;
+
+apm_css_entry_30:
+        mov     dl,00101111b                    ; request for IDLE for all 4 IDE drives
+        cmp     al,off_set_apm_enabled_fn       ; apm function enabled/standby/suspend/off ?
+        jb      short apm_css_entry_00          ; no...
+        jz      short apm_css_entry_31          ; apm function 'enabled'
+        cmp     al,off_set_apm_off_fn           ;
+        ja      short apm_css_entry_00          ; no...
+        mov     dl,00011111b                    ; request for STANDBY for all 4 IDE drives
+apm_css_entry_31:
+        mov     dh,ds:gpm_ide_idle_timeout      ; (dh) = IDLE timer value
+        call    ide_low_power_request           ;
+        mov     dh,0ffh                         ; set to no timer in case some drives failed with timer
+        call    ide_low_power_request           ;
+        clc                                     ; (cy) = 00 for no error
+        ret
+
+ENDIF
+
+apm_css_entry   endp
+
+;---------------------------------------------------------------;
+;                  APM_CSS_DEV_FUNC_JMP_TABLE                   ;
+;---------------------------------------------------------------;
+
+apm_css_dev_func_jmp_table      label   word
+
+        dw      cgroup:apm_css_fn_00 - cgroup:smi_code_begin + orgbase; FN# 00 .. enable power management for system/device
+        dw      cgroup:apm_css_fn_01 - cgroup:smi_code_begin + orgbase; FN# 01 .. disable power management for system/device
+        dw      cgroup:apm_css_fn_02 - cgroup:smi_code_begin + orgbase; FN# 02 .. set APM enabled for system/device
+        dw      cgroup:apm_css_fn_03 - cgroup:smi_code_begin + orgbase; FN# 03 .. set APM standby for system/device
+        dw      cgroup:apm_css_fn_04 - cgroup:smi_code_begin + orgbase; FN# 04 .. set APM suspend for system/device
+        dw      cgroup:apm_css_fn_05 - cgroup:smi_code_begin + orgbase; FN# 05 .. set APM off for system/device
+        dw      cgroup:apm_css_fn_06 - cgroup:smi_code_begin + orgbase; FN# 06 .. engage power management for system/device (v1.1 only)
+        dw      cgroup:apm_css_fn_07 - cgroup:smi_code_begin + orgbase; FN# 07 .. disengage power management for system/device (v1.1 only)
+        dw      cgroup:apm_css_fn_08 - cgroup:smi_code_begin + orgbase; FN# 08 .. get power state for system/device (v1.1 only)
+
+;---------------------------------------------------------------;
+;                  APM_CSS_STD_FUNC_JMP_TABLE                   ;
+;---------------------------------------------------------------;
+
+apm_css_std_func_jmp_table      label   word
+
+        dw      cgroup:apm_css_fn_c0 - cgroup:smi_code_begin + orgbase; FN# c0 .. process_apm_connect
+        dw      cgroup:apm_css_fn_c1 - cgroup:smi_code_begin + orgbase; FN# c1 .. process_apm_disconnect
+        dw      cgroup:apm_css_fn_c2 - cgroup:smi_code_begin + orgbase; FN# c2 .. apm_cpu_busy_call
+        dw      cgroup:apm_css_fn_c3 - cgroup:smi_code_begin + orgbase; FN# c3 .. apm_cpu_idle_call
+        dw      cgroup:apm_css_fn_c4 - cgroup:smi_code_begin + orgbase; FN# c4 .. set_power_on_defaults
+        dw      cgroup:apm_css_fn_c5 - cgroup:smi_code_begin + orgbase; FN# c5 .. notify_pm_event_posted
+        dw      cgroup:apm_css_fn_c6 - cgroup:smi_code_begin + orgbase; FN# c6 .. set_pre_cpu_idle_environment
+        dw      cgroup:apm_css_fn_c7 - cgroup:smi_code_begin + orgbase; FN# c7 .. set_post_cpu_idle_environment
+        dw      cgroup:apm_css_fn_c8 - cgroup:smi_code_begin + orgbase; FN# c8 .. processing_last_pm_req_notify (v1.1 only)
+        dw      cgroup:apm_css_fn_c9 - cgroup:smi_code_begin + orgbase; FN# c9 .. last_pm_req_rejected (v1.1 only)
+        dw      cgroup:apm_css_fn_ca - cgroup:smi_code_begin + orgbase; FN# ca .. notify_add_v11_apm_dev (v1.1 only)
+        dw      cgroup:apm_css_fn_cb - cgroup:smi_code_begin + orgbase; FN# cb .. notify_del_v11_apm_dev (v1.1 only)
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                 FN# C0 ... PROCESS_APM_CONNECT                ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to APM connect call;
+;     (APM function # 01,02,03).                                ;
+;  *  If you need to do anything while apm driver connects to   ;
+;     apm bios, do it here, otherwise ignore this hook.         ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+apm_css_fn_c0   proc    near
+
+        ret
+
+apm_css_fn_c0   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                 FN# C1 ... PROCESS_APM_DISCONNECT             ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to APM disconnect  ;
+;     call (APM function # 04).                                 ;
+;  *  If you need to do anything while apm driver disconnects to;
+;     apm bios, do it here, otherwise ignore this hook.         ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+apm_css_fn_c1   proc    near
+if MKF_USB_SUPPORT
+;; First Check Legacy USB enable?
+	pusha
+	mov	al,byte ptr ds:[legacy_usb]
+	test	al,01h
+	jz	check_legacy_usb_done
+	or	al,0f0h	
+	mov	byte ptr ds:[legacy_usb],al
+	push	es
+	push	ds
+        mov     ax,word ptr ds:[usb_segment]
+	mov	ds,ax
+	mov	es,ax
+	movzx	ebx,ax
+	shl	ebx,4
+	mov	cl,10h			; Enumerate, No Beep
+	extrn	UsbBiosInitialize:near
+	call	UsbBiosInitialize
+	pop	ds
+	pop	es
+check_legacy_usb_done:
+	popa
+endif	
+        ret
+
+apm_css_fn_c1   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                 FN# C2 ... APM_CPU_BUSY_CALL                  ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to APM CPU busy    ;
+;     call (APM function # 06), if this APM function is         ;
+;     implemented in SMI/IRQ.                                   ;
+;  *  This hook is identical to 'ROM_APM_CPU_BUSY_CALL' hook in ;
+;     GAPMNSMI.CSS.                                             ;
+;  *  Implementation of this hook is mandatory if APM CPU busy  ;
+;     call (APM function # 06h) is executed in SMI & APM CPU    ;
+;     idle call slows CPU clock speed for your implementation.  ;
+;     IF IRQ BASED POWER MANAGEMENT IS ACTIVE & IF APM IS       ;
+;     CONNECTED, THIS HOOK MUST BE IMPLEMENTED.                 ;
+;     Default implementation is 'RET'                           ;
+;  *  You need to switch to full processor clock speed here.    ;
+;---------------------------------------------------------------;
+
+apm_css_fn_c2   proc    near
+
+        ret
+
+apm_css_fn_c2   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                 FN# C3 ... APM_CPU_IDLE_CALL                  ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to APM CPU idle    ;
+;     call (APM function # 05), if this APM function is         ;
+;     implemented in SMI/IRQ.                                   ;
+;  *  This hook is identical to 'ROM_APM_CPU_IDLE_CALL' hook in ;
+;     GAPMNSMI.CSS.                                             ;
+;  *  Implementation of this hook is mandatory if APM CPU idle  ;
+;     call (APM function # 05h) is executed in SMI.             ;
+;     IF IRQ BASED POWER MANAGEMENT IS ACTIVE & IF APM IS       ;
+;     CONNECTED, THIS HOOK MUST BE IMPLEMENTED.                 ;
+;     Default implementation is 'RET'                           ;
+;  *  You need to switch to slow/stop processor clock here.     ;
+;---------------------------------------------------------------;
+
+apm_css_fn_c3   proc    near
+
+;-----------------------------------------------;
+; Check for pending interrupts before going     ;
+; to stop clock. If any interrupt is pending    ;
+; do not goto stop clock......                  ;
+; If you are doing slow clock, you do not need  ;
+; to check for pending interrupts....in this    ;
+; case comment next 2 lines of code....         ;
+;-----------------------------------------------;
+
+        call    enquire_intr_pending_system     ; any interrupt pending on slave/master ?
+        jnz     short apm_css_fn_c3_11          ; yes...EXIT
+
+;-----------------------------------------------;
+;       IF YOU ARE NOT DOING 'HLT' FOR IRQ      ;
+;       BASED POWER MANAGEMENT, YOU DO NOT      ;
+;          NEED FOLLOWING CODE IN BLOCK         ;
+;-----------------------------------------------;
+
+IF      IRQ_HANDLING_SUPPORT
+;;      call    check_irq_pm                    ; IRQ based power management currently active ?
+;;      jz      short apm_css_fn_c3_20          ; no...
+;;      call    irq_apm_restore_and_unmask_intr ; restore and unmask all interrupts
+;;apm_css_fn_c3_20:
+ENDIF
+
+;-----------------------------------------------;
+; Go to slow/stop clock here.....
+;-----------------------------------------------;
+
+; PUT CHIPSET SPECIFIC CODE HERE........
+
+;-----------------------------------------------;
+;       smsw    ax                              ;
+;       test    al,00000001b                    ; CPU in protected mode ?
+;       jz      short apm_css_fn_c3_01          ; no...can do 'HLT'
+;       mov     ax,cs                           ; (ax) = CS selector...lower 2 bits has privilege level info
+;       test    al,00000011b                    ; current privilege level (CPL) is 00 ?
+;       jnz     short apm_css_fn_c3_02          ; no...can't do 'HLT'
+;
+;apm_css_fn_c3_01:
+;       pushf                                   ; save current interrupt status
+;       sti                                     ; enable interrupts
+;       hlt                                     ; put CPU in STOP GRANT state
+;       popf                                    ; restore interrupt status
+;                                               ;
+;apm_css_fn_c3_02:
+;-----------------------------------------------;
+
+
+
+
+
+
+
+
+
+
+
+;-----------------------------------------------;
+; Resume from stop clock here.........
+;-----------------------------------------------;
+
+; PUT CHIPSET SPECIFIC CODE HERE........
+
+
+
+
+
+
+
+
+
+;-----------------------------------------------;
+;       IF YOU ARE NOT DOING 'HLT' FOR IRQ      ;
+;       BASED POWER MANAGEMENT, YOU DO NOT      ;
+;          NEED FOLLOWING CODE IN BLOCK         ;
+;-----------------------------------------------;
+
+IF      IRQ_HANDLING_SUPPORT
+;;      call    check_irq_pm                    ; IRQ based power management currently active ?
+;;      jz      short apm_css_fn_c3_21          ; no...
+;;      call    irq_apm_save_and_mask_intr      ; save and mask all interrupts
+;;apm_css_fn_c3_21:
+ENDIF
+
+;-----------------------------------------------;
+
+apm_css_fn_c3_11:
+        ret
+
+apm_css_fn_c3   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;               FN# C4 ... SET_POWER_ON_DEFAULTS                ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to apm restore apm ;
+;     bios power-on defaults call (APM function # 09h).         ;
+;  *  If you need to reinitialize anything with respect to apm, ;
+;     do it here, otherwise ignore this hook.                   ;
+;     Default implementation is 'RET'                           ;
+;---------------------------------------------------------------;
+
+apm_css_fn_c4   proc    near
+
+        ret
+
+apm_css_fn_c4   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;               FN# C5 ... NOTIFY_PM_EVENT_POSTED               ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (BX) PM event posted (according to APM specs)   ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to apm get pm event;
+;     call (APM function # 0Bh).                                ;
+;  *  It's a notification from core apm handler about the APM   ;
+;     event being posted to APM driver.                         ;
+;  *  You need to implement this hook if your standby/suspend   ;
+;     request processing is based on apm driver response,       ;
+;     otherwise ignore this hook.                               ;
+;     Default implementation is 'RET'                           ;
+;  *  APM v1.1 specification has completely defined the protocol;
+;     between apm bios & apm driver to handle standby/suspend   ;
+;     request.                                                  ;
+;---------------------------------------------------------------;
+
+apm_css_fn_c5   proc    near
+
+        ret
+
+apm_css_fn_c5   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;            FN# C6 ... SET_PRE_CPU_IDLE_ENVIRONMENT            ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to APM CPU idle    ;
+;     call (APM function # 05), if this APM function is         ;
+;     implemented in SMI/IRQ.                                   ;
+;  *  This hook is identical to 'ROM_SET_PRE_CPU_IDLE_ENVIRONMENT'
+;     hook in GAPMNSMI.CSS.                                     ;
+;  *  Implement this hook if APM CPU idle call (APM func # 05)  ;
+;     is executed in SMI & APM CPU idle call stops CPU clock    ;
+;     speed for your implementation & if you need to do anything;
+;     before going to stop clock.                               ;
+;     IF IRQ BASED POWER MANAGEMENT IS ACTIVE & IF APM IS       ;
+;     CONNECTED, THIS HOOK MUST BE IMPLEMENTED.                 ;
+;     Default implementation is 'RET'                           ;
+;  *  Put any chipset initialization code you need to do before ;
+;     going to stop clock.                                      ;
+;---------------------------------------------------------------;
+
+apm_css_fn_c6   proc    near
+
+        ret
+
+apm_css_fn_c6   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;            FN# C7 ... SET_POST_CPU_IDLE_ENVIRONMENT           ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to APM CPU idle    ;
+;     call (APM function # 05), if this APM function is         ;
+;     implemented in SMI/IRQ.                                   ;
+;  *  This hook is identical to 'ROM_SET_POST_CPU_IDLE_ENVIRONMENT'
+;     hook in GAPMNSMI.CSS.                                     ;
+;  *  Implement this hook if APM CPU idle call (APM func # 05)  ;
+;     is executed in SMI & APM CPU idle call stops CPU clock    ;
+;     speed for your implementation & if you need to do anything;
+;     after coming out of stop clock.                           ;
+;     IF IRQ BASED POWER MANAGEMENT IS ACTIVE & IF APM IS       ;
+;     CONNECTED, THIS HOOK MUST BE IMPLEMENTED.                 ;
+;     Default implementation is 'RET'                           ;
+;  *  Put any chipset initialization code you need to do after  ;
+;     coming out of stop clock.                                 ;
+;---------------------------------------------------------------;
+
+apm_css_fn_c7   proc    near
+
+        ret
+
+apm_css_fn_c7   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;            FN# C8 ... PROCESSING_LAST_PM_REQ_NOTIFY           ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to APM set power   ;
+;     state call (APM function # 07).                           ;
+;  *  This is a notification received from apm driver to let    ;
+;     apm bios know that apm driver is processing the last pm   ;
+;     event request. This notification must be sent once every  ;
+;     5 seconds after the apm driver receives the request from  ;
+;     apm bios thru get pm event apm call (APM function # 0Bh). ;
+;     This notification is available only in APM v1.1 specs.    ;
+;  *  You need to implement this hook if you are implementing   ;
+;     APM v1.1 BIOS & APM v1.1 DRIVER is being used to determine;
+;     the action to be taken for standby/suspend request.       ;
+;     Default implementation is 'RET'                           ;
+;  *  This notification is only available in APM v1.1 specs.    ;
+;---------------------------------------------------------------;
+
+apm_css_fn_c8   proc    near
+
+        ret
+
+apm_css_fn_c8   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                FN# C9 ... LAST_PM_REQ_REJECTED                ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to APM set power   ;
+;     state call (APM function # 07).                           ;
+;  *  This is a notification received from apm driver to let apm;
+;     bios know that apm driver has rejected the last pm event  ;
+;     request. This notification is available only in APM v1.1  ;
+;     specification.                                            ;
+;  *  You need to implement this hook if you are implementing   ;
+;     APM v1.1 BIOS & APM v1.1 DRIVER is being used to determine;
+;     the action to be taken for standby/suspend request.       ;
+;     Default implementation is 'RET'                           ;
+;  *  This notification is only available in APM v1.1 specs.    ;
+;---------------------------------------------------------------;
+
+apm_css_fn_c9   proc    near
+
+        ret
+
+apm_css_fn_c9   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                FN# CA ... NOTIFY_ADD_V11_APM_DEV              ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to APM driver      ;
+;     version call (APM function # 0Eh).                        ;
+;  *  This hook will be called when apm driver issues apm driver;
+;     version call with (CX) 1.1 to select apm v1.1 bios        ;
+;     functionality. At this point dev# 05 and dev# 06 will be  ;
+;     added to apm controlled device as these devices are newly ;
+;     included apm V1.1 device                                  ;
+;  *  Implement this hook to do anything you need, as dev# 05   ;
+;     and 06 are going to be controlled by apm, otherwise ignore;
+;     this hook.                                                ;
+;     Default implementation is 'RET'                           ;
+;  *  This function is only available in APM v1.1 bios.         ;
+;---------------------------------------------------------------;
+
+apm_css_fn_ca   proc    near
+
+        ret
+
+apm_css_fn_ca   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                FN# CB ... NOTIFY_DEL_V11_APM_DEV              ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler.         ;
+;  *  Control to this hook comes in response to APM driver      ;
+;     version call (APM function # 0Eh).                        ;
+;  *  This hook will be called when apm driver issues apm driver;
+;     version call with (CX) 1.0 to select apm v1.0 bios        ;
+;     functionality. At this point dev# 05 and dev# 06 will be  ;
+;     removed from apm controlled device as these devices are   ;
+;     not available as apm V1.0 device.                         ;
+;  *  Implement this hook to do anything you need, as dev# 05   ;
+;     and 06 are no longer controlled by apm, otherwise ignore  ;
+;     this hook.                                                ;
+;     Default implementation is 'RET'                           ;
+;  *  This function is only available in APM v1.1 bios.         ;
+;---------------------------------------------------------------;
+
+apm_css_fn_cb   proc    near
+
+        ret
+
+apm_css_fn_cb   endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;               FN# 00 ... ENABLE_POWER_MANAGEMENT              ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               (DI) pointer to dev state...currently SYSTEM    ;
+;               (DH) device #...currently SYSTEM                ;
+;               (DL) unit #, 0ffh means all units               ;
+;               (CL) # of units for each device                 ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error                            ;
+;               (CY) 01 for error                               ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler in response
+;     to apm enable/disable device power management call (APM   ;
+;     func # 0Dh which is defined in apm V1.1 specification) or ;
+;     apm enable/disable power management call (APM func# 08h   ;
+;     defined in both apm V1.0 V1.1 specification).             ;
+;  *  Implement this hook if you need to do anything when apm   ;
+;     driver enables power management to the system/device,     ;
+;     otherwise ignore this hook.                               ;
+;     Default implementation is 'CLC'                           ;
+;                               'RET'                           ;
+;  *  Apm system device is available both in apm V1.0 and V1.1  ;
+;     specification.                                            ;
+;---------------------------------------------------------------;
+
+apm_css_fn_00   proc    near
+
+        clc                                     ; (cy) = 00 for no error
+        ret
+
+apm_css_fn_00   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;               FN# 01 ... DISABLE_POWER_MANAGEMENT             ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               (DI) pointer to dev state...currently SYSTEM    ;
+;               (DH) device #...currently SYSTEM                ;
+;               (DL) unit #, 0ffh means all units               ;
+;               (CL) # of units for each device                 ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error                            ;
+;               (CY) 01 for error                               ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler in response
+;     to apm enable/disable device power management call (APM   ;
+;     func # 0Dh which is defined in apm V1.1 specification) or ;
+;     apm enable/disable power management call (APM func # 08h  ;
+;     defined in both apm V1.0 V1.1 specification).             ;
+;  *  Implement this hook if you need to do anything when apm   ;
+;     driver disables power management to the system/device,    ;
+;     otherwise ignore this hook.                               ;
+;     Default implementation is 'CLC'                           ;
+;                               'RET'                           ;
+;  *  Apm system device is available both in apm V1.0 and V1.1  ;
+;     specification.                                            ;
+;---------------------------------------------------------------;
+
+apm_css_fn_01   proc    near
+
+        clc                                     ; (cy) = 00 for no error
+        ret
+
+apm_css_fn_01   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                   FN# 02 ... SET_APM_ENABLED                  ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               (DI) pointer to dev state...currently SYSTEM    ;
+;               (DH) device #...currently SYSTEM                ;
+;               (DL) unit #, 0ffh means all units               ;
+;               (CL) # of units for each device                 ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error                            ;
+;               (CY) 01 for error                               ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler in response
+;     to apm set power state call (APM func # 07h which is      ;
+;     defined in both apm V1.0 and apm V1.1 specification).     ;
+;  *  Implement this hook if you need to do anything when apm   ;
+;     driver wants to take the system/device to apm enabled     ;
+;     state, otherwise ignore this hook.                        ;
+;     Default implementation is 'CLC'                           ;
+;                               'RET'                           ;
+;  *  Apm system device is available both in apm V1.0 and V1.1  ;
+;     specification.                                            ;
+;---------------------------------------------------------------;
+
+apm_css_fn_02   proc    near
+
+        clc                                     ; (cy) = 00 for no error
+        ret
+
+apm_css_fn_02   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                   FN# 03 ... SET_APM_STANDBY                  ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               (DI) pointer to dev state...currently SYSTEM    ;
+;               (DH) device #...currently SYSTEM                ;
+;               (DL) unit #, 0ffh means all units               ;
+;               (CL) # of units for each device                 ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error                            ;
+;               (CY) 01 for error                               ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler in response
+;     to apm set power state call (APM func # 07h which is      ;
+;     defined in both apm V1.0 and apm V1.1 specification).     ;
+;  *  Implement this hook if you need to do anything when apm   ;
+;     driver wants to take the system/device to apm standby     ;
+;     state, otherwise ignore this hook.                        ;
+;     Default implementation is 'CLC'                           ;
+;                               'RET'                           ;
+;  *  Apm system device is available both in apm V1.0 and V1.1  ;
+;     specification.                                            ;
+;---------------------------------------------------------------;
+
+apm_css_fn_03   proc    near
+
+        shr     si,1                            ; (si) = 0003h (off_set_apm_standby_fn)
+
+        call    detect_instant_on               ; INSTANT ON currently active ?
+        jc      short apm_css_fn_03_20          ; no...
+        call    instant_on_handler              ; handle standby request as required by INSTANT ON
+        clc                                     ; (cy) = 00 for no error
+        ret
+
+;-----------------------------------------------;
+
+apm_css_fn_03_20:
+        call    sleep_handler                   ; Pass control to SMI standby handler
+	test	byte ptr ds:[standby_timeout],01h
+	jnz	apm_fn_03_done
+        call    suspend_handler                 ; Pass control to APM suspend handler
+
+	and	word ptr ds:[pending_apm_event], not normal_resume_sys_bit
+	mov	dx, normal_resume_sys_bit		; resume event for 1.0 BIOS
+	test	byte ptr ds:[apm_connection_info],apm_bios_active_ver_above_v10
+	jz	short standby_resume_event_set_apm
+	mov	dx, sys_standby_resume_bit		; resume event for 1.1 BIOS
+
+standby_resume_event_set_apm:
+; Post event to driver
+	or	word ptr ds:[pending_apm_event],dx
+
+apm_fn_03_done:
+	mov	byte ptr ds:[standby_timeout],0
+        clc                                     ; (cy) = 00 for no error
+        ret
+
+apm_css_fn_03   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                   FN# 04 ... SET_APM_SUSPEND                  ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               (DI) pointer to dev state...currently SYSTEM    ;
+;               (DH) device #...currently SYSTEM                ;
+;               (DL) unit #, 0ffh means all units               ;
+;               (CL) # of units for each device                 ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error                            ;
+;               (CY) 01 for error                               ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler in response
+;     to apm set power state call (APM func # 07h which is      ;
+;     defined in both apm V1.0 and apm V1.1 specification).     ;
+;  *  Implement this hook if you need to do anything when apm   ;
+;     driver wants to take the system/device to apm suspend     ;
+;     state, otherwise ignore this hook.                        ;
+;     Default implementation is 'CLC'                           ;
+;                               'RET'                           ;
+;  *  Apm system device is available both in apm V1.0 and V1.1  ;
+;     specification.                                            ;
+;---------------------------------------------------------------;
+
+apm_css_fn_04   proc    near
+
+        shr     si,1                            ; (si) = 0004h (off_set_apm_suspend_fn)
+
+        call    detect_instant_on               ; INSTANT ON currently active ?
+        jc      short apm_css_fn_04_20          ; no...
+        call    instant_on_handler              ; handle suspend request as required by INSTANT ON
+        clc                                     ; (cy) = 00 for no error
+        ret
+
+;-----------------------------------------------;
+
+apm_css_fn_04_20:
+
+        call    suspend_handler                 ; Pass control to APM suspend handler
+	mov	byte ptr ds:[modem_ring],0ffh
+        clc                                     ; (cy) = 00 for no error
+        ret
+
+apm_css_fn_04   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                      FN# 05 ... SET_APM_OFF                   ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               (DI) pointer to dev state...currently SYSTEM    ;
+;               (DH) device #...currently SYSTEM                ;
+;               (DL) unit #, 0ffh means all units               ;
+;               (CL) # of units for each device                 ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error                            ;
+;               (CY) 01 for error                               ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler in response
+;     to apm set power state call (APM func # 07h which is      ;
+;     defined in both apm V1.0 and apm V1.1 specification).     ;
+;  *  Implement this hook if you need to do anything when apm   ;
+;     driver wants to take the system/device to apm off state,  ;
+;     otherwise ignore this hook.                               ;
+;     Default implementation is 'CLC'                           ;
+;                               'RET'                           ;
+;  *  Apm system device is available both in apm V1.0 and V1.1  ;
+;     specification.                                            ;
+;---------------------------------------------------------------;
+
+apm_css_fn_05   proc    near
+
+	call	prepare_for_shutdown
+	call	soft_off
+        clc                                     ; (cy) = 00 for no error
+        ret
+
+apm_css_fn_05   endp
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;               FN# 06 ... ENGAGE_POWER_MANAGEMENT              ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               (DI) pointer to dev state...currently SYSTEM    ;
+;               (DH) device #...currently SYSTEM                ;
+;               (DL) unit #, 0ffh means all units               ;
+;               (CL) # of units for each device                 ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error                            ;
+;               (CY) 01 for error                               ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler in response
+;     to apm engage/disengage power management call (APM func # ;
+;     0Fh which is defined in apm V1.1 specification).          ;
+;  *  Implement this hook if you need to do anything when apm   ;
+;     driver engages power management with apm bios for the     ;
+;     system/device, otherwise ignore this hook.                ;
+;     Default implementation is 'CLC'                           ;
+;                               'RET'                           ;
+;  *  This function is only available in APM v1.1 bios.         ;
+;---------------------------------------------------------------;
+
+apm_css_fn_06   proc    near
+
+        clc                                     ; (cy) = 00 for no error
+        ret
+
+apm_css_fn_06   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;             FN# 07 ... DISENGAGE_POWER_MANAGEMENT             ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               (DI) pointer to dev state...currently SYSTEM    ;
+;               (DH) device #...currently SYSTEM                ;
+;               (DL) unit #, 0ffh means all units               ;
+;               (CL) # of units for each device                 ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error                            ;
+;               (CY) 01 for error                               ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler in response
+;     to apm engage/disengage power management call (APM func # ;
+;     0Fh which is defined in apm V1.1 specification)           ;
+;  *  Implement this hook if you need to do anything when apm   ;
+;     driver disengages power management with apm bios for the  ;
+;     system/device, otherwise ignore this hook.                ;
+;     Default implementation is 'CLC'                           ;
+;                               'RET'                           ;
+;  *  This function is only available in APM v1.1 bios.         ;
+;---------------------------------------------------------------;
+
+apm_css_fn_07   proc    near
+
+        clc                                     ; (cy) = 00 for no error
+        ret
+
+apm_css_fn_07   endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                   FN# 08 ... GET_POWER_STATE                  ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (CH) bit 0 1 called in real mode                ;
+;                    bit 1 1 called in 16 bit protected mode    ;
+;                    bit 2 1 called in 32 bit protected mode    ;
+;               (DI) pointer to dev state...currently SYSTEM    ;
+;               (DH) device #...currently SYSTEM                ;
+;               (DL) unit #, 0ffh means all units               ;
+;               (CL) # of units for each device                 ;
+;               STACK PRESENT                                   ;
+;       Output: (CY) 00 for no error                            ;
+;                    (AX) has current state...currently SYSTEM  ;
+;               (CY) 01 for error                               ;
+;       Register destroyed : (EAX),(EBX),(ECX),(EDX),(ESI),(EDI);
+; NOTE :                                                        ;
+;  *  Control comes here from core smi/irq apm handler in response
+;     to apm get power state call (APM func # 0Ch which is      ;
+;     defined in apm V1.1 specification).                       ;
+;  *  On return (AX) should have the system/device state defined;
+;     as follows......                                          ;
+;               0000h ... apm enabled                           ;
+;               0001h ... apm standby                           ;
+;               0002h ... apm suspend                           ;
+;               0003h ... apm off                               ;
+;     Default implementation is 'XOR AX,AX'                     ;
+;                               'RET'                           ;
+;  *  This function is only available in APM v1.1 bios.         ;
+;---------------------------------------------------------------;
+
+apm_css_fn_08   proc    near
+
+        xor     ax,ax                           ; apm enabled state...(cy) = 00 for no error
+        ret
+
+apm_css_fn_08   endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;                        DETECT_INSTANT_ON                      ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;       Output: (CF) (CY) INSTANT ON currently not active       ;
+;               (CF) (NC) INSTANT ON currently active           ;
+;       Register destroyed : NONE                               ;
+;---------------------------------------------------------------;
+
+detect_instant_on       proc    near
+
+        test    byte ptr ds:misc_conf_info,instant_on_enabled; INSTANT ON enabled in SETUP ?
+        jz      short detect_instant_on_01      ; no...
+        test    byte ptr ds:apm_connection_info,apm_bios_active_ver_above_v10; APM v1.1 and above ?
+        jz      short detect_instant_on_01      ; no...v1.0...cannot be WIN95, so cannot be INSTANT ON
+                                                ; (cy) = 00
+
+;-----------------------------------------------;
+
+        push    ax                              ;
+        push    cx                              ;
+        push    dx                              ;
+        call    read_rtc_alarm                  ; is USER ALARM enabled ?
+        pop     dx                              ;
+        pop     cx                              ;
+        pop     ax                              ;
+        jc      short detect_instant_on_01      ; error...cmos inoperational
+        jz      short detect_instant_on_01      ; no...
+
+;-----------------------------------------------;
+
+        ret
+
+detect_instant_on_01:
+        stc                                     ; (cy) = 01 for INSTANT ON currently not active
+        ret
+
+detect_instant_on       endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;         ROUTINES TO SUPPORT NON-SMI DATA AREA FOR APM         ;
+;---------------------------------------------------------------;
+
+;;      public  set_rom_apm_connection_info     ;
+;;      public  set_rom_apm_state               ;
+;;      public  set_rom_pending_apm_event       ;
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                  SET_ROM_APM_CONNECTION_INFO                  ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (AL) data to write...identical data as 'APM_    ;
+;                    CONNECTION_INFO' in SMI/IRQ APM data area  ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+;  NOTE :                                                       ;
+;   *  This data is identical data as 'APM_CONNECTION_INFO' used;
+;      in SMI/IRQ APM data area.                                ;
+;   *  Chipset porting may use scratch chipset register or F000 ;
+;      shadow area for saving this info.                        ;
+;   *  This requires a BYTE of data area.                       ;
+;   *  The information will be retrived in 'GET_ROM_APM_        ;
+;      CONNECTION_INFO' hook in GAPMNSMI.CSS module.            ;
+;   *  This hook is mandatory. If F000 shadow area is used as   ;
+;      APM data area, then only routines you have to write are  ;
+;      'WRITE_ENABLE_F000_SHADOW' & 'WRITE_PROTECT_F000_SHADOW'.;
+;---------------------------------------------------------------;
+
+set_rom_apm_connection_info     proc    near
+
+        push    si                              ;
+
+;-----------------------------------------------;
+;     USE ONE OF THE 2 BLOCKS OF CODE BELOW     ;
+;-----------------------------------------------;
+;     IF F000 SHADOW USED AS APM DATA AREA      ;
+;-----------------------------------------------;
+
+;IF     CORE_BIOS_101094_ABOVE
+;-----------------------------------------------;
+;;;rom_apm_connection_info      equ     0f104h          ; FOM_FIXED_APM_CONNECTION_INFO
+;;;
+;;;     mov     si,rom_apm_connection_info      ;
+;-----------------------------------------------;
+;ELSE
+;-----------------------------------------------;
+;       extrn   rom_apm_connection_info:byte    ;
+;                                               ;
+;       mov     si,offset cgroup:rom_apm_connection_info
+;-----------------------------------------------;
+;ENDIF
+
+;-----------------------------------------------;
+;       IF BIOS DATA AREA AT 40:0000h USED      ;
+;               AS APM DATA AREA                ;
+;-----------------------------------------------;
+
+        mov     si,offset xdgroup:bda_apm_connection_info
+
+;-----------------------------------------------;
+
+        jmp     short set_rom_apm_state_00      ;
+
+set_rom_apm_connection_info     endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                      SET_ROM_APM_STATE                        ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (AL) data to write...identical data as 'APM_    ;
+;                    STATE' in SMI/IRQ APM data area            ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+;  NOTE :                                                       ;
+;   *  This data is identical data as 'APM_STATE' used in SMI/IRQ
+;      APM data area.                                           ;
+;   *  Chipset porting may use scratch chipset register or F000 ;
+;      shadow area for saving this info.                        ;
+;   *  This requires a BYTE of data area.                       ;
+;   *  The information will be retrived in 'GET_ROM_APM_STATE'  ;
+;      hook in GAPMNSMI.CSS module.                             ;
+;   *  This hook is mandatory. If F000 shadow area is used as   ;
+;      APM data area, then only routines you have to write are  ;
+;      'WRITE_ENABLE_F000_SHADOW' & 'WRITE_PROTECT_F000_SHADOW'.;
+;---------------------------------------------------------------;
+
+set_rom_apm_state       proc    near
+
+        push    si                              ;
+
+;-----------------------------------------------;
+;     USE ONE OF THE 2 BLOCKS OF CODE BELOW     ;
+;-----------------------------------------------;
+;     IF F000 SHADOW USED AS APM DATA AREA      ;
+;-----------------------------------------------;
+
+;IF     CORE_BIOS_101094_ABOVE
+;-----------------------------------------------;
+rom_apm_state           equ     0f105h          ; ROM_FIXED_APM_STATE
+
+;;      mov     si,rom_apm_state                ;
+;-----------------------------------------------;
+;ELSE
+;-----------------------------------------------;
+;       extrn   rom_apm_state:byte              ;
+;                                               ;
+;       mov     si,offset cgroup:rom_apm_state  ;
+;-----------------------------------------------;
+;ENDIF
+
+;-----------------------------------------------;
+;       IF BIOS DATA AREA AT 40:0000h USED      ;
+;               AS APM DATA AREA                ;
+;-----------------------------------------------;
+
+        mov     si,offset xdgroup:bda_apm_state ;
+
+;-----------------------------------------------;
+
+set_rom_apm_state_00::
+
+        call    write_rom_apm_data_byte         ;
+        pop     si                              ;
+        ret
+
+set_rom_apm_state       endp
+
+;---------------------------------------------------------------;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;               HOOK HOOK HOOK HOOK HOOK HOOK HOOK              ;
+;---------------------------------------------------------------;
+;                   SET_ROM_PENDING_APM_EVENT                   ;
+;---------------------------------------------------------------;
+;       Input : (DS) PM BIOS data segment                       ;
+;               (AX) data to write...identical data as 'PENDING_;
+;                    APM_EVENT' in SMI/IRQ APM data area        ;
+;               STACK PRESENT                                   ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+;  NOTE :                                                       ;
+;   *  This data is identical data as 'PENDING_APM_EVENT' used  ;
+;      in SMI/IRQ APM data area.                                ;
+;   *  Chipset porting may use scratch chipset register or F000 ;
+;      shadow area for saving this info.                        ;
+;   *  This requires a WORD of data area.                       ;
+;   *  The information will be retrived in 'GET_ROM_PENDING_APM_;
+;      EVENT' hook in GAPMNSMI.CSS module.                      ;
+;   *  This hook is mandatory. If F000 shadow area is used as   ;
+;      APM data area, then only routines you have to write are  ;
+;      'WRITE_ENABLE_F000_SHADOW' & 'WRITE_PROTECT_F000_SHADOW'.;
+;---------------------------------------------------------------;
+
+set_rom_pending_apm_event       proc    near
+
+        push    si                              ;
+
+;-----------------------------------------------;
+;     USE ONE OF THE 2 BLOCKS OF CODE BELOW     ;
+;-----------------------------------------------;
+;     IF F000 SHADOW USED AS APM DATA AREA      ;
+;-----------------------------------------------;
+
+;IF     CORE_BIOS_101094_ABOVE
+;-----------------------------------------------;
+rom_pending_apm_event   equ     0f106h          ; ROM_FIXED_PENDING_APM_EVENT
+
+;;;     mov     si,rom_pending_apm_event        ;
+;-----------------------------------------------;
+;ELSE
+;-----------------------------------------------;
+;       extrn   rom_pending_apm_event:word      ;
+;                                               ;
+;       mov     si,offset cgroup:rom_pending_apm_event
+;-----------------------------------------------;
+;ENDIF
+
+;-----------------------------------------------;
+;       IF BIOS DATA AREA AT 40:0000h USED      ;
+;               AS APM DATA AREA                ;
+;-----------------------------------------------;
+
+        mov     si,offset xdgroup:bda_pending_apm_event
+
+;-----------------------------------------------;
+
+        call    write_rom_apm_data_word         ;
+        pop     si                              ;
+        ret
+
+set_rom_pending_apm_event       endp
+
+;---------------------------------------------------------------;
+;                     WRITE_ROM_APM_DATA_BYTE                   ;
+;---------------------------------------------------------------;
+;       Input : (AL) data to write                              ;
+;               (SI) offset for data location                   ;
+;               (DS) PM BIOS data segment                       ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+;---------------------------------------------------------------;
+
+write_rom_apm_data_byte proc    near
+
+        push    bx                              ;
+        xor     bl,bl                           ; (bl) = 00 means write BYTE
+        jmp     short write_rom_apm_data_00     ;
+
+write_rom_apm_data_byte endp
+
+;---------------------------------------------------------------;
+;                     WRITE_ROM_APM_DATA_WORD                   ;
+;---------------------------------------------------------------;
+;       Input : (AX) data to write                              ;
+;               (SI) offset for data location                   ;
+;               (DS) PM BIOS data segment                       ;
+;       Output: NONE                                            ;
+;       Register destroyed : NONE                               ;
+;---------------------------------------------------------------;
+
+write_rom_apm_data_word proc    near
+
+        push    bx                              ;
+        mov     bl,0ffh                         ; (bl) = 0ffh means write WORD
+
+;-----------------------------------------------;
+
+write_rom_apm_data_00::
+
+IF      IRQ_HANDLING_SUPPORT
+        call    check_irq_pm                    ; IRQ based power management currently active ?
+        jnz     short write_rom_apm_data_02     ; yes...
+ENDIF
+
+        push    ds                              ;
+
+;-----------------------------------------------;
+;     USE ONE OF THE 2 BLOCKS OF CODE BELOW     ;
+;-----------------------------------------------;
+;     IF F000 SHADOW USED AS APM DATA AREA      ;
+;-----------------------------------------------;
+
+;;      push    ax                              ;
+;;      call    write_enable_f000_shadow        ; make F000 shadow area writeable
+;;      mov     ax,0f000h                       ;
+;;      mov     ds,ax                           ; (ds) = F000h
+;;      pop     ax                              ;
+
+;-----------------------------------------------;
+;       IF BIOS DATA AREA AT 40:0000h USED      ;
+;               AS APM DATA AREA                ;
+;-----------------------------------------------;
+
+        push    apm_16_32_bit_data_seg          ;
+        pop     ds                              ; (ds) = APM real mode data segment
+
+;-----------------------------------------------;
+
+        mov     [si],al                         ; write BYTE
+        or      bl,bl                           ; write BYTE ?
+        jz      short write_rom_apm_data_01     ; yes...
+        mov     [si],ax                         ; write WORD
+write_rom_apm_data_01:
+        pop     ds                              ;
+
+;-----------------------------------------------;
+;     USE ONE OF THE 2 BLOCKS OF CODE BELOW     ;
+;-----------------------------------------------;
+;     IF F000 SHADOW USED AS APM DATA AREA      ;
+;-----------------------------------------------;
+
+;;;     push    ax                              ;
+;;;     call    write_protect_f000_shadow       ; make F000 shadow write protect
+;;;     pop     ax                              ;
+
+;-----------------------------------------------;
+;       IF BIOS DATA AREA AT 40:0000h USED      ;
+;               AS APM DATA AREA                ;
+;-----------------------------------------------;
+
+;;;; NO CODE IS REQUIRED HERE.....
+
+;-----------------------------------------------;
+
+write_rom_apm_data_02:
+        pop     bx                              ;
+        ret
+
+write_rom_apm_data_word endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+;               APM ENTRY POINT HANDLING ROUTINES               ;
+;---------------------------------------------------------------;
+
+;;      public  get_apm_16_32_bit_code_seg      ;
+;;      public  get_apm_16_bit_entry_point      ;
+;;      public  get_apm_32_bit_entry_point      ;
+
+;;      public  get_apm_16_32_bit_data_seg      ;
+;;      public  get_apm_bios_data_seg_len       ;
+
+;---------------------------------------------------------------;
+;                   GET_APM_16_32_BIT_CODE_SEG                  ;
+;---------------------------------------------------------------;
+;       Input : NONE                                            ;
+;               STACK PRESENT                                   ;
+;       Output: (BX) APM 16/32 bit entry point code segment     ;
+;       Register destroyed : (BX)                               ;
+;---------------------------------------------------------------;
+
+get_apm_16_32_bit_code_seg      proc    near
+
+        mov     bx,apm_16_32_bit_code_seg       ; (bx) = APM BIOS 16 bit/32 bit protected mode code segment for SMI based power management
+
+IF      IRQ_HANDLING_SUPPORT
+        call    check_irq_pm                    ; IRQ based power management active ?
+        jz      short get_apm_16_32_bit_code_seg_00; no...SMI based power management active
+        mov     bx,cs                           ; (bx) = APM BIOS 16 bit/32 bit protected mode code segment for IRQ based power management
+get_apm_16_32_bit_code_seg_00:
+ENDIF
+
+        ret
+
+get_apm_16_32_bit_code_seg      endp
+
+;---------------------------------------------------------------;
+;                  GET_APM_16_BIT_ENTRY_POINT                   ;
+;---------------------------------------------------------------;
+;       Input : NONE                                            ;
+;               STACK PRESENT                                   ;
+;       Output: (BX) APM 16 bit protected mode entry point      ;
+;       Register destroyed : (BX)                               ;
+;---------------------------------------------------------------;
+
+get_apm_16_bit_entry_point      proc    near
+
+;IF     CORE_BIOS_101094_ABOVE
+;-----------------------------------------------;
+        mov     bx,apm_16bit_prot_mode_entry_fixed; NON-SMI CORE BIOS ENTRY POINT...(bx) = APM BIOS 16 bit protected mode entry point
+;-----------------------------------------------;
+;ELSE
+;-----------------------------------------------;
+;       extrn   apm_16bit_prot_mode_entry:near  ; APM BIOS 16 bit protected mode entry point
+;                                               ;
+;       mov     bx,offset cgroup:apm_16bit_prot_mode_entry; NON-SMI CORE BIOS ENTRY POINT...(bx) = APM bios 16 bit protected mode entry point for SMI based power management
+;-----------------------------------------------;
+;ENDIF
+
+IF      IRQ_HANDLING_SUPPORT
+        call    check_irq_pm                    ; IRQ based power management active ?
+        jz      short get_apm_16_bit_entry_point_00; no...SMI based power management active
+        mov     bx,cgroup:irq_apm_16bit_prot_mode_entry - cgroup:smi_code_begin + orgbase; NON-SMI CORE BIOS ENTRY POINT...(bx) = APM bios 16 bit protected mode entry point for IRQ based power management
+get_apm_16_bit_entry_point_00:
+ENDIF
+
+        ret
+
+get_apm_16_bit_entry_point      endp
+
+;---------------------------------------------------------------;
+;                  GET_APM_32_BIT_ENTRY_POINT                   ;
+;---------------------------------------------------------------;
+;       Input : NONE                                            ;
+;               STACK PRESENT                                   ;
+;       Output: (EBX) APM 32 bit protected mode entry point     ;
+;       Register destroyed : (EBX)                              ;
+;---------------------------------------------------------------;
+
+get_apm_32_bit_entry_point      proc    near
+
+;IF     CORE_BIOS_101094_ABOVE
+;-----------------------------------------------;
+        mov     ebx,apm_32bit_prot_mode_entry_fixed; NON-SMI CORE BIOS ENTRY POINT...(ebx) = APM BIOS 32 bit protected mode entry point
+;-----------------------------------------------;
+;ELSE
+;-----------------------------------------------;
+;       extrn   apm_32bit_prot_mode_entry:near  ; APM BIOS 32 bit protected mode entry point
+;                                               ;
+;       mov     ebx,offset cgroup:apm_32bit_prot_mode_entry; NON-SMI CORE BIOS ENTRY POINT...(bx) = APM bios 32 bit protected mode entry point for SMI based power management
+;-----------------------------------------------;
+;ENDIF
+
+IF      IRQ_HANDLING_SUPPORT
+        call    check_irq_pm                    ; IRQ based power management active ?
+        jz      short get_apm_32_bit_entry_point_00; no...SMI based power management active
+        mov     ebx,cgroup:irq_apm_32bit_prot_mode_entry - cgroup:smi_code_begin + orgbase; NON-SMI CORE BIOS ENTRY POINT...(ebx) = APM bios 32 bit prot mode entry point for IRQ based power management
+get_apm_32_bit_entry_point_00:
+ENDIF
+
+        ret
+
+get_apm_32_bit_entry_point      endp
+
+;---------------------------------------------------------------;
+;                   GET_APM_16_32_BIT_DATA_SEG                  ;
+;---------------------------------------------------------------;
+;       Input : NONE                                            ;
+;               STACK PRESENT                                   ;
+;       Output: (DX) APM 16/32 bit data segment                 ;
+;       Register destroyed : (DX)                               ;
+;---------------------------------------------------------------;
+
+get_apm_16_32_bit_data_seg      proc    near
+
+        mov     dx,apm_16_32_bit_data_seg       ; (dx) = APM BIOS 16 bit/32 bit data segment for SMI based power management
+
+IF      IRQ_HANDLING_SUPPORT
+        call    check_irq_pm                    ; IRQ based power management active ?
+        jz      short get_apm_16_32_bit_data_seg_00; no...SMI based power management active
+        mov     dx,ds                           ; (dx) = APM BIOS 16 bit/32 bit data segment for IRQ based power management
+get_apm_16_32_bit_data_seg_00:
+ENDIF
+
+        ret
+
+get_apm_16_32_bit_data_seg      endp
+
+;---------------------------------------------------------------;
+;                   GET_APM_BIOS_DATA_SEG_LEN                   ;
+;---------------------------------------------------------------;
+;       Input : NONE                                            ;
+;               STACK PRESENT                                   ;
+;       Output: (DI) APM BIOS data segment length               ;
+;       Register destroyed : (DI)                               ;
+;---------------------------------------------------------------;
+
+get_apm_bios_data_seg_len       proc    near
+
+        mov     di,apm_bios_data_seg_len        ; (di) = APM BIOS data segment length for SMI based power management
+
+IF      IRQ_HANDLING_SUPPORT
+        call    check_irq_pm                    ; IRQ based power management active ?
+        jz      short get_apm_bios_data_seg_len_00; no...SMI based power management active
+        mov     di,0ffffh                       ; (di) = APM BIOS data segment length for IRQ based power management (64KB)
+get_apm_bios_data_seg_len_00:
+ENDIF
+
+        ret
+
+get_apm_bios_data_seg_len       endp
+
+;---------------------------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**     (C)Copyright 1985-1996, American Megatrends Inc.        **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**             6145-F, Northbelt Parkway, Norcross,            **;
+;**                                                             **;
+;**             Georgia - 30071, USA. Phone-(770)-246-8600.     **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------------------------------;
+
+

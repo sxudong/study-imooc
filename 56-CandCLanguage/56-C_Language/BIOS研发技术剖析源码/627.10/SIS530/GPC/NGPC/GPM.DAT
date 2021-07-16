@@ -1,0 +1,493 @@
+;-----------------------------------------------;
+;	 BIOS POWER MANAGEMENT DATA AREA	;
+;	   USED BY GREEN PC CORE BIOS		;
+;	THE DATA AREA IS IN EQUATE FORM		;
+;		     GPM.DAT			;
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	     DECLARE FIXED ORG HERE		;
+;	THIS 'ORG' SHOULD NOT BE CHANGED	;
+;   smi_seg:0d000h thru 0faffh (2b00h bytes)	;
+;	available for usage as data area	;
+; NOTE :					;
+;	As this cseg data area are in equate	;
+;	form, initialise this data area during	;
+;	SMRAM initialization.			; 
+;-----------------------------------------------;
+
+dseg_data_area_begin	equ	0d000h		; 0d000h THRU 0faffh (02b00H BYTES)
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;    DATA AREA FOR SUPPORTING DIFFERENT CPUS	;
+;-----------------------------------------------;
+
+misc_proc_info		equ	dseg_data_area_begin	; 1 BYTE..miscellaneous processor info
+							; bit 0 1...numeric co-processor present
+							; bit 1 reserved
+							; bit 7-2 reserved
+
+misc_proc_smi_info	equ	misc_proc_info + 01	; 1 BYTE..miscellaneous processor SMI info
+							; bit 0 0..64KB or greater SMRAM
+							;	1..32KB SMRAM
+							; bit 1 RESERVED...USED INTERNALLY DURING SMI POST FOR SMBASE RELOCATION INFO
+							; b3 b2 ... SMI type
+							;  0  0 ... INTEL type SMI
+							;  0  1 ... CYRIX type SMI
+							;  1  0 ... AMD type SMI
+							;  1  1 ... reserved
+							; bit 4 0..single CPU board
+							;	1..dual/multiple CPU board
+							; bit 5 0..SMI based power management
+							;	1..IRQ based power management
+							; bit 6 0..Non-SMI CPU
+							;	1..SMI capable CPU
+							; bit 7 RESERVED...USED INTERNALLY DURING SMI POST FOR SMI POST STATUS
+
+no_of_sec_cpu_present	equ	misc_proc_smi_info + 01	; 1 BYTE..# of CPU present on the board
+
+bios_detected_cpu_mfr	equ	no_of_sec_cpu_present + 01; 1 WORD..CPU manufacturer (as detected by CORE BIOS)
+							; bit 0 1 INTEL
+							; bit 1 1 CYRIX
+							; bit 2 1 AMD
+							; bit 3 1 IBM
+							; bit 4 1 TI (TEXAS INSTRUMENTS)
+							; bit 5 1 UMC
+							; bit 15-6 reserved
+
+cpu_vendor	equ	bios_detected_cpu_mfr + 02	; 1 WORD..CPU manufacturer (as seen by PM BIOS)
+							; bit 0 1 INTEL
+							; bit 1 1 CYRIX
+							; bit 2 1 AMD
+							; bit 3 1 IBM
+							; bit 4 1 TI (TEXAS INSTRUMENTS)
+							; bit 5 1 UMC
+							; bit 15-6 reserved
+
+cpu_name_dseg	equ	cpu_vendor + 02			; 1 WORD..CPU model # as returned by desktop core bios
+							; for different CPU vendor
+
+;-----------------------------------------------;
+;	SMI_IDT_DESCRIPTOR FOR P54C CPU		;
+;-----------------------------------------------;
+
+smi_idt_descriptor	equ	cpu_name_dseg +02	; 8 BYTES...IDT
+
+;-----------------------------------------------;
+;	  CPU STATE DUMP SAVE DATA AREA		;
+;	  It is a structure of 9 DWORDs		;
+;-----------------------------------------------;
+
+;struc_cpu_gen_purpose_reg	struc
+
+reg_eax		equ	00h			; 1 DWORD...EAX
+reg_ebx		equ	reg_eax + 04		; 1 DWORD...EBX
+reg_ecx		equ	reg_ebx + 04		; 1 DWORD...ECX
+reg_edx		equ	reg_ecx + 04		; 1 DWORD...EDX
+reg_esi		equ	reg_edx + 04		; 1 DWORD...ESI
+reg_edi		equ	reg_esi + 04		; 1 DWORD...EDI
+reg_ebp		equ	reg_edi + 04		; 1 DWORD...EBP
+reg_eflags	equ	reg_ebp + 04		; 1 DWORD...EFLAGS
+reg_cr0		equ	reg_eflags + 04		; 1 DWORD...CR0
+
+;struc_cpu_gen_purpose_reg	ends
+
+;-----------------------------------------------;
+
+cpu_gen_purpose_reg_entry	equ	smi_idt_descriptor + 08; 9 DWORD..(36 bytes)
+
+;-----------------------------------------------;
+
+;struc_cpu_spl_reg_save	struc
+
+reg_cr1		equ	000h			; 1 DWORD...CR1 (RESERVED)
+reg_cr2		equ	reg_cr1 + 04		; 1 DWORD...CR2
+reg_cr3		equ	reg_cr2 + 04		; 1 DWORD...CR3
+reg_dr0		equ	reg_cr3 + 04		; 1 DWORD...DR0
+reg_dr1		equ	reg_dr0 + 04		; 1 DWORD...DR1
+reg_dr2		equ	reg_dr1 + 04		; 1 DWORD...DR2
+reg_dr3		equ	reg_dr2 + 04		; 1 DWORD...DR3
+reg_dr4		equ	reg_dr3 + 04		; 1 DWORD...DR4 (RESERVED)
+reg_dr5		equ	reg_dr4 + 04		; 1 DWORD...DR5 (RESERVED)
+reg_dr6		equ	reg_dr5 + 04		; 1 DWORD...DR6
+reg_tr3		equ	reg_dr6 + 04		; 1 DWORD...TR3 (CACHE TEST REG...DO NOT SAVE/RESTORE)
+reg_tr4		equ	reg_tr3 + 04		; 1 DWORD...TR4 (CACHE TEST REG...DO NOT SAVE/RESTORE)
+reg_tr5		equ	reg_tr4 + 04		; 1 DWORD...TR5 (CACHE TEST REG...DO NOT SAVE/RESTORE...NOT READABLE)
+reg_tr6		equ	reg_tr5 + 04		; 1 DWORD...TR6
+reg_tr7		equ	reg_tr6 + 04		; 1 DWORD...TR7
+
+;struc_cpu_spl_reg_save	ends
+
+;-----------------------------------------------;
+
+cpu_spl_reg_save	equ	cpu_gen_purpose_reg_entry + 36; 15 DWORD..(60 bytes)SIZE struc_cpu_spl_reg_save dup (?)
+
+;-----------------------------------------------;
+
+cpu_dump_save_area	equ	cpu_spl_reg_save + 60; 512 BYTES...CPU DUMP save area
+fpu_state_save_area	equ	cpu_dump_save_area + 512; 128 BYTES...FPU DUMP save area
+
+;-----------------------------------------------;
+;	  RTC DATE/TIME SAVE DATA AREA		;
+;-----------------------------------------------;
+
+suspend_date	equ	fpu_state_save_area + 128; 1 DWORD...save suspend date
+suspend_time	equ	suspend_date +04	; 1 DWORD...save suspend time
+
+;-----------------------------------------------;
+;      IDE DRIVE POWER MANAGEMENT DATA AREA	;
+;-----------------------------------------------;
+
+;struc_hdd_x_info	struc
+
+hdd_misc_control_info		equ	0	; 1 BYTE...control environment information
+						; bits 3-0 IRQ level
+						; bit 4 1 means drive is available
+						; bit 5 reserved
+						; bit 6 0/1 primary/secondary controller
+						; bit 7 0/1 master/slave drive
+hdd_standby_imm_cmd_save	equ	hdd_misc_control_info + 01   ; 1 BYTE...standby immediate command to be used with the drive
+hdd_standby_cmd_save		equ	hdd_standby_imm_cmd_save + 01; 1 BYTE...standby command to be used with the drive
+hdd_idle_imm_cmd_save		equ	hdd_standby_cmd_save + 01    ; 1 BYTE...idle immediate command to be used with the drive
+hdd_idle_cmd_save		equ	hdd_idle_imm_cmd_save + 01   ; 1 BYTE...idle command to be used with the drive
+
+;struc_hdd_x_info	ends
+
+;-----------------------------------------------;
+
+struc_hdd_x_info_size	equ	5		; SIZE of struc_hdd_x_info
+
+hdd_0_control_struc	equ	suspend_time + 04		; 5 BYTES...for drv 0 of primary cntlr
+hdd_1_control_struc     equ     hdd_0_control_struc + 05	; 5 BYTES...for drv 1 of primary cntlr
+hdd_2_control_struc     equ     hdd_1_control_struc + 05	; 5 BYTES...for drv 0 of secondary cntlr
+hdd_3_control_struc     equ     hdd_2_control_struc + 05	; 5 BYTES...for drv 1 of secondary cntlr
+
+;-----------------------------------------------;
+;	  EXTENDED GET DRIVE PARAMETERS		;
+;	        SUPPORT DATA AREA		;
+;-----------------------------------------------;
+
+;struc_ext_drv_param	struc
+
+ms_info_size		equ	000h			; 1 WORD...information size
+ms_flags		equ	ms_info_size + 02	; 1 WORD...flags
+ms_cylinders		equ	ms_flags + 02		; 1 DWORD...no. of cylinders on disk
+ms_heads		equ	ms_cylinders + 04	; 1 DWORD...no. of heads per cylinder
+ms_sec_per_track	equ	ms_heads + 04		; 1 DWORD...no. of sectors per track
+ms_sectors		equ	ms_sec_per_track + 04	; 1 QWORD...no. of sectors on requested disk
+ms_sector_size		equ	ms_sectors + 08		; 1 WORD...no. of bytes per sector
+wd_extended_table	equ	ms_sector_size + 02	; 1 DWORD...pointer to configuration parameter
+
+;struc_ext_drv_param	ends
+
+;-----------------------------------------------;
+
+struc_ext_drv_param_size	equ	30		; SIZE of struc_ext_drv_param
+
+ext_drv_param	equ	hdd_3_control_struc + 05	; 30 BYTES...extended drive parameter save data area
+
+;-----------------------------------------------;
+
+;struc_wd_extended_table	struc
+
+wd_ide_base_addr	equ	000h			; 1 WORD...I/O port base address
+wd_ide_control_port_addr equ	wd_ide_base_addr + 02	; 1 WORD...control port address
+wd_hdd_misc_info_00	equ	wd_ide_control_port_addr + 02 ; 1 BYTE...bits 3-0 reserved
+							; bit 4 0/1 master/slave drive
+							; bit 5 reserved
+							; bit 6 1 LBA enabled
+							; bit 7 reserved
+wd_reserved_00		equ	wd_hdd_misc_info_00 + 01; 1 BYTE...reserved
+wd_irq			equ	wd_reserved_00 + 01	; 1 BYTE...IRQ used
+							; bits 3-0 IRQ
+							; bits 7-4 reserved
+wd_multi_sec_block_size	equ	wd_irq + 01		; 1 BYTE...sector count for multi-sector transfer
+wd_dma_info	equ	wd_multi_sec_block_size + 01	; 1 BYTE...bits 3-0 DMA channel
+							; bits 7-4 DMA type
+wd_pio_type		equ	wd_dma_info + 01	; 1 BYTE...bits 3-0 PIO type
+							; bits 7-4 reserved
+wd_hdd_misc_info_01	equ	wd_pio_type + 01	; 1 WORD...miscellaneous information
+							; bit 0 1 fast PIO accessing enabled
+							; bit 1 1 DMA accessing enabled
+							; bit 2 1 block PIO accessing enabled
+							; bit 3 1 CHS translation enabled
+							; bit 4 1 LBA translation enabled
+							; bit 5 1 removable media
+							; bit 6 1 CDROM
+							; bit 7 1 32 bit transfer mode
+							; bit 15-8 reserved
+wd_reserved_01		equ	wd_hdd_misc_info_01 + 02; 1 WORD...reserved
+wd_ext_rev_level	equ	wd_reserved_01 + 02	; 1 BYTE...current revision level of this extension
+wd_extension_csum	equ	wd_ext_rev_level + 01	; 1 BYTE...checksum, 2's complement of the sum of bytes 0-14
+
+;struc_wd_extended_table	ends
+
+;-----------------------------------------------;
+;   DEVICE POWER PIN CONFIGURATION DATA AREA	;
+;-----------------------------------------------;
+
+device_config_area	equ	ext_drv_param + 30 ; 12 BYTES
+						; actually 1st byte used for pin polarity for 8 devices
+						; next 8 bytes used for pin# used for the device
+						; next 3 bytes reserved
+
+;-----------------------------------------------;
+;	  INTERRUPT MASK SAVE DATA AREA		;
+;-----------------------------------------------;
+
+reset_5v_rsm_intr_mask_save_area equ	device_config_area + 12 ; 1 WORD..low byte for slave & high byte for master
+smi_intr_mask_save_area	equ	reset_5v_rsm_intr_mask_save_area + 02 ; 1 WORD..low byte for slave & high byte for master
+
+;-----------------------------------------------;
+;    VESA DISPLAY POWER MANAGEMENT DATA AREA	;
+;-----------------------------------------------;
+
+;struc_disp_x_info	struc
+
+disp_misc_control_info		equ	0	; 1 BYTE...control environment information
+						; bits 1-0 controller #
+						; bits 6-2 reserved
+						; bit 7 VESA VBE/PM interface supported
+disp_vbe_supported_power_mode	equ	disp_misc_control_info + 01  ; 1 BYTE...VESA VBE/PM supported power down modes
+						; bit 0 STANDBY
+						; bit 1 SUSPEND
+						; bit 2 OFF
+						; bit 3 REDUCED ON
+						; bit 7-4 reserved
+disp_vbe_ver_no			equ	disp_vbe_supported_power_mode + 01; 1 BYTE...VESA VBE/PM version no.
+
+;struc_disp_x_info	ends
+
+;-----------------------------------------------;
+
+struc_disp_x_info_size	equ	3		; SIZE of struc_disp_x_info
+
+disp_0_control_struc	equ	smi_intr_mask_save_area + 02; 3 BYTES...for primary display cntlr
+
+;-----------------------------------------------;
+;	    BOOT TIME INT 10H SAVE AREA		;
+;-----------------------------------------------;
+
+vga_bios_entry	equ	disp_0_control_struc + 03 ; 1 DWORD...INT 10h vector save area
+int_16_entry	equ	vga_bios_entry + 04	  ; 1 DWORD...INT 16h vector save area
+
+;-----------------------------------------------;
+
+;struc_vga_vector	struc
+
+vec_int_10		equ	0		; 1 DWORD...INT 10H
+vec_int_6d		equ	vec_int_10 + 04	; 1 DWORD...INT 6DH
+vec_int_4a8		equ	vec_int_6d + 04	; 1 DWORD...[0:4A8H]
+
+;struc_vga_vector	ends
+
+;-----------------------------------------------;
+
+save_post_vga_vector	equ	int_16_entry + 04	 ; 3 DWORDs...save VGA vectors at post time
+save_current_vga_vector	equ	save_post_vga_vector + 12; 3 DWORDs...save current VGA vectors
+
+;-----------------------------------------------;
+;	  KEYBOARD CONTROLLER SAVE AREA		;
+;-----------------------------------------------;
+
+;struc_kb_cntlr_data	struc
+
+kb_cntlr_cmd_byte	equ	0		; 1 BYTE...keyboard controller command byte
+kb_cntlr_output_buf_data equ	kb_cntlr_cmd_byte + 01 ; 1 BYTE...keyboard controller output buffer data
+kb_cntlr_status_byte	equ	kb_cntlr_output_buf_data + 01 ; 1 BYTE...keyboard controller status
+
+;struc_kb_cntlr_data	ends
+
+;-----------------------------------------------;
+
+struc_kb_cntlr_data_size	equ	03	; SIZE of struc_kb_cntlr_data
+
+suspend_kb_cntlr_data	equ	save_current_vga_vector + 12; 3 BYTES...keyboard controller data save area
+kb_cntlr_data		equ	suspend_kb_cntlr_data + 03  ; 3 BYTES...keyboard controller data save area
+
+;-----------------------------------------------;
+;	SUSPEND TIME PS2 MOUSE SAVE AREA	;
+;-----------------------------------------------;
+
+;struc_ps2_mouse_data	struc
+
+ps2_mouse_mode		equ	0		; 1 BYTE...mouse mode/presence
+						; bit 0 0 error during mouse data save
+						;       1 mouse data valid
+						; bit 1 1 ps/2 mouse restored OK
+						; bit 2 0/1 ps/2 mouse absent/present
+						; bit 3 1 mouse in wrap mode
+ps2_mouse_status	equ	ps2_mouse_mode + 01; 1 BYTE...mouse status
+						; bit 0-3 reserved
+						; bit 4 0/1 1:1scaling/2:1 scaling
+						; bit 5 0/1 mouse disabled/enabled
+						; bit 6 0/1 stream mode/remote mode
+						; bit 7 reserved
+ps2_mouse_resolution	equ	ps2_mouse_status + 01; 1 BYTE...mouse resolution
+ps2_mouse_sampling_rate	equ	ps2_mouse_resolution + 01; 1 BYTE...mouse sampling rate
+
+;struc_ps2_mouse_data	ends
+
+;-----------------------------------------------;
+
+struc_ps2_mouse_data_size	equ	04	; SIZE of struc_ps2_mouse_data
+
+ps2_mouse_data		equ	kb_cntlr_data + 03 ; 4 BYTES...ps/2 mouse data save area
+
+;-----------------------------------------------;
+;     MISCELLANEOUS INFORMATIONS SAVE AREA	;
+;-----------------------------------------------;
+
+gpm_ide_idle_timeout	equ	ps2_mouse_data + 04 ; 1 BYTE...idle timer timeout value for IDE drives
+gpm_ide_irq_usage	equ	gpm_ide_idle_timeout + 01; 1 WORD...keeps info about IRQ usage by the IDE controllers
+misc_conf_info	equ	gpm_ide_irq_usage + 02 ; 1 BYTE...bit 0 1...INSTANT ON support enabled
+						;      ...bit 7-1...reserved
+
+;-----------------------------------------------;
+;	   RTC ALARM HANDLING DATA AREA		;
+;-----------------------------------------------;
+
+rtc_stat_reg_b_save_area	equ	misc_conf_info + 01; 1 BYTE...RTC status reg B save area
+gpm_alarm_flag	equ	rtc_stat_reg_b_save_area + 01; 1 BYTE...bit 0...if set, restore USER alarm on resume
+						;	     ...bit 1...if set, restore RTC on resume
+						;	     ...bit 7-2...reserved
+user_alarm_save_area	equ	gpm_alarm_flag + 01; 3 BYTES...USER alarm save area
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;    DATA AREA USED FOR IRQ BASED POWER MGT.	;
+;-----------------------------------------------;
+
+irq_used_for_pm	equ	user_alarm_save_area + 03; 1 BYTE...saves the information of IRQ used for IRQ based power management
+irq_apm_in_progress equ	irq_used_for_pm + 01	; 1 BYTE...saves information about IRQ based APM is currently being executed
+irq_in_progress	equ	irq_apm_in_progress + 01; 1 BYTE...saves information about IRQ handler is currently being executed
+irq_apm_intr_mask_save_area equ irq_in_progress + 01; 1 WORD..low byte for slave & high byte for master
+save_irq_ss	equ	irq_apm_intr_mask_save_area + 02; 1 WORD...saves IRQ entry (SS)
+save_irq_sp	equ	save_irq_ss + 02	; 1 WORD...saves IRQ entry (SP)
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	DATA AREA FOR DUAL/MULTIPROCESSOR	;
+;-----------------------------------------------;
+;      DATA AREA TO SAVE/RESTORE LOCAL APIC	;
+;-----------------------------------------------;
+
+apic_task_priority_reg_save_area equ	save_irq_sp + 02; 1 DWORD...APIC task priority reg save data area
+apic_lvt_timer_reg_save_area	 equ	apic_task_priority_reg_save_area + 04; 2 DWORD...APIC timer interrupt reg save area
+apic_lvt_intr_00_reg_save_area	 equ	apic_lvt_timer_reg_save_area + 08; 2 DWORD...APIC LINT0 save area
+apic_lvt_intr_01_reg_save_area	 equ	apic_lvt_intr_00_reg_save_area + 08; 2 DWORD...APIC LINT1 save area
+apic_lvt_err_reg_save_area	 equ	apic_lvt_intr_01_reg_save_area + 08; 2 DWORD...APIC error interrupt reg save area
+
+;-----------------------------------------------;
+
+apic_spurious_intr_save_area	equ	apic_lvt_err_reg_save_area + 08 ; 6 BYTES...APIC spurious interrupt vector save area
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	    DATA AREA USED BY APM CODING	;
+;-----------------------------------------------;
+
+apm_data_area		equ	0e700h		; start of APM data area
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	 DATA AREA USED BY CHIPSET CODING	;
+;-----------------------------------------------;
+
+chipset_config_area	equ	0e800h		; start of chipset configuration data
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+

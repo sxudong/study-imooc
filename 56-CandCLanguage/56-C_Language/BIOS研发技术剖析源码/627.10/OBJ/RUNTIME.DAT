@@ -1,0 +1,50 @@
+n..\..\rom\dummyrun.exe
+l
+r
+ecs:100 'orgbase equ 00000h' 0d 0a 'cgroup group'
+ecs:120 ' _text' 0d 0a '_text segment byte commo'
+ecs:140 'n ' 27 'CODE' 27 0d 0a 'assume cs:cgroup' 0d 0a 'org '
+ecs:160 'orgbase' 0d 0a 'public runtime_start' 0d 0a 'r'
+ecs:180 'untime_start label byte' 0d 0a 'include'
+ecs:1a0 ' biosdata.dat' 0d 0a '_text ends' 0d 0a 'end' 0d 0a 1a
+
+a200
+mov     di,10d
+add     cx,0f
+and     cx,fff0
+mov     si,e000
+sub     si,cx
+mov     bx,si
+mov     cl,04
+mov     al,bh
+shr     al,cl
+call    280
+mov     al,bh
+call    280
+mov     al,bl
+shr     al,cl
+call    280
+mov     al,bl
+call    280
+int     3
+
+a280
+and     al,0f
+cmp     al,9
+jbe     288
+add     al,7
+add     al,30
+cs:mov[di],al
+inc     di
+ret
+
+g=200
+
+n..\..\rom\dr.asm
+rcx
+c1
+rbx
+0
+wcs:100
+
+q

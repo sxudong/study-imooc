@@ -1,0 +1,197 @@
+BeginDevice (ALI5113IdeController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_ALI5113_IDE_CONTROLLER)
+			Text = "OnBoard IDE"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary":DEFAULT:POWERON,
+				  "Secondary"
+		EndQuestion
+	EndScreen
+EndDevice	// ALI5113IdeController
+BeginDevice (ALI5113FloppyController)
+	Screen (SCR_PERIPHERAL)
+		 Question (Q_ALI5113_FLOPPY_CONTROLLER)
+			 Text = "OnBoard FDC"
+			 Options = "Auto":DEFAULT:POWERON,
+				   "Disabled",
+				   "Enabled"
+		 EndQuestion
+	EndScreen
+EndDevice	// ALI5113FloppyController
+BeginDevice (ALI5113SerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_ALI5113_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "3E8/COM3"
+		EndQuestion
+		Question (Q_ALI5113_COMA_MODE)
+			Text = "  Serial Port1 Mode"
+			ShadeWhen (Q_ALI5113_COMA_PORT) = "Disabled"
+			OptionSet = "Normal"
+				    "SIR",
+				    "ASKIR"
+			OptionSet = "N/A"
+			OptionSet = "Normal"
+				    "SIR",
+				    "ASKIR"
+		EndQuestion
+		Question (Q_ALI5113_COMA_DUPLEX)
+			Text = "  Serial Port1 Duplex"
+			ShadeWhen (Q_ALI5113_COMA_PORT) = "Disabled"
+			OptionSet = "Full Duplex"
+				    "HalF Duplex"
+			OptionSet = "N/A"
+			OptionSet = "Full Duplex"
+				    "HalF Duplex"
+		EndQuestion
+	EndScreen
+EndDevice	// ALI5113SerialPortA
+BeginDevice (ALI5113SerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_ALI5113_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "2F8/COM2",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_ALI5113_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+			ShadeWhen (Q_ALI5113_COMB_PORT) = "Disabled"
+			OptionSet = "Normal"
+				    "SIR",
+				    "ASKIR"
+			OptionSet = "N/A"
+			OptionSet = "Normal"
+				    "SIR",
+				    "ASKIR"
+		EndQuestion
+		Question (Q_ALI5113_COMB_DUPLEX)
+			Text = "  Serial Port2 Duplex"
+			ShadeWhen (Q_ALI5113_COMB_PORT) = "Disabled"
+			OptionSet = "Full Duplex"
+				    "HalF Duplex"
+			OptionSet = "N/A"
+			OptionSet = "Full Duplex"
+				    "HalF Duplex"
+		EndQuestion
+	EndScreen
+EndDevice	// ALI5113SerialPortB
+BeginDevice (Ali5113ParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_ALI5113_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_ALI5113_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			Present = No
+			Options = "N/A"
+		EndQuestion
+		Question (Q_ALI5113_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Ali5113_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice   // Ali5113ParallelPort
+BeginDevice (Ali5113ParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_ALI5113_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			ExternalFunction = Ali5113_Lpt_Addr_Xfn
+			OptionBits = 3
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_ALI5113_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = Ali5113_Lpt_Mode_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+		Question (Q_ALI5113_LPT_EPPVER)
+			Text = "  EPP Version"
+			ExternalFunction = Ali5113_Lpt_EppVer_Xfn
+			OptionBits = 1
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_ALI5113_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+			ExternalFunction = Ali5113_Lpt_Dma_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+		Question (Q_ALI5113_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Ali5113_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice   // Ali5113ParallelPortExt
+String (STR_ALI5113_AUTO)
+	Text = "Auto"
+EndString
+String (STR_ALI5113_DIS)
+	Text = "Disabled"
+EndString
+String (STR_ALI5113_378)
+	Text = "378"
+EndString
+String (STR_ALI5113_278)
+	Text = "278"
+EndString
+String (STR_ALI5113_3BC)
+	Text = "3BC"
+EndString
+String (STR_ALI5113_NORMAL)
+	Text = "Normal"
+EndString
+String (STR_ALI5113_BIDIR)
+	Text = "Bi-Dir"
+EndString
+String (STR_ALI5113_EPP)
+	Text = "EPP"
+EndString
+String (STR_ALI5113_ECP)
+	Text = "ECP"
+EndString
+String (STR_ALI5113_EPP19)
+	Text = "1.9"
+EndString
+String (STR_ALI5113_EPP17)
+	Text = "1.7"
+EndString
+String (STR_ALI5113_IRQ5)
+	Text = "5"
+EndString
+String (STR_ALI5113_IRQ7)
+	Text = "7"
+EndString
+String (STR_ALI5113_DMA0)
+	Text = "0"
+EndString
+String (STR_ALI5113_DMA1)
+	Text = "1"
+EndString
+String (STR_ALI5113_DMA3)
+	Text = "3"
+EndString
+String (STR_ALI5113_NA)
+	Text = "N/A"
+EndString

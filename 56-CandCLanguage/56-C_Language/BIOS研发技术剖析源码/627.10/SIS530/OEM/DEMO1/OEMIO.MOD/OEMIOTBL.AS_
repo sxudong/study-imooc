@@ -1,0 +1,1619 @@
+        page    ,132
+        title   I/O Initialization, IRQ, DMA routing tables
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1997, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+
+;---------------------------------------;
+        include makeflag.equ
+;---------------------------------------;
+;---------------------------------------;
+;       C O D E     S E G M E N T       ;
+;---------------------------------------;
+.386
+cgroup  group   _text
+_text segment word public USE16 'CODE'
+         assume cs:CGROUP
+
+
+;******************************************************************************;
+;                                  BOOTBLOCK                                   ;
+;******************************************************************************;
+
+;---------------------------------------;
+;       Register Initialization         ;
+;---------------------------------------;
+IFDEF   BOOTBLOCK
+        public  BBlockIoDmaRoutingTable
+        public  BBlockIoIrqDmaRoutingTable
+IF MKF_ALI5123
+        public  BBLOCKREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+;              Device   Data/Reg
+;             --------  --------
+        db      000h
+        dw              8024h           ;Set IRQ 8 active low
+        
+        db      007h
+        dw              0171h           ;set IRQ 1
+        db      007h
+        dw              0C72h           ;set IRQ 12 for PS/2 mouse
+        
+        db      008h
+        dw              08E4h           ;for KB soft reset ctrl
+        db      008h
+        dw              08E5h           ;for GA-20 enable
+        db      008h
+        dw              09EDh           ;for KeyLock
+        db      008h
+        dw              0130h           ;activate logical device 8
+        
+BBlockRegisterInitTableEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 3
+
+ENDIF
+IF MKF_DSCH20
+        public  BBLOCKREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      003h,   0F0h            ;Floppy
+        db      016h,   0FCh            ;RTC
+        db      018h,   0C0h            ;KBC
+BBlockRegisterInitTableEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_ITE8661
+        public  BBLOCKREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+;              Device   Data/Reg
+;             --------  --------
+        db      000h
+        dw              0024h           ; Bit1 =0 Clock 24h
+BBlockRegisterInitTableEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 3
+
+ENDIF
+
+IF MKF_ITE8680 
+        public  BBLOCKREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+;              Device   Data/Reg
+;             --------  --------
+        db      005h
+        dw              00F0h           ;for KB Special Configuration (such as
+                                        ;Key Lock, KBC Clk)
+        db      005h
+        dw              0130h           ;activate logical device 5 (KBC)
+
+        db      006h
+        dw              0130h           ;activate logical device 6 (KBC Mouse)
+BBlockRegisterInitTableEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 3
+
+ENDIF
+IF MKF_NAT303
+        public  BBLOCKREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     000h          ; CR 0 
+        db      001h,     000h          ; CR 1
+        db      002h,     008h          ; CR 2
+        db      003h,     001h          ; CR 3
+        db      004h,     002h          ; CR 4
+        db      005h,     04Fh          ; CR 5 KB & RTC
+        db      006h,     098h          ; CR 6
+        db      007h,     000h          ; CR 7 
+        db      009h,     0C0h          ; CR 9
+        db      00Bh,     0CFh          ; CR B
+        db      00Dh,     0CFh          ; CR D
+BBlockRegisterInitTableEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_NAT306
+        public  BBLOCKREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     000h          ; CR 0
+        db      001h,     000h          ; CR 1
+        db      002h,     000h          ; CR 2
+        db      003h,     001h          ; CR 3
+        db      004h,     002h          ; CR 4
+        db      005h,     00Fh          ; CR 5 KB & RTC
+        db      006h,     000h          ; CR 6
+        db      007h,     000h          ; CR 7
+        db      009h,     0C0h          ; CR 9
+        db      00Ah,     000h          ; CR A
+        db      00Bh,     0CFh          ; CR B
+        db      00Ch,     000h          ; CR C
+        db      00Dh,     0CFh          ; CR D
+        db      00Eh,     000h          ; CR E
+        db      00Fh,     01Eh          ; CR F
+        db      010h,     000h          ; CR 10
+        db      011h,     000h          ; CR 11
+        db      012h,     030h          ; CR 12
+        db      018h,     000h          ; CR 18
+        db      019h,     000h          ; CR 19
+        db      01Bh,     030h          ; CR 1B
+        db      01Ch,     000h          ; CR 1C
+BBlockRegisterInitTableEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_NAT336
+        public  BBLOCKREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      002h,     000h          ; CR 2
+        db      003h,     001h          ; CR 3
+        db      006h,     000h          ; CR 6
+        db      007h,     000h          ; CR 7
+        db      009h,     0C0h          ; CR 9
+        db      01Bh,     079h          ; CR 1B
+        db      040h,     000h          ; CR 40
+        db      041h,     006h          ; CR 41
+        db      048h,     0FCh          ; CR 48
+        db      049h,     000h          ; CR 49
+BBlockRegisterInitTableEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_NAT338
+        public  BBLOCKREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     008h          ; CR 0
+        db      002h,     000h          ; CR 2
+        db      003h,     001h          ; CR 3
+        db      006h,     000h          ; CR 6
+        db      007h,     000h          ; CR 7
+        db      009h,     0C0h          ; CR 9
+        db      01Bh,     008h          ; CR 1B
+        db      041h,     036h          ; CR 41
+        db      048h,     0FCh          ; CR 48
+        db      049h,     000h          ; CR 49
+        db      051h,     000h          ; CR 51
+BBlockRegisterInitTableEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_SMC67X
+        public  BBLOCKREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      022h,     001h  ;PWR ON FDC
+
+;-----------------------------------------------------------------------------;
+;;; Select one of the following:
+;;; 12 Bit Address Qualification, for either standard or Serialized IRQ system
+        db      024h,     004h  ; OSC is on, 12 Bit Address Qualification
+
+;;; 16 Bit Address Qualification, for Serialized IRQ system only
+;;;	db      024h,     044h  ; OSC is on, 16 Bit Address Qualification
+;-----------------------------------------------------------------------------;
+
+        db      007h,     007h  ; select logical device 7 (KBC)
+        db      070h,     001h  ; set IRQ 1
+        db      072h,     00Ch  ; set IRQ 12 for PS/2 mouse
+        db      0F0h,     000h  ; KRST_GA20
+
+        db      007h,     008h  ;Select logical device 8 (Aux I/O)
+                                ;Pin Multiplexing Control
+;-----------------------------------------------------------------------------;
+;;; Select one of the following:
+;;; For Serialized IRQ system
+        db      0C0h,     006h  ;Serial IRQ, DMA 3
+
+;;; For Normal IRQ system
+;;;     db      0C0h,     002h  ;DMA 3
+;-----------------------------------------------------------------------------;
+
+        db      030h,     001h  ;Enable (Auxiliary I/O)
+BBlockRegisterInitTableEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_SMC68X
+        public  BBLOCKREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      022h,     001h          ; PWR ON FDC
+        db      024h,     084h          ; OSC is on
+
+        db      007h,     000h          ; select logical device 0 (FDC)
+        db      060h,     003h
+        db      061h,     0f0h          ; set FDC port addr to 3F0h
+        db      070h,     006h          ; set to IRQ 6
+
+        db      007h,     007h          ; select logical device 7 (KBC)
+        db      070h,     001h          ; set IRQ 1
+        db      072h,     00Ch          ; set IRQ 12 for PS/2 mouse
+BBlockRegisterInitTableEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_SMC932
+        public  BBLOCKREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      022h,     001h          ; PWR ON FDC
+        db      024h,     0c4h          ; OSC is on
+
+        db      007h,     000h          ; select logical device 0 (FDC)
+        db      060h,     003h
+        db      061h,     0f0h          ; set FDC port addr to 3F0h
+        db      070h,     006h          ; set to IRQ 6
+        db      074h,     002h          ; set to DMA 2
+
+        db      007h,     006h          ; select logical device 6 (RTC)
+        db      070h,     008h          ; set IRQ 8
+
+        db      007h,     007h          ; select logical device 7 (KBC)
+        db      070h,     001h          ; set IRQ 1
+        db      072h,     00Ch          ; set IRQ 12 for PS/2 mouse
+        db      007h,     008h          ; select logical device 8 (Aux I/O)
+        db      0E8h,     012h          ; for KB soft reset ctrl
+        db      0EDh,     008h          ; for GA-20 enable
+BBlockRegisterInitTableEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_WIN977
+        public  BBLOCKREGINITCOUNT
+	public	BBLOCKFDCREGINITCOUNT
+	public	BBLOCKKBCREGINITCOUNT
+	public	BBLOCKRTCREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockFDCRegisterInitTableStart
+        public  BBlockKBCRegisterInitTableStart
+        public  BBlockRTCRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+BBlockFDCRegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+
+; Win977 Boot Block FDC Regs Init Table
+        db      022h,     001h  ; PWR ON FDC
+        db      024h,     0A4h  ; OSC is on
+
+        db      007h,     000h  ; select logical device 0 (FDC)
+        db      030h,     000h  ; deactivate FDC
+        db      060h,     003h
+        db      061h,     0f0h  ; set FDC port addr to 3F0h
+        db      070h,     006h  ; set to IRQ 6
+        db      074h,     002h  ; set to DMA 2
+        db      030h,     001h  ; activate FDC
+BBlockFDCRegisterInitTableEnd:
+
+BBlockKBCRegisterInitTableStart:
+; Win977 Boot Block KBC Regs Init Table
+        db      024h,     0A4h  ; OSC is on
+        
+        db      007h,     008h  ; select logical device 8 (Aux I/O)
+        db      030h,     001h  ; activate logical device 8
+        db      0E8h,     010h  ; for KB soft reset ctrl
+        db      0E8h,     012h  ; for KB soft reset ctrl
+        db      0EDh,     008h  ; for GA-20 enable
+        db      0BAh,     0F0h  ; activate logical device 8
+        
+        db      007h,     005h  ; select logical device 5 (KBC)
+        db      060h,     000h  ;
+        db      061h,     060h  ; set KBC index port address
+        db      062h,     000h  ;
+        db      063h,     064h  ; set KBC data port address
+        db      070h,     001h  ; set IRQ 1
+        db      072h,     00Ch  ; set IRQ 12 for PS/2 mouse
+        db      0f0h,     040h  ; Select Clock 8 Mhz.
+        db      030h,     001h  ; activate logical device 7
+BBlockKBCRegisterInitTableEnd:
+
+BBlockRTCRegisterInitTableStart:
+; Win977 Boot Block RTC Regs Init Table
+        db      024h,     0A4h  ; OSC is on
+        
+        db      007h,     004h  ; select logical device 4 (RTC)
+        db      060h,     000h  ;
+        db      061h,     070h  ; set RTC I/O base address
+        db      070h,     008h  ; set IRQ 8
+        db      0f0h,     080h  ; Select Bank 2 of CMOS RAM
+        db      030h,     001h  ; activate RTC
+BBlockRTCRegisterInitTableEnd:
+BBlockRegisterInitTableEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 2
+BBLOCKFDCREGINITCOUNT = (BBlockFDCRegisterInitTableEnd - BBlockFDCRegisterInitTableStart) / 2
+BBLOCKKBCREGINITCOUNT = (BBlockKBCRegisterInitTableEnd - BBlockKBCRegisterInitTableStart) / 2
+BBLOCKRTCREGINITCOUNT = (BBlockRTCRegisterInitTableEnd - BBlockRTCRegisterInitTableStart) / 2
+ENDIF
+        
+IF MKF_SMC957
+        public  BBLOCKREGINITCOUNT
+        public  BBlockRegisterInitTableStart
+        public  BBlockRegisterInitTableEnd
+BBlockRegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      022h,     001h          ;PWR ON FDC
+        db      024h,     004h          ;OSC is on
+BBlockRegisterInitTableEnd:
+        db      (Smc9578051RegisterInitEnd - Smc9578051RegisterInitStart) / 3
+Smc9578051RegisterInitStart:
+;;; Comment this block if Serialized IRQ is used.
+;;; ---------------- Begin Block --------------- ;;;
+        db      41h                     ;Select Legacy IRQ, CPU_RESET, GA20
+        dw      7f3dh                   ;8051 Multiplexing_1 Register
+;;; ----------------- End Block ---------------- ;;;
+        db      02h                     ;Select DRQ2
+        dw      7f40h                   ;8051 Multiplexing_2 Register
+        db      02h                     ;Select nDACK2
+        dw      7f30h                   ;8051 Mutilplexing_3 Register
+Smc9578051RegisterInitEnd:
+
+BBLOCKREGINITCOUNT = (BBlockRegisterInitTableEnd - BBlockRegisterInitTableStart) / 2
+
+ENDIF
+
+
+;---------------------------------------;
+;              DMA Routing              ;
+;---------------------------------------;
+
+BBlockIoDmaRoutingTable:
+IF MKF_NAT336
+;       NAT336 DRQ Pins:        DRQ0 = 01h
+;                               DRQ1 = 02h
+;                               DRQ2 = 03h
+;                               None = 00h
+
+;             System    Nat336
+;               DRQ     DRQ pin
+;             ------    -------
+        db      00h,      01h           ;System DRQ0 connected to Nat336 DRQ0
+        db      01h,      02h           ;System DRQ1 connected to Nat336 DRQ1
+        db      02h,      03h           ;System DRQ2 connected to Nat336 DRQ2
+        db      03h,      00h           ;System DRQ3 not connected to Nat336
+ENDIF
+IF MKF_SMC68X
+;       SMC68X DMA Pins:        DMA_A = 00h
+;                               DMA_B = 01h
+;                               DMA_C = 02h
+;                               None  = 04h
+
+;             System    SMC68X
+;               DRQ     DMA pin
+;             ------    -------
+        db      00h,      00h           ;System DRQ0 connected to SMC68X DMA_A
+        db      01h,      01h           ;System DRQ1 connected to SMC68X DMA_B
+        db      02h,      02h           ;System DRQ2 connected to SMC68X DMA_C
+        db      03h,      04h           ;System DRQ3 not connected to SMC68X
+ENDIF
+
+
+;---------------------------------------;
+;         FDC IRQ & DMA Routing         ;
+;---------------------------------------;
+
+BBlockIoIrqDmaRoutingTable:
+IF MKF_GM803C
+;       GM803C IRQ Pins:        IRQ_A = 01h
+;                               IRQ_B = 02h
+;                               IRQ_C = 03h
+;                               IRQ_D = 04h
+;                               IRQ_E = 05h
+;                               IRQ_F = 06h
+;                               IRQ_H = 08h
+
+;       GM803C DMA Pins:        DMA_A = 01h
+;                               DMA_B = 02h
+;                               DMA_C = 03h
+
+;              IRQ 6    DMA 2
+;             -------  -------
+        db      06h,     02h            ;ex: uses IRQ_F pin for IRQ6
+                                        ;         DMA_B pin for DRQ2
+ENDIF
+IF MKF_SMC669
+;       SMC669 IRQ Pins:        IRQ_A = 01h
+;                               IRQ_B = 02h
+;                               IRQ_C = 03h
+;                               IRQ_D = 04h
+;                               IRQ_E = 05h
+;                               IRQ_F = 06h
+;                               IRQ_G = 07h
+;                               IRQ_H = 08h
+
+;       SMC669 DMA Pins:        DMA_A = 01h
+;                               DMA_B = 02h
+;                               DMA_C = 03h
+
+;              IRQ 6    DMA 2
+;             -------  -------
+        db      06h,     02h            ;ex: uses IRQ_F pin for IRQ6
+                                        ;         DMA_B pin for DRQ2
+ENDIF
+IF MKF_WIN877
+;       Win877 IRQ Pins:        IRQ_A = 01h
+;                               IRQ_B = 02h
+;                               IRQ_C = 03h
+;                               IRQ_D = 04h
+;                               IRQ_E = 05h
+;                               IRQ_F = 06h
+;                               IRQ_G = 07h
+;                               IRQ_H = 08h
+
+;       Win877 DMA Pins:        DMA_A = 01h
+;                               DMA_B = 02h
+;                               DMA_C = 03h
+
+        db      06h, 02h                ;ex: uses IRQ_F pin for IRQ6
+                                        ;         DMA_B pin for DRQ2
+ENDIF
+
+;******************************************************************************;
+;                                 RUNTIME                                      ;
+;******************************************************************************;
+
+ELSE                                    ; Runtime tables
+        public  LptIrqBitMask
+        public  LptDmaBitMask
+        public  IoIrqRoutingTable
+        public  IoDmaRoutingTable
+
+
+;------------------------------------------------------;
+; IRQ and DMA channel available to route (in bit mask) ;
+;------------------------------------------------------;
+
+LptIrqBitMask:
+        dw      00a0h                   ;IRQ 5, 7
+LptDmaBitMask:
+        db      00001011b               ;DMA3, DMA1, DMA0
+
+
+;---------------------------------------;
+;       Register Initialization         ;
+;---------------------------------------;
+
+IF MKF_AIP
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+;       db      002h,     000h          ; CR 2
+        db      003h,     000h          ; CR 3
+        db      010h,     000h          ; CR 10
+        db      020h,     000h          ; CR 20
+        db      030h,     000h          ; CR 30
+        db      040h,     000h          ; CR 40
+        db      050h,     000h          ; CR 50
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_ALI5113
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      011h,     000h          ; CR 1 
+        db      022h,     000h          ; CR 2 
+        db      033h,     090h          ; CR 3
+        db      055h,     003h          ; CR 5
+        db      066h,     0a0h          ; CR 6
+        db      077h,     001h          ; CR 7
+        db      088h,     000h          ; CR 8
+        db      099h,     000h          ; CR 9
+        db      0aah,     08ah          ; CR A
+        db      0bbh,     048h          ; CR B
+        db      0cch,     041h          ; CR C
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_ALI5119
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      022h,     000h          ; CR 2 
+        db      033h,     090h          ; CR 3
+        db      055h,     003h          ; CR 5
+        db      066h,     080h          ; CR 6
+        db      077h,     001h          ; CR 7
+        db      088h,     010h          ; CR 8
+        db      099h,     010h          ; CR 9
+        db      0aah,     08ah          ; CR A
+        db      0bbh,     048h          ; CR B
+        db      0cch,     001h          ; CR C
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_ALI5123
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;              Device   Data/Reg
+;             --------  --------
+        db      000h                    ;select logical device 0 (FDC)
+        dw                0030h         ;deactivate FDC
+
+        db      003h                    ;select logical device 3 (LPT)
+        dw                3CF0h
+        db      003h                    ;select logical device 3 (LPT)
+        dw                0030h         ;deactivate LPT
+        
+        db      004h                    ;select logical device 4 (SER1)
+        dw                0030h         ;deactivate COMA
+        
+        db      005h                    ;select logical device 5 (SER2)
+        dw                0030h         ;deactivate COMB
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 3
+
+ENDIF
+IF MKF_CT735
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     08Ah          ; CR 0 
+        db      001h,     0B4h          ; CR 1
+        db      002h,     088h          ; CR 2
+        db      005h,     000h          ; CR 5
+        db      006h,     000h          ; CR 6
+        db      009h,     000h          ; CR 9
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_DSCH20
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      02h,      00h   ; Disable FDC   
+        db      03h,      0C0h  ; FDC mode
+        db      07h,      0F8h  ; Disable LPT
+        db      0Ch,      0F8h  ; Disable COMA  
+        db      11h,      0F8h  ; Disable COMB  
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_GM803B
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      0A0h,     003h          ; CR A0
+        db      0A1h,     000h          ; CR A1
+        db      0A2h,     000h          ; CR A2
+        db      0A4h,     000h          ; CR A4
+        db      0A5h,     000h          ; CR A5
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_GM803C
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      0C2h,     003h          ; CR C2
+        db      0C3h,     0FCh          ; CR C3
+        db      0CEh,     000h          ; CR CE
+        db      0CFh,     000h          ; CR CF
+        db      0D0h,     000h          ; CR D0
+        db      0D1h,     000h          ; CR D1
+        db      0D3h,     000h          ; CR D3
+        db      0D5h,     000h          ; CR D5
+        db      0D6h,     000h          ; CR D6
+        db      0D7h,     000h          ; CR D7
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_ITE8680 or MKF_ITE8661 
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;              Device   Data/Reg
+;             --------  --------
+        db      000h                    ;select logical device 0 (FDC)
+        dw                0030h         ;deactivate FDC
+
+        db      001h                    ;select logical device 1 (SER1)
+        dw                0030h         ;deactivate COMA
+
+        db      002h                    ;select logical device 2 (SER2)
+        dw                0030h         ;deactivate COMB
+
+        db      003h                    ;select logical device 3 (LPT)
+        dw                0030h         ;deactivate LPT
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 3
+ENDIF
+
+IF MKF_NAT303
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     000h          ; CR 0
+        db      001h,     000h          ; CR 1
+        db      002h,     00Ch          ; CR 2
+        db      003h,     001h          ; CR 3
+        db      004h,     002h          ; CR 4
+;       db      005h,     00Fh          ; CR 5
+        db      006h,     098h          ; CR 6
+        db      007h,     000h          ; CR 7
+        db      009h,     0C0h          ; CR 9
+        db      00Bh,     0CFh          ; CR B
+        db      00Dh,     0CFh          ; CR D
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_NAT306
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     000h          ; CR 0
+        db      001h,     000h          ; CR 1
+        db      002h,     000h          ; CR 2
+        db      003h,     001h          ; CR 3
+        db      004h,     002h          ; CR 4
+        db      006h,     000h          ; CR 6
+        db      007h,     000h          ; CR 7
+        db      009h,     0C0h          ; CR 9
+        db      00Ah,     000h          ; CR A
+        db      00Bh,     000h          ; CR B
+        db      00Ch,     000h          ; CR C
+        db      00Dh,     000h          ; CR D
+        db      00Eh,     000h          ; CR E
+        db      00Fh,     01Eh          ; CR F
+        db      010h,     000h          ; CR 10
+        db      011h,     000h          ; CR 11
+        db      012h,     030h          ; CR 12
+        db      018h,     000h          ; CR 18
+        db      019h,     000h          ; CR 19
+        db      01Bh,     030h          ; CR 1B
+        db      01Ch,     000h          ; CR 1C
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_NAT308
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;              Device   Data/Reg
+;             --------  --------
+        db      003h                    ;select logical device 3 (FDC)
+        dw                0030h         ;deactivate FDC
+
+        db      004h                    ;select logical device 3 (LPT)
+        dw                0030h         ;deactivate LPT
+
+        db      004h                    ;select logical device 3 (LPT)
+        dw                0271h         ;IRQ high activate
+
+        db      006h                    ;select logical device 6 (SER1)
+        dw                0030h         ;deactivate COMA
+
+        db      005h                    ;select logical device 5 (SER2)
+        dw                0030h         ;deactivate COMB
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 3
+
+ENDIF
+IF MKF_NAT312
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     000h          ; CR 0 
+        db      001h,     000h          ; CR 1
+        db      002h,     008h          ; CR 2
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_NAT322
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     000h          ; CR 0 
+        db      001h,     000h          ; CR 1
+        db      002h,     008h          ; CR 2
+        db      003h,     001h          ; CR 3
+        db      004h,     000h          ; CR 4
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_NAT332
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     000h          ; CR 0
+        db      001h,     000h          ; CR 1
+        db      002h,     008h          ; CR 2
+        db      003h,     001h          ; CR 3
+        db      004h,     000h          ; CR 4
+        db      006h,     008h          ; CR 6
+;       db      007h,     000h          ; CR 7
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_NAT336
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     000h          ; CR 0
+        db      001h,     000h          ; CR 1
+        db      002h,     000h          ; CR 2
+        db      003h,     001h          ; CR 3
+        db      004h,     002h          ; CR 4
+        db      006h,     000h          ; CR 6
+        db      007h,     000h          ; CR 7
+        db      009h,     0C0h          ; CR 9
+        db      00Ah,     000h          ; CR A
+        db      00Bh,     000h          ; CR B
+        db      00Ch,     000h          ; CR C
+        db      00Dh,     000h          ; CR D
+        db      00Eh,     000h          ; CR E
+        db      010h,     000h          ; CR 10
+        db      011h,     000h          ; CR 11
+        db      012h,     000h          ; CR 12
+;       db      018h,     000h          ; CR 18
+        db      01Bh,     079h          ; CR 1B
+        db      01Ch,     000h          ; CR 1C
+        db      040h,     000h          ; CR 40
+        db      041h,     006h          ; CR 41
+        db      042h,     000h          ; CR 42
+        db      043h,     000h          ; CR 43
+        db      044h,     000h          ; CR 44
+        db      045h,     000h          ; CR 45
+        db      046h,     000h          ; CR 46
+        db      047h,     000h          ; CR 47
+        db      048h,     0FCh          ; CR 48
+        db      049h,     000h          ; CR 49
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_NAT338
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     000h          ; CR 0
+        db      002h,     000h          ; CR 2
+        db      003h,     001h          ; CR 3
+        db      004h,     002h          ; CR 4
+        db      006h,     000h          ; CR 6
+        db      007h,     000h          ; CR 7
+        db      009h,     0C0h          ; CR 9
+        db      00Ah,     000h          ; CR A
+        db      00Bh,     000h          ; CR B
+        db      00Ch,     000h          ; CR C
+        db      00Dh,     000h          ; CR D
+        db      010h,     000h          ; CR 10
+        db      011h,     000h          ; CR 11
+        db      012h,     000h          ; CR 12
+        db      018h,     026h          ; CR 18
+        db      01Bh,     008h          ; CR 1B
+        db      01Ch,     000h          ; CR 1C
+        db      040h,     0A0h          ; CR 40
+        db      041h,     036h          ; CR 41
+        db      042h,     000h          ; CR 42
+        db      043h,     000h          ; CR 43
+        db      044h,     000h          ; CR 44
+        db      045h,     000h          ; CR 45
+        db      046h,     000h          ; CR 46
+        db      047h,     000h          ; CR 47
+        db      048h,     0FCh          ; CR 48
+        db      049h,     000h          ; CR 49
+;       db      04Ah,     000h          ; CR 4A
+;       db      04Bh,     000h          ; CR 4B
+        db      04Ch,     000h          ; CR 4C
+        db      04Dh,     000h          ; CR 4D
+        db      04Eh,     000h          ; CR 4E
+        db      04Fh,     000h          ; CR 4F
+        db      050h,     000h          ; CR 50
+        db      051h,     000h          ; CR 51
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_SMC651                           ; Same for SMC661, CT711, CT712
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     08Ah          ; CR 0 
+        db      001h,     0BCh          ; CR 1
+        db      002h,     088h          ; CR 2
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_SMC665
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     08Ah          ; CR 0
+        db      001h,     0BCh          ; CR 1
+        db      002h,     088h          ; CR 2
+        db      003h,     079h          ; CR 3
+        db      004h,     000h          ; CR 4
+        db      005h,     000h          ; CR 5
+        db      00Ah,     007h          ; CR A - ECC FIFO
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_SMC665IR
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     08Ah          ; CR 0 
+        db      001h,     0BCh          ; CR 1
+        db      002h,     088h          ; CR 2
+        db      003h,     079h          ; CR 3
+        db      004h,     000h          ; CR 4
+        db      005h,     000h          ; CR 5
+        db      006h,     0FFh          ; CR 6
+        db      007h,     000h          ; CR 7
+        db      008h,     000h          ; CR 8
+        db      009h,     000h          ; CR 9
+        db      00Ah,     000h          ; CR A
+        db      00Bh,     000h          ; CR B
+        db      00Ch,     000h          ; CR C
+        db      00Dh,     00Dh          ; CR D
+        db      00Eh,     082h          ; CR E
+        db      00FH,     000h          ; CR F
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_SMC669
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     0AAh          ; CR 0
+        db      001h,     09Ch          ; CR 1
+        db      002h,     088h          ; CR 2
+        db      003h,     0F4h          ; CR 3
+        db      004h,     000h          ; CR 4
+        db      005h,     000h          ; CR 5
+        db      007h,     000h          ; CR 7
+        db      00Ah,     007h          ; CR A - ECC FIFO (SMC669FR - IR Pins selection)
+        db      00Ch,     000h          ; CR C
+        db      010h,     040h          ; CR 10 - (SMC669 - PLL Clock selection)
+        db      020h,     000h          ; CR 20
+        db      021h,     000h          ; CR 21
+        db      022h,     000h          ; CR 22
+        db      023h,     000h          ; CR 23
+        db      024h,     000h          ; CR 24
+        db      025h,     000h          ; CR 25
+        db      026h,     000h          ; CR 26
+        db      027h,     000h          ; CR 27
+IF MKF_SMC669FR                         ;IF for SMC669FR
+        db      028h,     000h          ; CR 28
+        db      029h,     010h          ; CR 29 (SMC669FR - Pin 23 set to IR Mode)
+        db      02Ah,     000h          ; CR 2A
+        db      02Bh,     000h          ; CR 2B
+        db      02Ch,     000h          ; CR 2C
+        db      02Dh,     003h          ; CR 2D
+        db      02Eh,     000h          ; CR 2E
+        db      02Fh,     000h          ; CR 2F
+ENDIF                                   ;ENDIF for SMC669FR
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_SMC67X
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      003h,     003h  ; GP Index Reg. Address
+        db      022h,     039h  ; PWR ON FDC, LPT, SER ports
+        db      023h,     000h  ; turn off intelligent pwr mgnt
+
+;-----------------------------------------------------------------------------;
+;;; 12 Bit Address Qualification, for either standard or Serialized IRQ system
+        db      024h,     004h  ; OSC is on, 12 Bit Address Qualification
+
+;;; 16 Bit Address Qualification, for Serialized IRQ system only
+;;;	db      024h,     044h  ; OSC is on, 16 Bit Address Qualification
+;-----------------------------------------------------------------------------;
+
+        db      007h,     000h  ; select logical device 0 (FDC)
+        db      030h,     000h  ; deactivate FDC
+
+        db      007h,     003h  ; select logical device 3 (LPT)
+        db      030h,     000h  ; deactivate
+
+        db      007h,     004h  ; select logical device 4 (SER1)
+        db      030h,     000h  ; deactivate
+
+        db      007h,     005h  ; select logical device 5 (SER2)
+        db      030h,     000h  ; deactivate
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_SMC68X
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      022h,     039h  ; PWR ON FDC, LPT, SER
+        db      023h,     000h  ; turn off intelligent pwr mgnt
+        db      024h,     084h  ; OSC is on
+
+        db      007h,     000h  ; select logical device 0 (FDC)
+        db      030h,     000h  ; deactivate FDC
+        db      060h,     003h
+        db      061h,     0f0h  ; set FDC port addr to 3F0h
+        db      070h,     006h  ; set to IRQ 6
+
+        db      007h,     003h  ; select logical device 3 (LPT)
+        db      030h,     000h  ; deactivate
+
+        db      007h,     004h  ; select logical device 4 (SER1)
+        db      030h,     000h  ; deactivate
+
+        db      007h,     005h  ; select logical device 5 (SER2)
+        db      030h,     000h  ; deactivate
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_SMC922
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     0aah          ; CR 0 
+        db      001h,     0bch          ; CR 1
+        db      002h,     098h          ; CR 2
+        db      003h,     078h          ; CR 3
+        db      004h,     000h          ; CR 4
+        db      005h,     000h          ; CR 5
+        db      006h,     0ffh          ; CR 6
+        db      007h,     000h          ; CR 7 
+        db      00Ah,     007h          ; CR A
+        db      00Bh,     000h          ; CR B
+        db      00Ch,     000h          ; CR C
+        db      00Fh,     000h          ; CR F
+        db      010h,     000h          ; CR 10
+        db      018h,     04fh          ; CR 13
+        db      019h,     080h          ; CR 16
+        db      01Bh,     080h          ; CR 18
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_SMC932
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      022h,     03fh  ; PWR ON FDC, LPT, SER, IDE ports
+        db      023h,     000h  ; turn off intelligent pwr mgnt
+        db      024h,     0c4h  ; OSC is on
+
+        db      007h,     000h  ; select logical device 0 (FDC)
+        db      030h,     000h  ; deactivate FDC
+        db      060h,     003h
+        db      061h,     0f0h  ; set FDC port addr to 3F0h
+        db      070h,     006h  ; set to IRQ 6
+        db      074h,     002h  ; set to DMA 2
+
+        db      007h,     001h  ; select logical device 1 (IDE1)
+        db      030h,     000h  ; deactivate
+
+        db      007h,     002h  ; select logical device 2 (IDE2)
+        db      030h,     000h  ; deactivate
+
+        db      007h,     003h  ; select logical device 3 (LPT)
+        db      030h,     000h  ; deactivate
+
+        db      007h,     004h  ; select logical device 4 (SER1)
+        db      030h,     000h  ; deactivate
+
+        db      007h,     005h  ; select logical device 5 (SER2)
+        db      030h,     000h  ; deactivate
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_SMC957
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      022h,     039h  ; PWR ON FDC, LPT, SER ports
+        db      023h,     000h  ; turn off intelligent pwr mgnt
+        db      024h,     084h  ; IRQ8 active low, CLK_OUT = 1.8432 MHZ
+                                ; OSC is on
+        
+        db      007h,     000h  ; select logical device 0 (FDC)
+        db      030h,     000h  ; deactivate FDC
+        
+        db      007h,     003h  ; select logical device 3 (LPT)
+        db      030h,     000h  ; deactivate
+        
+        db      007h,     004h  ; select logical device 4 (SER1)
+        db      030h,     000h  ; deactivate
+        
+        db      007h,     005h  ; select logical device 5 (SER2)
+        db      030h,     000h  ; deactivate
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_UMC8663
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      0C0h,     000h          ; CR 0 
+        db      0C1h,     09Fh          ; CR 1
+        db      0C2h,     081h          ; CR 2
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_UMC8663B
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      0C0h,     000h          ; CR 0 
+        db      0C1h,     09Fh          ; CR 1
+        db      0C2h,     081h          ; CR 2
+        db      0C3h,     008h          ; CR 3
+;       db      0C4h,     000h          ; CR 4 - Not needed
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_UMC8669
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      0C0h,     067h          ; CR 0 
+        db      0C1h,     07fh          ; CR 1
+        db      0C2h,     0e1h          ; CR 2
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_WIN787
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     0F0h          ; CR 0
+        db      001h,     03Fh          ; CR 1
+        db      002h,     000h          ; CR 2
+        db      003h,     060h          ; CR 3
+        db      004h,     000h          ; CR 4
+        db      005h,     008h          ; CR 5
+        db      006h,     000h          ; CR 6
+        db      007h,     005h          ; CR 7
+        db      008h,     000h          ; CR 8
+        db      009h,     000h          ; CR 9
+        db      00Ah,     000h          ; CR A
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_WIN787IF
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     0F0h          ; CR 0 
+        db      001h,     03Fh          ; CR 1
+        db      002h,     000h          ; CR 2
+        db      003h,     060h          ; CR 3
+        db      004h,     000h          ; CR 4
+        db      005h,     008h          ; CR 5
+        db      006h,     000h          ; CR 6
+        db      007h,     005h          ; CR 7 
+        db      008h,     000h          ; CR 8
+        db      009h,     000h          ; CR 9
+        db      00Ah,     000h          ; CR A
+        db      00Dh,     002h          ; CR D
+        db      010h,     000h          ; CR 10
+        db      011h,     000h          ; CR 11
+        db      012h,     000h          ; CR 12
+        db      013h,     000h          ; CR 13
+        db      014h,     000h          ; CR 14
+        db      015h,     000h          ; CR 15
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+IF MKF_WIN877
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      000h,     000h          ; CR 0
+        db      001h,     000h          ; CR 1
+        db      002h,     000h          ; CR 2
+        db      003h,     060h          ; CR 3
+        db      004h,     000h          ; CR 4
+        db      005h,     008h          ; CR 5
+        db      006h,     000h          ; CR 6
+        db      007h,     000h          ; CR 7
+        db      008h,     000h          ; CR 8
+        db      009h,     000h          ; CR 9
+        db      00Ah,     000h          ; CR A
+        db      00Dh,     0A3h          ; CR D
+        db      010h,     000h          ; CR 10
+        db      011h,     000h          ; CR 11
+        db      012h,     000h          ; CR 12
+        db      013h,     000h          ; CR 13
+        db      014h,     000h          ; CR 14
+        db      015h,     000h          ; CR 15
+        db      016h,     002h          ; CR 16
+        db      017h,     000h          ; CR 17
+        db      01Eh,     000h          ; CR 1E
+        db      020h,     000h          ; CR 20
+        db      021h,     000h          ; CR 21
+        db      022h,     000h          ; CR 22
+        db      023h,     000h          ; CR 23
+        db      024h,     000h          ; CR 24
+        db      025h,     000h          ; CR 25
+;       db      026h,     000h          ; CR 26
+;       db      027h,     000h          ; CR 27
+;       db      028h,     000h          ; CR 28
+;       db      029h,     000h          ; CR 29
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+
+ENDIF
+
+IF MKF_WIN977
+        public  REGINITCOUNT
+        public  RegisterInitTableStart
+        public  RegisterInitTableEnd
+RegisterInitTableStart:
+;                        Power
+;             Register  On Value
+;             --------  --------
+        db      024h,   0A4h            ; make sure KBC/RTC active
+
+        db      007h,   000h            ; disable Floopy controller
+        db      030h,   000h            ;
+
+        db      007h,   001h            ; disable Parallel port
+        db      030h,   000h            ;
+
+        db      007h,   002h            ; disable serial port A
+        db      030h,   000h            ;
+
+        db      007h,   003h            ; disable serial port B
+        db      030h,   000h            ;
+
+        db      007h,   006h            ; disable Ir port
+        db      030h,   000h            ;
+RegisterInitTableEnd:
+
+REGINITCOUNT = (RegisterInitTableEnd - RegisterInitTableStart) / 2
+ENDIF
+
+;---------------------------------------;
+;              IRQ Routing              ;
+;---------------------------------------;
+
+IoIrqRoutingTable:
+IF MKF_ALI5113
+;       Set IRQ value to 5/7/FF for IRQ5/IRQ7/Not Used
+
+;            ALI5113
+;            Pin No.    IRQ     
+;           --------  --------  
+        db    039h,     007h    ; Pin 39 is IRQ7
+        db    094h,     005h    ; Pin 94 is IRQ5
+        db    024h,     0FFh    ; Pin 24 is not used
+ENDIF
+IF MKF_ALI5119
+;       Set IRQ value to 5/7 for IRQ5/IRQ7
+
+;            ALI5119
+;            Pin No.    IRQ     
+;           --------  --------  
+        db    039h,     007h    ; Pin 39 is IRQ7
+        db    094h,     005h    ; Pin 94 is IRQ5
+ENDIF
+IF MKF_GM803C
+;       GM803C IRQ Pins:        IRQ_A = 01h
+;                               IRQ_B = 02h
+;                               IRQ_C = 03h
+;                               IRQ_D = 04h
+;                               IRQ_E = 05h
+;                               IRQ_F = 06h
+;                               IRQ_H = 08h
+;                               None  = 00h
+
+        db      03h, 03h                ;IRQ3 connected to IRQ_C
+        db      04h, 04h                ;IRQ4 connected to IRQ_D
+        db      05h, 05h                ;IRQ5 connected to IRQ_E
+        db      06h, 06h                ;IRQ6 connected to IRQ_F
+        db      07h, 08h                ;IRQ7 connected to IRQ_H
+        db      08h, 00h                ;No IRQ
+ENDIF
+IF MKF_SMC665IR
+;       Set IRQ value to 5/7 for IRQ5/IRQ7
+
+;           SMC665IR
+;            Pin No.    IRQ     
+;           --------  --------  
+        db    039h,     007h    ; Pin 39 is IRQ7
+        db    094h,     005h    ; Pin 94 is IRQ5
+ENDIF
+IF MKF_SMC669
+;       SMC669 IRQ Pins:        IRQ_A = 01h
+;                               IRQ_B = 02h
+;                               IRQ_C = 03h
+;                               IRQ_D = 04h
+;                               IRQ_E = 05h
+;                               IRQ_F = 06h
+;                               IRQ_G = 07h
+;                               IRQ_H = 08h
+;                               None  = 00h
+
+;              System    SMC669
+;               IRQ       IRQ
+;             --------  --------
+        db      03h,      03h           ;IRQ3 connected to IRQ_C
+        db      04h,      04h           ;IRQ4 connected to IRQ_D
+        db      05h,      05h           ;IRQ5 connected to IRQ_E
+        db      06h,      06h           ;IRQ6 connected to IRQ_F
+        db      07h,      07h           ;IRQ7 connected to IRQ_G
+        db      08h,      00h           ;No IRQ
+ENDIF
+IF MKF_WIN877
+;       WIN877 IRQ Pins:        IRQ_A = 01h
+;                               IRQ_B = 02h
+;                               IRQ_C = 03h
+;                               IRQ_D = 04h
+;                               IRQ_E = 05h
+;                               IRQ_F = 06h
+;                               IRQ_G = 07h
+;                               IRQ_H = 08h
+;                               None  = 00h
+
+;              System    WIN877
+;               IRQ       IRQ
+;             --------  --------
+        db      03h,      03h           ;IRQ3 connected to IRQ_C
+        db      04h,      04h           ;IRQ4 connected to IRQ_D
+        db      05h,      01h           ;IRQ5 connected to IRQ_A
+        db      06h,      06h           ;IRQ6 connected to IRQ_F
+        db      07h,      05h           ;IRQ7 connected to IRQ_E
+        db      08h,      00h           ;No IRQ
+ENDIF
+
+
+;---------------------------------------;
+;              DMA Routing              ;
+;---------------------------------------;
+
+IoDmaRoutingTable:
+IF MKF_ALI5113
+;       Set DRQ value to 1/3 for DRQ1/DRQ3
+
+;            ALI5113
+;            Pin No.    DRQ     
+;           --------  --------  
+        db    098h,     001h    ; Pin 98 is DRQ1
+        db    023h,     003h    ; Pin 23 is DRQ3
+ENDIF
+IF MKF_NAT306
+;       NAT306 PDRQ Pins:       PDRQ0 = 00h
+;                               PDRQ1 = 01h
+;                               None  = FFh
+
+;              System   Nat306
+;               DRQ     DRQ pin
+;             --------  --------
+        db      00h,      0ffh          ;System DRQ0 not connected to any Nat306 PDRQ pin
+        db      01h,      000h          ;System DRQ1 connected to Nat306 PDRQ0 pin
+        db      02h,      0ffh          ;System DRQ2 not connected to any Nat306 PDRQ pin
+        db      03h,      001h          ;System DRQ3 connected to Nat306 PDRQ1 pin
+        db      04h                     ;No DMA, dummy value
+ENDIF
+IF MKF_NAT336
+;       NAT336 DRQ Pins:        DRQ0 = 01h
+;                               DRQ1 = 02h
+;                               DRQ2 = 03h
+;                               None = 00h
+
+;             System    Nat336
+;               DRQ     DRQ pin
+;             ------    -------
+        db      00h,      01h           ;System DRQ0 connected to Nat336 DRQ0
+        db      01h,      02h           ;System DRQ1 connected to Nat336 DRQ1
+        db      02h,      03h           ;System DRQ2 connected to Nat336 DRQ2
+        db      03h,      00h           ;System DRQ3 not connected to Nat336
+        db      04h,      00h           ;No DMA, dummy value
+ENDIF
+IF MKF_GM803C
+;       GM803C DMA Pins:        DMA_A = 01h
+;                               DMA_B = 02h
+;                               DMA_C = 03h
+;                               None  = 00h
+
+        db      00h, 00h                ;DRQ0 not connected
+        db      01h, 01h                ;DRQ1 connected to DRQ_A
+        db      02h, 02h                ;DRQ2 connected to DRQ_B
+        db      03h, 03h                ;DRQ3 connected to DRQ_C
+        db      04h, 00h                ;No DRQ
+ENDIF
+IF MKF_SMC669
+;       SMC669 DMA Pins:        DMA_A = 01h
+;                               DMA_B = 02h
+;                               DMA_C = 03h
+;                               None  = 00h
+
+;             System    SMC669
+;               DRQ     DRQ pin
+;             ------    -------
+        db      00h,      00h           ;DRQ0 not connected
+        db      01h,      01h           ;DRQ1 connected to DRQ_A
+        db      02h,      02h           ;DRQ2 connected to DRQ_B
+        db      03h,      03h           ;DRQ3 connected to DRQ_C
+        db      04h,      00h           ;No DRQ
+ENDIF
+IF MKF_SMC68X
+;       SMC68X DMA Pins:        DMA_A = 00h
+;                               DMA_B = 01h
+;                               DMA_C = 02h
+;                               None  = 04h
+
+;             System    SMC68X
+;               DRQ     DMA pin
+;             ------    -------
+        db      00h,      00h           ;System DRQ0 connected to SMC68X DMA_A
+        db      01h,      01h           ;System DRQ1 connected to SMC68X DMA_B
+        db      02h,      02h           ;System DRQ2 connected to SMC68X DMA_C
+        db      03h,      04h           ;System DRQ3 not connected to SMC68X
+        db      04h,      04h           ;No DRQ
+ENDIF
+IF MKF_WIN877
+;       WIN877 DMA Pins:        DMA_A = 01h
+;                               DMA_B = 02h
+;                               DMA_C = 03h
+;                               None  = 00h
+
+;             System    WIN877
+;               DRQ     DRQ pin
+;             ------    -------
+        db      00h,      00h           ;DRQ0 not connected
+        db      01h,      01h           ;DRQ1 connected to DRQ_A
+        db      02h,      02h           ;DRQ2 connected to DRQ_B
+        db      03h,      03h           ;DRQ3 connected to DRQ_C
+        db      04h,      00h           ;No DRQ
+ENDIF
+
+ENDIF
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1997, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+_text    ends
+         end

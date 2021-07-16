@@ -1,0 +1,322 @@
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;****************************************************************************;
+
+ESCD_MAJOR_VERSION	EQU 2
+ESCD_MINOR_VERSION	EQU 1
+
+ACFG_SIGNATURE		equ 47464341h	;ASCII string "ACFG"
+INVALID_SLOT_NUM	equ 0FFh
+UNKNOWN_SLOT_NUM	equ 0FEh
+SPECIAL_DEV_SLOT_NUM	equ 0FDh	;Holds default resources for IDE, etc.
+FIRST_VIRTUAL_SLOT	equ 10h		;Slot 16 is first virtual slot in ESCD
+
+SPECIAL_DEV_FUNC_IDE_PRI equ 00h	;Holds default resources for prmary IDE
+SPECIAL_DEV_FUNC_IDE_SEC equ 01h	;Holds default resources for secondary IDE
+SPECIAL_DEV_FUNC_IDE_DUAL equ 02h	;Holds default resources for dual channel IDE
+
+
+; escd_cfghdr Structure
+;------------------------------------------------------------------------------
+escd_cfghdr		struc
+escd_ch_escd_size	dw ?		;Size of entire ESCD (includes this hdr)
+escd_ch_signature	dd ?		;Set to ACFG_SIGNATURE
+escd_ch_minor_ver	db ?		;Minor version of this ESCD structure
+escd_ch_major_ver	db ?		;Major version of this ESCD structure
+escd_ch_board_count	db ?		;Number of boards stored in ESCD
+escd_ch_reserved	db 3 dup (?)
+escd_cfghdr		ends
+
+
+; escd_brdhdr Structure
+;------------------------------------------------------------------------------
+escd_brdhdr		struc
+escd_bh_board_size	dw ?		;Size of board's data, includes this hdr
+escd_bh_slot_num	db ?		;Slot number of this board
+escd_bh_reserved	db ?
+escd_brdhdr		ends
+
+
+; escd_brdinfo Structure
+;------------------------------------------------------------------------------
+escd_brdinfo		struc
+escd_bi_device_id	dd ?		;Device ID of board
+escd_bi_board_flags	dw ?		;Board flags word
+escd_bi_ovl_version	dw ?		;Version number of OVL file (EISA only)
+escd_brdinfo		ends
+
+; Bit definitions for escd_bi_board_flags
+;------------------------------------------------------------------------------
+BIF_NO_READABLE_ID	equ 0040h	;Bit 6:  If set, board does not have readable ID
+BIF_CFG_LOCKED		equ 0400h	;Bit 10: If set, board's config is locked
+BIF_NO_CFG_FILE		equ 4000h	;Bit 14: If set, board has no cfg file
+					;        (PCI / PnPISA)
+
+; escd_std_func Structure
+;------------------------------------------------------------------------------
+escd_std_func		struc
+escd_std_func_size	dw ?		; Size of this function data that follows
+escd_std_sel_size	db ?		; Always set to 1 when generating
+escd_std_sel_data	db ?		; Always set to 0 when generating
+escd_std_func_info	db ?		; See bit definitions (FI_xxxxxxx)
+escd_std_func		ends
+
+
+; escd_pnp_func Structure
+;------------------------------------------------------------------------------
+escd_pnp_func		struc
+escd_pnp_func_size	dw ?		;Size of this function data that follows
+escd_pnp_sel_size	db ?		;Always set to 1
+escd_pnp_sel_data	db ?		;Always set to 0
+escd_pnp_func_info	db ?		;See bit definitions (FI_xxxxxxx)
+escd_pnp_freeform_size	db ?		;Size of freeform data
+
+escd_pnp_signature	dd ?		;Set to ACFG_SIGNATURE
+escd_pnp_minor_ver	db ?		;Minor version of this ESCD structure
+escd_pnp_major_ver	db ?		;Major version of this ESCD structure
+escd_pnp_board_type	db ?		;See board type constants (ESCD_BT_xxxx)
+escd_pnp_reserved	db ?
+escd_pnp_disabled_map	dw ?		;Bit map of disabled logical devices
+escd_pnp_error_map	dw ?		;Bit map of config errors in funcs
+escd_pnp_fixed_map	dw ?		;Bit map of fixed config devices
+escd_pnp_reserved2	dw ?
+
+escd_pnp_vendor_id	dd ?		;Vendor ID of PnP device
+escd_pnp_serial_num	dd ?		;Serial number of PnP device
+escd_pnp_func		ends
+
+
+; escd_pci_func Structure
+;------------------------------------------------------------------------------
+escd_pci_func		struc
+escd_pci_func_size	dw ?		;Size of this function data that follows
+escd_pci_sel_size	db ?		;Always set to 1
+escd_pci_sel_data	db ?		;Always set to 0
+escd_pci_func_info	db ?		;See bit definitions (FI_xxxxxxx)
+escd_pci_freeform_size	db ?		;Size of freeform data
+
+escd_pci_signature	dd ?		;Set to ACFG_SIGNATURE
+escd_pci_minor_ver	db ?		;Minor version of this ESCD structure
+escd_pci_major_ver	db ?		;Major version of this ESCD structure
+escd_pci_board_type	db ?		;See board type constants (ESCD_BT_xxxx)
+escd_pci_reserved	db ?
+escd_pci_disabled_map	dw ?		;Bit map of disabled logical devices
+escd_pci_error_map	dw ?		;Bit map of config errors in funcs
+escd_pci_fixed_map	dw ?		;Bit map of fixed config devices
+escd_pci_reserved2	dw ?
+
+escd_pci_brdid		db 8 dup (?)	;1 to 8 escd_pci_board_id structures
+escd_pci_func		ends
+
+
+; escd_pci_board_id Structure
+;------------------------------------------------------------------------------
+escd_pci_board_id	struc
+escd_pbi_bus_num	db ?		;PCI bus number of the device
+escd_pbi_devfunc_num	db ?		;Device # (bit 7-3) function # (bit 2-0)
+escd_pbi_device_id	dw ?		;Device ID of the device..........these are backwards in the spec!
+escd_pbi_vendor_id	dw ?		;Vendor ID of the device
+escd_pbi_reserved	dw ?
+escd_pci_board_id	ends
+
+
+; EscdPpbFunc Structure (for PCI to PCI bridges)
+;------------------------------------------------------------------------------
+EscdPpbFunc		STRUC
+escdPpbFuncSize		DW ?		; Size of this function data that follows
+escdPpbSelSize		DB ?		; Always set to 1
+escdPpbSelData		DB ?		; Always set to 0
+escdPpbFuncInfo		DB ?		; See bit definitions (FI_xxxxxxx)
+escdPpbFreeformSize	DB ?		; Size of freeform data
+
+escdPpbSignature	DD ?		; Set to ACFG_SIGNATURE
+escdPpbMinorVer		DB ?		; Minor version of this ESCD structure
+escdPpbMajorVer		DB ?		; Major version of this ESCD structure
+escdPpbBoardType	DB ?		; See board type constants (ESCD_BT_xxxx)
+escdPpbReserved		DB ?
+escdPpbDisabledMap	DW ?		; Bit map of disabled logical devices
+escdPpbErrorMap		DW ?		; Bit map of config errors in funcs
+escdPpbFixedMap		DW ?		; Bit map of fixed config devices
+escdPpbReserved2	DW ?
+
+escdPpbPriBusNum	DB ?		; Bus # on primary side of PPB
+escdPpbDevFuncNum	DB ?		; Device # (bit 7-3) function # (bit 2-0)
+escdPpbDeviceID		DW ?		; Device ID of the PPB
+escdPpbVendorID		DW ?		; Vendor ID of the PPB
+escdPpbSecBusNum	DB ?		; Bus # on secondary side of PPB
+escdPpbSubBusNum	DB ?		; Highest bus # behind bridge
+escdPpbIoBase		DD ?		; Start addr of PPB's I/O window
+escdPpbIoLimit		DD ?		; End addr of PPB's I/O window
+escdPpbMemBase		DD ?		; Start addr of PPB's memory window
+escdPpbMemLimit		DD ?		; End addr of PPB's memory window
+escdPpbPfMemBase	DD ?		; Start addr of PPB's prefetchable memory
+escdPpbPfMemBaseHi32	DD ?		; Upper 32 bits of above field
+escdPpbPfMemLimit	DD ?		; End addr of PPB's prefetchable memory
+escdPpbPfMemLimitHi32	DD ?		; Upper 32 bits of above field
+escdPpbFlags		DB ?		; Set bit definitions below
+escdPpbReserved3	DB 3 dup (?)
+EscdPpbFunc		ENDS
+
+
+; Bit definitions for escdPpbFlags
+;------------------------------------------------------------------------------
+PPBF_CHILD_DEV_LOCKED	EQU 01h		; If set, device(s) on PPB are locked
+
+
+; Bit definitions for escd_pnp_func_info, escd_pci_func_info, escd_ppb_func_info
+;------------------------------------------------------------------------------
+FI_TYPE_PRESENT		equ 01h		;If set, type/subtype string present
+FI_MEM_PRESENT		equ 02h		;If set, mem entry(s) present
+FI_IRQ_PRESENT		equ 04h		;If set, irq entry(s) present
+FI_DMA_PRESENT		equ 08h		;If set, dma entry(s) present
+FI_PORT_PRESENT		equ 10h		;If set, port entry(s) present
+FI_PORT_INIT_PRESENT	equ 20h		;If set, port init entry(s) present
+FI_FREEFORM_PRESENT	equ 40h		;If set, freeform data present
+FI_FUNC_DISABLED	equ 80h		;If set, function disable bit
+
+
+; Values for escd_pnp_board_type, escd_pci_board_type
+;------------------------------------------------------------------------------
+ESCD_BT_ISA		equ 01h		;Board type is ISA
+ESCD_BT_EISA		equ 02h		;Board type is EISA
+ESCD_BT_PCI		equ 04h		;Board type is PCI
+ESCD_BT_PCMCIA		equ 08h		;Board type is PCMCIA
+ESCD_BT_PNP		equ 10h		;Board type is PnP
+ESCD_BT_MCA		equ 20h		;Board type is MCA
+ESCD_BT_PPB		EQU 40h		; Board type is PCI to PCI bridge
+
+
+; ESCD Device State Values
+;------------------------------------------------------------------------------
+ESCD_ST_NORMAL		equ 010b	;EISA disabled bit set - Device is fully reconfigurable
+ESCD_ST_DISABLED	equ 011b	;EISA disabled/ECD disable bits set - Device is disabled
+ESCD_ST_LOCKED		equ 100b	;Device lock bit set - Device is locked
+
+
+; escd_mem_entry Structure
+;------------------------------------------------------------------------------
+escd_mem_entry		struc
+escd_mem_flags		dw ?		;See ESCD_MEM_xxxxxx values below
+escd_mem_base		db 3 dup(?)	;Base address of memory divided by 100h
+escd_mem_size		dw ?		;Size of memory block in KB
+escd_mem_entry		ends
+
+EISA_MEM_64M		EQU 04000000h	;Largest memory block definable in ESCD
+
+; Values for escd_mem_flags
+;------------------------------------------------------------------------------
+ESCD_MEM_WRITABLE	equ 0001h	;Memory is writable
+ESCD_MEM_CACHEABLE	equ 0002h	;Memory is cacheable
+ESCD_MEM_CACHE_POLICY	equ 0004h	;0=Write through, 1=Write back
+ESCD_MEM_TYPE_BITS	equ 0018h	;Use to isolate memory type bits
+  ESCD_MEM_TYPE_SYS	equ 0000h	;Memory type is system
+  ESCD_MEM_TYPE_EXP	equ 0008h	;Memory type is expanded
+  ESCD_MEM_TYPE_VIR	equ 0010h	;Memory type is virtual
+  ESCD_MEM_TYPE_OTH	equ 0018h	;Memory type is other
+ESCD_MEM_SHARED		equ 0020h	;Memory is shared
+ESCD_MEM_MORE_FOLLOW	equ 0080h	;More entries follow
+ESCD_MEM_ACCESS_BITS	equ 0300h	;Use to isolate access size bits
+  ESCD_MEM_ACCESS_BYTE	equ 0000h	;Access size is byte
+  ESCD_MEM_ACCESS_WORD	equ 0100h	;Access size is word
+  ESCD_MEM_ACCESS_DWORD	equ 0200h	;Access size is dword
+ESCD_MEM_DECODE_BITS	equ 0C00h	;Use to isolate decode size bits
+  ESCD_MEM_DECODE_20	equ 0000h	;Decode size is 20 bits
+  ESCD_MEM_DECODE_24	equ 0400h	;Decode size is 24 bits
+  ESCD_MEM_DECODE_32	equ 0800h	;Decode size is 32 bits
+
+
+; escd_irq_entry Structure
+;------------------------------------------------------------------------------
+escd_irq_entry		struc
+escd_irq_flags		dw ?		;See ESCD_IRQ_xxxxxx values below
+escd_irq_entry		ends
+
+
+; Values for escd_irq_flags
+;------------------------------------------------------------------------------
+ESCD_IRQ_LEVEL_BITS	equ 000Fh	;Use to isolate IRQ level bits
+ESCD_IRQ_LEVEL_TRIG	equ 0020h	;IRQ is level triggered
+ESCD_IRQ_SHARED		equ 0040h	;IRQ is shared
+ESCD_IRQ_MORE_FOLLOW	equ 0080h	;More IRQ entries follow
+
+
+; escd_dma_entry Structure
+;------------------------------------------------------------------------------
+escd_dma_entry		struc
+escd_dma_flags		dw ?		;See ESCD_DMA_xxxxxx values below
+escd_dma_entry		ends
+
+
+; Values for escd_dma_flags
+;------------------------------------------------------------------------------
+ESCD_DMA_CHANNEL_BITS	equ 0007h	;Use to isolate DMA channel bits
+ESCD_DMA_SHARED		equ 0040h	;DMA channel is shared
+ESCD_DMA_MORE_FOLLOW	equ 0080h	;More DMA entries follow
+ESCD_DMA_SIZE_BITS	equ 0C00h	;Use to isolate DMA tranfer size bits
+  ESCD_DMA_SIZE_BYTE	equ 0000h	;DMA transfer size is byte
+  ESCD_DMA_SIZE_WORD	equ 0400h	;DMA transfer size is word
+  ESCD_DMA_SIZE_DWORD	equ 0800h	;DMA transfer size is dword
+  ESCD_DMA_SIZE_EWORD	equ 0C00h	;DMA transfer size is eword
+ESCD_DMA_TIMING_BITS	equ 3000h	;Use to isolate DMA timing bits
+  ESCD_DMA_TIMING_ISA	equ 0000h	;DMA timing is ISA compatible
+  ESCD_DMA_TIMING_A	equ 1000h	;DMA timing is type A
+  ESCD_DMA_TIMING_B	equ 2000h	;DMA timing is type B
+  ESCD_DMA_TIMING_C	equ 3000h	;DMA timing is type C
+
+
+; escd_port_entry Structure
+;------------------------------------------------------------------------------
+escd_port_entry		struc
+escd_port_flags		db ?		;See ESCD_PORT_xxxxxx values below
+escd_port_base		dw ?		;Base address of I/O port block
+escd_port_entry		ends
+
+
+; Values for escd_port_flags
+;------------------------------------------------------------------------------
+ESCD_PORT_SIZE_BITS	equ 1Fh		;Use to isolate port block size bits
+ESCD_PORT_SHARED	equ 40h		;I/O port block is shared
+ESCD_PORT_MORE_FOLLOW	equ 80h		;More port entries follow
+
+
+ISARES_PORT_MAP_SIZE	equ 24		;Size of isares_port_map below
+					;Port 3FF-100 = 300 / 4 = 192 bits
+
+; cmos_used_isares Structure (for machines with no NVRam)
+;------------------------------------------------------------------------------
+cmos_used_isares	struc
+isares_irq_map		dw ?		;One bit for each IRQ used by ISA
+isares_dma_map		db ?		;One bit for each DMA used by ISA
+isares_port_map		db ISARES_PORT_MAP_SIZE dup(?)
+					;One bit for each 4 ports used by ISA
+isares_lomem_map	db 3 dup (?)	;One bit for each 16k used by ISA
+isares_himem_map	dw ?		;One bit for each 1M used by ISA
+cmos_used_isares	ends
+
+
+
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+

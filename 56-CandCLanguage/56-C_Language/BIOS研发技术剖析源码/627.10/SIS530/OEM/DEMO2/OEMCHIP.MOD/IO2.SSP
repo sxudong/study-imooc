@@ -1,0 +1,9 @@
+
+// This AMI Setup Script Processor (SSP) file contains setup items for
+// all supported peripheral devices.  This file is considered a core BIOS
+// file and should not be modified.
+
+Description = "Peripheral setup items"
+
+LanguageVersion = 1
+

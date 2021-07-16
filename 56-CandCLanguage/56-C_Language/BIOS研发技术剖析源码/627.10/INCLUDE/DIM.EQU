@@ -1,0 +1,445 @@
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;****************************************************************************;
+
+
+PNP_SPEC_VERSION	equ	01h	;Version of PnP spec implemented
+
+DIM_MAJOR_VERSION	textequ	<'1'>	;Device Initialization Manager version
+DIM_MINOR_VERSION	textequ	<'80'>
+
+
+;------------------------------------------------------------------------------
+; Organization of first 64k or DRAM
+;
+; Offset          Length            Description
+; -----------------------------------------------------------------------------
+; 0000h            300h             Interrupt Vectors
+; 0300h            100h             BIOS Stack
+; 0400h            100h             BIOS Data Area
+; 0500h            100h             Unused
+; 0600h            A00h             Unused
+; 1000h           8000h             Unused
+; 9000h           7000h             _dimdata segment
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+; Data Area Sizes
+;------------------------------------------------------------------------------
+NVRAM_MAX_SIZE		equ 2000h	;Maximum allowable size of NVRam
+NVRAM_CHECK_SIZE	equ 10h		;Size of buffer used in update_nvram
+RESMAP_MAX_ENTRIES	equ 192		;192 entries * 21 bytes = 4032 bytes
+
+
+;------------------------------------------------------------------------------
+; Shadow constants
+;------------------------------------------------------------------------------
+SHADOW_GRANULARITY	equ 4000h	;Assume shadow granularity is 16k
+
+SHAD_STATE_RW_ROM	equ 0		;Sets shadow to "Read/Write from ROM"
+SHAD_STATE_RW_RAM	equ 1		;Sets shadow to "Read/Write to RAM"
+SHAD_STATE_WP_RAM	equ 2		;Sets shadow to "Write Protect RAM"
+
+
+;------------------------------------------------------------------------------
+; NVRam is divided into two sections:
+;
+;   1. NVRam Header Structure
+;      This struc holds varies variables that need to persist across boots.  It
+;      also holds pointers to the other two sections.
+;
+;   2. ESCD Structure
+;      This section holds the Extended System Configuration Data Structure.  See
+;      the ESCD specification for details.
+;
+;------------------------------------------------------------------------------
+
+; Generic Boot Device Structure (one each for input, output, and IPL)
+;------------------------------------------------------------------------------
+boot_dev_gen		struc
+bdgen_dev_type		db ?		;Set to DEVTYPE_xxx
+bdgen_devid		dd ?		;Device ID of boot device
+bdgen_reserved		db 8 dup (?)
+bdgen_unit		dw ?		;Unit number of boot device
+bdgen_flags		dw ?		;Boot device control flags (see below)
+boot_dev_gen		ends
+
+
+; System Board Boot Device Structure (one each for input, output, and IPL)
+;------------------------------------------------------------------------------
+boot_dev_sys		struc
+bdsys_dev_type		db ?		;Set to DEVTYPE_SYS
+bdsys_devid		dd ?		;Device ID of boot device
+bdsys_node_num		db ?		;Node number of the device
+bdsys_reserved		db 7 dup (?)
+bdsys_unit		dw ?		;Unit number of boot device
+bdsys_flags		dw ?		;Boot device control flags (see below)
+boot_dev_sys		ends
+
+
+; ISA Boot Device Structure (one each for input, output, and IPL)
+;------------------------------------------------------------------------------
+boot_dev_isa		struc
+bdisa_dev_type		db ?		;Set to DEVTYPE_ISA
+bdisa_devid		dd ?		;Device ID of boot device
+bdisa_reserved		db 8 dup (?)
+bdisa_unit		dw ?		;Unit number of boot device
+bdisa_flags		dw ?		;Boot device control flags (see below)
+boot_dev_isa		ends
+
+
+; EISA Boot Device Structure (one each for input, output, and IPL)
+;------------------------------------------------------------------------------
+boot_dev_eisa		struc
+bdeisa_dev_type		db ?		;Set to DEVTYPE_EISA
+bdeisa_devid		dd ?		;Device ID of boot device
+bdeisa_slot		db ?		;Slot number of boot device
+bdeisa_reserved		db 7 dup (?)
+bdeisa_unit		dw ?		;Unit number of boot device
+bdeisa_flags		dw ?		;Boot device control flags (see below)
+boot_dev_eisa		ends
+
+
+; PnP Boot Device Structure (one each for input, output, and IPL)
+;------------------------------------------------------------------------------
+boot_dev_pnp		struc
+bdpnp_dev_type		db ?		;Set to DEVTYPE_PNP
+bdpnp_devid		dd ?		;Device ID of boot device
+bdpnp_sernum		dd ?		;Serial number of boot device
+bdpnp_ldevid		dd ?		;Logical device ID of boot device
+bdpnp_unit		dw ?		;Unit number of boot device
+bdpnp_flags		dw ?		;Boot device control flags (see below)
+boot_dev_pnp		ends
+
+
+; PCI Boot Device Structure (one each for input, output, and IPL)
+;------------------------------------------------------------------------------
+boot_dev_pci		struc
+bdpci_dev_type		db ?		;Set to DEVTYPE_PCI
+bdpci_devid		dd ?		;Device ID of boot device
+bdpci_devfunc		db ?		;Device/Func number of boot device
+bdpci_bus		db ?		;PCI bus number of boot device
+bdpci_reserved		db 6 dup (?)
+bdpci_unit		dw ?		;Unit number of boot device
+bdpci_flags		dw ?		;Boot device control flags (see below)
+boot_dev_pci		ends
+
+
+; Values for bdxxx_dev_type
+;-------------------------------------------------------------------------------
+DEVTYPE_DEFAULT		equ 0		;Unknown or default boot device type
+DEVTYPE_SYS		equ 1		;System board boot device type
+DEVTYPE_ISA		equ 2		;ISA boot device type
+DEVTYPE_EISA		equ 3		;EISA boot device type
+DEVTYPE_PNP		equ 4		;PNP boot device type
+DEVTYPE_PCI		equ 5		;PCI boot device type
+DEVTYPE_PCMCIA		equ 6		;PCMCIA boot device type
+DEVTYPE_MCA		equ 7		;MCA boot device type
+
+
+; Bit definitions for bdxxx_flags
+;-------------------------------------------------------------------------------
+BD_FLAG_NO_DEV_CHECK	equ	01h	;If set, don't check for device attached
+					;  to the controller (in/out/ipl)
+
+; Union combining all boot_dev_xxx structures
+;-------------------------------------------------------------------------------
+boot_dev_all		union
+gen			boot_dev_gen <>
+sys			boot_dev_sys <>
+isa			boot_dev_isa <>
+eisa			boot_dev_eisa <>
+pnp			boot_dev_pnp <>
+pci			boot_dev_pci <>
+boot_dev_all		ends
+
+
+; NVRam Header Structure
+;------------------------------------------------------------------------------
+nvr_header		struc
+nvrhd_signature		dw ?		;Set to AA55h
+nvrhd_size_512		db ?		;Size of NVRam in 512 byte blocks
+nvrhd_retf		db ?		;Set to RETF instruction (0CBh)
+
+nvrhd_nvram_checksum	db ?		;Adjusted so all of NVRam checksums to 0
+nvrhd_reserved		db ?		;Reserved byte
+
+nvrhd_header_size	dw ?		;Size of this header in bytes, checksum starts here
+nvrhd_eisa_offset	dw ?		;Offset of Int 15 info & ptrs into ESCD
+nvrhd_escd_offset	dw ?		;Offset of ESCD structure
+
+nvrhd_output		boot_dev_all <>	;Boot output device
+nvrhd_input		boot_dev_all <>	;Boot input device
+nvrhd_ipl		boot_dev_all <>	;Boot ipl device
+;Add 3 more to store devices that were actually used for boot
+
+nvrhd_pnp_max_csn	db ?		;Maximum CSN assigned to PnP device
+nvrhd_pnp_read_port	dw ?		;Port used to read PnP configuration
+
+nvr_header		ends
+
+
+; Runtime Shadow Block - The data in this struc is copied into F000 shadow
+; during the DIM function 5 for access by runtime BIOS functions.
+;------------------------------------------------------------------------------
+rt_shadow_block		struc
+rtsb_max_pci_bus_num	db ?		;Highest PCI bus number found in POST
+rtsb_pnp_max_csn	db ?		;Maximum CSN assigned to PnP device
+rtsb_pnp_read_port	dw ?		;Port used to read PnP configuration
+rt_shadow_block		ends
+
+
+
+; PNP ISA Config Structure (for PnP function 40h)
+;------------------------------------------------------------------------------
+pnp_isa_cfg		struc
+pnpcfg_rev_level	db ?		;Rev level of Plug and Play BIOS
+pnpcfg_max_csn		db ?		;Highest CSN assigned during POST
+pnpcfg_read_data_port	dw ?		;PnP ISA Read data port used during POST
+pnpcfg_reserved		dw ?
+pnp_isa_cfg		ends
+
+
+NVR_INIT_EISA_OFF	equ	(size nvr_header + 10h) AND 0FFF0h
+NVR_EISA_TO_ESCD_OFF	equ	0F0h	;Offset of nvrhd_escd_offset from EISA
+
+
+; Bit definitions for xxxStatus words (in DIM.DAT)
+;------------------------------------------------------------------------------
+STAT_SYS_NVRAM_CKSUM	equ 00000001h	;If set, NVRam checksum is bad
+STAT_SYS_NODE_CONFLICT	equ 00000002h	;If set, resource conflict was detected
+			       		;  in the system device node settings
+STAT_SYS_NO_OUTPUT_DEV	equ 00000004h	;If set, no boot output device was found
+STAT_SYS_NO_INPUT_DEV	equ 00000008h	;If set, no boot input device was found
+STAT_SYS_NO_IPL_DEV	equ 00000010h	;If set, no IPL device was found
+STAT_SYS_NVRAM_IGNORED	equ 00000020h	;If set, NVRam ignored (INS key pressed)
+STAT_SYS_NVRAM_INOP	equ 00000040h	;If set, NVRam is inoperational
+STAT_SYS_RESERVED	equ 00000080h	;Reserved
+STAT_SYS_CONF_LPT	equ 00000100h	;If set, conflict in LPT node
+STAT_SYS_CONF_COM	equ 00000200h	;If set, conflict in COM node
+STAT_SYS_CONF_FLOPPY	equ 00000400h	;If set, conflict in Floppy node
+STAT_SYS_CONF_IDE	equ 00000800h	;If set, conflict in IDE node
+
+STAT_ISA_CONFLICT	equ 00000001h	;If set, resource conflict was detected
+					;  in static devices' ESCD
+
+STAT_PCI_IO_CONFLICT	equ 00000001h	;I/O Port conflict flag
+STAT_PCI_MEM_CONFLICT	equ 00000002h	;Memory conflict flag
+STAT_PCI_IRQ_CONFLICT	equ 00000004h	;IRQ conflict flag
+
+
+; Resource Manager functions
+;------------------------------------------------------------------------------
+CALL_RESMGR macro
+	extrn	resmgr_entry:near
+	call	resmgr_entry
+endm
+
+RM_INIT			equ	00h
+RM_ALLOC_IRQ		equ	01h
+RM_ALLOC_DMA		equ	02h
+RM_ALLOC_PORT		equ	03h
+RM_ALLOC_MEM		equ	04h
+RM_ADD_BOOT_DEV		equ	05h
+RM_ESCD_GET_IRQ_ENTRY	equ	06h
+RM_ESCD_GET_DMA_ENTRY	equ	07h
+RM_ESCD_GET_PORT_ENTRY	equ	08h
+RM_ESCD_GET_MEM_ENTRY	equ	09h
+RM_GET_MEM_OWNER	equ	0Ah
+RM_GET_NEXT_EXP_ROM	equ	0Bh
+RM_SHRINK_MEM_SIZE	equ	0Ch
+RM_FREE_DEVICE		equ	0Dh
+RM_PNP_RES_BACKOUT	equ	0Eh
+RM_ISA_FIX_SHADOW	equ	0Fh
+RM_ALLOC_STD_VGA	equ	10h
+RM_ALLOC_DUMMY		equ	11h
+
+
+; Resource Value Structures (IRQ, DMA, PORT, MEM)
+;------------------------------------------------------------------------------
+resval_irq	struc
+rv_irq_flags	db	?		;
+rv_irq_level	db	?		;IRQ level number
+rv_irq_rsvd	db	7 dup (?)
+resval_irq	ends
+
+resval_dma	struc
+rv_dma_flags	db	?		;
+rv_dma_channel	db	?		;DMA channel number
+rv_dma_rsvd	db	7 dup (?)
+resval_dma	ends
+
+resval_port	struc
+rv_port_flags	db	?		;
+rv_port_start	dw	?		;Base address of port block
+rv_port_size	dw	?		;Size of port block
+rv_port_rsvd	db	4 dup (?)
+resval_port	ends
+
+resval_mem	struc
+rv_mem_flags	db	?		;
+rv_mem_start	dd	?		;Absolute base address of memory block
+rv_mem_size	dd	?		;Size of memory block
+resval_mem	ends
+
+; Owner Entry Structures (SYS, ISA, EISA, PNP, PCI)
+;------------------------------------------------------------------------------
+owner_sys	struc
+own_sys_sig	db	?		;Set to OWNTYPE_SYS
+own_sys_nodenum	db	?		;Node number of system device node
+own_sys_rsvd	dw	?
+own_sys_devid	dd	?		;Device ID of system device node
+own_sys_rsvd2	dd	?
+owner_sys	ends
+
+owner_isa	struc
+own_isa_sig	db	?		;Set to OWNTYPE_ISA
+own_isa_slot	db	?		;Slot number of ISA device
+own_isa_func	db	?		;Function number of ISA device
+own_isa_rsvd	db	?
+own_isa_vendid	dw	?		;Vendor ID of ISA device
+own_isa_prodid	dw	?		;Product ID of ISA device
+own_isa_rsvd2	dd	?
+owner_isa	ends
+
+owner_eisa	struc
+own_eisa_sig	db	?		;Set to OWNTYPE_EISA
+own_eisa_slot	db	?		;Slot number of EISA device
+own_eisa_func	db	?		;Function number of EISA device
+own_eisa_rsvd	db	?
+own_eisa_vendid	dw	?		;Vendor ID of EISA device
+own_eisa_prodid	dw	?		;Product ID of EISA device
+own_eisa_rsvd2	dd	?
+owner_eisa	ends
+
+owner_pnp	struc
+own_pnp_sig	db	?		;Set to OWNTYPE_PNP
+own_pnp_csn	db	?		;Card select number of PNP device
+own_pnp_ldn	db	?		;Logical device number of PNP device
+own_pnp_cfgndx	db	?		;Holds config register index value
+own_pnp_vendid	dd	?		;Vendor ID of PNP device
+own_pnp_sernum	dd	?		;Serial number of PNP device
+owner_pnp	ends
+
+owner_pci	struc
+own_pci_sig	db	?		;Set to OWNTYPE_PCI
+own_pci_bus	db	?		;Bus number of PCI device
+own_pci_devfunc	db	?		;Dev/Func number of PCI device
+own_pci_rsvd	db	?
+own_pci_vendid	dw	?		;Vendor ID of PCI device
+own_pci_devid	dw	?		;Device ID of PCI device
+own_pci_rsvd2	dd	?
+owner_pci	ends
+
+
+; Values for owner_???.own_???_sig
+;------------------------------------------------------------------------------
+OWNTYPE_SYS	equ	01h		;Owner of resource is system board
+OWNTYPE_ISA	equ	02h		;Owner of resource is an ISA device
+OWNTYPE_EISA	equ	03h		;Owner of resource is an EISA device
+OWNTYPE_PNP	equ	04h		;Owner of resource is an PNP device
+OWNTYPE_PCI	equ	05h		;Owner of resource is an PCI device
+OWNTYPE_PCMCIA	equ	06h		;Owner of resource is an PCMCIA device
+OWNTYPE_MCA	equ	07h		;Owner of resource is an MCA device
+
+
+; Resource Map Entry Structure
+;------------------------------------------------------------------------------
+resmap_entry	struc
+rm_res_type	db	?		;RESTYPE_IRQ, RESTYPE_DMA, etc.
+rm_res_flags	db	?		;RESFLAG_SHARE, RESFLAG_STATIC, etc.
+union
+rm_resval_irq	resval_irq  <>
+rm_resval_dma	resval_dma  <>
+rm_resval_port	resval_port <>
+rm_resval_mem	resval_mem  <>
+ends
+union
+rm_owner_sys	owner_sys  <>
+rm_owner_isa	owner_isa  <>
+rm_owner_eisa	owner_eisa <>
+rm_owner_pnp	owner_pnp  <>
+rm_owner_pci	owner_pci  <>
+ends
+resmap_entry	ends
+
+
+; Values for resmap_entry.rm_res_type
+;------------------------------------------------------------------------------
+RESTYPE_NONE	equ	00h		;Resource entry is unused
+RESTYPE_IRQ	equ	01h		;Resource entry is an IRQ
+RESTYPE_DMA	equ	02h		;Resource entry is a DMA
+RESTYPE_PORT	equ	03h		;Resource entry is a Port block
+RESTYPE_MEM	equ	04h		;Resource entry is a Memory block
+RESTYPE_DUMMY	equ	0FFh		;Resource entry is a Dummy entry
+
+; Bit definitions for resmap_entry.rm_res_flags
+;------------------------------------------------------------------------------
+RESFLAG_SHARE		equ	01h	;Bit 0: If set, resource is shareable
+RESFLAG_FORCE		equ	02h	;Bit 1: If set, alloc is forced
+
+RESFLAG_PORT_DECODE16	equ	04h	;Bit 2: If set, 16 bit decode on port address
+
+RESFLAG_MEM_EXP_ROM	equ	04h	;Bit 2: If set, this memory is option ROM
+RESFLAG_MEM_SHADOW	equ	08h	;Bit 3: If set, this memory must be shadow
+
+RESFLAG_IRQ_H_E		equ	04h	;Bit 2: If set, IRQ is active high/edge (ISA)
+RESFLAG_IRQ_L_E		equ	08h	;Bit 3: If set, IRQ is active low /edge
+RESFLAG_IRQ_H_L		equ	10h	;Bit 4: If set, IRQ is active high/level
+RESFLAG_IRQ_L_L		equ	20h	;Bit 5: If set, IRQ is active low /level
+
+RESFLAG_LO_TO_HI	equ	40h	;Bit 6: If set, alloc lowest possible
+RESFLAG_NO_ALLOC	equ	80h	;Bit 7: If set, just check if the
+					;  resource is available, don't actually
+					;  allocate a resmap_entry
+
+; LegacyPort Structure for specifying legacy I/O ports for RESMGR to avoid
+;------------------------------------------------------------------------------
+LegacyPort	struc
+LPBaseAddr	dw ?			;Base address of I/O port block
+LPLength	db ?			;Size of I/O port block
+LegacyPort	ends
+
+
+; PCI Manual Override Settings Structure
+;------------------------------------------------------------------------------
+pci_man_settings	struc
+pciman_flags	db ?			;Various flag bits
+					; Bit 0: 0 = Disable the device
+					;        1 = Enable the device
+					; Bit 7-1: Reserved (set to 0)
+pciman_latency	db ?			;Value for latency timer reg
+pciman_io_base	dw 4 dup (?)		;Values for 4 I/O base addr regs
+pciman_rom_base	dd ?			;Value for PCI Exp ROM base addr reg
+pciman_int_line	db ?			;Int Line to use (Auto/A/B/C/D/Disable)
+pciman_irq	db ?			;IRQ to route to this Int Line
+pci_man_settings	ends
+
+
+
+
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+

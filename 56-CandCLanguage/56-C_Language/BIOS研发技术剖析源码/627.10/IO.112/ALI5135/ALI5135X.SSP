@@ -1,0 +1,413 @@
+//*****************************************************************;
+BeginDevice (ALI5135XFloppyController)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135X_FLOPPY_CONTROLLER)
+            Text = "OnBoard FDC"
+            Options = "Auto":DEFAULT:POWERON,
+                      "Disabled",
+                      "Enabled"
+        EndQuestion
+//        Question (Q_ALI5135X_FLOPPY_SWAP)
+//            Text = "  Floppy Drive Swap"
+//            ShadeWhen (Q_ALI5135X_FLOPPY_CONTROLLER) = "Disabled"
+//            Optionset = "Disabled", "Enabled"
+//            Optionset = "N/A"
+//            Optionset = "Disabled", "Enabled"
+//        EndQuestion
+        Question (Q_ALI5135X_FLOPPY_ACCESS)
+            Text = "  Floppy Access Control"
+            RuntimeFunction = ALI5135X_FDC_Xrn
+            ExternalFunction = ALI5135X_FDC_Xfn
+            OptionBits = 1
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+    EndScreen
+EndDevice // ALI5135XFloppyController
+BeginDevice (ALI5135XSerialPortA)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135X_COMA_PORT)
+            Text = "OnBoard Serial Port1"
+            Options = "Auto":DEFAULT:POWERON,
+                      "Disabled",
+                      "3F8/COM1",
+                      "2F8/COM2",
+                      "3E8/COM3",
+                      "2E8/COM4"
+        EndQuestion
+        Question (Q_ALI5135X_COMA_MODE)
+            Text = "  Serial Port1 Mode"
+            ShadeWhen (Q_ALI5135X_COMA_PORT) = "Disabled"
+            Optionset = "Normal", "IrDA", "ASKIR"
+            Optionset = "N/A"
+            Optionset = "Normal", "IrDA", "ASKIR"
+        EndQuestion
+        Question (Q_ALI5135X_COMA_TIMER)
+            Text = "    IR Half-Duplex Time-Out"
+            ExternalFunction = ALI5135X_ComA_Timer_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 0
+        EndQuestion
+    EndScreen
+EndDevice // ALI5135XSerialPortA
+BeginDevice (Ali5135XSerialPortB)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135X_COMB_PORT)
+            Text = "OnBoard Serial Port2"
+            Options = "Auto":DEFAULT:POWERON,
+                      "Disabled",
+                      "3F8/COM1",
+                      "2F8/COM2",
+                      "3E8/COM3",
+                      "2E8/COM4"
+        EndQuestion
+        Question (Q_ALI5135X_COMB_MODE)
+            Text = "  Serial Port2 Mode"
+            ShadeWhen (Q_ALI5135X_COMB_PORT) = "Disabled"
+            Optionset = "Normal", "IrDA", "ASKIR"
+            Optionset = "N/A"
+            Optionset = "Normal", "IrDA", "ASKIR"
+//          ExternalFunction = ALI5135X_ComB_Mode_Xfn
+//          OptionBits = 2
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+        Question (Q_ALI5135X_COMB_TIMER)
+            Text = "    IR Half-Duplex Time-Out"
+            ExternalFunction = ALI5135X_ComB_Timer_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 0
+        EndQuestion
+    EndScreen
+EndDevice // Ali5135XSerialPortB
+BeginDevice (ALI5135XSerialPortC)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135X_COMC_PORT)
+            Text = "OnBoard Serial Port3"
+//          Options = "Auto":DEFAULT:POWERON,
+//                    "Disabled",
+//                    "3F8/COM1",
+//                    "2F8/COM2",
+//                    "3E8/COM3",
+//                    "2E8/COM4"
+            RuntimeFunction = ALI5135X_ComC_Port_Xrn
+            ExternalFunction = ALI5135X_ComC_Port_Xfn
+            OptionBits = 3
+            Default = 1
+            PowerOn = 1
+        EndQuestion
+        Question (Q_ALI5135X_COMC_MODE)
+            Text = "  Serial Port3 Mode"
+//          ShadeWhen (Q_ALI5135X_COMC_PORT) = "Disabled"
+//          Optionset = "Normal", "IrDA", "ASKIR", "FIR"
+//          Optionset = "N/A"
+//          Optionset = "Normal", "IrDA", "ASKIR", "FIR"
+            RuntimeFunction = ALI5135X_ComC_Mode_Xrn
+            ExternalFunction = ALI5135X_ComC_Mode_Xfn
+            OptionBits = 2
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+        Question (Q_ALI5135X_COMC_IRQ)
+            Text = "  Serial Port3 IRQ"
+            RuntimeFunction = ALI5135X_ComC_Irq_Xrn
+            ExternalFunction = ALI5135X_ComC_Irq_Xfn
+            OptionBits = 4
+            Default = 11
+            PowerOn = 11
+        EndQuestion
+        Question (Q_ALI5135X_COMC_DMA)
+            Text = "  Serial Port3 DMA"
+            RuntimeFunction = ALI5135X_ComC_Dma_Xrn
+            ExternalFunction = ALI5135X_ComC_Dma_Xfn
+            OptionBits = 2
+            Default = 1
+            PowerOn = 1
+        EndQuestion
+        Question (Q_ALI5135X_COMC_TYPE)
+            Text = "    IR Transceiver Module Type"
+            RuntimeFunction = ALI5135X_ComC_Type_Xrn
+            ExternalFunction = ALI5135X_ComC_Type_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 1
+        EndQuestion
+        Question (Q_ALI5135X_COMC_TIMER)
+            Text = "    IR Half-Duplex Time-Out"
+            RuntimeFunction = ALI5135X_ComC_Timer_Xrn
+            ExternalFunction = ALI5135X_ComC_Timer_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 0
+        EndQuestion
+    EndScreen
+EndDevice       // ALI5135XSerialPortC
+BeginDevice (ALI5135XParallelPort)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135X_LPT_PORT)
+            Text = "OnBoard Parallel Port"
+            Options = "Auto":DEFAULT:POWERON,
+                      "Disabled",
+                      "378",
+                      "278",
+                      "3BC"
+        EndQuestion
+        Question (Q_ALI5135X_LPT_MODE)
+            Text = "  Parallel Port Mode"
+            ShadeWhen (Q_ALI5135X_LPT_PORT) = "Disabled"
+            OptionSet = "Normal", "Bi-Dir"
+            OptionSet = "N/A"
+            OptionSet = "Normal", "Bi-Dir"
+        EndQuestion
+        Question (Q_ALI5135X_LPT_IRQ)
+            Text = "  Parallel Port IRQ"
+            ExternalFunction = ALI5135X_Lpt_Irq_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 1
+        EndQuestion
+    EndScreen
+EndDevice       // ALI5135XParallelPort
+BeginDevice (ALI5135XParallelPortExt)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135X_LPT_PORT)
+            Text = "OnBoard Parallel Port"
+            ExternalFunction = ALI5135X_Lpt_Addr_Xfn
+            OptionBits = 3
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+        Question (Q_ALI5135X_LPT_MODE)
+            Text = "  Parallel Port Mode"
+            ExternalFunction = ALI5135X_Lpt_Mode_Xfn
+            OptionBits = 2
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+        Question (Q_ALI5135X_LPT_EPPVER)
+            Text = "    EPP Version"
+            ExternalFunction = ALI5135X_Lpt_EppVer_Xfn
+            OptionBits = 1
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+        Question (Q_ALI5135X_LPT_IRQ)
+            Text = "  Parallel Port IRQ"
+            ExternalFunction = ALI5135X_Lpt_Irq_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 1
+        EndQuestion
+        Question (Q_ALI5135X_LPT_ECP_DMA)
+            Text = "  Parallel Port DMA Channel"
+            ExternalFunction = ALI5135X_Lpt_Dma_Xfn
+            OptionBits = 2
+            Default = 3
+            PowerOn = 3
+        EndQuestion
+    EndScreen
+EndDevice       // ALI5135XParallelPortExt         
+BeginDevice (ALI5135XFloppyController)
+    Screen (SCR_PERIPHERAL)
+        Question (Q_ALI5135F_KEYBOARD_POWERON)
+            Text = "KeyBoard PowerOn"
+//          Options = "Disabled":DEFAULT:POWERON,
+//                    "Enabled"
+            RuntimeFunction = ALI5135F_poweron_Xrn
+            ExternalFunction = ALI5135F_poweron_Xfn
+            OptionBits = 1
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+        Question (Q_ALI5135F_POWERON_SELECT)
+            Text = "PowerOn Select"
+//          ShadeWhen (Q_ALI5135F_KEYBOARD_POWERON) = "Disabled"
+//          Options = "Password",
+//                    "HotKey":DEFAULT:POWERON
+            RuntimeFunction = ALI5135F_poweron_select_Xrn
+            ExternalFunction = ALI5135F_poweron_select_Xfn
+            OptionBits = 1
+            Default = 1
+            PowerOn = 1
+        EndQuestion
+        Question (Q_ALI5135F_HOTKEY_SELECT)
+            Text = "HotKey Select"
+//          Options = "Ctrl-Alt-Del":DEFAULT:POWERON,
+//                    "Ctrl-Alt-Ins"
+//                    "C-A-LShift"
+//                    "C-A-RShift"
+//                    "Ctrl-Alt-F1"
+//                    "Ctrl-Alt-F2"
+//                    "Ctrl-Alt-F3"
+//                    "Ctrl-Alt-F4"
+//                    "Ctrl-Alt-F5"
+//                    "Ctrl-Alt-F6"
+//                    "Ctrl-Alt-F7"
+//                    "Ctrl-Alt-F8"
+//                    "Ctrl-Alt-F9"
+//                    "Ctrl-Alt-F10"
+//                    "Ctrl-Alt-F11"
+//                    "Ctrl-Alt-F12"
+            RuntimeFunction = ALI5135F_hotkey_select_Xrn
+            ExternalFunction = ALI5135F_hotkey_select_Xfn
+            OptionBits = 4
+            Default = 0
+            PowerOn = 0
+        EndQuestion
+    EndScreen
+EndDevice       // ALI5135FHotKeyController
+String(STR_ALI5135X_NA)
+    Text = "N/A"
+EndString
+String(STR_ALI5135X_AUTO)
+    Text = "Auto"
+EndString
+String(STR_ALI5135X_378)
+    Text = "378"
+EndString
+String(STR_ALI5135X_278)
+    Text = "278"
+EndString
+String(STR_ALI5135X_3BC)
+    Text = "3BC"
+EndString
+String(STR_ALI5135X_3F8)
+    Text = "3F8/COM1"
+EndString
+String(STR_ALI5135X_2F8)
+    Text = "2F8/COM2"
+EndString
+String(STR_ALI5135X_3E8)
+    Text = "3E8/COM3"
+EndString
+String(STR_ALI5135X_2E8)
+    Text = "2E8/COM4"
+EndString
+String(STR_ALI5135X_NORMAL)
+    Text = "Normal"
+EndString
+String(STR_ALI5135X_READONLY)
+    Text = "Read Only"
+EndString
+String(STR_ALI5135X_IRDA)
+    Text = "IrDA"
+EndString
+String(STR_ALI5135X_ASKIR)
+    Text = "ASKIR"
+EndString
+String(STR_ALI5135X_FIR)
+    Text = "FIR"
+EndString
+String(STR_ALI5135X_BIDIR)
+    Text = "Bi-Dir"
+EndString
+String(STR_ALI5135X_EPP)
+    Text = "EPP"
+EndString
+String(STR_ALI5135X_ECP)
+    Text = "ECP+EPP"
+EndString
+String(STR_ALI5135X_EPP17)
+    Text = "1.7"
+EndString
+String(STR_ALI5135X_EPP19)
+    Text = "1.9"
+EndString
+String(STR_ALI5135X_1)
+    Text = "1"
+EndString
+String(STR_ALI5135X_2)
+    Text = "2"
+EndString
+String(STR_ALI5135X_3)
+    Text = "3"
+EndString
+String(STR_ALI5135X_4)
+    Text = "4"
+EndString
+String(STR_ALI5135X_5)
+    Text = "5"
+EndString
+String(STR_ALI5135X_7)
+    Text = "7"
+EndString
+String(STR_ALI5135X_9)
+    Text = "9"
+EndString
+String(STR_ALI5135X_A)
+    Text = "10"
+EndString
+String(STR_ALI5135X_B)
+    Text = "11"
+EndString
+String(STR_ALI5135X_C)
+    Text = "12"
+EndString
+String(STR_ALI5135X_IBM)
+    Text = "IBM"
+EndString
+String(STR_ALI5135X_HP)
+    Text = "HP"
+EndString
+String(STR_ALI5135X_HIGH)
+    Text = "High"
+EndString
+String(STR_ALI5135X_LOW)
+    Text = "Low"
+EndString
+String(STR_ALI5135F_PASSWORD)
+    Text = "Password"
+EndString
+String(STR_ALI5135F_HOTKEY)
+    Text = "HotKey"
+EndString
+String(STR_ALI5135F_CTRL_ALT_DEL)
+    Text = "Ctrl-Alt-Del"
+EndString
+String(STR_ALI5135F_CTRL_ALT_INS)
+    Text = "Ctrl-Alt-Ins"
+EndString
+String(STR_ALI5135F_CTRL_ALT_LSHIFT)
+    Text = "C-A-LShift"
+EndString
+String(STR_ALI5135F_CTRL_ALT_RSHIFT)
+    Text = "C-A-RShift"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F1)
+    Text = "Ctrl-Alt-F1"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F2)
+    Text = "Ctrl-Alt-F2"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F3)
+    Text = "Ctrl-Alt-F3"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F4)
+    Text = "Ctrl-Alt-F4"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F5)
+    Text = "Ctrl-Alt-F5"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F6)
+    Text = "Ctrl-Alt-F6"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F7)
+    Text = "Ctrl-Alt-F7"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F8)
+    Text = "Ctrl-Alt-F8"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F9)
+    Text = "Ctrl-Alt-F9"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F10)
+    Text = "Ctrl-Alt-F10"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F11)
+    Text = "Ctrl-Alt-F11"
+EndString
+String(STR_ALI5135F_CTRL_ALT_F12)
+    Text = "Ctrl-Alt-F12"
+EndString

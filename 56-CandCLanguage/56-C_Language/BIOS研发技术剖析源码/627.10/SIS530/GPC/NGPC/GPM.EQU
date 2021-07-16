@@ -1,0 +1,602 @@
+;-----------------------------------------------;
+;	    GREEN PC BIOS EQUATE FILE		;
+;		     GPM.EQU			;
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;		   ORGBASE EQUATE		;
+;-----------------------------------------------;
+
+orgbase			equ	8000h		;
+
+;-----------------------------------------------;
+;		   STACK  EQUATES		;
+;    smi_seg:0fb00h thru 0fcfeh (01feh bytes)	;
+;	    available for stack usage		;
+;-----------------------------------------------;
+
+pm_bios_global_stack_ptr	equ	0fcfeh	; 0fb00H THRU 0fcfeH (01FEH BYTES)
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	      MISCELLANEOUS EQUATES		;
+;-----------------------------------------------;
+
+int_vec_seg		equ	000h		;
+bios_data_seg		equ	40h		;
+upd_check_loop_time	equ	1000h		; CMOS update in progress check
+
+no_of_ide_drv_supported		equ	04h	; number of IDE drive supported
+
+int_13_ext_func_41		equ	41h	; extended function 41h...check extension present (MICROSOFT defined)
+int_13_ext_func_48		equ	48h	; extended function 48h...get drive parameters (MICROSOFT defined...extended by WESTERN DIGITAL)
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	   CMOS PORT ADDRESS EQUATES		;
+;-----------------------------------------------;
+
+cmos_address_port		equ	70h	;
+cmos_data_port			equ	71h	;
+
+;-----------------------------------------------;
+;	    CMOS INDEX PORT EQUATES		;
+;-----------------------------------------------;
+
+cmos_seconds		equ	00h		;
+cmos_minutes		equ	02h		;
+cmos_hours		equ	04h		;
+
+cmos_century		equ	32h		;
+cmos_year		equ	09h		;
+cmos_month		equ	08h		;
+cmos_date		equ	07h		;
+
+cmos_alarm_second	equ	01h		;
+cmos_alarm_minute	equ	03h		;
+cmos_alarm_hour		equ	05h		;
+
+cmos_stat_reg_a	equ	0ah			;
+cmos_stat_reg_b	equ	0bh			;
+cmos_stat_reg_c	equ	0ch			;
+cmos_stat_reg_d	equ	0dh			;
+
+;-----------------------------------------------;
+;	CMOS STATUS REG 0AH BIT EQUATES		;
+;-----------------------------------------------;
+
+update_in_progress_bit	equ	10000000b	;
+stage_divider_bit	equ	00100000b	; 32.768 KHz time base
+rate_selection_bit	equ	00000110b	; 1.024 KHz square wave output frequency
+
+;-----------------------------------------------;
+;	CMOS STATUS REG 0BH BIT EQUATES		;
+;-----------------------------------------------;
+
+daylight_saving_bit	equ	00000001b	; daylight saving enabled
+twentyfour_mode_bit	equ	00000010b	; 24 HOUR mode
+square_wave_enable_bit	equ	00001000b	; square wave enabled
+update_ended_intr_bit	equ	00010000b	; update ended interrupt bit
+alarm_intr_bit		equ	00100000b	; alarm interrupt enable
+periodic_intr_bit	equ	01000000b	; periodic interrupt enable
+set_bit			equ	10000000b	;
+
+;-----------------------------------------------;
+;		RTC TIMEOUT EQUATES		;
+;-----------------------------------------------;
+
+upd_check_loop_time		equ	1000h	; update in progress check timeout counter
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	  GREEN PC IDE HANDLING EQUATES		;
+;-----------------------------------------------;
+;    IDE INTERFACE REGISTERS OFFSET EQUATES	;
+;-----------------------------------------------;
+
+data_reg_off		equ	00h		; data register
+error_reg_off		equ	01h		; error register
+write_precomp_reg_off	equ	01h		; write precompensation register
+sector_count_reg_off	equ	02h		; sector count register
+sector_no_reg_off	equ	03h		; sector number register
+cylinder_low_reg_off	equ	04h		; cylinder number (LOW) register
+cylinder_high_reg_off	equ	05h		; cylinder number (HIGH 2 bits) register
+drive_head_reg_off	equ	06h		; drive/head number register
+status_reg_off		equ	07h		; status register
+command_reg_off		equ	07h		; command register
+
+;-----------------------------------------------;
+;      IDE CONTROLLER BASE ADDRESS EQUATES	;
+;-----------------------------------------------;
+
+primary_ide_cntlr	equ	1f0h		; base address for primary IDE controller
+secondary_ide_cntlr	equ	170h		; base address for secondary IDE controller
+
+;-----------------------------------------------;
+;      IDE INT 13H INTERFACE ERROR EQUATES	;
+;-----------------------------------------------;
+
+no_error		equ	00h		; no error
+bad_cmd			equ	01h		; bad/invalid command
+data_corrected		equ	11h		; ECC data corrected error
+write_fault		equ	0cch		; write fault error
+not_ready		equ	0aah		; not ready error
+bad_seek		equ	40h		; bad seek
+bad_address_mark	equ	02h		; bad address mark
+record_not_found	equ	04h		; record not found
+bad_ecc			equ	10h		; ECC is bad
+bad_sector_flag		equ	0ah		; bad sector flag detected
+undefined_err		equ	0bbh		; undefined error
+time_out_err		equ	80h		; time out error
+dma_boundary_err	equ	09h		; DMA 64k boundary overflow
+general_cntlr_failure	equ	20h		; general controller failure
+drv_param_activity_failed equ	07h		; drive parameter activity failed
+reset_fail_err		equ	05h		; reset failed
+
+no_err_diagnostics_code	equ	01h		;
+
+;-----------------------------------------------;
+;	 IDE STATUS REGISTER BIT EQUATES	;
+;-----------------------------------------------;
+
+ide_cntlr_busy_bit	equ	10000000b	; busy bit
+ide_drv_rdy_bit		equ	01000000b	; drive ready bit
+ide_drv_wt_fault_bit	equ	00100000b	; drive write fault bit
+ide_drv_seek_complete_bit equ	00010000b	; seek complete bit
+ide_data_corrected_bit	equ	00000100b	; data corrected bit
+ide_err_reg_bit		equ	00000001b	; error reg has additional error information
+
+;-----------------------------------------------;
+;	 IDE ERROR REGISTER BIT EQUATES		;
+;-----------------------------------------------;
+
+ide_aborted_cmd_bit	equ	00000100b	; aborted command
+
+;-----------------------------------------------;
+;	   IDE INT 13H TIMEOUT EQUATES		;
+;-----------------------------------------------;
+
+cbloop			equ	30h		; controller busy timeout (48 secs)
+dnrloop			equ	0c00h		; drive ready timeout
+drqloop			equ	0c8h		; wait for DRQ active for 3 milliseconds
+wfiloop			equ	10h		; wait for interrupt timeout (16 secs)
+
+;-----------------------------------------------;
+;	 IDE CONTROLLER COMMAND EQUATES		;
+;-----------------------------------------------;
+
+idle_cmd		equ	11100011b	; idle command (E3h)
+idle_immediate_cmd	equ	11100001b	; idle immediate command (E1h)
+standby_cmd		equ	11100010b	; standby command (E2h)
+standby_immediate_cmd	equ	11100000b	; standby immediate command (E0h)
+sleep_cmd		equ	11100110b	; sleep command (E6h)
+check_power_mode_cmd	equ	11100101b	; check power mode command (E5h)
+
+idle_old_cmd		equ	10010111b	; idle command (97h)
+idle_immediate_old_cmd	equ	10010101b	; idle immediate command (95h)
+standby_old_cmd		equ	10010110b	; standby command (96h)
+standby_immediate_old_cmd equ	10010100b	; standby immediate command (94h)
+sleep_old_cmd		equ	10011001b	; sleep command (99h)
+check_power_mode_old_cmd equ	10011000b	; check power mode command (98h)
+
+;-----------------------------------------------;
+;	HDD_MISC_CONTROL_INFO BIT EQUATES	;
+;-----------------------------------------------;
+
+hdd_irq_level_bit_index_equ	equ	0	; Bit 3-0 ... IRQ level 0 thru 15
+hdd_present_bit_index_equ	equ	4	; Bit 4 = 1 this ide drive successfully
+						;	    initialized during POST
+						;	= 0 this ide drive was	not
+						;	    initialized during POST
+hdd_port_select_bit_index_equ	equ	6	; Bit 6	= 1 device connected to secondary
+						;	    controller (170h base address)
+						;	= 0 device connected to primary
+						;	    controller (1F0h base address)
+hdd_drive_select_bit_index_equ	equ	7	; Bit 7	= 0/1 drive 0/1 for primary/seconadry
+						;	    controller
+
+hdd_irq_level_bit_equ		equ	(0fh shl hdd_irq_level_bit_index_equ)
+hdd_present_bit_equ		equ	(1 shl hdd_present_bit_index_equ)
+hdd_port_select_bit_equ 	equ	(1 shl hdd_port_select_bit_index_equ)
+hdd_drive_select_bit_equ	equ	(1 shl hdd_drive_select_bit_index_equ)
+
+;-----------------------------------------------;
+;	 WD_HDD_MISC_INFO_00 BIT EQUATES	;
+;-----------------------------------------------;
+
+wd_drive_0_1_bit	equ	00010000b	; drive 1 of the selected controller
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;     GREEN PC VESA VBE/PM HANDLING EQUATES	;
+;-----------------------------------------------;
+;	      VBE/PM FUNCTION EQUATES		;
+;-----------------------------------------------;
+
+vesa_ext_func			equ	04fh	;
+vesa_vbe_pm_services_func	equ	010h	;
+
+report_vbe_pm_support_info	equ	000h	;
+set_disp_power_state		equ	001h	;
+get_disp_power_state		equ	002h	;
+
+;-----------------------------------------------;
+;      VESA_LOW_POWER_REQUEST ERROR EQUATES	;
+;-----------------------------------------------;
+
+vbe_pm_req_func_not_supported	equ	01h	; requested VESA VBE/PM function not supported
+vbe_pm_req_state_not_supported	equ	02h	; requested display power state not supported
+
+;-----------------------------------------------;
+;  VESA VBE/PM POWER STATE REQUEST BIT EQUATES	;
+;-----------------------------------------------;
+
+vbe_pm_on_bit		equ	00000000b	; ON
+vbe_pm_standby_bit	equ	00000001b	; STANDBY
+vbe_pm_suspend_bit	equ	00000010b	; SUSPEND
+vbe_pm_off_bit		equ	00000100b	; OFF
+vbe_pm_reduced_on_bit	equ	00001000b	; REDUCED ON
+
+;-----------------------------------------------;
+;	DISP_MISC_CONTROL_INFO BIT EQUATES	;
+;-----------------------------------------------;
+
+vbe_pm_interface_supported	equ	10000000b; bit 7..1 means VESA VBE/PM interface supported
+						; bit 6-2 reserved
+vbe_pm_cntlr_mask	equ	00000011b	; bit 1-0 ... controller #
+
+;-----------------------------------------------;
+;	IBM COMPATIBLE VGA REGISTER EQUATES	;
+;-----------------------------------------------;
+
+input_status_reg_1_mono_reg	equ	3bah	; input stat reg 1 mono
+input_status_reg_1_color_reg	equ	3dah	; input stat reg 1 colr
+attribute_addr_reg		equ	3c0h	; attribute address
+sequencer_addr_reg		equ	3c4h	; sequencer address
+crt_addr_reg_mono		equ	3b4h	; crt cntlr addr mono
+crt_addr_reg_color		equ	3d4h	; crt cntlr addr color
+miscellaneous_out_reg_read_mode	equ	3cch	; misc. out reg (read)
+
+;-----------------------------------------------;
+
+clocking_mode_reg_idx		equ	01h	; SEQUENCER
+crtc_mode_cntl_reg_index	equ	17h	; CRT controller
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;     MISCELLANEOUS SYSTEM PORT/BIT EQUATES	;
+;-----------------------------------------------;
+;      INTERRUPT CNTLR (8259) PORT EQUATES      ;
+;-----------------------------------------------;
+
+control_8259_master     equ     020h            ; 8259 master controller control port
+control_8259_slave      equ     0a0h            ; 8259 slave controller control port
+mask_8259_master        equ     021h            ; 8259 master controller mask port
+mask_8259_slave         equ     0a1h            ; 8259 slave controller mask port
+
+;-----------------------------------------------;
+;    INTERRUPT CNTLR (8259) COMMAND EQUATES     ;
+;-----------------------------------------------;
+
+irr_reg_read_cmd        equ     00001010b       ; interrupt request reg (IRR) read
+eoi_cmd                 equ     00100000b       ; end of interrupt command
+
+;-----------------------------------------------;
+;	   INTERRUPT MASK BITS EQUATES		;
+;-----------------------------------------------;
+
+rtc_intr_bit		equ	00000001b	;
+
+;-----------------------------------------------;
+;            SPEAKER_PORT EQUATES               ;
+;            REFRESH_PORT EQUATES               ;
+;-----------------------------------------------;
+
+speaker_port            equ     61h             ; speaker port
+refresh_port            equ     61h             ; refresh port
+
+;-----------------------------------------------;
+;	SPEAKER/REFRESH PORT BIT EQUATES	;
+;-----------------------------------------------;
+
+timer_counter2_gate_bit equ     00000001b       ; timer cntlr #1 counter 2 gate bit
+speaker_bit             equ     00000010b       ; speaker enabled
+refresh_bit             equ     00010000b       ; refresh bit
+
+;-----------------------------------------------;
+;     TIMER CONTROLLER (8254) PORT EQUATES	;
+;-----------------------------------------------;
+
+timer_cntlr_1_cmd_reg		equ	043h	; timer #1 command port
+timer_cntlr_1_count0_reg	equ	040h	; timer #1 counter #0 port
+timer_cntlr_1_count1_reg	equ	041h	; timer #1 counter #1 port
+timer_cntlr_1_count2_reg	equ	042h	; timer #1 counter #2 port
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	KEYBOARD CONTROLLER PORT EQUATES	;
+;-----------------------------------------------;
+
+kb_data_port		equ	60h		; keyboard controller data port
+kb_stat_port		equ	64h		; keyboard controller status port
+kb_cmd_port		equ	64h		; keyboard controller command port
+
+;-----------------------------------------------;
+;	 KEYBOARD CONTROLLER STATUS BYTE	;
+;	     (PORT 64H READ) EQUATES		;
+;-----------------------------------------------;
+
+kb_output_buf_full	equ	00000001b	; keyboard controller output buffer full
+kb_input_buf_full	equ	00000010b	; keyboard controller input buffer full
+kb_aux_output_buf_full	equ	00100000b	; keyboard controller auxiliary output buffer full
+
+;-----------------------------------------------;
+;	KEYBOARD CONTROLLER COMMAND BYTE	;
+;		   BIT EQUATES			;
+;-----------------------------------------------;
+
+disable_keyboard_bit	equ	00010000b	; disable keyboard
+disable_aux_dev_bit	equ	00100000b	; disable auxiliary device
+
+;-----------------------------------------------;
+;      KEYBOARD CONTROLLER COMMAND EQUATES	;
+;-----------------------------------------------;
+
+wrt_to_aux_dev_cmd		equ	0d4h	; write to auxiliary device (mouse)
+
+read_kb_cntlr_cmd_byte_cmd	equ	020h	; read keyboard controller command byte
+wrt_kb_cntlr_cmd_byte_cmd	equ	060h	; next byte is keyboard controller command byte
+wrt_kb_output_buf_cmd		equ	0d2h	; next byte is written to output buffer as if initiated by keyboard
+wrt_kb_aux_output_buf_cmd	equ	0d3h	; next byte is written to output buffer as if initiated by auxiliary device
+
+;-----------------------------------------------;
+
+ami_megakey2_rd_ram_cmd		equ	0ach	; AMI MEGAKEY II read keyboard controller ram command
+ami_megakey2_wt_ram_cmd		equ	0afh	; AMI MEGAKEY II write keyboard command
+
+;-----------------------------------------------;
+;	   PS/2 MOUSE COMMANDS EQUATES		;
+;-----------------------------------------------;
+
+disable_mouse_cmd		equ	0f5h	; disable mouse
+enable_mouse_cmd		equ	0f4h	; enable mouse
+set_sampling_rate_mouse_cmd	equ	0f3h	; set sampling rate
+set_remote_mode_mouse_cmd	equ	0f0h	; set remote mode
+set_wrap_mode_mouse_cmd		equ	0eeh	; set wrap mode
+reset_wrap_mode_mouse_cmd	equ	0ech	; reset wrap mode
+set_stream_mode_mouse_cmd	equ	0eah	; set stream mode
+status_request_mouse_cmd	equ	0e9h	; status request
+set_resolution_mouse_cmd	equ	0e8h	; set resolution
+set_scaling_2x1_mouse_cmd	equ	0e7h	; set scaling 2:1
+reset_scaling_mouse_cmd		equ	0e6h	; set scaling 1:1
+
+;-----------------------------------------------;
+;	 KEYBOARD/MOUSE RESPONSE EQUATES	;
+;-----------------------------------------------;
+
+kb_mouse_acknowledge		equ	0fah	; 'ACK' from keyboard/mouse
+
+;-----------------------------------------------;
+;	  PS2_MOUSE_MODE BIT  EQUATES 		;
+;-----------------------------------------------;
+
+ps2_mouse_data_valid	equ	00000001b	; save data for ps/2 mouse is valid (no error during save)
+ps2_mouse_restore_ok	equ	00000010b	; ps/2 mouse restored OK
+ps2_mouse_present	equ	00000100b	; ps/2 mouse present
+ps2_mouse_wrap_mode	equ	00001000b	; ps/2 mouse in wrap mode
+
+;-----------------------------------------------;
+;	  PS2_MOUSE_STATUS BIT EQUATES		;
+;-----------------------------------------------;
+
+ps2_mouse_2x1_scaling	equ	00010000b	; mouse in 2:1 scaling
+ps2_mouse_enabled	equ	00100000b	; mouse enabled
+ps2_mouse_remote_mode	equ	01000000b	; mouse in remote mode
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	    MISC_CONF_INFO BIT EQUATES		;
+;-----------------------------------------------;
+
+instant_on_enabled	equ	00000001b	; bit 0...INSTANT ON support enabled
+						; bit 7-1...reserved
+
+;-----------------------------------------------;
+;	    GPC_ALARM_FLAG BIT EQUATES		;
+;-----------------------------------------------;
+
+restore_user_alarm_on_resume	equ	00000001b; bit 0...restore USER alarm on resume
+restore_rtc_on_resume		equ	00000010b; bit 1...restore RTC on resume
+						; bit 7-2...reserved
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	INTEL PENTIUM CPU LOCAL APIC MEMORY	;
+;	    MAPPED I/O REGISTER EQUATES		;
+;-----------------------------------------------;
+
+apic_spurious_intr_vec_reg equ	000f0h		; spurious interrupt vector reg
+apic_intr_cmd_low_reg	equ	00300h		; interrupt command reg (ICR) LOW
+apic_intr_cmd_high_reg	equ	00310h		; interrupt command reg (ICR) HIGH
+apic_error_status_reg	equ	00280h		; error status reg (ECR)
+apic_remote_read_reg	equ	000c0h		; remote read reg (RR)
+apic_id_reg		equ	00020h		; APIC ID reg
+
+;-----------------------------------------------;
+
+apic_task_priority_reg	equ	00080h		; task priority reg
+
+apic_lvt_timer_reg	equ	00320h		; local vector table (TIMER)
+apic_lvt_intr_00_reg	equ	00350h		; local vector table (LINT0)
+apic_lvt_intr_01_reg	equ	00360h		; local vector table (LINT1)
+apic_lvt_err_reg	equ	00370h		; local vector table (ERROR)
+
+;-----------------------------------------------;
+;	     APIC IPI MESSAGE EQUATES		;
+;-----------------------------------------------;
+
+apic_smi_ipi		equ	010b		; SMI IPI
+apic_remote_read_ipi	equ	011b		; Remote Read IPI
+apic_init_ipi		equ	101b		; INIT IPI
+apic_startup_ipi	equ	110b		; STARTUP IPI
+
+;-----------------------------------------------;
+; APIC SPURIOUS INTERRUPT VECOTR REG BIT EQUATES;
+;-----------------------------------------------;
+
+apic_sw_enabled		equ	100000000b	; APIC SW enabled (bit 8)
+
+;-----------------------------------------------;
+;	APIC TIMER INTERRUPT REG BIT EQUATES	;
+;	APIC LINT0 INTERRUPT REG BIT EQUATES	;
+;	APIC LINT1 INTERRUPT REG BIT EQUATES	;
+;	APIC ERROR INTERRUPT REG BIT EQUATES	;
+;-----------------------------------------------;
+
+apic_intr_mask_bit	equ	000010000h	; mask the interrupt
+
+;-----------------------------------------------;
+;	PROCESSOR_IN_SMI_INFO BIT EQUATES	;
+;	CURRENT_PROCESSOR_BIT BIT EQUATES	;
+;-----------------------------------------------;
+
+boot_strap_processor_bit equ	0000000000000001b; boot strap processor (BSP)
+
+;-----------------------------------------------;
+;		MISCELLANEOUS EQUATES		;
+;-----------------------------------------------;
+
+send_apic_ipi_retry_count	equ	10	;
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;

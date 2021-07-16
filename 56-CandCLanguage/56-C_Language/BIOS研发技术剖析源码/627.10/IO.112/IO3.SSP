@@ -1,0 +1,1536 @@
+
+// This AMI Setup Script Processor (SSP) file contains setup items for
+// all supported peripheral devices.  This file is considered a core BIOS
+// file and should not be modified.
+
+Description = "Peripheral setup items"
+
+LanguageVersion = 1
+
+BeginDevice (Smc932Ide1Controller)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC932_IDE1_CONTROLLER)
+			Text = "OnBoard IDE1"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary":DEFAULT:POWERON,
+				  "Secondary"
+		EndQuestion
+	EndScreen
+EndDevice   // Smc932Ide1Controller
+BeginDevice (Smc932Ide2Controller)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC932_IDE2_CONTROLLER)
+			Text = "OnBoard IDE2"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary",
+				  "Secondary":DEFAULT:POWERON
+		EndQuestion
+	EndScreen
+EndDevice   // Smc932Ide2Controller
+BeginDevice (Smc932FloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC932_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+	EndScreen
+EndDevice   // Smc932FloppyController
+BeginDevice (Smc932SerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC932_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice   // Smc932SerialPortA
+BeginDevice (Smc932SerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC932_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_SMC932_COMB_PORT_IR)
+			Text = "  Serial Port2 Mode"
+                        ExternalFunction = Smc932_ComB_Mode_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC932_COMB_PORT_IR_MODE)
+			Text = "    IR Transmission Mode"
+                        ExternalFunction = Smc932_ComB_Ir_Trans_Mode_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC932_COMB_PORT_RECEIVER_POLARITY)
+			Text = "    Receiver Polarity"
+                        ExternalFunction = Smc932_ComB_Ir_Recv_Pola_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC932_COMB_PORT_TRANSMITTER_POLARITY)
+			Text = "    Transmitter Polarity"
+                        ExternalFunction = Smc932_ComB_Ir_Trans_Pola_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+	EndScreen
+EndDevice   // Smc932SerialPortB
+BeginDevice (Smc932FrSerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC932FR_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8",
+				  "2F8",
+				  "3E8",
+				  "2E8"
+		EndQuestion
+		Question (Q_SMC932FR_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+			ShadeWhen (Q_SMC932FR_COMB_PORT) = "Disabled"
+			OptionSet = "Normal", "IrDA SIR-A", "ASK-IR", "IrDA SIR-B", "IrDA HDLC", "IrDA 4PPM", "Consumer", "Raw IR"
+			OptionSet = "N/A"
+			OptionSet = "Normal", "IrDA SIR-A", "ASK-IR", "IrDA SIR-B", "IrDA HDLC", "IrDA 4PPM", "Consumer", "Raw IR"
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC932_COMB_PORT_IR_MODE)
+			Text = "    IR Duplex Mode"
+                        ExternalFunction = Smc932_ComB_Ir_Trans_Mode_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC932_COMB_PORT_RECEIVER_POLARITY)
+			Text = "    Receiver Polarity"
+                        ExternalFunction = Smc932_ComB_Ir_Recv_Pola_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC932_COMB_PORT_TRANSMITTER_POLARITY)
+			Text = "    Transmitter Polarity"
+                        ExternalFunction = Smc932_ComB_Ir_Trans_Pola_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+		Question (Q_SMC932FR_COMB_FIR_PORT)
+			Text = "    Fast IR Port"
+			ExternalFunction = Smc932Fr_ComB_Fir_Xfn
+                        OptionBits = 9
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC932FR_COMB_FIR_DMA)
+			Text = "    Fast IR DMA"
+			ExternalFunction = Smc932Fr_ComB_Fir_Dma_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+	EndScreen
+EndDevice   // Smc932FrSerialPortB
+BeginDevice (SMC932ParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC932_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_SMC932_LPT_MODE)
+			Text = "  Parallel Port Mode"
+                        ExternalFunction = SMC932_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC932_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = SMC932_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+			EndQuestion
+	EndScreen
+EndDevice	// SMC932ParallelPort
+BeginDevice (SMC932ParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_SMC932_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+                        ExternalFunction = Smc932_Lpt_Addr_Xfn
+                        OptionBits = 3
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC932_LPT_MODE)
+			Text = "  Parallel Port Mode"
+                        ExternalFunction = Smc932_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 2
+                        PowerOn = 2
+		EndQuestion
+		Question (Q_SMC932_LPT_EPPVER)
+			Text = "  EPP Version"
+                        ExternalFunction = Smc932_Lpt_EppVer_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_SMC932_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Smc932_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+		Question (Q_SMC932_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+                        ExternalFunction = Smc932_Lpt_Dma_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+
+		EndQuestion
+	EndScreen
+EndDevice	// SMC932ParallelPortExt	   
+String(STR_SMC932_IRDA)
+	Text ="IrDA"
+EndString
+String(STR_SMC932_ASKIR)
+	Text ="ASK IR"
+EndString
+String(STR_SMC932_FULL_DUPLEX)
+	Text ="Full Duplex"
+EndString
+String(STR_SMC932_HALF_DUPLEX)
+	Text ="Half Duplex"
+EndString
+String(STR_SMC932_ACTIVE_HIGH)
+	Text ="Active High"
+EndString
+String(STR_SMC932_ACTIVE_LOW)
+	Text ="Active Low"
+EndString
+String(STR_SMC932_NA)
+	Text ="N/A"
+EndString
+String(STR_SMC932_AUTO)
+        Text ="Auto"
+EndString
+String(STR_SMC932_DIS)
+        Text ="Disabled"
+EndString
+String(STR_SMC932_378)
+        Text ="378"
+EndString
+String(STR_SMC932_278)
+        Text ="278"
+EndString
+String(STR_SMC932_3BC)
+        Text ="3BC"
+EndString
+String(STR_SMC932_NORMAL)
+        Text ="Normal"
+EndString
+String(STR_SMC932_BIDIR)
+        Text ="Bi-Dir"
+EndString
+String(STR_SMC932_EPP)
+        Text ="EPP"
+EndString
+String(STR_SMC932_ECP)
+        Text ="ECP"
+EndString
+String(STR_SMC932_EPP19)
+        Text ="1.9"
+EndString
+String(STR_SMC932_EPP17)
+        Text ="1.7"
+EndString
+String(STR_SMC932_IRQ5)
+        Text ="5"
+EndString
+String(STR_SMC932_IRQ7)
+        Text ="7"
+EndString
+String(STR_SMC932_DMA0)
+        Text ="0"
+EndString
+String(STR_SMC932_DMA1)
+        Text ="1"
+EndString
+String(STR_SMC932_DMA3)
+        Text ="3"
+EndString
+BeginDevice (Umc8669IdeController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8669_IDE_CONTROLLER)
+			Text = "OnBoard IDE"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary":DEFAULT:POWERON,
+				  "Secondary"
+		EndQuestion
+	EndScreen
+EndDevice	// UMC8669IdeController
+BeginDevice (Umc8669FloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8669_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "Enabled"
+		EndQuestion
+	EndScreen
+EndDevice	// UMC8669FloppyController
+BeginDevice (Umc8669SerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8669_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice	// UMC8669SerialPortA
+BeginDevice (Umc8669SerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8669_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_UMC8669_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+			ShadeWhen (Q_UMC8669_COMB_PORT) = "Disabled"
+			Optionset = "Normal",  "HPSIR", "ASKIR"
+			Optionset = "N/A"
+			Optionset = "Normal",  "HPSIR", "ASKIR"
+		EndQuestion
+		Question (Q_UMC8669_COMB_DUPLEX)
+			Text = "  Serial Port2 Duplex"
+			ExternalFunction = Umc8669_ComB_Duplex_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+		Question (Q_UMC8669_COMB_IR_GROUP)
+			Text = "  Serial Port2 IR group"
+			ExternalFunction = Umc8669_ComB_IrGroup_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+	EndScreen
+EndDevice   // Umc8669SerialPortB
+BeginDevice (UMC8669ParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8669_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_UMC8669_LPT_MODE)
+			Present = No
+			Text = "Dummy question"
+			Options = "N/A"
+		EndQuestion
+		Question (Q_UMC8669_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Umc8669_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice	// UMC8669ParallelPort
+BeginDevice (Umc8669ParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_UMC8669_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			ExternalFunction = Umc8669_Lpt_Addr_Xfn
+			OptionBits = 3
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_UMC8669_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = Umc8669_Lpt_Mode_Xfn
+			OptionBits = 2
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_UMC8669_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+			ExternalFunction = Umc8669_Lpt_Dma_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+		Question (Q_UMC8669_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Umc8669_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice   // Umc8669ParallelPortExt
+String (STR_UMC8669_HALF)
+	Text = "Half Duplex"
+EndString
+String (STR_UMC8669_FULL)
+	Text = "Full Duplex"
+EndString
+String (STR_UMC8669_GROUP_A)
+	Text = "A - No IDE"
+EndString
+String (STR_UMC8669_GROUP_B)
+	Text = "B - No IDE"
+EndString
+String (STR_UMC8669_GROUP_C)
+	Text = "C"
+EndString
+String (STR_UMC8669_AUTO)
+	Text = "Auto"
+EndString
+String (STR_UMC8669_DIS)
+	Text = "Disabled"
+EndString
+String (STR_UMC8669_378)
+	Text = "378"
+EndString
+String (STR_UMC8669_278)
+	Text = "278"
+EndString
+String (STR_UMC8669_3BC)
+	Text = "3BC"
+EndString
+String (STR_UMC8669_NORMAL)
+	Text = "Normal"
+EndString
+String (STR_UMC8669_EPP)
+	Text = "EPP"
+EndString
+String (STR_UMC8669_ECP)
+	Text = "ECP"
+EndString
+String (STR_UMC8669_IRQ5)
+	Text = "5"
+EndString
+String (STR_UMC8669_IRQ7)
+	Text = "7"
+EndString
+String (STR_UMC8669_DMA0)
+	Text = "0"
+EndString
+String (STR_UMC8669_DMA1)
+	Text = "1"
+EndString
+String (STR_UMC8669_DMA3)
+	Text = "3"
+EndString
+String (STR_UMC8669_NA)
+	Text = "N/A"
+EndString
+BeginDevice (WIN877IdeController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877_IDE_CONTROLLER)
+			Text = "OnBoard IDE"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary":DEFAULT:POWERON,
+				  "Secondary"
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877IdeController
+BeginDevice (WIN877FloppyController)
+	Screen (SCR_PERIPHERAL)
+		 Question (Q_WIN877_FLOPPY_CONTROLLER)
+			 Text = "OnBoard FDC"
+			 Options = "Auto":DEFAULT:POWERON,
+				   "Disabled",
+				   "Enabled"
+		 EndQuestion
+	EndScreen
+EndDevice	// WIN877FloppyController
+BeginDevice (WIN877SerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877SerialPortA
+BeginDevice (WIN877SerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_WIN877_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+			ShadeWhen (Q_WIN877_COMB_PORT) = "Disabled"
+			Options = "Normal":DEFAULT:POWERON,
+				  "IrDA"
+		EndQuestion
+		Question (Q_WIN877_COMB_DUPLEX_MODE)
+			Text = "    IR Duplex Mode"
+			ShadeWhen (Q_WIN877_COMB_MODE) = "Normal"
+			Options = "Full Duplex"
+				  "Half Duplex":DEFAULT:POWERON
+		EndQuestion
+		Question (Q_WIN877_COMB_PROTOCOL)
+			Text = "    IrDA Protocol"
+			ShadeWhen (Q_WIN877_COMB_MODE) = "Normal"
+			Options = "1.6 uS":DEFAULT:POWERON,
+				  "3/16 Baud"
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877SerialPortB
+BeginDevice (WIN877ParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_WIN877_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			Present = NO
+                        ExternalFunction = Win877_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Win877_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877ParallelPort
+BeginDevice (WIN877ParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+                        ExternalFunction = Win877_Lpt_Addr_Xfn
+                        OptionBits = 3
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877_LPT_MODE)
+			Text = "  Parallel Port Mode"
+                        ExternalFunction = Win877_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 2
+                        PowerOn = 2
+		EndQuestion
+		Question (Q_WIN877_LPT_EPPVER)
+			Text = "  EPP Version"
+                        ExternalFunction = Win877_Lpt_EppVer_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Win877_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+		Question (Q_WIN877_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+                        ExternalFunction = Win877_Lpt_Dma_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877ParallelPortExt	   
+String(STR_WIN877_NA)
+	Text ="N/A"
+EndString
+String(STR_WIN877_AUTO)
+        Text ="Auto"
+EndString
+String(STR_WIN877_DIS)
+        Text ="Disabled"
+EndString
+String(STR_WIN877_378)
+        Text ="378"
+EndString
+String(STR_WIN877_278)
+        Text ="278"
+EndString
+String(STR_WIN877_3BC)
+        Text ="3BC"
+EndString
+String(STR_WIN877_NORMAL)
+        Text ="Normal"
+EndString
+String(STR_WIN877_EPP)
+        Text ="EPP"
+EndString
+String(STR_WIN877_EPP19)
+        Text ="1.9"
+EndString
+String(STR_WIN877_EPP17)
+        Text ="1.7"
+EndString
+String(STR_WIN877_SPP_EPP)
+        Text ="SPP/EPP"
+EndString
+String(STR_WIN877_ECP)
+        Text ="ECP"
+EndString
+String(STR_WIN877_IRQ5)
+        Text ="5"
+EndString
+String(STR_WIN877_IRQ7)
+        Text ="7"
+EndString
+String(STR_WIN877_DMA0)
+        Text ="0"
+EndString
+String(STR_WIN877_DMA1)
+        Text ="1"
+EndString
+String(STR_WIN877_DMA3)
+        Text ="3"
+EndString
+BeginDevice (WIN877AFIdeController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877AF_IDE_CONTROLLER)
+			Text = "OnBoard IDE"
+			Options = RESERVED,
+				  "Disabled",
+				  "Primary":DEFAULT:POWERON,
+				  "Secondary"
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877AFIdeController
+BeginDevice (WIN877AFFloppyController)
+	Screen (SCR_PERIPHERAL)
+		 Question (Q_WIN877AF_FLOPPY_CONTROLLER)
+			 Text = "OnBoard FDC"
+			 Options = "Auto":DEFAULT:POWERON,
+				   "Disabled",
+				   "Enabled"
+		 EndQuestion
+	EndScreen
+EndDevice	// WIN877AFFloppyController
+BeginDevice (WIN877AFSerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877AF_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877AFSerialPortA
+BeginDevice (WIN877AFSerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877AF_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_WIN877AF_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+// 			ShadeWhen (Q_WIN877AF_COMB_PORT) = "Disabled"
+// 			Options = "Normal":DEFAULT:POWERON,
+// 		    		  "IrDA"
+// 		    		  "Fast IR"
+			ExternalFunction = Win877AF_ComB_Ir_Mode_Xfn
+            OptionBits = 2
+            Default = 0
+         	PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877AF_COMB_DUPLEX_MODE)
+			Text = "    IR Duplex Mode"
+//			ShadeWhen (Q_WIN877AF_COMB_MODE) = "Normal"
+//			Options = "Full Duplex"
+//			    	  "Half Duplex":DEFAULT:POWERON
+			ExternalFunction = Win877AF_ComB_Ir_Duplex_Xfn
+            OptionBits = 1
+            Default = 1
+         	PowerOn = 1
+		EndQuestion
+		Question (Q_WIN877AF_COMB_PROTOCOL)
+			Text = "    IrDA Protocol"
+//			ShadeWhen (Q_WIN877AF_COMB_MODE) = "Normal"
+//			Options = "1.6 uS":DEFAULT:POWERON,
+//    				  "3/16 Baud"
+			ExternalFunction = Win877AF_ComB_Ir_Protocol_Xfn
+            OptionBits = 1
+            Default = 0
+         	PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877AF_COMB_FIR_DMA)
+			Text = "    Fast IR DMA"
+			RuntimeFunction = Win877AF_ComB_Fir_Dma_Xrfn
+			ExternalFunction = Win877AF_ComB_Fir_Dma_Xfn
+            OptionBits = 3
+            Default = 1
+         	PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877AFSerialPortB
+BeginDevice (WIN877AFParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877AF_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto":DEFAULT:POWERON,
+				  "Disabled",
+				  "378",
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_WIN877AF_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			Present = NO
+                        ExternalFunction = Win877AF_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877AF_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = Win877AF_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877AFParallelPort
+BeginDevice (WIN877AFParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_WIN877AF_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+                        ExternalFunction = Win877AF_Lpt_Addr_Xfn
+                        OptionBits = 3
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877AF_LPT_MODE)
+			Text = "  Parallel Port Mode"
+                        ExternalFunction = Win877AF_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 2
+                        PowerOn = 2
+		EndQuestion
+		Question (Q_WIN877AF_LPT_EPPVER)
+			Text = "  EPP Version"
+                        ExternalFunction = Win877AF_Lpt_EppVer_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+		EndQuestion
+		Question (Q_WIN877AF_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Win877AF_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+		EndQuestion
+		Question (Q_WIN877AF_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA Channel"
+                        ExternalFunction = Win877AF_Lpt_Dma_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+		EndQuestion
+	EndScreen
+EndDevice	// WIN877AFParallelPortExt	   
+String(STR_WIN877AF_NA)
+	Text ="N/A"
+EndString
+String(STR_WIN877AF_AUTO)
+        Text ="Auto"
+EndString
+String(STR_WIN877AF_DIS)
+        Text ="Disabled"
+EndString
+String(STR_WIN877AF_378)
+        Text ="378"
+EndString
+String(STR_WIN877AF_278)
+        Text ="278"
+EndString
+String(STR_WIN877AF_3BC)
+        Text ="3BC"
+EndString
+String(STR_WIN877AF_NORMAL)
+        Text ="Normal"
+EndString
+String(STR_WIN877AF_IRDA)
+        Text ="IrDA"
+EndString
+String(STR_WIN877AF_FIR)
+        Text ="Fast IR"
+EndString
+String(STR_WIN877AF_FULL)
+        Text ="Full Duplex"
+EndString
+String(STR_WIN877AF_HALF)
+        Text ="Half Duplex"
+EndString
+String(STR_WIN877AF_16US)
+        Text ="1.6 uS"
+EndString
+String(STR_WIN877AF_316)
+        Text ="3/16 Baud"
+EndString
+String(STR_WIN877AF_EPP)
+        Text ="EPP"
+EndString
+String(STR_WIN877AF_EPP19)
+        Text ="1.9"
+EndString
+String(STR_WIN877AF_EPP17)
+        Text ="1.7"
+EndString
+String(STR_WIN877AF_SPP_EPP)
+        Text ="SPP/EPP"
+EndString
+String(STR_WIN877AF_ECP)
+        Text ="ECP"
+EndString
+String(STR_WIN877AF_IRQ5)
+        Text ="5"
+EndString
+String(STR_WIN877AF_IRQ7)
+        Text ="7"
+EndString
+String(STR_WIN877AF_DMA0)
+        Text ="0"
+EndString
+String(STR_WIN877AF_DMA1)
+        Text ="1"
+EndString
+String(STR_WIN877AF_DMA3)
+        Text ="3"
+EndString
+String(STR_WIN877AF_DMAA)
+        Text ="DMA_A"
+EndString
+String(STR_WIN877AF_DMAB)
+        Text ="DMA_B"
+EndString
+String(STR_WIN877AF_DMAC)
+        Text ="DMA_C"
+EndString
+String(STR_WIN877AF_DMAD)
+        Text ="DMA_D"
+EndString
+//*****************************************************************//
+BeginDevice (Win627FloppyController)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_FLOPPY_CONTROLLER)
+                        Text = "OnBoard FDC"
+                        Options = "Auto":DEFAULT:POWERON,
+                                  "Disabled",
+                                  "Enabled"
+                EndQuestion
+        EndScreen
+EndDevice   // Win627FloppyController
+BeginDevice (Win627SerialPortA)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_COMA_PORT)
+                        Text = "OnBoard Serial PortA"
+                        Options = "Auto":DEFAULT:POWERON,
+                                  "Disabled",
+                                  "3F8/COM1",
+                                  "2F8/COM2",
+                                  "3E8/COM3",
+                                  "2E8/COM4"
+                EndQuestion
+        EndScreen
+EndDevice   // Win627SerialPortA
+BeginDevice (Win627SerialPortB)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_COMB_PORT)
+                        Text = "OnBoard Serial PortB"
+                        Options = "Auto":DEFAULT:POWERON,
+                                          "Disabled",
+                                          "3F8/COM1",
+                                          "2F8/COM2",
+                                          "3E8/COM3",
+                                          "2E8/COM4"
+                EndQuestion
+                Question (Q_Win627_COMB_MODE)
+	                Text =    "  Serial PortB Mode"
+                        ShadeWhen (Q_Win627_COMB_PORT) = "Disabled"
+                        Options = "Normal":DEFAULT:POWERON,
+				  Reserved,
+                                  "1.6 uS",
+                                  "3/16 Baud",
+				  Reserved,
+				  Reserved,
+				  Reserved,
+                                  "ASKIR"       
+                        Present = Yes
+                EndQuestion
+                Question (Q_WIN627_COMB_DUPLEX_MODE)
+                        Text =    "    IR Duplex Mode"
+                        ShadeWhen (Q_Win627_COMB_MODE) = "Normal"
+                        Options = "Full Duplex",
+                                  "Half Duplex":DEFAULT:POWERON
+                EndQuestion
+                Question (Q_WIN627_COMB_IR_PIN_SELECT)
+                        Text = "    IR Pin Select"
+                        ShadeWhen (Q_Win627_COMB_MODE) = "Normal"
+                        Options = "SINB/SOUTB.",
+                                  "IRRX/IRTX":DEFAULT:POWERON
+                        Present = Yes
+                EndQuestion
+        EndScreen
+EndDevice   // Win627SerialPortB
+BeginDevice (Win627CIrPort)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_IR_PORT)
+                        Text = "OnBoard CIR Port"
+                        Options = "Disabled":DEFAULT:POWERON,
+				  "Enabled"
+//				   "3E0",                
+//				   "2E0"                
+//				   "3E8",
+//				   "2E8"                 
+                EndQuestion
+                Question (Q_Win627_IR_PORT_IRQ)
+                        Text = "  CIR IRQ Select"
+                        ShadeWhen (Q_Win627_IR_PORT) = "Disabled"
+                        Options = "3",
+                                  "4",  
+                                  "9",  
+                                  "10":DEFAULT:POWERON, 
+                                  "11"  
+                EndQuestion
+        EndScreen
+EndDevice   // Win627CIrPort
+BeginDevice (Win627ParallelPort)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_LPT_PORT)
+                        Text = "OnBoard Parallel Port"
+                        Options = "Auto":DEFAULT:POWERON,
+                                          "Disabled",
+                                          "378",
+                                          "278",
+                                          "3BC"
+                EndQuestion
+                Question (Q_Win627_LPT_MODE)
+                        Text = "  Parallel Port Mode"
+                        ExternalFunction = Win627_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win627_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Win627_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+                        EndQuestion
+        EndScreen
+EndDevice       // Win627ParallelPort
+BeginDevice (Win627ParallelPortExt)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_LPT_PORT)
+                        Text = "OnBoard Parallel Port"
+                        ExternalFunction = Win627_Lpt_Addr_Xfn
+                        OptionBits = 3
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win627_LPT_MODE)
+                        Text = "  Parallel Port Mode"
+                        ExternalFunction = Win627_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win627_LPT_EPPVER)
+                        Text = "  EPP Version"
+                        ExternalFunction = Win627_Lpt_EppVer_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win627_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Win627_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+                EndQuestion
+                Question (Q_Win627_LPT_ECP_DMA)
+                        Text = "  Parallel Port DMA Channel"
+                        ExternalFunction = Win627_Lpt_Dma_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+                EndQuestion
+        EndScreen
+EndDevice       // Win627ParallelPortExt           
+BeginDevice (Win627MidiPort)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_MIDI_PORT)
+                        Text = "OnBoard Midi Port"
+                        Options = "Disabled":DEFAULT:POWERON,
+                                  "300",               
+                		  "330"
+		EndQuestion 
+                Question (Q_Win627_MIDI_PORT_IRQ)
+                        Text = "  Midi IRQ Select"
+                        ShadeWhen (Q_Win627_MIDI_PORT) = "Disabled"
+                        Options = "5",
+                                  "7",  
+                                  "9":DEFAULT:POWERON, 
+                                  "10"
+                EndQuestion
+        EndScreen
+EndDevice   // Win627MidiPort
+BeginDevice (Win627GamePort)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_GAME_PORT)
+                        Text = "OnBoard Game Port"
+                        Options = "Disabled":DEFAULT:POWERON,
+                                  "200",               
+                		  "208"
+		EndQuestion 
+        EndScreen
+EndDevice   // Win627GamePort
+BeginDevice (Win627FloppyController)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_KB_WAKEUP_FUNC)
+                        Text = "Keyboard PowerOn Function"
+//                        Options = "Disabled":DEFAULT:POWERON,
+//                                  "Specific Key",
+//                                  "Any Key"
+                        ExternalFunction = Win627_KB_FuncE_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion                                                                                                                      
+        	Question (Q_WIN977EF_KB_PASSWORD)
+            	Text = "Specific Key for PowerOn"
+            	ExternalFunction = Win977ef_KB_Pas
+            	OptionBits = 1
+            	Default = 0
+            	PowerOn = 0
+        	EndQuestion
+
+                Question (Q_Win627_MOUSE_WAKEUP_FUNC)
+                        Text = "Mouse PowerOn Function"
+//                        Options = "Disabled":DEFAULT:POWERON,
+//                                  "Any Action",
+//                                  "Left-botton",
+//                                  "Right-botton"
+                        ExternalFunction = Win627_Mouse_FuncE_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+        EndScreen
+EndDevice       // Win627ACPI   
+//String(STR_Win627_FULL_DUPLEX)	      
+//        Text ="Full Duplex"
+//EndString
+//String(STR_Win627_HALF_DUPLEX)
+//        Text ="Half Duplex"
+//EndString
+String(STR_Win627_NA)
+        Text ="N/A"
+EndString
+String(STR_Win627_AUTO)
+        Text ="Auto"
+EndString
+String(STR_Win627_EN)
+        Text ="Enabled"
+EndString
+String(STR_Win627_DIS)
+        Text ="Disabled"
+EndString
+String(STR_Win627_378)
+        Text ="378"
+EndString
+String(STR_Win627_278)
+        Text ="278"
+EndString
+String(STR_Win627_3BC)
+        Text ="3BC"
+EndString
+String(STR_Win627_NORMAL)
+        Text ="Normal"
+EndString
+String(STR_Win627_BIDIR)
+        Text ="Bi-Dir"
+EndString
+String(STR_Win627_EPP)
+        Text ="EPP"
+EndString
+String(STR_Win627_ECP)
+        Text ="ECP"
+EndString
+String(STR_Win627_EPP19)
+        Text ="1.9"
+EndString
+String(STR_Win627_EPP17)
+        Text ="1.7"
+EndString
+String(STR_Win627_IRQ5)
+                Text ="5"
+EndString
+String(STR_Win627_IRQ7)
+                Text ="7"
+EndString
+String(STR_Win627_DMA0)
+                Text ="0"
+EndString
+String(STR_Win627_DMA1)
+                Text ="1"
+EndString
+String(STR_Win627_DMA3)
+                Text ="3"
+EndString
+//String(STR_Win627_4)
+//                Text ="4"
+//EndString
+//String(STR_Win627_9)
+//                Text ="9"
+//EndString
+//String(STR_Win627_10)
+//                Text ="10"
+//EndString
+//String(STR_Win627_11)
+//                Text ="11"
+//EndString
+//String(STR_ANY_ACTION)
+//                Text ="Any Action"
+//EndString
+String(STR_ENTER)
+    Text = "PasswordÙ"
+EndString
+//*****************************************************************//
+BeginDevice (Win977FloppyController)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_FLOPPY_CONTROLLER)
+                        Text = "OnBoard FDC"
+                        Options = "Auto":DEFAULT:POWERON,
+                                          "Disabled",
+                                          "Enabled"
+                EndQuestion
+        EndScreen
+EndDevice   // Win977FloppyController
+BeginDevice (Win977SerialPortA)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_COMA_PORT)
+                        Text = "OnBoard Serial PortA"
+                        Options = "Auto":DEFAULT:POWERON,
+                                          "Disabled",
+                                          "3F8/COM1",
+                                          "2F8/COM2",
+                                          "3E8/COM3",
+                                          "2E8/COM4"
+                EndQuestion
+        EndScreen
+EndDevice   // Win977SerialPortA
+BeginDevice (Win977SerialPortB)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_COMB_PORT)
+                        Text = "OnBoard Serial PortB"
+                        Options = "Auto":DEFAULT:POWERON,
+                                          "Disabled",
+                                          "3F8/COM1",
+                                          "2F8/COM2",
+                                          "3E8/COM3",
+                                          "2E8/COM4"
+                EndQuestion
+                Question (Q_WIN977_COMB_IR_PIN_SELECT)
+                        Text = "IR I/O pin Location Select"
+                        Options = "SINB/SOUTB.":DEFAULT:POWERON,
+                                          "IRRX/IRTX"
+                        Present = No
+                EndQuestion
+                Question (Q_Win977_COMB_MODE)
+                        Text =    "  Serial PortB Mode"
+                        RuntimeFunction = Win977_COMB_RFunc_Xfn
+//                      ShadeWhen (Q_Win977_COMB_PORT) = "Disabled"
+//                      Options = "Normal":DEFAULT:POWERON,
+//                                        "IrDA",
+//                                        "ASKIR"       
+                        ExternalFunction = Win977_ComB_EFunc_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_WIN977_COMB_DUPLEX_MODE)
+                        Text =    "    IR Duplex Mode"
+                        RuntimeFunction = Win977_COMB_RFunc_Xfn
+//                      ShadeWhen (Q_Win977_COMB_MODE) = "Normal"
+//                      Options = "Full Duplex",
+//                                "Half Duplex":DEFAULT:POWERON
+                        ExternalFunction = Win977_ComB_Duplex_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+                EndQuestion
+                Question (Q_WIN977_COMB_PROTOCOL)
+                        Text =    "    IrDA Protocol"
+                        RuntimeFunction = Win977_COMB_RFunc_Xfn
+//                      ShadeWhen (Q_WIN977TF_COMB_MODE) = "Normal"
+//                      Options = "1.6 uS":DEFAULT:POWERON,
+//                                "3/16 Baud"
+                        ExternalFunction = Win977_ComB_Protocol_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+        EndScreen
+EndDevice   // Win977SerialPortB
+BeginDevice (Win977SerialPortB)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_IR_PORT)
+                        Text = "IR Port Support"
+                        RuntimeFunction = Win977_IR_RFunc_Xfn
+//                      Options = "Disabled":DEFAULT:POWERON,
+//                                        "Enable"
+                        ExternalFunction = Win977_IR_EFunc_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win977_IR_PORT_MODE)
+                        Text = "  IR Mode Select"
+                        RuntimeFunction = Win977_IR_RFunc_Xfn
+//                      ShadeWhen (Q_Win977_IR_PORT) = "Disabled"
+//                      Options = "SIR":DEFAULT:POWERON,
+//                                        "ASKIR",      
+//                                        "FIR",        
+//                                        "CIR" 
+                        ExternalFunction = Win977_IR_Mode_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win977_IR_PORT_BASE)
+                        Text = "  IR Base Address Select"
+                        RuntimeFunction = Win977_IR_RFunc_Xfn
+//                      ShadeWhen (Q_Win977_IR_PORT) = "Disabled"
+//                      Options = "3E0",
+//                                        "2E0",        
+//                                        "3E8":DEFAULT:POWERON,        
+//                                        "2E8" 
+                        ExternalFunction = Win977_IR_Addr_Xfn
+                        OptionBits = 2
+                        Default = 2
+                        PowerOn = 2
+                EndQuestion
+                Question (Q_Win977_IR_PORT_IRQ)
+                        Text = "  IR IRQ Select"
+                        RuntimeFunction = Win977_IR_RFunc_Xfn
+//                      ShadeWhen (Q_Win977_IR_PORT) = "Disabled"
+//                      Options = "3",
+//                                        "4",  
+//                                        "9":DEFAULT:POWERON,  
+//                                        "10", 
+//                                        "11"  
+                        ExternalFunction = Win977_IR_IRQ_Xfn
+                        OptionBits = 3
+                        Default = 2
+                        PowerOn = 2
+                EndQuestion
+                Question (Q_Win977_IR_PORT_DMA)
+                        Text = "  IR DMA Select"
+                        RuntimeFunction = Win977_IR_RFunc_Xfn
+//                      ShadeWhen (Q_Win977_IR_PORT) = "Disabled"
+//                      Options = "Disabled":DEFAULT:POWERON,
+//                                        "0",  
+//                                        "1",  
+//                                        "3"   
+                        ExternalFunction = Win977_IR_DMA_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+        EndScreen
+EndDevice   // Win977Win977IrPort 
+BeginDevice (Win977ParallelPort)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_LPT_PORT)
+                        Text = "OnBoard Parallel Port"
+                        Options = "Auto":DEFAULT:POWERON,
+                                          "Disabled",
+                                          "378",
+                                          "278",
+                                          "3BC"
+                EndQuestion
+                Question (Q_Win977_LPT_MODE)
+                        Text = "  Parallel Port Mode"
+                        ExternalFunction = Win977_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win977_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Win977_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+                        EndQuestion
+        EndScreen
+EndDevice       // Win977ParallelPort
+BeginDevice (Win977ParallelPortExt)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_LPT_PORT)
+                        Text = "OnBoard Parallel Port"
+                        ExternalFunction = Win977_Lpt_Addr_Xfn
+                        OptionBits = 3
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_WIN977_LPT_PORT_SETTING)
+                        Text = "Test Item Do Not Present"
+                        Options = "0":DEFAULT:POWERON,"1","2","3"
+                        Present = No
+                EndQuestion
+                Question (Q_Win977_LPT_MODE)
+                        Text = "  Parallel Port Mode"
+                        ExternalFunction = Win977_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win977_LPT_EPPVER)
+                        Text = "  EPP Version"
+                        ExternalFunction = Win977_Lpt_EppVer_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win977_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Win977_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+                EndQuestion
+                Question (Q_Win977_LPT_ECP_DMA)
+                        Text = "  Parallel Port DMA Channel"
+                        ExternalFunction = Win977_Lpt_Dma_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+                EndQuestion
+        EndScreen
+EndDevice       // Win977ParallelPortExt           
+BeginDevice (Win977FloppyController)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win977_KB_WAKEUP_FUNC)
+                        Text = "K/B Wake-up function"
+                        RuntimeFunction = Win977_KB_Func_Xfn
+//                      Options = "Disabled":DEFAULT:POWERON,
+//                                        "Specific Key",
+//                                        "Any Key"
+                        ExternalFunction = Win977_KB_FuncE_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion                                                                                                                      
+                Question (Q_Win977_MOUSE_WAKEUP_FUNC)
+                        Text = "Mouse Wake-up function"
+                        RuntimeFunction = Win977_Mouse_Func_Xfn
+//                      Options = "Disabled":DEFAULT:POWERON,
+//                                        "Any Key",
+//                                        "Left-botton",
+//                                        "Right-botton"
+                        ExternalFunction = Win977_Mouse_FuncE_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+        EndScreen
+EndDevice       // Win977ACPI   
+String(STR_Win977_STANDARD)
+        Text ="Standard"
+EndString
+String(STR_Win977_IRDA)
+        Text ="IrDA"
+EndString
+String(STR_Win977_ASKIR)
+        Text ="ASK IR"
+EndString
+String(STR_Win977_FIR)
+        Text ="FIR"
+EndString
+String(STR_Win977_CIR)
+        Text ="CIR"
+EndString
+String(STR_Win977_FULL_DUPLEX)
+        Text ="Full Duplex"
+EndString
+String(STR_Win977_HALF_DUPLEX)
+        Text ="Half Duplex"
+EndString
+String(STR_Win977_16US)
+        Text ="1.6 uS"
+EndString
+String(STR_Win977_316)
+        Text ="3/16 Baud"
+EndString
+String(STR_Win977_ACTIVE_HIGH)
+        Text ="Active High"
+EndString
+String(STR_Win977_ACTIVE_LOW)
+        Text ="Active Low"
+EndString
+String(STR_Win977_NA)
+        Text ="N/A"
+EndString
+String(STR_Win977_AUTO)
+        Text ="Auto"
+EndString
+String(STR_Win977_EN)
+        Text ="Enabled"
+EndString
+String(STR_Win977_DIS)
+        Text ="Disabled"
+EndString
+String(STR_Win977_378)
+        Text ="378"
+EndString
+String(STR_Win977_278)
+        Text ="278"
+EndString
+String(STR_Win977_3BC)
+        Text ="3BC"
+EndString
+String(STR_Win977_3E0)
+        Text ="3E0"
+EndString
+String(STR_Win977_2E0)
+        Text ="2E0"
+EndString
+String(STR_Win977_3E8)
+        Text ="3E8"
+EndString
+String(STR_Win977_2E8)
+        Text ="2E8"
+EndString
+String(STR_Win977_NORMAL)
+        Text ="Normal"
+EndString
+String(STR_Win977_BIDIR)
+        Text ="Bi-Dir"
+EndString
+String(STR_Win977_EPP)
+        Text ="EPP"
+EndString
+String(STR_Win977_ECP)
+        Text ="ECP"
+EndString
+String(STR_Win977_EPP19)
+        Text ="1.9"
+EndString
+String(STR_Win977_EPP17)
+        Text ="1.7"
+EndString
+String(STR_Win977_IRQ5)
+                Text ="5"
+EndString
+String(STR_Win977_IRQ7)
+                Text ="7"
+EndString
+String(STR_Win977_DMA0)
+                Text ="0"
+EndString
+String(STR_Win977_DMA1)
+                Text ="1"
+EndString
+String(STR_Win977_DMA3)
+                Text ="3"
+EndString
+String(STR_Win977_4)
+                Text ="4"
+EndString
+String(STR_Win977_9)
+                Text ="9"
+EndString
+String(STR_Win977_10)
+                Text ="10"
+EndString
+String(STR_Win977_11)
+                Text ="11"
+EndString
+String(STR_SPECIFIC_KEY)
+                Text ="Specific Key"
+EndString
+String(STR_ANY_KEY)
+                Text ="Any Key"
+EndString
+String(STR_LEFT_BOTTON)
+                Text ="Left-botton"
+EndString
+String(STR_RIGHT_BOTTON)
+                Text ="Right-botton"
+EndString

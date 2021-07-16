@@ -1,0 +1,66 @@
+;*****************************************************************;
+;*****************************************************************;
+;-------------------------------;
+; CMOS MAP			;
+;-------------------------------;
+diskette_ab	equ	10h	; 10h = diskette type A,B = xxxx,xxxx
+				; 11h = reserved (00)
+harddisk_cd	equ	12h	; 12h = harddisk type C,D = xxxx,xxxx
+				; 13h = reserved (00)
+equipment	equ	14h	; 14h = #drive,display,xx,numproc,IPL
+base_mem_low	equ	15h	; 15h = base memory  low-byte
+base_mem_high	equ	16h	; 16h = base memory high-byte
+expn_mem_low	equ	17h	; 17h = expansion memory  low-byte
+expn_mem_high	equ	18h	; 18h = expansion memory high-byte
+extd_hdisk_c	equ	19h	; 19h = hard disk type C extended
+extd_hdisk_d	equ	1ah	; 1ah = hard disk type D extended
+harddisk_e	equ	27h	; 27h = secondary master type bits 5..0
+harddisk_f	equ	28h	; 28h = secondary slave type bits 5..0
+expn_mem_low_64	equ	35h	; 35h = expansion memory  low-byte (unit 64k)
+expn_mem_high_64 equ	36h	; 36h = expansion memory high-byte (unit 64k)
+;-------------------------------;
+; User defined hard disk types	;
+; Primary Master   := (1B..20)	;
+; Primary Slave    := (21..26)	;
+; Secondary Master := (40..45)	;
+; Secondary Slave  := (46..4B)	;
+;-------------------------------;
+uc_cylinder	equ	1bh	; 1bh = no. of cylinders, 2 bytes
+				; 1ch = ,,	,,	,,
+uc_head		equ	1dh	; 1dh = no. of heads, 1 byte
+uc_wpcomp	equ	1eh	; 1eh = write precomp cylinder,2 bytes
+				; 1fh = ,,	,,	,,	,,
+uc_sector	equ	20h	; 20h = no. of sectors, 1 byte
+;-------------------------------;
+ud_cylinder	equ	21h	; 21h = no. of cylinders, 2 bytes
+				; 22h = ,,	,,	,,
+ud_head		equ	23h	; 23h = no. of heads, 1 byte
+ud_wpcomp	equ	24h	; 24h = write precomp cylinder,2 bytes
+				; 25h = ,,	,,	,,	,,
+ud_sector	equ	26h	; 26h = no. of sectors, 1 byte
+;-------------------------------;
+ue_cylinder	equ	40h	; 40h = no. of cylinders, 2 bytes
+				; 41h = ,,	,,	,,
+ue_head		equ	42h	; 42h = no. of heads, 1 byte
+ue_wpcomp	equ	43h	; 43h = write precomp cylinder,2 bytes
+				; 44h = ,,	,,	,,	,,
+ue_sector	equ	45h	; 45h = no. of sectors, 1 byte
+;-------------------------------;
+uf_cylinder	equ	46h	; 46h = no. of cylinders, 2 bytes
+				; 47h = ,,	,,	,,
+uf_head		equ	48h	; 48h = no. of heads, 1 byte
+uf_wpcomp	equ	49h	; 49h = write precomp cylinder,2 bytes
+				; 4ah = ,,	,,	,,	,,
+uf_sector	equ	4bh	; 4bh = no. of sectors, 1 byte
+;-------------------------------;
+adv_ide_c	equ	2ah	; 2Ah = primary master enhanced features
+adv_ide_d	equ	2bh	; 2Bh = primary master enhanced features
+adv_ide_e	equ	2ch	; 2Ch = primary master enhanced features
+adv_ide_f	equ	2dh	; 2Dh = primary master enhanced features
+;-------------------------------;
+lba_bit		equ	00000001b; bit-0
+block_bit	equ	00000010b; bit-1
+bit32_bit	equ	00000100b; bit-2
+pio_bits	equ	00111000b; bit 5-4-3
+pio_shift	equ	03h	;  #of bits shifting right
+;-------------------------------;

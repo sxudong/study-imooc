@@ -1,0 +1,77 @@
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;----------- SilentBootInfo ------------;
+toggle_key_bit			equ	00000001b; toggle key pressed information
+					;	0 = toggle key not pressed
+					;	1 = toggle key pressed
+curr_display_bit		equ	00000010b; current display information
+					;	0 = current display is BIOS
+					;	1 = current display is OEM
+prev_display_bit		equ	00000100b; previous display information
+					;	0 = previous display is BIOS
+					;	1 = previous display is OEM
+display_change_in_progress_bit	equ	00001000b; display change status
+					;	0 = display change complete
+					;	1 = display change in progress
+int10_trap_bit			equ	00010000b; INT10 trap information during add-on rom init
+					;	0 = INT10 not trapped
+					;	1 = INT10 trapped
+bios_key_bit			equ	00100000b; BIOS key (e.g. ESC,DEL,TAB,etc.) information
+					;	0..BIOS keys (e.g. ESC,DEL,TAB, etc.) not pressed
+					;	1..at least one BIOS key pressed, hence stuck key will not be checked
+oem_bios_change_bit		equ	01000000b; OEM to BIOS display change information
+					;	0 = OEM to BIOS display change not happened
+					;	1 = OEM to BIOS display change happened
+				; Bit-7.........NOT USED
+;------------- BIOS_SCRATCH ------------;
+bios_f_shadow_bit		equ	00000001b; F000 shadow information
+					;	0 = Disabled
+					;	1 = Enabled
+bios_e_shadow_bit		equ	00000010b; E000 shadow information
+					;	0 = Disabled
+					;	1 = Enabled
+;				; Bit5-2........NOT USED
+				; Bit4-2........NOT USED
+acpi_aware_os_bit		equ	00100000b; ACPI Aware OS Information
+					;	0 = Not an ACPI Aware OS
+					;	1 = ACPI Aware OS
+bios_post_complete_bit		equ	01000000b; BIOS POST information
+					;	0 = POST not complete
+					;	1 = POST complete
+int19_display_bit		equ	10000000b; Active display during INT19
+					;	0 = BIOS display
+					;	1 = OEM display
+;---------------------------------------;
+
+; $$$CORE0028+ >>>
+silent_buffer_size		equ	80*30*2
+silent_buffer_segment		equ	07000h
+silent_buffer_offset		equ	10000h-silent_buffer_size
+; $$$CORE0028+ <<<
+
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;

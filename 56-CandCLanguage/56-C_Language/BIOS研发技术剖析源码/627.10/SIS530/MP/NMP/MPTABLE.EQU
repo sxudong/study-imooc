@@ -1,0 +1,432 @@
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+; 
+;*****************************************************************;
+;
+;	MPTABLE.EQU
+;
+;	This file contains various equate declarations needed for 
+;	creating MultiProcessing table entries.
+;
+;*****************************************************************;
+
+
+PCMP_SIGNATURE			textequ		<"PCMP">
+PCMP_SIGNATURE_DWORD		textequ		<"PMCP">	; for lodsd/stosd operations 
+
+MP_SPEC_REVISION		equ	01h
+
+
+PROCESSOR_ENTRY_TYPE		equ	0
+BUS_ENTRY_TYPE			equ	1
+IO_APIC_ENTRY_TYPE		equ	2
+INTERRUPT_ENTRY_TYPE		equ	3
+LOCAL_INTR_ENTRY_TYPE		equ	4
+
+
+;
+;	CPU related equates
+;
+
+DEFAULT_LOCAL_APIC_ADDRESS	equ	0FEE00000h 
+
+
+; CPU Flags
+CPU_ENBLD       		equ     01h		; CPU is enabled
+BSP_CPU         		equ     02h		; CPU is Bootstrap processor
+
+; CPU Signature as per CPUID
+Family_486      		equ     0421h		; Generic 486
+Family_586      		equ     0500h		; Generic 586
+
+Model_P54C      		equ     20h
+B1_CPU          		equ     01h
+B3_CPU          		equ     02h
+B5_CPU          		equ     04h
+C2_CPU          		equ     05h
+
+; CPU feature flags as per CPUID
+FPU             		equ     0001h		; On-chip FPU
+VME				equ	0002h		; Virtual 8086 mode enhancements
+DE				equ	0004h		; Debugging extensions
+PSE				equ	0008h		; Page size extensions (4M pages)
+TSC				equ	0010h		; Time stamp counter
+MSR				equ	0020h		; Model specific registers
+PAE				equ	0040h		; Physical address extension (addressing > 32 bits)
+MCE				equ	0080h		; Machine check exception
+CX8             		equ     0100h		; Compare and Exchange 8 bytes
+LOCAL_APIC_ON_CPU      		equ     0200h		; On chip local APIC
+MTRR				equ	1000h		; Memory type range registers
+PGE				equ	2000h		; PTE global bit
+MCA				equ	4000h		; Machine check architecture
+CMOV_SUPPORT			equ	8000h		; Condional move instruction
+
+INTEGRATED_APIC_VERSION 	equ     11h		; Integrated APIC version 1x
+
+; Default CPU conditions
+
+DEFAULT_NUMBER_OF_PROCESSORS	equ	2
+DEFAULT_CPU_SIGNATURE		equ	(Family_586 OR Model_P54C OR B1_CPU) 
+DEFAULT_CPU_FEATURES		equ	(FPU OR LOCAL_APIC_ON_CPU OR CX8)
+
+;
+;	Bus definition related equates
+;
+
+EISA_BUS                textequ         <"EISA  ">              ; EISA Bus
+ISA_BUS                 textequ         <"ISA   ">              ; ISA Bus
+PCI_BUS                 textequ         <"PCI   ">              ; PCI Bus
+MCA_BUS                 textequ         <"MCA   ">              ; MCA Bus
+PCMCIA_BUS              textequ         <"PCMCIA">              ; PCMCIA Bus
+VL_BUS                  textequ         <"VL    ">              ; VESA Local Bus
+NU_BUS                  textequ         <"NUBUS ">              ; Apple MAC NuBus
+VME_BUS                 textequ         <"VME   ">              ; VME Bus
+COROLLARY_BUS           textequ         <"CBUS  ">              ; Corollary Bus
+COROLLARY_BUS_II        textequ         <"CBUSII">              ; Corollary Bus II
+MULTI_BUS_I             textequ         <"MBI   ">              ; Multibus I
+MULTI_BUS_II            textequ         <"MBII  ">              ; Multibus II
+MPI_BUS                 textequ         <"MPI   ">              ; MPI Bus
+MPSA_BUS                textequ         <"MPSA  ">              ; MPSA Bus
+EXPRESS_BUS             textequ         <"XPRESS">              ; Express System Bus
+FUTURE_BUS              textequ         <"FUTURE">              ; IEEE FutureBus
+VME_BUS                 textequ         <"VME   ">              ; VME Bus
+INTERNAL_BUS            textequ         <"INTERN">              ; Internal Bus
+TURBO_CHANNEL_BUS       textequ         <"TC    ">              ; DEC Turbo Channel
+
+;
+;	I/O APIC related equates
+;
+
+IO_APIC_ENBLD   		equ     01h
+DEFAULT_IO_APIC_ID		equ	02h
+DEFAULT_IO_APIC_BASE_ADDRESS 	equ	0FEC00000h 
+ALL_IO_APICS			equ	0FFh
+
+IO_APIC_REGISTER_SELECT		equ	0000h
+IO_APIC_REGISTER_WINDOW		equ	0010h
+
+IO_APIC_ID_REGISTER		equ	00h
+IO_APIC_VERSION_REGISTER	equ	01h
+
+;
+;	Interrupt related entries
+;
+
+INTR_TYPE       	equ     00h
+NMI_TYPE        	equ     01h
+SMI_TYPE        	equ     02h
+EXTINT_TYPE     	equ     03h
+
+BUS_DEFAULT_POLARITY    equ     00h
+BUS_ACTIVE_HIGH         equ     01h
+BUS_ACTIVE_LOW          equ     03h
+
+BUS_DEFAULT_TRIGGER     equ     00h
+BUS_EDGE_TRIGGER        equ     04h
+BUS_LEVEL_TRIGGER       equ     0Ch
+
+;
+;	Local APIC related entries
+;
+
+ALL_LOCAL_APICS		equ	0FFh
+
+LOCAL_APIC_ID		equ	0020h		; Local APIC ID
+LOCAL_APIC_VER		equ	0030h		; APIC version
+
+LOCAL_APIC_ENABLED	equ	000000100h	; Local APIC enabled bit in SVR
+
+LOCAL_APIC_TPR		equ	0080h		; Task Priority Register
+LOCAL_APIC_APR		equ	0090h		; Arbitration Priority Register
+LOCAL_APIC_PPR		equ	00A0h		; Processor Priority Register
+LOCAL_APIC_EOI		equ	00B0h		; EOI Register
+LOCAL_APIC_RRR		equ	00C0h		; Remote Read Register
+LOCAL_APIC_LDR		equ	00D0h		; Logical Destination Register
+LOCAL_APIC_DFR		equ	00E0h		; Destination Format Register
+LOCAL_APIC_SVR		equ	00F0h		; Spurious Vector Register
+
+LOCAL_APIC_ISR_BASE	equ	0100h		; ISR 0-255
+LOCAL_APIC_TMR_BASE	equ	0180h		; TMR 0-255
+LOCAL_APIC_IRR_BASE	equ	0200h		; IRR 0-255
+
+LOCAL_APIC_ESR		equ	0280h		; Error status register
+
+LOCAL_APIC_ICR_LOW	equ	0300h		; Interrupt Command Register 0-31
+LOCAL_APIC_ICR_HIGH	equ	0310h		; Interrupt Command Register 32-63
+
+LOCAL_APIC_LVT0		equ	0320h		; LVT0 (timer)
+LOCAL_APIC_TIMER	equ	0320h		; LVT0 (timer)
+
+LOCAL_APIC_LVT1		equ	0350h		; LVT1 (LINT0)
+LOCAL_APIC_LINT0	equ	0350h		; LVT1 (LINT0)
+
+LOCAL_APIC_LVT2		equ	0360h		; LVT2 (LINT1)
+LOCAL_APIC_LINT1	equ	0360h		; LVT2 (LINT1)
+
+LOCAL_APIC_LVT3		equ	0370h		; LVT3 (Error)
+LOCAL_APIC_ERROR	equ	0370h		; LVT3 (Error)
+
+LOCAL_APIC_TIMER_IC	equ	0380h		; Initial count for timer
+LOCAL_APIC_TIMER_CC	equ	0390h		; Current count for timer
+LOCAL_APIC_TIMER_DC	equ	03E0h		; Timer divide configuration register
+
+ICR_HIGH_RESERVED	equ	000ffffffh 	; Reserved bits in ICR HIGH
+ICR_LOW_RESERVED	equ	0fff02000h 	; Resrved bits in ICR LOW
+
+; Interrupt delivery modes
+INT_DELIVER_FIXED		equ	000b		; Fixed
+INT_DELIVER_LOWEST_PRIORITY	equ	001b		; Lowest priority
+INT_DELIVER_SMI			equ	010b		; SMI
+INT_DELIVER_REMOTE_READ		equ	011b		; Remote read
+INT_DELIVER_NMI			equ	100b		; NMI
+INT_DELIVER_INIT        	equ	101b		; INIT
+INT_DELIVER_START_UP        	equ	110b		; Start Up
+INT_DELIVER_EXTINT		equ	111b		; ExtInt
+
+LOCAL_APIC_INTR_MASK_BIT	equ	000010000h	; APIC mask interrupt
+
+; Destination shorthand
+DESTINATION_FIELD		equ	00b		; Use destination field
+DESTINATION_SELF		equ	01b		; Send to self
+DESTINATION_ALL_INCL_SELF	equ	10b		; Send to all including self
+DESTINATION_ALL_EXCL_SELF	equ	11b		; Send to all excluding self
+
+REMOTE_READ_STATUS_FIELD	equ	0300h		; Remote read status
+REMOTE_READ_ERROR		equ	00b		; Error on remote read
+REMOTE_READ_IN_PROGRESS		equ	01b		; Remote read in progress
+REMOTE_READ_VALID		equ	11b		; Remote read valid
+
+APIC_IPI_RETRY_COUNT		equ	10		; Try an IPI ten times
+REMOTE_READ_RETRY_COUNT		equ	10		; Try remote read ten times
+
+
+; ESR (Error status register)  bit definitions
+
+SEND_CS_ERROR			equ	000000001h	; Send checksum error
+RECEIVE_CS_ERROR		equ	000000002h	; Receive checksum error
+SEND_ACCEPT_ERROR		equ	000000004h	; Send accept error
+RECEIVE_ACCEPT_ERROR		equ	000000008h	; Receive accept error
+
+SEND_ILLEGAL_VECTOR		equ	000000020h	; Send illegal vector
+RECEIVE_ILLEGAL_VECTOR		equ	000000040h	; Receive illegal vector
+ILLEGAL_REGISTER_ADDRESS	equ	000000080h	; Illegal register address
+
+
+;*****************************************************************;
+;*****************************************************************;
+;	PCI.EQU							  ;
+;*****************************************************************;
+;*****************************************************************;
+
+PCI_SPEC_VERSION	equ	0210h	;Version of PCI spec implemented
+
+PCI_SPEC_CYCLE_M1	equ	10h
+PCI_SPEC_CYCLE_M2	equ	20h
+PCI_CFG_SPACE_M1	equ	01h
+PCI_CFG_SPACE_M2	equ	02h
+
+MAX_PCI_DEVICE_NUM	equ	1Fh	;Highest allowable PCI device number
+
+; Standard PCI configuration register offsets and relevant values
+;------------------------------------------------------------------------------
+PCI_REG_VENDID		equ	00h	;PCI vendor ID register
+PCI_REG_DEVID		equ	02h	;PCI device ID register
+PCI_REG_COMMAND		equ	04h	;PCI command register
+  CMD_DEV_DISABLE	equ	00h	;Disables device when written to cmd reg
+  CMD_IO_SPACE		equ	01h	;IO space enable bit
+  CMD_MEM_SPACE		equ	02h	;Memory space enable bit
+  CMD_BUS_MASTER	equ	04h	;Bus master enable bit
+  CMD_SPECIAL_CYCLE	equ	08h	;Special cycle enable bit
+  CMD_MEM_INVALIDATE	equ	10h	;Memory write & invalidate enable bit
+  CMD_PAL_SNOOP		equ	20h	;VGA palette snoop enable bit
+  CMD_PARITY		equ	40h	;Parity error enable bit
+  CMD_WAIT_CYCLE	equ	80h	;Wait cycle control bit
+  CMD_SERR		equ	100h	;SERR# enable bit
+  CMD_FAST_BTOB		equ	200h	;Fast back-to-back enable bit
+PCI_REG_STATUS		equ	06h	;PCI status register
+  STAT_RESET_ALL	equ	0FFFFh	;Resets all status bits
+PCI_REG_REVID		equ	08h	;PCI revision ID register
+PCI_REG_IF_TYPE		equ	09h	;PCI interface type register
+PCI_REG_SUB_TYPE	equ	0Ah	;PCI sub type register
+PCI_REG_BASE_TYPE	equ	0Bh	;PCI base type register
+PCI_REG_LINE_SIZE	equ	0Ch	;PCI cache line size register
+PCI_REG_LATENCY		equ	0Dh	;PCI latency timer register
+PCI_REG_HEADER_TYPE	equ	0Eh	;PCI header type register
+  MULTI_FUNC_BIT	equ	80h	;If set, device is multi function
+  PCI_CFG_HEADER_STD	equ	00h	;Standard PCI config space
+  PCI_CFG_HEADER_PPB	equ	01h	;PCI-PCI bridge config space
+PCI_REG_BIST		equ	0Fh	;PCI built in self test register
+PCI_REG_FIRST_BASE_ADD	equ	10h	;PCI first base address register
+PCI_REG_LAST_BASE_ADD	equ	24h	;PCI last base address register
+  PCI_BASE_ADD_PORT_BIT equ	01h	;If set, base add reg is for I/O port
+  PCI_BASE_ADD_MEMTYPE	equ	06h	;Bits in lower word that are mem type
+    PCI_BASE_ADD_MT_32	equ	00h	;Memory must be located at 32 bit add
+    PCI_BASE_ADD_MT_20	equ	02h	;Memory must be located at 20 bit add
+    PCI_BASE_ADD_MT_64	equ	04h	;Memory must be located at 64 bit add
+  PCI_BASE_ADD_PREFETCH	equ	08h	;If set, memory is prefetchable
+  PCI_BASE_ADD_MEMMASK	equ	0FFF0h	;Bits in lower word that are memory mask
+  PCI_BASE_ADD_PORTMASK	equ	0FFFCh	;Bits in lower word that are port mask
+PCI_REG_ROM_BASE_ADD	equ	30h	;PCI expansion ROM base address register
+  PCI_BASE_ADD_ROMMASK	equ	0FC00h	;Bits in lower word that are ROM mask
+PCI_REG_INT_LINE	equ	3Ch	;PCI interrupt line register
+PCI_REG_INT_PIN		equ	3Dh	;PCI interrupt pin register
+PCI_REG_MAX_GNT		equ	3Eh	;PCI max grant register
+PCI_REG_MAX_LAT		equ	3Fh	;PCI max latency register
+
+
+PCI_REG_MAX_ADDRESS	equ	0FF00h	;Invalid PCI register address bits
+PCI_REG_ADDRESS_BYTE	equ	PCI_REG_MAX_ADDRESS + 0000h
+PCI_REG_ADDRESS_WORD	equ	PCI_REG_MAX_ADDRESS + 0001h
+PCI_REG_ADDRESS_DWORD	equ	PCI_REG_MAX_ADDRESS + 0003h
+
+
+; PCI Expansion ROM Header - At offset 0 in each PCI ROM image
+;------------------------------------------------------------------------------
+pci_rom_header		struc
+pci_rom_signature	dw ?		;Always equal to AA55h
+pci_rom_init_size	db ?		;Size in 512 byte blocks
+pci_rom_init_entry	dd ?		;JMP instruction (entry point for init)
+pci_rom_reserved	db 11h dup (?)
+pci_rom_data_struc_ptr	dw ?		;Offset of PCI ROM Data Structure
+pci_rom_header		ends
+
+
+PCIR_SIGNATURE		equ 52494350h	;ASCII "PCIR" signature (see below)
+PCIRD_CUR_STRUC_REV	equ 00h		;Current rev level of following struc
+
+; PCI Expansion ROM Data Structure - Each ROM image should have one
+;------------------------------------------------------------------------------
+pci_rom_data_struc	struc
+pcird_signature		dd ?		;Should equal to PCIR_SIGNATURE
+pcird_vendid		dw ?		;PCI Vendor ID
+pcird_devid		dw ?		;PCI Device ID
+pcird_vpd_ptr		dw ?		;Pointer to Vital Product Data struc
+pcird_struc_len		dw ?		;Length of this structure (18h)
+pcird_struc_rev		db ?		;Revision number of this structure (00)
+pcird_base_type		db ?		;Class code - base type
+pcird_sub_type		db ?		;Class code - sub type
+pcird_if_type		db ? 		;Class code - interface type
+pcird_image_len		dw ?		;Length of this ROM image/512
+pcird_code_rev		dw ?		;Vendor defined rev level of ROM code
+pcird_code_type		db ?		;Type of code in image (see equ's below)
+pcird_indicator		db ?		;Indocator flags (see equ's below)
+pcird_reserved		dw ?
+pci_rom_data_struc	ends
+
+
+; Values for pcird_code_type - Indicates which processor this code is for
+;------------------------------------------------------------------------------
+PCI_ROM_CODE_X86	equ 00h		;Code is for x86/AT architecture
+PCI_ROM_CODE_OPENBOOT	equ 01h		;Code is for OpenBoot architecture
+
+
+; Defined bits in pcird_indicator
+;------------------------------------------------------------------------------
+PCIRD_IND_LAST_IMAGE	equ 80h		;Bit 7: If set, this image is the last
+
+
+
+; PCI - PCI Bridge Constants and Structures
+;==============================================================================
+
+PCI_MAX_BUSSES	equ 16			;Maximum number of PCI busses in a
+					; system.  This is 16 because busses
+					; own I/O space in units of 4k
+					; granularity.
+
+; PCI-PCI Bridge configuration register offsets and relevant values
+;------------------------------------------------------------------------------
+PPB_REG_PRI_BUS_NUM	equ 18h		;Primary bus number register
+PPB_REG_SEC_BUS_NUM	equ 19h		;Secondary bus number register
+PPB_REG_SUB_BUS_NUM	equ 1Ah		;Subordinate bus number register
+PPB_REG_IO_BASE		equ 1Ch		;I/O space base address register
+PPB_REG_IO_LIMIT	equ 1Dh		;I/O space limit register
+PPB_REG_MEM_BASE	equ 20h		;Memory space base address register
+PPB_REG_MEM_LIMIT	equ 22h		;Memory space limit register
+PPB_REG_PFMEM_BASE	equ 24h		;Prefetchable memory space base address
+PPB_REG_PFMEM_LIMIT	equ 26h		;Prefetchable memory space limit reg
+PPB_REG_PFMEM_BASE_U32	equ 28h		;Prefetchable memory base upper 32 bits
+PPB_REG_PFMEM_LIMIT_U32	equ 2Ch		;Prefetchable memory limit upper 32 bits
+PPB_REG_IO_BASE_U16	equ 30h		;I/O space base upper 16 bits
+PPB_REG_IO_LIMIT_U16	equ 32h		;I/O space limit upper 16 bits
+PPB_REG_BRIDGE_CONTROL	equ 3Eh		;Bridge control register
+  BC_PARITY_ENABLE	equ 01h		;  Parity enable bit
+  BC_SERR_ENABLE	equ 02h		;  SERR enable bit
+  BC_ISA_ENABLE		equ 04h		;  ISA enable bit
+  BC_VGA_ENABLE		equ 08h		;  VGA enable bit
+  BC_MASTER_ABORT_MODE	equ 20h		;  Master abort mode behavior bit
+  BC_SEC_BUS_RESET	equ 40h		;  Secondary bus reset bit
+  BC_FAST_B2B_ENABLE	equ 80h		;  Fast back to back enable bit
+
+
+; PCI Bus Table Entry Structure
+;------------------------------------------------------------------------------
+pci_bus_entry	struc
+pbe_parent_bus		db ?		;Bus number of this bus's parent bus
+pbe_parent_bus_dev	db ?		;Device/function number of this bus's
+					;   bridge on parent bus
+pbe_reserved		db 2 dup (?)	;Force size of struc to power of 2
+pbe_bus_to_global_int	db 4 dup (?)	;This bus's Int A/B/C/D map to these
+pbe_io_start		dw ?		;Start of this bus's I/O space
+pbe_reserved2		dw ?		;So pbe_io_start may be accessed as dword
+pbe_io_size		dw ?		;Size of this bus's I/O space
+pbe_reserved3		dw ?		;So pbe_io_size may be accessed as dword
+pbe_mem_start		dd ?		;Start of this bus's memory space
+pbe_mem_size		dd ?		;Size of this bus's memory space
+pbe_pfmem_start		dd ?		;Start of this bus's prefetchable memory
+pbe_pfmem_size		dd ?		;Size of this bus's prefetchable memory
+
+pbe_io_local_start	dw ?		;Start of this bus's local device's I/O
+pbe_reserved4		dw ?
+pbe_mem_local_start	dd ?		;Start of this bus's local device's mem
+pbe_pfmem_local_start	dd ?		;Start of this bus's local device's pfmem
+pbe_reserved5		db 4 dup (?)	;Force size of struc to power of 2
+
+pbe_reserved6		db 16 dup (?)	;Force size of struc to power of 2
+
+pci_bus_entry	ends
+
+PCI_BUS_ENTRY_SIZE_SHIFT	equ 6	;Size of above structure Log 2
+
+
+; PCI IRQ Routing Table Entry Structure
+;------------------------------------------------------------------------------
+pci_irq_entry	struc
+pirq_bus_number		db ?		;PCI bus number of device
+pirq_device_number	db ?		;PCI device number of device (in upper 5 bits)
+pirq_inta_reg		db ?		;Chipset register for this dev's Int A Pin
+pirq_inta_irqs		dw ?		;Bitmap of IRQs routable to Int A Pin
+pirq_intb_reg		db ?		;Chipset register for this dev's Int B Pin
+pirq_intb_irqs		dw ?		;Bitmap of IRQs routable to Int B Pin
+pirq_intc_reg		db ?		;Chipset register for this dev's Int C Pin
+pirq_intc_irqs		dw ?		;Bitmap of IRQs routable to Int C Pin
+pirq_intd_reg		db ?		;Chipset register for this dev's Int D Pin
+pirq_intd_irqs		dw ?		;Bitmap of IRQs routable to Int D Pin
+pirq_phys_slot		db ?		;Physical slot number of device
+pirq_reserved		db ?
+pci_irq_entry	ends
+
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;

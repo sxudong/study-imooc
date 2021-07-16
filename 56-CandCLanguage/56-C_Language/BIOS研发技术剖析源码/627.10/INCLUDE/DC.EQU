@@ -1,0 +1,19 @@
+; routines in DC module
+dc_math_processor       equ	0
+dc_base_memory          equ	1
+dc_floppy_a             equ	2
+dc_ext_memory           equ	3
+dc_floppy_b             equ	4
+dc_serial_port          equ	5
+dc_display_type         equ	6
+dc_parallel_port        equ	7
+dc_amibios_date         equ	8
+; BCP configurable
+dc_processor_clock	equ	9
+dc_l2_cache		equ	10
+dc_apm_smi		equ	11
+dc_external_cache_type	equ	12
+; Public routines
+dc_display_colon	equ	13
+
+dc_oem_index_start	equ	20

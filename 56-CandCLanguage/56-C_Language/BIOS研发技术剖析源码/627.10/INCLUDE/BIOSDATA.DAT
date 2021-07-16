@@ -1,0 +1,400 @@
+.xlist
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1999, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------;
+;	GLOBAL DATA STORAGES 40:0	;
+;---------------------------------------;
+xdgroup	group	dseg
+dseg	segment	para	common	'DATA'
+	assume	ds:xdgroup
+
+	ORG	0000h
+
+;---------------------------------------;
+;	BIOS DATA STORAGES		;
+;---------------------------------------;
+rs_232_address		dw	4 dup(?); 00h rs232 adapters addresses
+printer_address		dw	3 dup(?); 08h printer addresses
+ext_bios_data_seg	dw	1 dup(?); 0eh extended BIOS data seg addr
+machine_config		dw	1 dup(?); 10h hardware equipment status
+test_scratch		db	1 dup(?); 12h scratch byte during init
+system_memory		dw	1 dup(?); 13h system memory in K bytes
+sys_info	label	byte
+test_flag		db	1 dup(?); 15h scratch byte during init (POST)
+				; miscellaneous system info (RUNTIME)
+				; bit-7  Extended BIOS Data area
+				;	 0..not present
+				;	 1..present
+				; bit-6	 Floppy drive swap
+				;	 0..disabled
+				;	 1..enabled
+				; bit5-4 power management selection method
+				;	 00..disabled
+				;	 01..SMI based power management
+				;	 10..hardware auto power management
+				;	 11..IRQ based power management (CURRENTLY NOT IMPLEMENTED)
+				; bit3-2 #of HDDs on secondary controller
+				;	 00..none
+				;	 01..One
+				;	 10..Two
+				;	 11..Reserved
+				; bit1-0 #of HDDs on primary controller
+				;	 00..none
+				;	 01..One
+				;	 10..Two
+				;	 11..Reserved
+dummy_byte_1		db	1 dup(?); 16h scratch byte during init
+				; bit7-6 Turbo switch
+				;   bit-7  0 high speed if Pin-X = 1
+				;	     low  speed if Pin-X = 0
+				;	   1 low  speed if Pin-X = 1
+				;	     high speed if Pin-X = 0
+				;   bit-6  0 turbo function disabled
+				;	   1 turbo function enabled
+				; bit-5  current speed status
+				;	 0...high
+				;	 1...low
+				; bit-4  current cache status
+				;	 0...disabled
+				;	 1...enabled
+				; bit3-2 3Mode floppy
+				; bit1-0 turbo switch counter
+;---------------------------------------;
+;	KEYBOARD DATA STORAGES		;
+;---------------------------------------;
+kb_stat_flag		db	1 dup(?); 17h keyboard status flag
+kb_hold_flag		db	1 dup(?); 18h toggle key's hold flag
+kb_alt_char		db	1 dup(?); 19h alt_character byte
+kb_buf_head_ptr		dw	1 dup(?); 1ah keyboard buffer head pointer
+kb_buf_tail_ptr		dw	1 dup(?); 1ch keyboard buffer tail pointer
+kb_buffer		dw     16 dup(?); 1eh keyboard buffer (15 char max)
+;---------------------------------------;
+;	FLOPPY DATA STORAGES		;
+;---------------------------------------;
+recal_int_flag		db	1 dup(?); 3eh status for recalibration
+motor_status_flag	db	1 dup(?); 3fh status for drive motors
+motor_time_count	db	1 dup(?); 40h turn off time for motor
+floppy_io_status	db	1 dup(?); 41h return code status byte
+task_file		label	byte	; task file for hard disk
+fdc_8272_status		db	7 dup(?); 42h status for floppy controller
+;---------------------------------------;
+;	VIDEO DATA STORAGES		;
+;---------------------------------------;
+mode_of_vdo		db	1 dup(?); 49h current mode (set by user)
+columns_of_vdo		dw	1 dup(?); 4ah no of columns per row
+page_length		dw	1 dup(?); 4ch no of bytes per page
+page_start		dw	1 dup(?); 4eh start address of active page
+position_of_cursor	dw	8 dup(?); 50h corsor position for each page
+mode_of_cursor		dw	1 dup(?); 60h current cursor mode setting
+active_page_no		db	1 dup(?); 62h current display page no
+address_of_6845		dw	1 dup(?); 63h address of 6845 index reg
+current_mode_set	db	1 dup(?); 65h mode set in 6845 control port
+current_palette		db	1 dup(?); 66h current palette set
+;---------------------------------------;
+;	POST DATA STORAGES		;
+;---------------------------------------;
+offset_shutdown		dw	1 dup(?); 67h offset of shutdown routine
+segment_shutdown	dw	1 dup(?); 69h segment of shutdown routine
+interrupt_flag		db	1 dup(?); 6bh interrupt flag
+;---------------------------------------;
+;	TIMER DATA STORAGES		;
+;---------------------------------------;
+timer_low_count		dw	1 dup(?); 6ch low word of timer count
+timer_high_count	dw	1 dup(?); 6eh high word of timer count
+timer_count_rolled	db	1 dup(?); 70h timer rolled over
+;---------------------------------------;
+;	BIOS DATA STORAGES EXTENDED	;
+;---------------------------------------;
+break_flag		db	1 dup(?); 71h flag for ctrl break key
+dummy_word		dw	1 dup(?); 72h unused data word
+;---------------------------------------;
+;	WINCHESTER DATA STORAGES	;
+;---------------------------------------;
+winch_status		db	1 dup(?); 74h status of hard disk operation
+winch_number		db	1 dup(?); 75h no of hard disk drives
+winch_control_byte	db	1 dup(?); 76h more than 8 heads & disable retry
+dummy_byte_2		db	1 dup(?); 77h unused, CAN BE USED FUTURE
+;---------------------------------------;
+;	PRINTER & RS232 DATA STORAGES	;
+;---------------------------------------;
+print_time_max		db	4 dup(?); 78h maximum time for printing
+rs_232_time_max		db	4 dup(?); 7ch maximum transmission time
+;---------------------------------------;
+;	KEYBOARD DATA STORAGES EXTENDED	;
+;---------------------------------------;
+kb_buff_begin		dw	1 dup(?); 80h start address of keyboard buf
+kb_buff_end		dw	1 dup(?); 82h end address of keyboard buf
+rows_of_vdo		db	1 dup(?); 84h rows of vdo (EGA/VGA compatible)
+			db	1 dup(?); 85h character height
+			db	1 dup(?); 86h RESERVED
+			db	1 dup(?); 87h video control state
+			db	1 dup(?); 88h video control state
+			db	1 dup(?); 89h RESERVED
+			db	1 dup(?); 8ah RESERVED
+;---------------------------------------;
+;	FLOPPY DATA STORAGES EXTENDED	;
+;---------------------------------------;
+last_xfer_rate		db	1 dup(?); 8bh last data transfer rate
+;---------------------------------------;
+;	WINCHESTER DATA STORAGES EXTENDED
+;---------------------------------------;
+winch_stat_reg		db	1 dup(?); 8ch hard disk status register
+winch_error_reg		db	1 dup(?); 8dh hard disk error register
+winch_int_flag		db	1 dup(?); 8eh hard disk interrupt status
+;---------------------------------------;
+;	FLOPPY DATA STORAGES EXTENDED	;
+;---------------------------------------;
+duel_card		db	1 dup(?); 8fh availability of 1.2M drive
+current_floppy_media	db	2 dup(?); 90h type of floppy drive/media
+;;;;old_floppy_media	db	2 dup(?); 92h old type	,,	,,
+run_scratch1		db	1 dup(?); 92h runtime scratch1
+run_scratch2		db	1 dup(?); 93h runtime scratch2
+
+current_cylinder	db	2 dup(?); 94h cylinder position of fdd
+;---------------------------------------;
+;	KEYBOARD DATA STORAGES EXTENDED	;
+;---------------------------------------;
+dummy_byte_3		db	1 dup(?); 96h keyboard type byte
+kb_leds_flag		db	1 dup(?); 97h keyboard led's status byte
+;---------------------------------------;
+;	REAL TIME CLOCK DATA STORAGES	;
+;---------------------------------------;
+user_flag_offset	dw	1 dup(?); 98h offset of user defined flag
+user_flag_segment	dw	1 dup(?); 9ah segment of user defined flag
+user_wait_low		dw	1 dup(?); 9ch low word of user defined time
+user_wait_high		dw	1 dup(?); 9eh highword of user defined time
+user_wait_flag		db	1 dup(?); a0h user defined time active flag
+			db	11 dup(?); a1h video data area
+			db	11 dup(?); ach RESERVED
+;;;;			org	00ceh
+;;;;day_counter		dw	1 dup(?); ceh day counter word
+;---------------------------------------;
+;	APM HANDLING BIOS DATA AREA	;
+;	USED FOR GREEN PC/NOTE BOOK	;
+;---------------------------------------;
+			org	00e0h
+bda_apm_connection_info	db	1 dup(?); 0e0h...apm connection info
+bda_apm_state		db	1 dup(?); 0e1h...apm state
+bda_pending_apm_event	dw	1 dup(?); 0e2h...pending apm event
+;---------------------------------------;
+;  APM BATTERY HANDLING BIOS DATA AREA	;
+;	    USED FOR NOTE BOOK		;
+;---------------------------------------;
+bda_ac_bat_status	dw	1 dup(?); 0e4h...apm ac line and battery status
+bda_bat_flag_life_prcnt dw	1 dup(?); 0e6h...apm battery flag and percentage of life left
+bda_bat_life_time	dw	1 dup(?); 0e8h...apm battery remaining time
+;---------------------------------------;
+;      MISCELLANEOUS OEM USAGE BIOS	;
+;		DATA AREA		;
+;	    USED FOR NOTE BOOK		;
+;---------------------------------------;
+			org	00eah
+oem_support_byte	db	1 dup(?); bit 0 = 1 means user password used for booting
+		 			;	= 0 means no password/supervisor password used for booting
+					; bit 1 = 1 means floppy drive is removed
+					;	= 0 means floppy drive is present
+					; bit 2 = 1 means FDD access for write disabled
+					;	= 0 means FDD access for write enabled
+					; bit 3 = 1 means HDD access for write disabled
+					;	= 0 means HDD access for write enabled
+					; bits 7-4 reserved
+;---------------------------------------;
+;      AMI PCMCIA CLIENT DRIVER USAGE	;
+;	      BIOS DATA AREA		;
+;	    USED FOR NOTE BOOK		;
+;---------------------------------------;
+			org	00ebh
+bda_pcmcia_busy_flag	db	1 dup(?); 0ebh...individual bits are used by different client driver
+					; to set busy while working in a critical section
+;---------------------------------------;
+;    DOCKING HANDLING BIOS DATA AREA	;
+;	    USED FOR NOTE BOOK		;
+;---------------------------------------;
+			org	00ech
+docking_station_flag	db	1 dup(?); bit 0 = 1 means DOCKED
+					;	= 0 means UNDOCKED
+					; bit 1 = 1 means PnP OS active
+					;	= 0 means PnP OS inactive
+					; bit 4 = 1 COLD DOCKING active (if bit 0 says docked)
+					;	= 0 HOT/WARM DOCKING active (if bit 0 says docked)
+					; bit 5 = 1 means DOCKING capabilities info available
+					;	= 0 means DOCKING capabilities info not available
+					; bit 6 = 1 means BIOS supports DOCKING
+					;	= 0 means BIOS doesn't support DOCKING
+					; bit 7 = 1 means 'docking_station_pci_info' valid
+					;	= 0 means 'docking_station_pci_info' not valid
+docking_event_flag	db	1 dup(?); bit 0 = 1 means DOCK/UNDOCK event has happened
+					;	= 0 means no DOCK/UNDOCK event pending
+docking_event		dw	1 dup(?); 0eeh...DOCK/UNDOCK event to be posted to OS
+docking_station_pci_info dw	1 dup(?); 0f0h...BUS#,DEV#,FUNC# for DOCKING device
+					; bits 15-8 ... BUS#
+					; bits 7-3  ... DEV#
+					; bits 2-0  ... FUNC#
+docking_station_identifier dd	1 dup(?); 0f2h...docking station location identifier
+docking_station_capabilities dw	1 dup(?); 0f6h...docking station capabilities
+					; bit 0 = 1 means docking station supports docking/undocking sequence (VCR style)
+					; bit 0 = 0 means docking station does not support docking/undocking sequence (Surprise style)
+					; bit 2 1
+					;     0 0...system should be powered off to dock or undock (Cold Docking)
+					;     0 1...system supports warm docking/undocking, system must be in suspend
+					;     1 0...system supports hot docking/undocking, not required to be in suspend
+					;     1 1...reserved
+					; bit 3-15...reserved (0)
+;---------------------------------------;
+;	PRINT SCREEN DATA STORAGES	;
+;---------------------------------------;
+			org	0100h
+prtsc_status_flag	db	1 dup(?); 100h print screen status byte
+;---------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1999, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------;
+;	EXT BIOS DATA STORAGES		;
+;---------------------------------------;
+			org	0000h
+ext_bios_data_area_size	db	1 dup(?); extended data area size
+					; in # of 1K blocks
+;---------------------------------------;
+;	   MOUSE  DATA  STORAGE		;
+;---------------------------------------;
+			org	0022h
+device_driver		dw	2 dup(?); device driver rouitne off,seg
+mouse_flag_1		db	1 dup(?); pointing device flag 1st byte
+mouse_flag_2		db	1 dup(?); pointing device flag 2nd byte
+data_storage		db	8 dup(?); to store data received from
+					; the pointing device
+;---------------------------------------;
+;      FAIL SAFE TIMER DATA STORAGE	;
+;---------------------------------------;
+			org	0039h
+fail_safe_time_count	dw	1 dup(?);
+;---------------------------------------;
+			org	003Dh	; 003Dh-008Ch for CDROM packet data
+cdrom_packet		label	byte
+;---------------------------------------;
+			org	0090h	; 0090h-00BFh for ARMD/SCSI
+first_scsi_drive_number db	1 dup(?); Drive# (DL) for 1st  SCSI that can be accessed thru BIOS
+last_scsi_drive_number  db	1 dup(?); Drive# (DL) for last SCSI that can be accessed thru BIOS
+first_scsi_drive_curr_number db	1 dup(?); Drive# (DL) for 1st  SCSI that can be accessed thru BIOS
+last_scsi_drive_curr_number  db	1 dup(?); Drive# (DL) for last SCSI that can be accessed thru BIOS
+first_afd_drive_curr_number  db	1 dup(?); Drive# (DL) for 1st  AFD that can be accessed thru BIOS
+last_afd_drive_curr_number   db	1 dup(?); Drive# (DL) for last AFD that can be accessed thru BIOS
+attempted_boot_drive	dw	1 dup(?); Bit-mapped information of boot devices already tried for booting
+					; Bit-n = 0/1..Nth boot device has not/yes been tried for booting
+afd_media_info		db    4*8 dup(?); media info for 4 ARMD drives, 4 words (8bytes) per drive
+					; offset-0 = drive status (media type)
+					;		= 00 media not present
+					;		<>00 media type
+					; offset-1 = Lock count
+					;		= 00, unlocked
+					;		<>00, lock count
+					; offset3-2= #of cylinders (1-based)
+					; offset-4 = #of heads (1-based)
+					; offset-5 = #of sectors/track (1-based)
+					; offset7-6= #of bytes/sector (1-based)
+fb_attribute		db	1 dup(?); Flex Boot Attribute
+					; bit-0 = 0 SCSI BIOS not under control
+					;	  1 SCSI BIOS under control
+					; bit7-1....Reserved for future use
+afd_hdd_media_info_ptr	dw	1 dup(?); ptr to start of data area (inside AFD_MEDIA_INFO) for AFDs emulated as HDD
+; $$$CORE0047+ >>>
+first_i2o_hdd_drive_number db	1 dup(?); Drive# (DL) for 1st  SCSI that can be accessed thru BIOS
+first_i2o_hdd_drive_curr_number db 1 dup(?); Drive# (DL) for 1st  SCSI that can be accessed thru BIOS
+ptr_to_i2obsadevice	dw	1 dup(?); Ptr to I2oBsaDevice data area in code segment
+; $$$CORE0047+ <<<
+smbios_change_status	db	1 dup(?); SMBIOS Change Status
+					;	00h	No Change
+					;	01h	Other
+					;	02h	Unknown
+					;	03h	Signle SMBIOS Structure Affected
+					;	04h	Multiple SMBIOS Structures Affected
+					;	05h-FFh	Reserved
+smbios_change_type	db	1 dup(?); SMBIOS Change Type
+					; Bit-0 = 1 -> One/More structures was changed
+					; Bit-1 = 1 -> One/More structures was added
+					; Bit7-2.......Reserved
+smbios_change_handle	dw	1 dup(?); Handle# of changed SMBIOS structure
+					; valid only for single structure change
+					; invalid for multiple structure change
+scsi_dl_sub		db	1 dup (?); $$$CORE0022+
+last_booted_drive	dw	1 dup(?); $$$CORE0059+
+scsi_cdrom_DL		db	1 dup (?); (INT130018+)
+;---------------------------------------;
+;   PCI BUS MASTER SCRATCH DATA AREA	;
+;   CDROM	   SCRATCH DATA AREA	;
+;---------------------------------------;
+			org	0100h	; 100h-2FFh for PCI Bus master EDDS
+					;	    and AFD scratch buffer
+start_of_edds		label	byte
+start_of_afd_scratch	label	byte
+
+; $$$CORE0047+ >>>
+RunOutboundMessageFrame         label   byte            ;; Size 40H bytes
+                        org     RunOutboundMessageFrame+40h
+RunInboundMessageOffset         label   byte            ;; Size 60H bytes
+                        org     RunInboundMessageOffset+60h
+RunScratchBuffer1Offset         label   byte            ;; Size 60H bytes
+                        org     RunScratchBuffer1Offset+60h
+RunScratchBuffer2Offset         label   byte            ;; Size (400H - ScratchBuffer2Offset) bytes
+                        org     RunScratchBuffer2Offset+60h
+RunScratchBuffer3Offset         label   byte            ;; Size (400H - ScratchBuffer2Offset) bytes
+                        org     RunScratchBuffer3Offset+60h
+GA20Status			label	byte		;; Current GA20 Status
+; $$$CORE0047+ <<<
+;---------------------------------------;
+			org	0300h	; 300h-3FFh for CDROM scratch buffer
+StartOfI2OEDDS          label   byte	; $$$CORE0047+
+start_of_prd_save	label	byte
+CDROM_BUF_LENGTH	equ	50h
+cdrom_vol_desc_buf	label	byte	; db	CDROM_BUF_LENGTH dup (?)
+;---------------------------------------;
+;  These definitions are required only for Weak/Strong External
+	public	AbsentPCIBmIdePtr
+	public	AbsentPCIBmIdeTable
+AbsentPCIBmIdePtr	label	word
+AbsentPCIBmIdeTable	label	byte
+;---------------------------------------;
+; $$$CORE0047+ >>>
+			org	0400h	; end of EBDA
+EbdaEndOffset           label   byte
+;---------------------------------------;
+; $$$CORE0047+ <<<
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1999, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+;---------------------------------------;
+dseg	ends
+.list

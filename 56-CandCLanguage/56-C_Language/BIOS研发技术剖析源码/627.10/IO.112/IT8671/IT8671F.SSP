@@ -1,0 +1,230 @@
+//*****************************************************************;
+//*****************************************************************;
+//**                                                             **;
+//**      (C)Copyright 1985-1998, American Megatrends, Inc.      **;
+//**                                                             **;
+//**                     All Rights Reserved.                    **;
+//**                                                             **;
+//**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+//**                                                             **;
+//**                     Phone (770)-246-8600                    **;
+//**                                                             **;
+//*****************************************************************;
+//*****************************************************************;
+//*****************************************************************;
+// $Header: /BIOS/PORTING/IO.112/IT8671F/IT8671F.SSP 1 	98/03/10 12:00a $
+//
+// $Revision: 1 $
+//
+// $Date: 98/03/10 12:00a $
+//*****************************************************************;
+//*****************************************************************;
+// Revision History
+// ----------------
+// $Log: /BIOS/PORTING/IO.112/IT8671F/IT8671F.SSP $
+// 
+// 1     98/03/10 12:00a Chung
+// Initial release.
+// 
+//*****************************************************************;
+BeginDevice (IT8671FFloppyController)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8671F_FLOPPY_CONTROLLER)
+			Text = "OnBoard FDC"
+			Options = "Auto",
+				  "Disabled",
+				  "Enabled":DEFAULT:POWERON
+		EndQuestion
+//		Question (Q_IT8671F_FLOPPY_SWAP)
+//			Text = "  Floppy Drive Swap"
+//			ShadeWhen (Q_IT8671F_FLOPPY_CONTROLLER) = "Disabled"
+//			Options	= "Disabled":DEFAULT:POWERON,
+//				  "Enabled"
+//		EndQuestion
+//		Question (Q_IT8671F_FLOPPY_ACCESS)
+//			Text = "  Floppy Access Control"
+//			ShadeWhen (Q_IT8671F_FLOPPY_CONTROLLER) = "Disabled"
+//			Options	= "Normal":DEFAULT:POWERON,
+//				  "Read-Only"
+//		EndQuestion
+	EndScreen
+EndDevice // IT8671FFloppyController
+BeginDevice (IT8671FSerialPortA)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8671F_COMA_PORT)
+			Text = "OnBoard Serial Port1"
+			Options = "Auto",
+				  "Disabled",
+				  "3F8/COM1":DEFAULT:POWERON,
+				  "2F8/COM2",
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+	EndScreen
+EndDevice // IT8671FSerialPortA
+BeginDevice (IT8671FSerialPortB)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8671F_COMB_PORT)
+			Text = "OnBoard Serial Port2"
+			Options = "Auto",
+				  "Disabled",
+				  "3F8/COM1",
+				  "2F8/COM2":DEFAULT:POWERON,
+				  "3E8/COM3",
+				  "2E8/COM4"
+		EndQuestion
+		Question (Q_IT8671F_COMB_MODE)
+			Text = "  Serial Port2 Mode"
+			ShadeWhen (Q_It8671F_COMB_PORT) = "Disabled"
+			Optionset = "Normal", "IrDA", "ASKIR"
+			Optionset = "N/A"
+			Optionset = "Normal", "IrDA", "ASKIR"
+		EndQuestion
+		Question (Q_IT8671F_COMB_DUPLEX)
+			Text = "    IR Duplex Mode"
+			ExternalFunction = IT8671F_ComB_Duplex_Xfn
+			OptionBits = 1
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+	EndScreen
+EndDevice	// IT8671FSerialPortB
+BeginDevice (IT8671FParallelPort)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8671F_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			Options = "Auto",
+				  "Disabled",
+				  "378":DEFAULT:POWERON,
+				  "278",
+				  "3BC"
+		EndQuestion
+		Question (Q_IT8671F_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ShadeWhen (Q_IT8671F_LPT_PORT) = "Disabled"
+			OptionSet = "Normal"
+			OptionSet = "N/A"
+			OptionSet = "Normal"
+		EndQuestion
+		Question (Q_IT8671F_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = IT8671F_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+	EndScreen
+EndDevice	// IT8671FParallelPort
+BeginDevice (IT8671FParallelPortExt)
+	Screen (SCR_PERIPHERAL)
+		Question (Q_IT8671F_LPT_PORT)
+			Text = "OnBoard Parallel Port"
+			ExternalFunction = IT8671F_Lpt_Addr_Xfn
+			OptionBits = 3
+			Default = 2
+			PowerOn = 2
+		EndQuestion
+		Question (Q_IT8671F_LPT_MODE)
+			Text = "  Parallel Port Mode"
+			ExternalFunction = IT8671F_Lpt_Mode_Xfn
+			OptionBits = 2
+			Default = 0
+			PowerOn = 0
+		EndQuestion
+		Question (Q_IT8671F_LPT_IRQ)
+			Text = "  Parallel Port IRQ"
+			ExternalFunction = IT8671F_Lpt_Irq_Xfn
+			OptionBits = 1
+			Default = 1
+			PowerOn = 1
+		EndQuestion
+		Question (Q_IT8671F_LPT_ECP_DMA)
+			Text = "  Parallel Port DMA"
+			ExternalFunction = IT8671F_Lpt_Dma_Xfn
+			OptionBits = 2
+			Default = 3
+			PowerOn = 3
+		EndQuestion
+	EndScreen
+EndDevice	// IT8671FParallelPortExt
+//BeginDevice (IT8671FFloppyController)
+//	Screen (SCR_PERIPHERAL)
+//		Question (Q_KB_POWER_ON_FUNC)
+//			Text = "Keyboard Power On"
+//			Options = "Disabled",
+//				  "By Password",
+//				  "By StrokeKey",
+//				  RESERVED
+//		EndQuestion
+//		Question (Q_KB_PO_STROKE_KEY)
+//			Text = " Stroke Keys Selected"
+//			Options = "Ctrl+F1":DEFAULT:POWERON,
+//				  "Ctrl+F2",
+//				  "Ctrl+F3",
+//				  "Ctrl+F4",
+//				  "Ctrl+F5",
+//				  "Ctrl+F6"
+//			Present = No
+//		EndQuestion
+//		Question (Q_MOUSE_POWER_ON_FUNC)
+//			Text = "PS2 Mouse Power On"
+//			Options = "Disabled":DEFAULT:POWERON,
+//				  "Enabled"
+//			Present = No
+//		EndQuestion
+//	EndScreen
+//EndDevice	// IT8671FAPC
+String(STR_IT8671F_NA)
+	Text = "N/A"
+EndString
+String(STR_IT8671F_AUTO)
+	Text = "Auto"
+EndString
+String(STR_IT8671F_378)
+	Text = "378"
+EndString
+String(STR_IT8671F_278)
+	Text = "278"
+EndString
+String(STR_IT8671F_3BC)
+	Text = "3BC"
+EndString
+String(STR_IT8671F_NORMAL)
+	Text = "Normal"
+EndString
+String (STR_IT8671F_EPP)
+	Text = "EPP"
+EndString
+String(STR_IT8671F_ECP)
+	Text = "ECP"
+EndString
+String(STR_IT8671F_EPPECP)
+	Text = "EPP+ECP"
+EndString
+String(STR_IT8671F_0)
+	Text = "0"
+EndString
+String(STR_IT8671F_1)
+	Text = "1"
+EndString
+String(STR_IT8671F_3)
+	Text = "3"
+EndString
+String(STR_IT8671F_5)
+	Text = "5"
+EndString
+String(STR_IT8671F_7)
+	Text = "7"
+EndString
+String(STR_IT8671F_FULL)
+	Text = "Full Duplex"
+EndString
+String(STR_IT8671F_HALF)
+	Text = "Half Duplex"
+EndString
+String(STR_IT8671F_HIGH)
+	Text = "High"
+EndString
+String(STR_IT8671F_LOW)
+	Text = "Low"
+EndString

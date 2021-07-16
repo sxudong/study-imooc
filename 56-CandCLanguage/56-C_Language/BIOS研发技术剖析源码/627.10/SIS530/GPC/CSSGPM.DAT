@@ -1,0 +1,142 @@
+;-----------------------------------------------;
+;	   POWER MANAGEMENT DATA AREA		;
+;	  USED BY GREEN PC CHIPSET BIOS		;
+;	THE DATA AREA IS IN EQUATE FORM		;
+;		     CSSGPM.DAT			;
+;   THIS FILE IS ALREADY INCLUDED IN GPM.ASM	;
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+;	     DECLARE FIXED ORG HERE		;
+;	THIS 'ORG' SHOULD NOT BE CHANGED	;
+;   smi_seg:0e800h thru 0faffh (1300h bytes)	;
+;	available for usage as chipset data area;
+; NOTE :					;
+;	As this cseg data area are in equate	;
+;	form, initialise this data area during	;
+;	SMRAM initialization.			;
+;-----------------------------------------------;
+
+chipset_dseg_data_area_begin	equ	0e800h	; 0e800h THRU 0faffh (01300H BYTES)
+
+
+;-----------------------------------------------;
+;	PUT CHIPSET SPECIFIC DATA AREA HERE	;
+;-----------------------------------------------;
+irq_0_7_monitor_mask		equ	chipset_dseg_data_area_begin
+irq_8_15_monitor_mask		equ	irq_0_7_monitor_mask		+1
+irq_0_7_break_mask		equ	irq_8_15_monitor_mask		+1
+irq_8_15_break_mask		equ	irq_0_7_break_mask		+1
+;
+; Important - BIT DEFINITIONS FOR STANDBY MONITOR/BREAK EVENTS
+; ------------------------------------------------------------
+;
+;	Bit 0	:	IRQ 1
+;	Bit 1	:	IRQ 3
+;	Bit 2	:	IRQ 4
+;	Bit 3	:	IRQ 8
+;	Bit 4	:	IRQ 12
+;
+standby_break_events		equ	irq_8_15_break_mask		+1
+video_cmos_pm			equ	standby_break_events		+1
+ide_cmos_pm			equ	video_cmos_pm			+1
+doze_timer_value		equ	ide_cmos_pm			+1
+standby_timer_value             equ     doze_timer_value		+1                     +1
+suspend_timer_value		equ	standby_timer_value		+1
+instant_on_timer_value		equ	suspend_timer_value		+1
+ide_timer_value 		equ	instant_on_timer_value		+1
+video_down_mode 		equ	ide_timer_value 		+1
+clock_throttle_ratio		equ	video_down_mode 		+1
+
+; data area required for ECC -------------------------------------------------;
+multi_bit_error 		equ	clock_throttle_ratio		+1
+serr_enable			equ	multi_bit_error 		+1
+single_bit_error		equ	serr_enable			+1
+bpar_multi_bit_error		equ	single_bit_error		+1
+serr_duration			equ	bpar_multi_bit_error		+1
+serr_auto_enable		equ	serr_duration			+1
+escreg_a4_data			equ	clock_throttle_ratio		+1
+escreg_a5_data			equ	escreg_a4_data			+1
+escreg_a7_data			equ	escreg_a5_data			+1
+txcreg_05_data			equ	escreg_a7_data			+1
+txcreg_50_data			equ	txcreg_05_data			+1
+txcreg_90_data			equ	txcreg_50_data			+1
+ecc_row_error			equ	escreg_a7_data			+1	; 1 word
+ecc_row_address 		equ	ecc_row_error			+2	; 8 dwords
+;-----------------------------------------------------------------------------;
+usb_interrupt_processing        equ     ecc_row_address			+4
+usb_segment                     equ     usb_interrupt_processing	+1
+pci_cf8_register		equ	usb_segment			+2
+legacy_usb    			equ	pci_cf8_register		+4
+
+;-----------------------------------------------;
+smi_21_a1_wake_mask             equ     legacy_usb			+1
+smi_21_a1_moni_mask		equ	smi_21_a1_wake_mask		+2
+smi_green_pc_monitor_state	equ     smi_21_a1_moni_mask             +2
+smi_video_power_down		equ	smi_green_pc_monitor_state	+1
+smi_ide_power_down		equ	smi_video_power_down		+1
+video_access			equ     smi_ide_power_down		+1                     +1
+power_button_status		equ	video_access            	+1
+;; Added for hot key
+hot_key_enable_status		equ	power_button_status            	+1
+;; Added for keyboard password
+keyboard_password_status	equ	hot_key_enable_status           +1
+;Added for Ring power on
+power_on_by_ri			equ     keyboard_password_status	+1
+;Added for LAN power on
+power_on_by_network	       	equ     power_on_by_ri			+1
+;Added for RTC power on
+rtc_alarm                       equ     power_on_by_network		+1
+rtc_alarm_date                  equ     rtc_alarm                       +1
+rtc_alarm_hour                  equ     rtc_alarm_date                  +1
+rtc_alarm_minute                equ     rtc_alarm_hour                  +1
+rtc_alarm_second                equ     rtc_alarm_minute                +1
+; APM 1.2
+standby_timeout			equ	rtc_alarm_second		+1
+modem_ring    			equ	standby_timeout			+1
+modem_irq			equ	modem_ring			+1
+; for ACPI
+save_reg_60h			equ	modem_irq			+1
+save_reg_68h			equ	save_reg_60h			+4
+pmu_state			equ	save_reg_68h			+4
+pm_enable			equ	pmu_state			+1
+						; (CORE0221+)>
+reg_ds				equ	pm_enable+1
+reg_es				equ	reg_ds+2
+reg_fs				equ	reg_es+2
+reg_gs				equ	reg_fs+2; length = 2 bytes
+						; <(CORE0221+)
+dummy				equ	reg_gs				+2
+chipset_dseg_data_area_end	equ	dummy		 		+1
+
+
+;-----------------------------------------------;
+;*****************************************************************;
+;*****************************************************************;
+;**								**;
+;**	(C)Copyright 1985-1996, American Megatrends Inc.	**;
+;**								**;
+;**			All Rights Reserved.			**;
+;**								**;
+;**		6145-F, Northbelt Parkway, Norcross,		**;
+;**								**;
+;**		Georgia - 30071, USA. Phone-(770)-246-8600.	**;
+;**								**;
+;*****************************************************************;
+;*****************************************************************;
+;-----------------------------------------------;
+
+

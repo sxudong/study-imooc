@@ -1,0 +1,289 @@
+//*****************************************************************//
+BeginDevice (Win627FloppyController)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_FLOPPY_CONTROLLER)
+                        Text = "OnBoard FDC"
+                        Options = "Auto":DEFAULT:POWERON,
+                                  "Disabled",
+                                  "Enabled"
+                EndQuestion
+        EndScreen
+EndDevice   // Win627FloppyController
+BeginDevice (Win627SerialPortA)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_COMA_PORT)
+                        Text = "OnBoard Serial PortA"
+                        Options = "Auto":DEFAULT:POWERON,
+                                  "Disabled",
+                                  "3F8/COM1",
+                                  "2F8/COM2",
+                                  "3E8/COM3",
+                                  "2E8/COM4"
+                EndQuestion
+        EndScreen
+EndDevice   // Win627SerialPortA
+BeginDevice (Win627SerialPortB)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_COMB_PORT)
+                        Text = "OnBoard Serial PortB"
+                        Options = "Auto":DEFAULT:POWERON,
+                                          "Disabled",
+                                          "3F8/COM1",
+                                          "2F8/COM2",
+                                          "3E8/COM3",
+                                          "2E8/COM4"
+                EndQuestion
+                Question (Q_Win627_COMB_MODE)
+	                Text =    "  Serial PortB Mode"
+                        ShadeWhen (Q_Win627_COMB_PORT) = "Disabled"
+                        Options = "Normal":DEFAULT:POWERON,
+				  Reserved,
+                                  "1.6 uS",
+                                  "3/16 Baud",
+				  Reserved,
+				  Reserved,
+				  Reserved,
+                                  "ASKIR"       
+                        Present = Yes
+                EndQuestion
+                Question (Q_WIN627_COMB_DUPLEX_MODE)
+                        Text =    "    IR Duplex Mode"
+                        ShadeWhen (Q_Win627_COMB_MODE) = "Normal"
+                        Options = "Full Duplex",
+                                  "Half Duplex":DEFAULT:POWERON
+                EndQuestion
+                Question (Q_WIN627_COMB_IR_PIN_SELECT)
+                        Text = "    IR Pin Select"
+                        ShadeWhen (Q_Win627_COMB_MODE) = "Normal"
+                        Options = "SINB/SOUTB.",
+                                  "IRRX/IRTX":DEFAULT:POWERON
+                        Present = Yes
+                EndQuestion
+        EndScreen
+EndDevice   // Win627SerialPortB
+BeginDevice (Win627CIrPort)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_IR_PORT)
+                        Text = "OnBoard CIR Port"
+                        Options = "Disabled":DEFAULT:POWERON,
+				  "Enabled"
+//				   "3E0",                
+//				   "2E0"                
+//				   "3E8",
+//				   "2E8"                 
+                EndQuestion
+                Question (Q_Win627_IR_PORT_IRQ)
+                        Text = "  CIR IRQ Select"
+                        ShadeWhen (Q_Win627_IR_PORT) = "Disabled"
+                        Options = "3",
+                                  "4",  
+                                  "9",  
+                                  "10":DEFAULT:POWERON, 
+                                  "11"  
+                EndQuestion
+        EndScreen
+EndDevice   // Win627CIrPort
+BeginDevice (Win627ParallelPort)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_LPT_PORT)
+                        Text = "OnBoard Parallel Port"
+                        Options = "Auto":DEFAULT:POWERON,
+                                          "Disabled",
+                                          "378",
+                                          "278",
+                                          "3BC"
+                EndQuestion
+                Question (Q_Win627_LPT_MODE)
+                        Text = "  Parallel Port Mode"
+                        ExternalFunction = Win627_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win627_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Win627_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+                        EndQuestion
+        EndScreen
+EndDevice       // Win627ParallelPort
+BeginDevice (Win627ParallelPortExt)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_LPT_PORT)
+                        Text = "OnBoard Parallel Port"
+                        ExternalFunction = Win627_Lpt_Addr_Xfn
+                        OptionBits = 3
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win627_LPT_MODE)
+                        Text = "  Parallel Port Mode"
+                        ExternalFunction = Win627_Lpt_Mode_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win627_LPT_EPPVER)
+                        Text = "  EPP Version"
+                        ExternalFunction = Win627_Lpt_EppVer_Xfn
+                        OptionBits = 1
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+                Question (Q_Win627_LPT_IRQ)
+                        Text = "  Parallel Port IRQ"
+                        ExternalFunction = Win627_Lpt_Irq_Xfn
+                        OptionBits = 1
+                        Default = 1
+                        PowerOn = 1
+                EndQuestion
+                Question (Q_Win627_LPT_ECP_DMA)
+                        Text = "  Parallel Port DMA Channel"
+                        ExternalFunction = Win627_Lpt_Dma_Xfn
+                        OptionBits = 2
+                        Default = 3
+                        PowerOn = 3
+                EndQuestion
+        EndScreen
+EndDevice       // Win627ParallelPortExt           
+BeginDevice (Win627MidiPort)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_MIDI_PORT)
+                        Text = "OnBoard Midi Port"
+                        Options = "Disabled":DEFAULT:POWERON,
+                                  "300",               
+                		  "330"
+		EndQuestion 
+                Question (Q_Win627_MIDI_PORT_IRQ)
+                        Text = "  Midi IRQ Select"
+                        ShadeWhen (Q_Win627_MIDI_PORT) = "Disabled"
+                        Options = "5",
+                                  "7",  
+                                  "9":DEFAULT:POWERON, 
+                                  "10"
+                EndQuestion
+        EndScreen
+EndDevice   // Win627MidiPort
+BeginDevice (Win627GamePort)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_GAME_PORT)
+                        Text = "OnBoard Game Port"
+                        Options = "Disabled":DEFAULT:POWERON,
+                                  "200",               
+                		  "208"
+		EndQuestion 
+        EndScreen
+EndDevice   // Win627GamePort
+BeginDevice (Win627FloppyController)
+        Screen (SCR_PERIPHERAL)
+                Question (Q_Win627_KB_WAKEUP_FUNC)
+                        Text = "Keyboard PowerOn Function"
+//                        Options = "Disabled":DEFAULT:POWERON,
+//                                  "Specific Key",
+//                                  "Any Key"
+                        ExternalFunction = Win627_KB_FuncE_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion                                                                                                                      
+        	Question (Q_WIN977EF_KB_PASSWORD)
+            	Text = "Specific Key for PowerOn"
+            	ExternalFunction = Win977ef_KB_Pas
+            	OptionBits = 1
+            	Default = 0
+            	PowerOn = 0
+        	EndQuestion
+
+                Question (Q_Win627_MOUSE_WAKEUP_FUNC)
+                        Text = "Mouse PowerOn Function"
+//                        Options = "Disabled":DEFAULT:POWERON,
+//                                  "Any Action",
+//                                  "Left-botton",
+//                                  "Right-botton"
+                        ExternalFunction = Win627_Mouse_FuncE_Xfn
+                        OptionBits = 2
+                        Default = 0
+                        PowerOn = 0
+                EndQuestion
+        EndScreen
+EndDevice       // Win627ACPI   
+//String(STR_Win627_FULL_DUPLEX)	      
+//        Text ="Full Duplex"
+//EndString
+//String(STR_Win627_HALF_DUPLEX)
+//        Text ="Half Duplex"
+//EndString
+String(STR_Win627_NA)
+        Text ="N/A"
+EndString
+String(STR_Win627_AUTO)
+        Text ="Auto"
+EndString
+String(STR_Win627_EN)
+        Text ="Enabled"
+EndString
+String(STR_Win627_DIS)
+        Text ="Disabled"
+EndString
+String(STR_Win627_378)
+        Text ="378"
+EndString
+String(STR_Win627_278)
+        Text ="278"
+EndString
+String(STR_Win627_3BC)
+        Text ="3BC"
+EndString
+String(STR_Win627_NORMAL)
+        Text ="Normal"
+EndString
+String(STR_Win627_BIDIR)
+        Text ="Bi-Dir"
+EndString
+String(STR_Win627_EPP)
+        Text ="EPP"
+EndString
+String(STR_Win627_ECP)
+        Text ="ECP"
+EndString
+String(STR_Win627_EPP19)
+        Text ="1.9"
+EndString
+String(STR_Win627_EPP17)
+        Text ="1.7"
+EndString
+String(STR_Win627_IRQ5)
+                Text ="5"
+EndString
+String(STR_Win627_IRQ7)
+                Text ="7"
+EndString
+String(STR_Win627_DMA0)
+                Text ="0"
+EndString
+String(STR_Win627_DMA1)
+                Text ="1"
+EndString
+String(STR_Win627_DMA3)
+                Text ="3"
+EndString
+//String(STR_Win627_4)
+//                Text ="4"
+//EndString
+//String(STR_Win627_9)
+//                Text ="9"
+//EndString
+//String(STR_Win627_10)
+//                Text ="10"
+//EndString
+//String(STR_Win627_11)
+//                Text ="11"
+//EndString
+//String(STR_ANY_ACTION)
+//                Text ="Any Action"
+//EndString
+String(STR_ENTER)
+    Text = "PasswordÙ"
+EndString

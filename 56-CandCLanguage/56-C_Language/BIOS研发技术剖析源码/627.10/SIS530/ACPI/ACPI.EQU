@@ -1,0 +1,261 @@
+;*****************************************************************;
+;*****************************************************************;
+;*****************************************************************;
+;**                                                             **;
+;**      (C)Copyright 1985-1997, American Megatrends, Inc.      **;
+;**                                                             **;
+;**                     All Rights Reserved.                    **;
+;**                                                             **;
+;**           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;**                                                             **;
+;**                     Phone (770)-246-8600                    **;
+;**                                                             **;
+;*****************************************************************;
+;*****************************************************************;
+
+;*****************************************************************;
+; Modify ACPITBL.ASM to accomidate chipset porting functions      ;
+;                                                                 ;
+; No porting is required in this document.			  ;
+; Chipset-specific equates should be added to ACPI_CSS.EQU.	  ;
+; OEM/platform-specific equates should be added to ACPI_OEM.EQU.  ;
+;*****************************************************************;
+
+; IMPORTANT..define the entry offset in ACPI Table building module
+ACPI_FACS_OFFSET		equ	08000h
+ACPI_MODULE_ENTRY_OFFSET	equ	0C000h
+
+; Equates for Various Tables
+
+; In KB, Amount of Memory used for ACPI Tables. Unit Used to reserve memory
+; in Int 15 Memory reporting functions
+ACPI_MEM_KB		equ		64
+
+CREATOR_VEND_ID		equ		'TFSM'
+CREATOR_REV		equ		00000097h
+
+RSDT_SIGN		equ		'RSDT'
+RSDT_SIGN_DW		equ		'TDSR'
+
+DSDT_SIGN_DW		equ		'TDSD'
+APIC_SIGN_DW		equ		'CIPA'
+
+FACP_SIGN		equ		'FACP'
+FACP_SIGN_DW		equ		'PCAF'
+
+FACS_SIGN_DW		equ		'SCAF'
+BOOT_SIGN_DW		equ		'TOOB'
+
+ACPI_REV		equ		01h
+TBL_OEMID		equ		'AMIINT'
+TBL_OEMID1		equ		'IIMA'
+TBL_OEMID2		equ		'TN'
+TBL_OEMID_TBL		equ		'AMIINT09'
+TBL_OEM_REV		equ		0009h
+
+STRUC_PROC_TYPE		equ		00h
+STRUC_IOAPIC_TYPE	equ		01h
+
+DUAL_PIC	equ	00000000b
+MULTIPLE_APIC	equ	00000001b
+
+CMOS_Page	equ	070h
+CMOS_Index	equ	07Fh
+
+RSDT_OEM_REV	equ	00003521h
+FACP_OEM_REV	equ	00003521h
+
+;----------------------------------------------------------------------------;
+;                       Structure Header Block                               ;
+; RSDT, FACP, APIC Tables have a Common Header Structure		     ;
+;----------------------------------------------------------------------------;
+
+genhdr		struc
+table_signature		dd	1 dup(?)
+table_length		dd	1 dup(?)
+table_rev		db	1 dup(?)
+table_checksum		db	1 dup(?)
+;table_oem_id		db	6 dup(?)	; String for the OEM
+table_oem_id_1		dd	1 dup(?)	; String for the OEM
+table_oem_id_2		dw	1 dup(?)	; String for the OEM
+table_oem_table_id	db	8 dup(?)	; String to describe OEM Table
+table_oem_rev		db	4 dup(?)	; OEM Supplied Revision
+table_creator_id	dd	1 dup(0)	; Creator ID for ASL Compiler
+						; This is the Vendor for the company
+						; which created the ASL Compiler
+table_creator_rev	dd	1 dup(0)
+genhdr		ends
+
+;----------------------------------------------------------------------------;
+;                        Root System Description Table                       ;
+;----------------------------------------------------------------------------;
+rsdt_table			struc
+rsdt_header		db	size genhdr dup (?)
+facp_ptr		dd	1 dup (?)		; 32 Bit Physical Ptr to FACP Table
+
+IF MKF_ACPI_APIC_TBL
+%out APIC Tables In
+apic_ptr		dd	1 dup (?)		; 32 Bit Physical Ptr to FACP Table
+ENDIF
+
+;;##IF MKF_ACPI_QUICK_BOOT
+;;##%out Quick Boot Tables In
+;;##boot_ptr		dd	1 dup (?)		; 32 Bit Physical Ptr to FACP Table
+;;##ENDIF
+
+
+rsdt_table			ends
+
+;----------------------------------------------------------------------------;
+;             NOTE : ALL OPTIONAL FIELDS SHOULD READ ZERO		     ;
+;                        Fixed ACPI Description Table                        ;
+;----------------------------------------------------------------------------;
+facp_table			struc
+
+facp_header		db	size genhdr dup (?)
+
+facs_ptr		dd	1 dup(?)	; 32 Bit Physical Ptr to FACS Table
+dsdt_ptr		dd	1 dup(?)	; 32 Bit Physical Ptr to DSDT
+
+int_model		db	1 dup(?)	;
+
+facp_resv_1		db	1 dup(0)	; Reserved
+
+sci_int_vect		dw	1 dup(?)	; System Vector for SCI Intr
+smi_cmd_port		dd	1 dup(?)	; SMI Command Port
+acpi_val_enb		db	1 dup(?)
+acpi_val_dis		db	1 dup(?)
+s4bios_req_val		db	1 dup(?)
+facp_resv_2		db	1 dup(?)
+
+pm1a_evt_blk_addr	dd	1 dup(?)	; REQUIRED
+pm1b_evt_blk_addr	dd	1 dup(0)	; OPTIONAL
+
+pm1a_cnt_blk_addr	dd	1 dup(?)	; REQUIRED
+pm1b_cnt_blk_addr	dd	1 dup(0)
+
+pm2_cnt_blk_addr	dd	1 dup(0)
+pm_tmr_blk_addr		dd	1 dup(?)
+
+gpe0_blk_addr		dd	1 dup(?)
+gpe1_blk_addr		dd	1 dup(?)
+
+pm1_evt_length		db	1 dup(?)
+pm1_cnt_length		db	1 dup(?)
+
+pm2_cnt_length		db	1 dup(?)
+pm_tmr_length		db	1 dup(?)
+
+gpe0_blk_length		db	1 dup(?)
+gpe1_blk_length		db	1 dup(?)
+gpe1_base		db	1 dup(?)
+
+facp_resv_3		db	1 dup(?)
+
+p_lvl2_lat_val		dw	1 dup(?)
+p_lvl3_lat_val		dw	1 dup(?)
+
+flush_size_val		dw	1 dup(0)
+flush_stride_val	dw	1 dup(0)
+
+duty_offset_val		db	1 dup(0)
+duty_width_val		db	1 dup(0)
+
+day_alarm_val		db	1 dup(?)
+month_alarm_val		db	1 dup(?)
+century_val		db	1 dup(?)
+
+facp_resv_4		db	3 dup(0)	; For 1.0 3 Reserved Bytes
+
+facp_flags		dd	1 dup(?)
+
+facp_table			ends
+
+;----------------------------------------------------------------------------;
+;                       Firmware ACPI Control Structure                      ;
+;----------------------------------------------------------------------------;
+
+facs_table		struc
+
+facs_signature       	dd	1 dup(?)
+facs_length          	dd      1 dup(?)
+facs_hw_signature	dd	1 dup(?)
+fw_wake_vector		dd	1 dup(?)
+global_lock		dd	1 dup(?)
+facs_flags		dd	1 dup(0)
+facs_reserved		db	40 dup(0)
+
+facs_table		ends
+
+;----------------------------------------------------------------------------;
+;                 Differentiated System Definition Block                     ;
+;----------------------------------------------------------------------------;
+
+dsdt_table			struc
+dsdt_header		db	size genhdr dup (?)
+pcode			db	1 dup(?)
+dsdt_table			ends
+
+IF MKF_ACPI_APIC_TBL
+%out APIC Tables In
+;----------------------------------------------------------------------------;
+;                 Local APIC Entry Format in APIC Block                      ;
+;----------------------------------------------------------------------------;
+procstruc	struc
+struc_type	db	1 dup(?)		; Will Always be ZERO
+proc_length	db	1 dup(?)		; Will always be 12
+apic_proc_id	db	1 dup(?)		; Should Match in ASL
+apic_id		db	1 dup(?)		; The Physical ID of the APIC
+proc_flags	dd	1 dup(0)		; TBD
+procstruc	ends
+
+;----------------------------------------------------------------------------;
+;                     IO APIC Entry Format in APIC Block                     ;
+;----------------------------------------------------------------------------;
+ioapicstr	struc
+struc_type	db	1 dup(?)		; Will Always be ONE for IO APIC
+ioapic_length	db	1 dup(?)		; Will always be 12
+io_apic_id	db	1 dup(?)		; The Physical ID of the APIC
+ioapic_resv	db	1 dup(0)		;
+io_apic_addr	dd	1 dup(?)		; Physical Address
+sys_vect_base	dd	1 dup(0)		; System Vector Index
+ioapicstr	ends
+;----------------------------------------------------------------------------;
+;                          APIC Structure
+;----------------------------------------------------------------------------;
+apic_table			struc
+apic_header		db	size genhdr dup (?)
+local_apic_addr		dd	1 dup(?)		; Address of Local APIC
+multiple_apic_flags	dd	1 dup(0)
+proc_1_entry		db	size procstruc dup(?)
+ioapic_1_entry		db	size ioapicstr dup(?)
+apic_table			ends
+
+ENDIF
+
+;----------------------------------------------------------------------------;
+;                          Simple Boot Flag Structure
+;----------------------------------------------------------------------------;
+boot_table			struc
+
+boot_header		db	size genhdr dup (?)
+boot_cmos_page		db	1 dup(?)
+boot_cmos_index		db	1 dup(?)
+boot_resv		dw	1 dup(0)
+
+boot_table			ends
+
+;     *****************************************************************;
+;     *****************************************************************;
+;     **                                                             **;
+;     **      (C)Copyright 1985-1996, American Megatrends, Inc.      **;
+;     **                                                             **;
+;     **                     All Rights Reserved.                    **;
+;     **                                                             **;
+;     **           6145-F Northbelt Pkwy, Norcross, GA 30071         **;
+;     **                                                             **;
+;     **                     Phone (770)-246-8600                    **;
+;     **                                                             **;
+;     *****************************************************************;
+;     *****************************************************************;
+

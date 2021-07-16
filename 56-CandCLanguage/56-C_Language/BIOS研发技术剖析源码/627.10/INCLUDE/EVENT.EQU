@@ -1,0 +1,114 @@
+LOG_BUFFER_SEG		equ	4000h	; Used 4000:0000 as buffer for Setup
+;EVENT_LOG_GPNV_HANDLE	equ	1
+MAX_LOG_SIZE		equ	1000h	;max. size is 4k
+
+;-----------------------------------------------------------------------;
+;			EVENT LOG TYPES					;
+;-----------------------------------------------------------------------;
+SINGLE_BIT_ECC_MEMORY_ERROR		equ	01h
+MULTI_BIT_ECC_MEMORY_ERROR		equ     02h
+PARITY_MEMORY_ERROR			equ     03h
+BUS_TIME_OUT				equ     04h
+IO_CHANNEL_CHECK			equ     05h
+SOFTWARE_NMI				equ     06h
+POST_MEMORY_RESIZE			equ     07h
+POST_ERROR				equ     08h
+PCI_PARITY_ERROR			equ     09h
+PCI_SYSTEM_ERROR			equ     0Ah
+CPU_FAILURE				equ     0Bh
+EISA_FAILURE_TIMER_TIME_OUT		equ     0Ch
+CORRECTABLE_MEMORY_LOG_DISABLED		equ     0Dh
+TOO_MANY_ERROR				equ     0Eh
+SYSTEM_LIMIT_EXCEEDED			equ     10h
+ASYNCHRONOUS_HARDWARE_TIMER_EXPIRED	equ     11h
+SYSTEM_CONFIGURATION_INFORMATION	equ     12h
+HARD_DISK_INFORMATION			equ     13h
+SYSTEM_RECONFIGURED			equ     14h
+UNCORRECTABLE_CPU_COMPLEX_ERROR		equ     15h
+LOG_AREA_RESET_CLEARED			equ     16h
+SYSTEM_BOOT				equ     17h
+
+;-----------------------------------------------------------------------;
+;			POST ERROR FIRST DWORD				;
+;-----------------------------------------------------------------------;
+CHANNEL_2_TIMER_ERROR			equ	00000001h
+MASTER_PIC_ERROR			equ     00000002h
+SLAVE_PIC_ERROR				equ     00000004h
+CMOS_BATTERY_FAILURE			equ     00000008h
+CMOS_SYSTEM_OPTIONS_NOT_SET		equ     00000010h
+CMOS_CHECKSUM_ERROR			equ     00000020h
+CMOS_CONFIGURATION_ERROR		equ     00000040h
+MOUSE_AND_KEYBOARD_SWAPPED		equ     00000080h
+KEYBOARD_LOCKED				equ     00000100h
+KEYBOARD_NOT_FUNCTIONAL			equ     00000200h
+KEYBOARD_CONTROLLER_NOT_FUNCTIONAL	equ     00000400h
+CMOS_MEMORY_SIZE_DIFFERENT		equ     00000800h
+MEMORY_DECREASED_IN_SIZE		equ     00001000h
+CACHE_MEMORY_ERROR			equ     00002000h
+FLOPPY_DRIVE_0_ERROR			equ     00004000h
+FLOPPY_DRIVE_1_ERROR			equ     00008000h
+FLOPPY_CONTROLLER_FAILURE		equ     00800000h
+NUMBER_OF_ATA_DRIVES_REDUCED_ERROR	equ     01000000h
+CMOS_TIME_NOT_SET			equ     02000000h
+DDC_MONITOR_CONFIGURATION_CHANGE	equ     04000000h
+SECOND_DWORD_HAS_VALID_DATA		equ	08000000h
+PS2_MOUSE_ERROR				equ     10000000h
+
+;-----------------------------------------------------------------------;
+;			POST ERROR SECOND DWORD				;
+;-----------------------------------------------------------------------;
+PCI_MEMORY_CONFLICT			equ     00000080h
+PCI_IO_CONFLICT				equ     00000100h
+PCI_IRQ_CONFLICT			equ     00000200h
+PNP_MEMORY_CONFLICT			equ     00000400h
+PNP_32_BIT_MEMORY_CONFLICT		equ     00000800h
+PNP_IO_CONFLICT				equ     00001000h
+PNP_IRQ_CONFLICT			equ     00002000h
+PNP_DMA_CONFLICT			equ     00004000h
+BAD_PNP_SERIAL_ID_CHECKSUM		equ     00008000h
+BAD_PNP_RESOURCE_DATA_CHECKSUM		equ     00010000h
+STATIC_RESOURCE_CONFLICT		equ     00020000h
+NVRAM_CHECKSUM_ERROR			equ     00040000h
+SYSTEM_BOARD_DEVICE_RESOURCE_CONFLICT	equ     00080000h
+PRIMARY_OUTPUT_DEVICE_NOT_FOUND		equ     00100000h
+PRIMARY_INPUT_DEVICE_NOT_FOUND		equ     00200000h
+PRIMARY_BOOT_DEVICE_NOT_FOUND		equ     00400000h
+NVRAM_CLEARED_BY_JUMPER			equ     00800000h
+NVRAM_DATA_INVALID			equ     01000000h
+FDC_RESOURCE_CONFLICT			equ     02000000h
+PRIMARY_ATA_RESOURCE_CONFLICT		equ     04000000h
+SECONDARY_ATA_RESOURCE_CONFLICT		equ     08000000h
+PARALLEL_PORT_RESOURCE_CONFLICT		equ     10000000h
+SERIAL_PORT_1_RESOURCE_CONFLICT		equ     20000000h
+SERIAL_PORT_2_RESOURCE_CONFLICT		equ     40000000h
+AUDIO_RESOURCE_CONFLICT			equ     80000000h
+
+LOG_RECORD	struct
+  event_type	db	?
+  record_len	db	?
+  year		db	?
+  month		db	?
+  day		db	?
+  hour		db	?
+  minute	db	?
+  second	db	?
+  var_data1	dd	?
+  var_data2	dd	?
+LOG_RECORD	ends
+
+LOG_BUFFER	struct
+  log_size	dw	?
+  logging	db	?	;0=disaled, 1=enabled
+  log_change	db	?	;0=unchanged, 1=changed
+  log_capacity	db	?	;0=Space Available, 1=Space Full
+  log_validity	db	?	;0=valid, 1=invalid
+  change_token	dd	?	;reassigned every time event log change
+  gpnv_handle	db	?	;GPNV handle # for event log data
+  as_read	db	?	;0=unread, 1=read
+  reserve1	db 	5 dup(?)
+  post_err1	dd	?	;1st dword for POST error
+  post_err2	dd	?	;2nd dword for POST error
+  reserve2	db 	24 dup(?)
+  log_data	db	MAX_LOG_SIZE dup(?);max. size for event log data
+LOG_BUFFER	ends
+
