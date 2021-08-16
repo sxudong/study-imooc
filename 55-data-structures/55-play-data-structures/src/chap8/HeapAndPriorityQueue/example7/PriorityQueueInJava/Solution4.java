@@ -19,7 +19,7 @@ public class Solution4 {
         PriorityQueue<Integer> pq = new PriorityQueue<>(new Comparator<Integer>() {
             @Override
             public int compare(Integer a, Integer b) {
-                return map.get(a) - map.get(b);
+                return map.get(a) - map.get(b);  //匿名内部类，引用了外部数据Map
             }
         });
         for(int key: map.keySet()){
@@ -44,10 +44,9 @@ public class Solution4 {
     }
 
     public static void main(String[] args) {
-
         int[] nums = {1, 1, 1, 2, 2, 3};
         int k = 2;
-        printList((new Solution()).topKFrequent(nums, k));
+        printList((new Solution4()).topKFrequent(nums, k));
     }
 }
 /* Output:

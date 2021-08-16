@@ -52,7 +52,7 @@ public class UnionFind2 implements UF {
         int pRoot = find(p);
         int qRoot = find(q);
 
-        if( pRoot == qRoot ) //　同属一个根节点
+        if( pRoot == qRoot ) //　它们同属一个根节点
             return;
 
         parent[pRoot] = qRoot;

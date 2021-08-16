@@ -21,6 +21,7 @@ public class SegmentTree<E> {
 
         // 4倍空间存储线段树所有节点
         tree = (E[]) new Object[4 * arr.length];
+        // 创建“求和”的线段树
         buildSegmentTree(0, 0, arr.length - 1);
     }
 
@@ -31,7 +32,6 @@ public class SegmentTree<E> {
      * @param r 区间右端点，结束位置
      */
     private void buildSegmentTree(int treeIndex, int l, int r){
-
         // 终止条件，区间只有一个元素
         if(l == r) {
             // 此时这个节点存储的就是它本身

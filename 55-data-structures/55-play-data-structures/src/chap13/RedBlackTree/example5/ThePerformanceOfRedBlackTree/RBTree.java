@@ -45,13 +45,19 @@ public class RBTree<K extends Comparable<K>, V> {
         return node.color;
     }
 
-    //   node                     x
-    //  /   \     左旋转         /  \
-    // T1   x   --------->   node   T3
-    //     / \              /   \
-    //    T2 T3            T1   T2
+    /**
+     * 左旋转
+     *        node                     x
+     *       /   \     左旋转         /  \
+     *      T1   x   --------->   node   T3
+     *          / \              /   \
+     *         T2 T3            T1   T2
+     *
+     * 左旋转其实只是一个子过程，在我们的添加逻辑中还需要进行更多的后续处理。
+     * 我们在左旋转的过程并不维持红黑树的性质，我们主要做的事情是通过旋转这个过程让
+     * (37, 42) 这两个元素对应是 2-3树 中一个 3-节点 就好了。
+     */
     private Node leftRotate(Node node){
-
         Node x = node.right;
 
         // 左旋转
@@ -235,8 +241,8 @@ public class RBTree<K extends Comparable<K>, V> {
         }
     }
 
+    // study-imooc\55-data-structures\55-play-data-structures
     public static void main(String[] args){
-
         System.out.println("Pride and Prejudice");
 
         ArrayList<String> words = new ArrayList<>();

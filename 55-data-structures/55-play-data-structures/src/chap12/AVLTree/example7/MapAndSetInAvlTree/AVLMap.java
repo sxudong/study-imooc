@@ -5,7 +5,7 @@ package chap12.AVLTree.example7.MapAndSetInAvlTree;
  * @param <K>
  * @param <V>
  */
-public class AVLMap<K extends Comparable<K>, V> implements Map<K, V> {
+public class AVLMap<K extends Comparable<K>, V> implements Map<K, V> { //实现Map接口
 
     private AVLTree<K, V> avl;
 

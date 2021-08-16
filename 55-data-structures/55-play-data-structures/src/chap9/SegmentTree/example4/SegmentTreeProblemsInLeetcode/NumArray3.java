@@ -45,6 +45,7 @@ class NumArray3 {
         return sum[j + 1] - sum[i];
     }
 
+    // 针对第index个索引元素修改成value
     public void update(int index, int val) {
         data[index] = val;
         for(int i = index + 1 ; i < sum.length ; i ++)

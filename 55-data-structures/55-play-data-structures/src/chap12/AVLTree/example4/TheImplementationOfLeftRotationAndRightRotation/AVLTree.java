@@ -51,6 +51,7 @@ public class AVLTree<K extends Comparable<K>, V> {
         return true;
     }
 
+    // 中序排序
     private void inOrder(Node node, ArrayList<K> keys){
 
         if(node == null)
@@ -80,15 +81,17 @@ public class AVLTree<K extends Comparable<K>, V> {
 
     // 获得节点node的高度
     private int getHeight(Node node){
-        if(node == null)
+        if(node == null) //一个空的node，它的度度值就是0
             return 0;
         return node.height;
     }
 
     // 获得节点node的平衡因子
     private int getBalanceFactor(Node node){
+        //节点为空，平衡因子为0
         if(node == null)
             return 0;
+        //左子树的高度减去右子树的高度
         return getHeight(node.left) - getHeight(node.right);
     }
 
@@ -104,12 +107,14 @@ public class AVLTree<K extends Comparable<K>, V> {
         Node x = y.left;
         Node T3 = x.right;
 
-        // 向右旋转过程
+        // 1.向右旋转过程
         x.right = y;
         y.left = T3;
 
-        // 更新height
+        // 2.更新height
+        // 当前y节点左右子树中高度值最高的加1
         y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
+        // 当前x节点左右子树中高度值最高的加1
         x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
 
         return x;
@@ -127,12 +132,14 @@ public class AVLTree<K extends Comparable<K>, V> {
         Node x = y.right;
         Node T2 = x.left;
 
-        // 向左旋转过程
+        // 1.向左旋转过程
         x.left = y;
         y.right = T2;
 
-        // 更新height
+        // 2.更新height
+        // 当前y节点左右子树中高度值最高的加1
         y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
+        // 当前x节点左右子树中高度值最高的加1
         x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
 
         return x;
@@ -159,19 +166,21 @@ public class AVLTree<K extends Comparable<K>, V> {
         else // key.compareTo(node.key) == 0
             node.value = value;
 
-        // 更新height
+        // 1.更新height
         node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
 
-        // 计算平衡因子
+        // 2.计算平衡因子
         int balanceFactor = getBalanceFactor(node);
 //        if(Math.abs(balanceFactor) > 1)
 //            System.out.println("unbalanced : " + balanceFactor);
 
-        // 平衡维护
-        if (balanceFactor > 1 && getBalanceFactor(node.left) >= 0)
+        // 3.平衡维护
+        // 左子树高于右子树，并且当前节点左子树平衡因子大于等于0，说明当前这个node它不平
+        // 衡的原因是在于它的左侧的左侧添加了一个节点，我们要对这种情况进行一个平衡维护。
+        if (balanceFactor > 1 && getBalanceFactor(node.left) >= 0)   //LL右旋转操作
             return rightRotate(node);
 
-        if (balanceFactor < -1 && getBalanceFactor(node.right) <= 0)
+        if (balanceFactor < -1 && getBalanceFactor(node.right) <= 0) //RR左旋转操作
             return leftRotate(node);
 
         return node;

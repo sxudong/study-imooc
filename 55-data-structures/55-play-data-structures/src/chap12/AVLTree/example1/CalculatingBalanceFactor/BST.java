@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * @param <V>
  */
 // public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
-public class BST<K extends Comparable<K>, V> {
+public class BST<K extends Comparable<K>, V> { //映射版本的BST，泛型类型中包括有key和value两个值
 
     private class Node{
         public K key;

@@ -6,13 +6,13 @@ import java.util.ArrayList;
  * 13-3 红黑树与2-3树的等价性
  *
  * 基于BST修改(二分搜索树)
+ * isRed() 是子过程调用，尚未调用，在13-7中add调用
  * @param <K>
  * @param <V>
  */
 public class RBTree<K extends Comparable<K>, V> {
-
-    private static final boolean RED = true;
-    private static final boolean BLACK = false;
+    private static final boolean RED = true;    //红色
+    private static final boolean BLACK = false; //黑色
 
     private class Node{
         public K key;
@@ -25,7 +25,8 @@ public class RBTree<K extends Comparable<K>, V> {
             this.value = value;
             left = null;
             right = null;
-            color = RED; // 默认红色，代表它在要这个红黑树对应的2-3树中对应的某一个节点融合
+            // 默认创建的节点是红色,代表它要在这个红黑树中和所等价的2-3树中对应的某一个节点融合
+            color = RED;
         }
     }
 
@@ -60,12 +61,13 @@ public class RBTree<K extends Comparable<K>, V> {
     // 向以node为根的二分搜索树中插入元素(key, value)，递归算法
     // 返回插入新节点后二分搜索树的根
     private Node add(Node node, K key, V value){
-
+        //递归终止条件
         if(node == null){
             size ++;
             return new Node(key, value);
         }
 
+        //根据key值确认它插入的位置，是在左子树中，还是在右子树中，还是修改当前这个node的值
         if(key.compareTo(node.key) < 0)
             node.left = add(node.left, key, value);
         else if(key.compareTo(node.key) > 0)
@@ -173,7 +175,6 @@ public class RBTree<K extends Comparable<K>, V> {
             }
 
             // 待删除节点左右子树均不为空的情况
-
             // 找到比待删除节点大的最小节点, 即待删除节点右子树的最小节点
             // 用这个节点顶替待删除节点的位置
             Node successor = minimum(node.right);
@@ -186,8 +187,8 @@ public class RBTree<K extends Comparable<K>, V> {
         }
     }
 
+    // study-imooc\55-data-structures\55-play-data-structures
     public static void main(String[] args){
-
         System.out.println("Pride and Prejudice");
 
         ArrayList<String> words = new ArrayList<>();
@@ -210,3 +211,10 @@ public class RBTree<K extends Comparable<K>, V> {
         System.out.println();
     }
 }
+/* Output:
+Pride and Prejudice
+Total words: 125901
+Total different words: 6530
+Frequency of PRIDE: 53
+Frequency of PREJUDICE: 11
+ */

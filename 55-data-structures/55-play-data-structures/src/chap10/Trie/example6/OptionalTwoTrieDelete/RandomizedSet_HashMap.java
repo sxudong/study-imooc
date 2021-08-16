@@ -1,4 +1,4 @@
-package chap10.Trie.example2.OptionalTwoTrieDelete;
+package chap10.Trie.example6.OptionalTwoTrieDelete;
 /// Leetcode 380. Insert Delete GetRandom O(1)
 /// https://leetcode.com/problems/insert-delete-getrandom-o1/description/
 ///

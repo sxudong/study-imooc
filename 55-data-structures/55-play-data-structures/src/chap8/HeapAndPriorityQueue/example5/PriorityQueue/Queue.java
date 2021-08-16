@@ -1,7 +1,6 @@
 package chap8.HeapAndPriorityQueue.example5.PriorityQueue;
 
 public interface Queue<E> {
-
     int getSize();
     boolean isEmpty();
     void enqueue(E e);  // 加入一个元素叫“入队”

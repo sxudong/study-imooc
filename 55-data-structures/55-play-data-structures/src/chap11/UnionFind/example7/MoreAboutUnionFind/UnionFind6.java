@@ -1,7 +1,7 @@
 package chap11.UnionFind.example7.MoreAboutUnionFind;
 
 /**
- * 我们的第六版 Union-Find
+ * 我们的第六版 Union-Find 使用递归方式实现
  */
 public class UnionFind6 implements UF {
 

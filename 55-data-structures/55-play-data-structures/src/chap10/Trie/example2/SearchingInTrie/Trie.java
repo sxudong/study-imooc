@@ -1,4 +1,4 @@
-package chap10.Trie.example4.SearchingInTrie;
+package chap10.Trie.example2.SearchingInTrie;
 
 import java.util.TreeMap;
 

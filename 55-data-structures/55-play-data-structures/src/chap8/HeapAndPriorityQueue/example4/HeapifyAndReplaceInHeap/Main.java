@@ -56,7 +56,7 @@ public class Main {
 }
 /* 比起人空堆中一个一个添加元素，从复杂度来说是有一个质的飞跃的
 Test MaxHeap completed.
-Without heapify: 0.8655388 s
+Without heapify: 1.883074179 s
 Test MaxHeap completed.
-With heapify: 0.7349263 s
+With heapify: 1.126421874 s
 *///~

@@ -2,6 +2,7 @@ package chap13.RedBlackTree.example2.KeepRootBlackAndLeftRotation;
 
 import java.util.ArrayList;
 
+//使用的是 第12章 AVLTree 中添加的 key/value 的二分搜索树基础上修改
 public class BST<K extends Comparable<K>, V> {
 
     private class Node{

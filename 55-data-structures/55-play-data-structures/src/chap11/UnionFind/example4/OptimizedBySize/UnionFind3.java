@@ -5,13 +5,11 @@ package chap11.UnionFind.example4.OptimizedBySize;
  * 改善：加上 size 根的集合中元素个数
  */
 public class UnionFind3 implements UF{
-
     private int[] parent; // parent[i]表示第一个元素所指向的父节点
     private int[] sz;     // sz[i]表示以i为根的集合中元素个数
 
     // 构造函数
     public UnionFind3(int size){
-
         parent = new int[size];
         sz = new int[size];
 
@@ -51,7 +49,6 @@ public class UnionFind3 implements UF{
     // O(h)复杂度, h为树的高度
     @Override
     public void unionElements(int p, int q){
-
         int pRoot = find(p);
         int qRoot = find(q);
 
@@ -62,6 +59,7 @@ public class UnionFind3 implements UF{
          * 根据两个元素所在树的元素个数不同判断合并方向
          * 将元素个数少的集合合并到元素个数多的集合上
          */
+        //p节点元素个数少，让元素比较少的根节点去指向元素比较多的这棵树的根节点
         if(sz[pRoot] < sz[qRoot]) {
             parent[pRoot] = qRoot;
             sz[qRoot] += sz[pRoot]; // sz[qRoot] = 1 + 1

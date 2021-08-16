@@ -46,7 +46,7 @@ public class Main {
     }
 }
 /* Output:
-UnionFind3 : 6.4623765 s
-UnionFind4 : 6.0228368 s
-UnionFind5 : 4.8151061 s
+UnionFind3 : 5.7918363 s
+UnionFind4 : 4.5018905 s
+UnionFind5 : 3.5143082 s
 *///~

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 /**
  * 13-6 颜色翻转 和 右旋转
+ * 颜色翻转和右旋转都是辅助子过程，尚未调用，在13-7中add调用
  * @param <K>
  * @param <V>
  */
 public class RBTree<K extends Comparable<K>, V> {
-
-    private static final boolean RED = true;
-    private static final boolean BLACK = false;
+    private static final boolean RED = true;    //红色
+    private static final boolean BLACK = false; //黑色
 
     private class Node{
         public K key;
@@ -23,6 +23,7 @@ public class RBTree<K extends Comparable<K>, V> {
             this.value = value;
             left = null;
             right = null;
+            // 默认创建的节点是红色,代表它要在这个红黑树中和所等价的2-3树中对应的某一个节点融合
             color = RED;
         }
     }
@@ -57,15 +58,17 @@ public class RBTree<K extends Comparable<K>, V> {
      *      T1   x   --------->   node   T3
      *          / \              /   \
      *         T2 T3            T1   T2
+     *
+     * 左旋转其实只是一个子过程，在我们的添加逻辑中还需要进行更多的后续处理。
+     * 我们在左旋转的过程并不维持红黑树的性质，我们主要做的事情是通过旋转这个过程让
+     * (37, 42) 这两个元素对应是 2-3树 中一个 3-节点 就好了。
      */
     private Node leftRotate(Node node){
-
         Node x = node.right;
 
         // 左旋转
         node.right = x.left;
         x.left = node;
-
         x.color = node.color;
         node.color = RED;
 
@@ -95,10 +98,9 @@ public class RBTree<K extends Comparable<K>, V> {
      * 颜色翻转
      */
     private void flipColors(Node node) {
-
-        node.color = RED;
-        node.left.color = BLACK;
-        node.right.color = BLACK;
+        node.color = RED;         //根节点要变成红色
+        node.left.color = BLACK;  //左孩子变成黑色
+        node.right.color = BLACK; //右孩子变成黑色
     }
 
     /**
@@ -117,12 +119,13 @@ public class RBTree<K extends Comparable<K>, V> {
      * @return 返回插入新节点后红黑树的根
      */
     private Node add(Node node, K key, V value){
-
+        //递归终止条件
         if(node == null){
             size ++;
             return new Node(key, value); // 默认插入红色节点
         }
 
+        //根据key值确认它插入的位置，是在左子树中，还是在右子树中，还是修改当前这个node的值
         if(key.compareTo(node.key) < 0)
             node.left = add(node.left, key, value);
         else if(key.compareTo(node.key) > 0)
@@ -243,8 +246,8 @@ public class RBTree<K extends Comparable<K>, V> {
         }
     }
 
+    // study-imooc\55-data-structures\55-play-data-structures
     public static void main(String[] args){
-
         System.out.println("Pride and Prejudice");
 
         ArrayList<String> words = new ArrayList<>();

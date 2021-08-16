@@ -1,4 +1,4 @@
-package chap10.Trie.example8.TrieUsingHashMapAndArray;
+package chap10.Trie.example7.TrieUsingHashMapAndArray;
 
 public interface Set<E> {
 

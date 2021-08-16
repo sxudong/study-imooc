@@ -50,7 +50,6 @@ public class MaxHeap<E extends Comparable<E>> {
     }
 
     private void siftUp(int k){
-
         while(k > 0 && data.get(parent(k)).compareTo(data.get(k)) < 0 ){
             data.swap(k, parent(k));
             k = parent(k);

@@ -54,7 +54,6 @@ public class MaxHeap<E extends Comparable<E>> {
     }
 
     private void siftUp(int k){
-
         while(k > 0 && data.get(parent(k)).compareTo(data.get(k)) < 0 ){
             data.swap(k, parent(k));
             k = parent(k);
@@ -70,7 +69,6 @@ public class MaxHeap<E extends Comparable<E>> {
 
     // 取出堆中最大元素
     public E extractMax(){
-
         E ret = findMax();
 
         data.swap(0, data.getSize() - 1);
@@ -81,7 +79,6 @@ public class MaxHeap<E extends Comparable<E>> {
     }
 
     private void siftDown(int k){
-
         while(leftChild(k) < data.getSize()){
             int j = leftChild(k); // 在此轮循环中,data[k]和data[j]交换位置
             if( j + 1 < data.getSize() &&
@@ -99,7 +96,6 @@ public class MaxHeap<E extends Comparable<E>> {
 
     // 取出堆中的最大元素，并且替换成元素e
     public E replace(E e){
-
         E ret = findMax();
         data.set(0, e);
         siftDown(0);

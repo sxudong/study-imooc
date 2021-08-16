@@ -17,17 +17,15 @@ package chap9.SegmentTree.example4.SegmentTreeProblemsInLeetcode;
  *
  * 说明:
  * 你可以假设数组不可变。
- * 会多次调用 sumRange 方法。
+ * 会多次调用 sumRange 方法。
  *
  * 来源：力扣（LeetCode）
  * 链接：https://leetcode-cn.com/problems/range-sum-query-immutable
  */
 class NumArray {
-
     private SegmentTree<Integer> segmentTree;
 
     public NumArray(int[] nums) {
-
         if(nums.length > 0){
             Integer[] data = new Integer[nums.length];
             for (int i = 0; i < nums.length; i++)
@@ -35,14 +33,11 @@ class NumArray {
             // 创建线段树
             segmentTree = new SegmentTree<>(data, (a, b) -> a + b);
         }
-
     }
 
     public int sumRange(int i, int j) {
-
         if(segmentTree == null)
             throw new IllegalArgumentException("Segment Tree is null");
-
         return segmentTree.query(i, j);
     }
 }

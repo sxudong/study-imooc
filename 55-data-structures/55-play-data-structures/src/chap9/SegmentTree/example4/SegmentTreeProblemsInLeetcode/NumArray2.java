@@ -17,7 +17,7 @@ package chap9.SegmentTree.example4.SegmentTreeProblemsInLeetcode;
  *
  * 说明:
  * 你可以假设数组不可变。
- * 会多次调用 sumRange 方法。
+ * 会多次调用 sumRange 方法。
  *
  * 来源：力扣（LeetCode）
  * 链接：https://leetcode-cn.com/problems/range-sum-query-immutable
@@ -29,7 +29,6 @@ public class NumArray2 {
                        // sumRange(i, j) = sum[j + 1] - sum[i]
 
     public NumArray2(int[] nums) {
-
         sum = new int[nums.length + 1];
         sum[0] = 0;
         // 初始化sum值

@@ -7,7 +7,7 @@ import java.util.*;
 public class Solution3 {
 
     private class Freq{
-
+        //e是元素，freq是频次
         public int e, freq;
 
         public Freq(int e, int freq){
@@ -57,7 +57,7 @@ public class Solution3 {
 
         int[] nums = {1, 1, 1, 2, 2, 3};
         int k = 2;
-        printList((new Solution()).topKFrequent(nums, k));
+        printList((new Solution3()).topKFrequent(nums, k));
     }
 }
 /* Output:

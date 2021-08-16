@@ -23,7 +23,7 @@ public class MaxHeap<E extends Comparable<E>> {
     public MaxHeap(E[] arr){
         data = new Array<>(arr); // 数组转换为动态数组
         if(arr.length != 1) {
-            // 最后一个节点的父节点
+            // 最后一个节点的父节点，循环遍历向前
             for(int i = parent(arr.length - 1) ; i >= 0 ; i --)
                 siftDown(i); // 数据下沉
         }
@@ -62,8 +62,11 @@ public class MaxHeap<E extends Comparable<E>> {
         siftUp(data.getSize() - 1);
     }
 
+    /**
+     * 数据下沉
+     * @param k 索引
+     */
     private void siftUp(int k){
-
         while(k > 0 && data.get(parent(k)).compareTo(data.get(k)) < 0 ){
             data.swap(k, parent(k));
             k = parent(k);
@@ -90,7 +93,6 @@ public class MaxHeap<E extends Comparable<E>> {
     }
 
     private void siftDown(int k){
-
         while(leftChild(k) < data.getSize()){
             int j = leftChild(k); // 在此轮循环中,data[k]和data[j]交换位置
             if( j + 1 < data.getSize() &&
@@ -112,7 +114,6 @@ public class MaxHeap<E extends Comparable<E>> {
      * @return 取出堆中的最大元素
      */
     public E replace(E e){
-
         E ret = findMax();
         data.set(0, e); // 堆顶元素换成 e
         siftDown(0); // 数据下沉

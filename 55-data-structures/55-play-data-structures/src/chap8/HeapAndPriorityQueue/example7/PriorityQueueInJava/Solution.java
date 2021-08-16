@@ -16,7 +16,7 @@ import java.util.TreeMap;
 public class Solution {
 
     private class Freq implements Comparable<Freq>{
-
+        //e是元素，freq是频次
         public int e, freq;
 
         public Freq(int e, int freq){
@@ -26,8 +26,10 @@ public class Solution {
 
         public int compareTo(Freq another){
             if(this.freq < another.freq)
-                return -1;
+                //return 1;
+                return -1; //使用Java的优先队列，这里需要做一个变更
             else if(this.freq > another.freq)
+                //return -1;
                 return 1;
             else
                 return 0;

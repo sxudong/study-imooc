@@ -17,3 +17,9 @@ public class Main {
         System.out.println(segTree.query(0, 5));
     }
 }
+/* output:
+[-3, 1, -4, -2, 3, -3, -1, -2, 0, null, null, -5, 2, null, null, null, null, null, null, null, null, null, null, null]
+1
+-1
+-3
+ */

@@ -297,9 +297,11 @@ public class AVLTree<K extends Comparable<K>, V> {
                 node.left = node.right = null;
 
                 // return successor;
-                retNode = successor;
+                retNode = successor; //现在retNode里存储的全部都是删除以后我们需要返回的那个新的retNode节点
             }
         }
+
+        // ======= 下面维护过程与面添加节点的过程是一样的 =======
 
         // 删除的是叶子节点就会产生这种情况
         if(retNode == null)
@@ -312,11 +314,11 @@ public class AVLTree<K extends Comparable<K>, V> {
         int balanceFactor = getBalanceFactor(retNode);
 
         // 平衡维护
-        // LL
+        // LL 右旋转操作
         if (balanceFactor > 1 && getBalanceFactor(retNode.left) >= 0)
             return rightRotate(retNode);
 
-        // RR
+        // RR 左旋转操作
         if (balanceFactor < -1 && getBalanceFactor(retNode.right) <= 0)
             return leftRotate(retNode);
 
@@ -338,7 +340,6 @@ public class AVLTree<K extends Comparable<K>, V> {
     }
 
     public static void main(String[] args){
-
         System.out.println("Pride and Prejudice");
 
         ArrayList<String> words = new ArrayList<>();
@@ -376,6 +377,6 @@ Total words: 125901
 Total different words: 6530
 Frequency of PRIDE: 53
 Frequency of PREJUDICE: 11
-is BST : true
-is Balanced : true
+is BST : true              //是一棵二分搜索树
+is Balanced : true         //是一棵平衡二叉树
 *///~

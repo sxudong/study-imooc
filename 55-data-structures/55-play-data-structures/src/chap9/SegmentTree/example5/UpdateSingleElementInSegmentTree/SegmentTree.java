@@ -112,7 +112,6 @@ public class SegmentTree<E> {
      * @param e
      */
     public void set(int index, E e){
-
         if(index < 0 || index >= data.length)
             throw new IllegalArgumentException("Index is illegal");
 
@@ -129,7 +128,6 @@ public class SegmentTree<E> {
      * @param e
      */
     private void set(int treeIndex, int l, int r, int index, E e){
-
         // 终止条件
         if(l == r){
             tree[treeIndex] = e;
@@ -137,7 +135,7 @@ public class SegmentTree<E> {
         }
 
         int mid = l + (r - l) / 2;
-        // treeIndex的节点分为[l...mid]和[mid+1...r]两部分
+        // treeIndex 的节点分为 [l...mid] 和 [mid+1...r] 两部分
 
         int leftTreeIndex = leftChild(treeIndex);
         int rightTreeIndex = rightChild(treeIndex);

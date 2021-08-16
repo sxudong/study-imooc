@@ -1,4 +1,4 @@
-package chap10.Trie.example7.TrieBasics;
+package chap10.Trie.example1.TrieBasics;
 
 public class Main {
 

@@ -6,14 +6,14 @@ import java.util.Collections;
 public class Main {
 
     public static void main(String[] args) {
-
         System.out.println("Pride and Prejudice");
 
         ArrayList<String> words = new ArrayList<>();
         if(FileOperation.readFile("pride-and-prejudice.txt", words)) {
             System.out.println("Total words: " + words.size());
 
-            // Collections.sort(words);
+            // 测试最坏的情况，放到Collections进行一次排序就好了。是按顺序放进去的，相应的BST就会退化成链表。
+            Collections.sort(words);
 
             // Test BST
             long startTime = System.nanoTime();
@@ -58,9 +58,16 @@ public class Main {
         System.out.println();
     }
 }
-/* Output:
+/* Output: 《傲慢与偏见》这本书没有达到最坏的情况，这里是随机的。
 Pride and Prejudice
 Total words: 125901
-BST: 0.131963099 s
-AVL: 0.139977 s
+BST: 0.133862 s
+AVL: 0.123231 s
+
+# 测试最坏的情况，放到Collections进行一次排序就好了。是按顺序放进去的，相应的BST就会退化成链表。
+# AVLTree有自平衡机制，不会退化成链表。
+Pride and Prejudice
+Total words: 125901
+BST: 16.5560147 s
+AVL: 0.0697917 s
 *///~

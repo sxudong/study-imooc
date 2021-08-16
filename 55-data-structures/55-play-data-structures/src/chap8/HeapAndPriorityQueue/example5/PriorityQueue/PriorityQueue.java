@@ -6,6 +6,8 @@ package chap8.HeapAndPriorityQueue.example5.PriorityQueue;
  */
 public class PriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
+    //使用最小堆逻辑进行选择时，每次将最小的删除；
+    //如果使用最大堆，需要设定好优先级，如此最大最小就是相对的了。
     private MaxHeap<E> maxHeap; // 最大堆结构
 
     public PriorityQueue(){
@@ -27,11 +29,13 @@ public class PriorityQueue<E extends Comparable<E>> implements Queue<E> {
         return maxHeap.findMax();
     }
 
+    // 加入一个元素叫“入队”
     @Override
     public void enqueue(E e){
         maxHeap.add(e);
     }
 
+    // 取出一个元素叫“出队”
     @Override
     public E dequeue(){
         return maxHeap.extractMax();

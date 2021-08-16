@@ -10,7 +10,6 @@ public class SegmentTree<E> {
     private E[] data;
 
     public SegmentTree(E[] arr){
-
         // new 一个静态数组
         data = (E[]) new Object[arr.length];
         for(int i = 0 ; i < arr.length ; i ++)

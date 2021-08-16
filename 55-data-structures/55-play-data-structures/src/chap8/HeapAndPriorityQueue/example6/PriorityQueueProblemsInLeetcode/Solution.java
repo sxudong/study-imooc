@@ -10,9 +10,8 @@ import java.util.TreeMap;
  * 8-7 Leetcode上优先队列相关问题
  *
  * 347. 前 K 个高频元素
- * 给定一个非空的整数数组，返回其中出现频率前 k 高的元素。
+ * 给定一个非空的整数数组，返回其中出现频率前 k 高的元素。
  *
- *  
  *
  * 示例 1:
  *
@@ -22,12 +21,11 @@ import java.util.TreeMap;
  *
  * 输入: nums = [1], k = 1
  * 输出: [1]
- *  
  *
  * 提示：
  *
- * 你可以假设给定的 k 总是合理的，且 1 ≤ k ≤ 数组中不相同的元素的个数。
- * 你的算法的时间复杂度必须优于 O(n log n) , n 是数组的大小。
+ * 你可以假设给定的k总是合理的，且 1 ≤ k ≤ 数组中不相同的元素的个数。
+ * 你的算法的时间复杂度必须优于 O(n log n) ,n是数组的大小。
  * 题目数据保证答案唯一，换句话说，数组中前 k 个高频元素的集合是唯一的。
  * 你可以按任意顺序返回答案。
  *
@@ -177,7 +175,6 @@ class Solution {
 
         @Override
         public String toString(){
-
             StringBuilder res = new StringBuilder();
             res.append(String.format("Array: size = %d , capacity = %d\n", size, data.length));
             res.append('[');
@@ -306,7 +303,6 @@ class Solution {
     }
 
     private interface Queue<E> {
-
         int getSize();
         boolean isEmpty();
         void enqueue(E e);
@@ -349,10 +345,11 @@ class Solution {
     }
 
     /**
-     * 频次信息
+     * 频次信息实体类
      */
     private class Freq implements Comparable<Freq>{
 
+        //e是元素，freq是频次
         public int e, freq;
 
         public Freq(int e, int freq){
@@ -368,9 +365,9 @@ class Solution {
         @Override
         public int compareTo(Freq another){
             if(this.freq < another.freq)
-                return 1; // 频率越底的优先级越高
+                return 1;  // 频率越底的优先级越高，不交换，直接添加到数组末尾
             else if(this.freq > another.freq)
-                return -1;
+                return -1; // 返回-1 数据下沉，交换位置
             else
                 return 0;
         }
@@ -378,6 +375,7 @@ class Solution {
 
     public List<Integer> topKFrequent(int[] nums, int k) {
 
+        //前一个Integer是元素，后一个Integer是频次
         TreeMap<Integer, Integer> map = new TreeMap<>(); // 使用Java的TreeMap
         for(int num: nums){
             if(map.containsKey(num))
@@ -398,7 +396,7 @@ class Solution {
             }
         }
 
-        // 放入到一个list返回
+        // 放入到一个 list 中返回
         LinkedList<Integer> res = new LinkedList<>();
         while(!pq.isEmpty())
             res.add(pq.dequeue().e);
@@ -412,7 +410,6 @@ class Solution {
     }
 
     public static void main(String[] args) {
-
         int[] nums = {1, 1, 1, 2, 2, 3};
         int k = 2; // 频率最高的前k个元素
         printList((new Solution()).topKFrequent(nums, k));

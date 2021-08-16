@@ -1,4 +1,4 @@
-package chap10.Trie.example6.TrieAndPatternMatch;
+package chap10.Trie.example4.TrieAndPatternMatch;
 /// Leetcode 211. Add and Search Word - Data structure design
 /// https://leetcode.com/problems/add-and-search-word-data-structure-design/description/
 
@@ -32,7 +32,6 @@ import java.util.TreeMap;
 public class WordDictionary {
 
     private class Node {
-
         public boolean isWord;
         public TreeMap<Character, Node> next;
 
@@ -48,14 +47,13 @@ public class WordDictionary {
 
     private Node root;
 
-    /** Initialize your data structure here. */
+    /** 在此处初始化您的数据结构 */
     public WordDictionary() {
         root = new Node();
     }
 
-    /** Adds a word into the data structure. */
+    /** 在数据结构中添加一个词 */
     public void addWord(String word) {
-
         Node cur = root;
         for(int i = 0 ; i < word.length() ; i ++){
             char c = word.charAt(i);
@@ -67,9 +65,8 @@ public class WordDictionary {
     }
 
     /**
-     * Returns if the word is in the data structure.
-     * A word could contain the dot character '.' to
-     * represent any one letter.
+     * 如果单词在数据结构中，则返回。
+     * 一个词可以包含点字符“.” 代表任何一个字母。
      */
     public boolean search(String word) {
         return match(root, word, 0);
@@ -77,7 +74,6 @@ public class WordDictionary {
 
     // 初始从根开始
     private boolean match(Node node, String word, int index){
-
         // 1、终止条件，index己经是word的长度了，整个word已经完了。
         if(index == word.length())
             return node.isWord;

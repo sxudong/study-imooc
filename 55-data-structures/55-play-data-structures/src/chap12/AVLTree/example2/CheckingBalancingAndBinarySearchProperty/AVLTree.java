@@ -4,7 +4,16 @@ import java.util.ArrayList;
 
 /**
  * 12-3 检查二分搜索树性质和平衡性
- * 添加了两个辅助函数判断是不是一个平衡二叉树
+ * 添加了两个辅助函数isBST()、isBalanced()判断是不是一个平衡二叉树？
+ *
+ * 对于AVLTree来说，它是对二分搜索树的改进，改进的是二分搜索树有可能退化成链表。
+ * 因此引进了平衡因子这个概念。AVLTree保持每个节点左右高度差不会超过1，但是在这
+ * 种情况下AVLTree同时也是一个二分搜索树，所以它也要满足二分搜索树的性质，也就是
+ * 对于每一个节点来说左子树所有的节点都要小于这个节点的值。相应的右节点所有的值都要
+ * 大于这个节点值，而且它的左右子树依然是二分搜索树。
+ * 代码有问题的话，很有可能打破这种性质，所以设置一个函数能够让我们方便的检查我们当
+ * 前的这棵AVLTree它是不是依然可以保持着它是一棵二分搜索树。
+ *
  * @param <K>
  * @param <V>
  */
@@ -88,14 +97,15 @@ public class AVLTree<K extends Comparable<K>, V> {
     // 获得节点node的高度
     private int getHeight(Node node){
         if(node == null)
-            return 0;
+            return 0; //一个空的node，它的度度值就是0
         return node.height;
     }
 
     // 获得节点node的平衡因子
     private int getBalanceFactor(Node node){
-        if(node == null)
+        if(node == null) //节点为空，平衡因子为0
             return 0;
+        //左子树的高度减去右子树的高度
         return getHeight(node.left) - getHeight(node.right);
     }
 
@@ -107,24 +117,29 @@ public class AVLTree<K extends Comparable<K>, V> {
     // 向以node为根的二分搜索树中插入元素(key, value)，递归算法
     // 返回插入新节点后二分搜索树的根
     private Node add(Node node, K key, V value){
-
+        //如果递归到底了，当前要添加的子树为空，此时创建一个新节点
         if(node == null){
             size ++;
             return new Node(key, value);
         }
 
+        //如果添加的的key比当前这个节点要小的话
         if(key.compareTo(node.key) < 0)
-            node.left = add(node.left, key, value);
+            node.left = add(node.left, key, value);   //到左子树中添加
+            //如果添加的的key比当前这个节点要大的话
         else if(key.compareTo(node.key) > 0)
-            node.right = add(node.right, key, value);
+            node.right = add(node.right, key, value); //到右子树中添加
+            //相等的话，是更新一下value值
         else // key.compareTo(node.key) == 0
             node.value = value;
 
-        // 更新height
+        // 添加了新的节点后，高度相应的就会有变化
+        // 1.更新height
         node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
 
-        // 计算平衡因子
+        // 2.计算平衡因子
         int balanceFactor = getBalanceFactor(node);
+        // 如果平衡因子绝对值大于1，说明整棵树不再满足平衡二叉树的条件
         if(Math.abs(balanceFactor) > 1)
             System.out.println("unbalanced : " + balanceFactor);
 
@@ -228,7 +243,6 @@ public class AVLTree<K extends Comparable<K>, V> {
             }
 
             // 待删除节点左右子树均不为空的情况
-
             // 找到比待删除节点大的最小节点, 即待删除节点右子树的最小节点
             // 用这个节点顶替待删除节点的位置
             Node successor = minimum(node.right);
@@ -242,7 +256,6 @@ public class AVLTree<K extends Comparable<K>, V> {
     }
 
     public static void main(String[] args){
-
         System.out.println("Pride and Prejudice");
 
         ArrayList<String> words = new ArrayList<>();
@@ -258,11 +271,11 @@ public class AVLTree<K extends Comparable<K>, V> {
             }
 
             System.out.println("Total different words: " + map.getSize());
-            System.out.println("Frequency of PRIDE: " + map.get("pride"));
-            System.out.println("Frequency of PREJUDICE: " + map.get("prejudice"));
+            System.out.println("Frequency of PRIDE: " + map.get("pride")); //pride出现的词频
+            System.out.println("Frequency of PREJUDICE: " + map.get("prejudice")); //prejudice出现的词频
 
-            System.out.println("is BST : " + map.isBST());
-            System.out.println("is Balanced : " + map.isBalanced());
+            System.out.println("is BST : " + map.isBST()); //是不是一棵二分搜索树
+            System.out.println("is Balanced : " + map.isBalanced()); //是否是一棵平衡二叉树
         }
 
         System.out.println();
@@ -275,6 +288,6 @@ unbalanced : 7
 Total different words: 6530
 Frequency of PRIDE: 53
 Frequency of PREJUDICE: 11
-is BST : true
-is Balanced : false
+is BST : true        //是一棵二分搜索树
+is Balanced : false  //不是一棵平衡二叉树
 *///~

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 /**
  * 13-5 保持根节点为黑色和左旋转
+ * 左旋转是辅助子过程，尚未调用，在13-7中add调用
  * @param <K>
  * @param <V>
  */
 public class RBTree<K extends Comparable<K>, V> {
-
-    private static final boolean RED = true;
-    private static final boolean BLACK = false;
+    private static final boolean RED = true;    //红色
+    private static final boolean BLACK = false; //黑色
 
     private class Node{
         public K key;
@@ -57,15 +57,18 @@ public class RBTree<K extends Comparable<K>, V> {
      *      T1   x   --------->   node   T3
      *          / \              /   \
      *         T2 T3            T1   T2
+     *
+     * 左旋转其实只是一个子过程，在我们的添加逻辑中还需要进行更多的后续处理。
+     * 我们在左旋转的过程并不维持红黑树的性质，我们主要做的事情是通过旋转这个过程让
+     * (37, 42) 这两个元素对应是 2-3树 中一个 3-节点 就好了。
      */
     private Node leftRotate(Node node){
-
         Node x = node.right;
 
         // 左旋转
         node.right = x.left;
         x.left = node;
-
+        
         x.color = node.color;
         node.color = RED;
 
@@ -88,12 +91,13 @@ public class RBTree<K extends Comparable<K>, V> {
      * @return 返回插入新节点后红黑树的根
      */
     private Node add(Node node, K key, V value){
-
+        //递归终止条件
         if(node == null){
             size ++;
             return new Node(key, value); // 默认插入红色节点
         }
 
+        //根据key值确认它插入的位置，是在左子树中，还是在右子树中，还是修改当前这个node的值
         if(key.compareTo(node.key) < 0)
             node.left = add(node.left, key, value);
         else if(key.compareTo(node.key) > 0)
@@ -214,8 +218,8 @@ public class RBTree<K extends Comparable<K>, V> {
         }
     }
 
+    // study-imooc\55-data-structures\55-play-data-structures
     public static void main(String[] args){
-
         System.out.println("Pride and Prejudice");
 
         ArrayList<String> words = new ArrayList<>();
@@ -238,3 +242,10 @@ public class RBTree<K extends Comparable<K>, V> {
         System.out.println();
     }
 }
+/* Output:
+Pride and Prejudice
+Total words: 125901
+Total different words: 6530
+Frequency of PRIDE: 53
+Frequency of PREJUDICE: 11
+ */

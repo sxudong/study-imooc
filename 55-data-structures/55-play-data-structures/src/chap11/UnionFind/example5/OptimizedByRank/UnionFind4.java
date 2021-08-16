@@ -4,13 +4,11 @@ package chap11.UnionFind.example5.OptimizedByRank;
  * 我们的第四版Union-Find
  */
 public class UnionFind4 implements UF {
-
     private int[] rank;   // rank[i]表示以i为根的集合所表示的树的层数
     private int[] parent; // parent[i]表示第i个元素所指向的父节点
 
     // 构造函数
     public UnionFind4(int size){
-
         rank = new int[size];
         parent = new int[size];
 
@@ -50,7 +48,6 @@ public class UnionFind4 implements UF {
     // O(h)复杂度, h为树的高度
     @Override
     public void unionElements(int p, int q){
-
         int pRoot = find(p);
         int qRoot = find(q);
 
@@ -59,9 +56,11 @@ public class UnionFind4 implements UF {
 
         /**
          * 根据两个元素所在树的 rank 不同判断合并方向
-         * 将 rank 低的集合合并到 rank 高的集合上
+         * 将 rank低的集合 合并到 rank高的集合上
          */
         if(rank[pRoot] < rank[qRoot])
+            //p树深度比q树深度小，相当于q树多了一个子树，
+            //也就是说q树的高度没有变化，所以合并之后不需要维护rank数组。
             parent[pRoot] = qRoot;
         else if(rank[qRoot] < rank[pRoot])
             parent[qRoot] = pRoot;

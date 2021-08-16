@@ -7,7 +7,7 @@ import java.util.*;
 public class Solution2 {
 
     private class Freq{
-
+        //e是元素，freq是频次
         public int e, freq;
 
         public Freq(int e, int freq){
@@ -39,6 +39,7 @@ public class Solution2 {
 
         // 构造一个比较器传进去
         //PriorityQueue<Freq> pq = new PriorityQueue<>(new FreqComparator());
+        //传一个lamdba表达式的比较器
         PriorityQueue<Freq> pq = new PriorityQueue<>((a,b) -> a.freq - b.freq);
         for(int key: map.keySet()){
             if(pq.size() < k)
@@ -62,10 +63,9 @@ public class Solution2 {
     }
 
     public static void main(String[] args) {
-
         int[] nums = {1, 1, 1, 2, 2, 3};
         int k = 2;
-        printList((new Solution()).topKFrequent(nums, k));
+        printList((new Solution2()).topKFrequent(nums, k));
     }
 }
 /* Output:

@@ -24,7 +24,6 @@ import java.util.TreeMap;
 public class MapSum {
 
     private class Node{
-
         public int value;
         public TreeMap<Character, Node> next;
 
@@ -47,7 +46,6 @@ public class MapSum {
     }
 
     public void insert(String key, int val) {
-
         Node cur = root;
         for(int i = 0 ; i < key.length() ; i ++){
             char c = key.charAt(i);
@@ -59,7 +57,6 @@ public class MapSum {
     }
 
     public int sum(String prefix) {
-
         Node cur = root;
         for(int i = 0 ; i < prefix.length() ; i ++){
             char c = prefix.charAt(i);
@@ -72,7 +69,6 @@ public class MapSum {
     }
 
     private int sum(Node node){
-
         // 终止条件,node为叶子节点
 //        if(node.next.size() == 0)
 //            return node.value;

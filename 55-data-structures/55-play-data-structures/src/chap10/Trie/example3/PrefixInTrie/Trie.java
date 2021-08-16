@@ -127,7 +127,7 @@ public class Trie {
 
 
     /**
-     * 查询是否在Trie中有单词以prefix为前缀 (非递归写法)
+     * 查询是否在 Trie 中有单词以 prefix 为前缀 (非递归写法)
      */
     public boolean isPrefix(String prefix){
         Node cur = root;

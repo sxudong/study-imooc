@@ -1,4 +1,4 @@
-package chap10.Trie.example4.SearchingInTrie;
+package chap10.Trie.example2.SearchingInTrie;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -47,6 +47,7 @@ public class BST<E extends Comparable<E>> {
             return new Node(e);
         }
 
+        //确认是插入在左子树中，还是在右子树中
         if(e.compareTo(node.e) < 0)
             node.left = add(node.left, e);
         else if(e.compareTo(node.e) > 0)
@@ -268,7 +269,6 @@ public class BST<E extends Comparable<E>> {
             }
 
             // 待删除节点左右子树均不为空的情况
-
             // 找到比待删除节点大的最小节点, 即待删除节点右子树的最小节点
             // 用这个节点顶替待删除节点的位置
             Node successor = minimum(node.right);

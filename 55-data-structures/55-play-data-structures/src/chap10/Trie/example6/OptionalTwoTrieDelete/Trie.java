@@ -1,13 +1,11 @@
-package chap10.Trie.example2.OptionalTwoTrieDelete;
+package chap10.Trie.example6.OptionalTwoTrieDelete;
 
 import java.util.TreeMap;
 import java.util.Stack;
 
-
+//https://blog.csdn.net/yuzhiqiang666/article/details/80711441
 public class Trie {
-
     private class Node{
-
         public boolean isWord;
         public TreeMap<Character, Node> next;
 
@@ -36,7 +34,6 @@ public class Trie {
 
     // 向Trie中添加一个新的单词word
     public void add(String word){
-
         Node cur = root;
         for(int i = 0 ; i < word.length() ; i ++){
             char c = word.charAt(i);
@@ -53,7 +50,6 @@ public class Trie {
 
     // 查询单词word是否在Trie中
     public boolean contains(String word){
-
         Node cur = root;
         for(int i = 0 ; i < word.length() ; i ++){
             char c = word.charAt(i);
@@ -66,7 +62,6 @@ public class Trie {
 
     // 查询是否在Trie中有单词以prefix为前缀
     public boolean isPrefix(String prefix){
-
         Node cur = root;
         for(int i = 0 ; i < prefix.length() ; i ++){
             char c = prefix.charAt(i);
@@ -78,9 +73,14 @@ public class Trie {
         return true;
     }
 
+    /*
+     * 1，如果单词是另一个单词的前缀，只需要把该word的最后一个节点的isWord的改成false
+     * 2，如果单词的所有字母的都没有多个分支，删除整个单词
+     * 3，如果单词的除了最后一个字母，其他的字母有多个分支，
+     */
+
     // 删除word, 返回是否删除成功
     public boolean remove(String word){
-
         // 将搜索沿路的节点放入栈中
         Stack<Node> stack = new Stack<>();
         stack.push(root);

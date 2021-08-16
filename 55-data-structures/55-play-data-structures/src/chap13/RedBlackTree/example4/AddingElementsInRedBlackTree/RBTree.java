@@ -2,10 +2,15 @@ package chap13.RedBlackTree.example4.AddingElementsInRedBlackTree;
 
 import java.util.ArrayList;
 
+/**
+ * 13-7 红黑树中添加新元素
+ * 新增代码：add调用前面写的辅助子过程方法。
+ * @param <K>
+ * @param <V>
+ */
 public class RBTree<K extends Comparable<K>, V> {
-
-    private static final boolean RED = true;
-    private static final boolean BLACK = false;
+    private static final boolean RED = true;    //红色
+    private static final boolean BLACK = false; //黑色
 
     private class Node{
         public K key;
@@ -18,6 +23,7 @@ public class RBTree<K extends Comparable<K>, V> {
             this.value = value;
             left = null;
             right = null;
+            // 默认创建的节点是红色,代表它要在这个红黑树中和所等价的2-3树中对应的某一个节点融合
             color = RED;
         }
     }
@@ -45,13 +51,19 @@ public class RBTree<K extends Comparable<K>, V> {
         return node.color;
     }
 
-    //   node                     x
-    //  /   \     左旋转         /  \
-    // T1   x   --------->   node   T3
-    //     / \              /   \
-    //    T2 T3            T1   T2
+    /**
+     * 左旋转
+     *        node                     x
+     *       /   \     左旋转         /  \
+     *      T1   x   --------->   node   T3
+     *          / \              /   \
+     *         T2 T3            T1   T2
+     *
+     * 左旋转其实只是一个子过程，在我们的添加逻辑中还需要进行更多的后续处理。
+     * 我们在左旋转的过程并不维持红黑树的性质，我们主要做的事情是通过旋转这个过程让
+     * (37, 42) 这两个元素对应是 2-3树 中一个 3-节点 就好了。
+     */
     private Node leftRotate(Node node){
-
         Node x = node.right;
 
         // 左旋转
@@ -70,7 +82,6 @@ public class RBTree<K extends Comparable<K>, V> {
     //  / \                       /  \
     // y  T1                     T1  T2
     private Node rightRotate(Node node){
-
         Node x = node.left;
 
         // 右旋转
@@ -85,10 +96,9 @@ public class RBTree<K extends Comparable<K>, V> {
 
     // 颜色翻转
     private void flipColors(Node node){
-
-        node.color = RED;
-        node.left.color = BLACK;
-        node.right.color = BLACK;
+        node.color = RED;         //根节点要变成红色
+        node.left.color = BLACK;  //左孩子变成黑色
+        node.right.color = BLACK; //右孩子变成黑色
     }
 
     // 向红黑树中添加新的元素(key, value)
@@ -100,12 +110,14 @@ public class RBTree<K extends Comparable<K>, V> {
     // 向以node为根的红黑树中插入元素(key, value)，递归算法
     // 返回插入新节点后红黑树的根
     private Node add(Node node, K key, V value){
-
+        //递归终止条件
         if(node == null){
             size ++;
             return new Node(key, value); // 默认插入红色节点
         }
 
+        //递归的上一层看是否需要维护红黑树的性质：
+        //根据key值确认它插入的位置，是在左子树中，还是在右子树中，还是修改当前这个node的值
         if(key.compareTo(node.key) < 0)
             node.left = add(node.left, key, value);
         else if(key.compareTo(node.key) > 0)
@@ -113,9 +125,12 @@ public class RBTree<K extends Comparable<K>, V> {
         else // key.compareTo(node.key) == 0
             node.value = value;
 
-        // 红黑树性质维护
+        // ======  新添加的代码逻辑链条,判断是否满足这3个条件 ======
+
+        // 红黑树性质维护(维护黑平衡的逻辑)
         // 左旋转：右孩子是红节点，右孩子不是红节点
         if (isRed(node.right) && !isRed(node.left))
+            // 返回的是左旋翻转之后产生的新的根节点
             node = leftRotate(node);
         // 右旋转：左孩子是红节点，左孩子的左孩子也是红节点
         if (isRed(node.left) && isRed(node.left.left))
@@ -123,6 +138,7 @@ public class RBTree<K extends Comparable<K>, V> {
         // 颜色翻转：左右都是红节点
         if (isRed(node.left) && isRed(node.right))
             flipColors(node);
+
 
         return node;
     }
@@ -237,8 +253,8 @@ public class RBTree<K extends Comparable<K>, V> {
         }
     }
 
+    // study-imooc\55-data-structures\55-play-data-structures
     public static void main(String[] args){
-
         System.out.println("Pride and Prejudice");
 
         ArrayList<String> words = new ArrayList<>();
@@ -261,7 +277,7 @@ public class RBTree<K extends Comparable<K>, V> {
         System.out.println();
     }
 }
-/* Output:
+/* 运行的结果和之前“AVLTree”或是“BST二分搜索树”结果是一样的，我们可以简单的验证我们写的这个红黑树基本是正确的。
 Pride and Prejudice
 Total words: 125901
 Total different words: 6530

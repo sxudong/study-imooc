@@ -48,6 +48,7 @@ public class BST<E extends Comparable<E>> {
         }
 
         // 2、转换成更小的问题
+        // 判断插入是在左子树中，还是在右子树中
         if(e.compareTo(node.e) < 0)
             node.left = add(node.left, e); // 递归调用，新节点返回
         else if(e.compareTo(node.e) > 0)

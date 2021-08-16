@@ -1,4 +1,4 @@
-package chap10.Trie.example8.TrieUsingHashMapAndArray;
+package chap10.Trie.example7.TrieUsingHashMapAndArray;
 
 import java.io.BufferedInputStream;
 import java.io.File;

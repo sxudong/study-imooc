@@ -2,6 +2,11 @@ package chap13.RedBlackTree.example1.TheEquivalenceOfRBTreeAndTwoThreeTree;
 
 import java.util.ArrayList;
 
+/**
+ * 使用的是 第12章 AVLTree 中添加的 key/value 的二分搜索树基础上修改
+ * @param <K>
+ * @param <V>
+ */
 // public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
 public class BST<K extends Comparable<K>, V> {
 

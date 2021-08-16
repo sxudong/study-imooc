@@ -1,9 +1,10 @@
-package chap10.Trie.example1.OptionalOneTrieInRecursion;
+package chap10.Trie.example6.OptionalTwoTrieDelete;
 
 import java.util.TreeMap;
 
-/// 使用Leetcode 208号问题测试我们实现的TrieR
-public class Trie208 {
+/// TrieR 是 Trie in Recursion的意思
+/// TrieR将使用递归的方式，实现我们在这一章所讲解的Trie的基本功能
+public class TrieR {
 
     private class Node{
 
@@ -21,13 +22,21 @@ public class Trie208 {
     }
 
     private Node root;
+    private int size;
 
-    public Trie208(){
+    public TrieR(){
         root = new Node();
+        size = 0;
+    }
+
+    // 获得Trie中存储的单词数量
+    public int getSize(){
+        return size;
     }
 
     // 向Trie中添加一个新的单词word
-    public void insert(String word){
+    public void add(String word){
+
         add(root, word, 0);
     }
 
@@ -35,8 +44,10 @@ public class Trie208 {
     private void add(Node node, String word, int index){
 
         if(index == word.length()){
-            if(!node.isWord)
+            if(!node.isWord){
                 node.isWord = true;
+                size ++;
+            }
             return;
         }
 
@@ -47,7 +58,7 @@ public class Trie208 {
     }
 
     // 查询单词word是否在Trie中
-    public boolean search(String word){
+    public boolean contains(String word){
         return contains(root, word, 0);
     }
 
@@ -65,7 +76,7 @@ public class Trie208 {
     }
 
     // 查询是否在Trie中有单词以prefix为前缀
-    public boolean startsWith(String prefix){
+    public boolean isPrefix(String prefix){
         return isPrefix(root, prefix, 0);
     }
 
@@ -80,5 +91,34 @@ public class Trie208 {
             return false;
 
         return isPrefix(node.next.get(c), prefix, index + 1);
+    }
+
+    // 删除word, 返回是否删除成功, 递归算法
+    public boolean remove(String word){
+        if(word.equals(""))
+            return false;
+        return remove(root, word, 0);
+    }
+
+    // 在以Node为根的Trie中删除单词word[index...end),返回是否删除成功, 递归算法
+    private boolean remove(Node node, String word, int index){
+
+        if(index == word.length()){
+            if(!node.isWord)
+                return false;
+            node.isWord = false;
+            size --;
+            return true;
+        }
+
+        char c = word.charAt(index);
+        if(!node.next.containsKey(c))
+            return false;
+
+        boolean ret = remove(node.next.get(c), word, index + 1);
+        Node nextNode = node.next.get(c);
+        if(!nextNode.isWord && nextNode.next.size() == 0)
+            node.next.remove(word.charAt(index));
+        return ret;
     }
 }

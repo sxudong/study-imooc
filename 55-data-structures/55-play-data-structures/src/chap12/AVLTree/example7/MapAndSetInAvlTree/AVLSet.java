@@ -4,7 +4,7 @@ package chap12.AVLTree.example7.MapAndSetInAvlTree;
  * 12-8 基于AVL树的集合
  * @param <E>
  */
-public class AVLSet<E extends Comparable<E>> implements Set<E> {
+public class AVLSet<E extends Comparable<E>> implements Set<E> { //实现Set接口
 
     private AVLTree<E, Object> avl;
 

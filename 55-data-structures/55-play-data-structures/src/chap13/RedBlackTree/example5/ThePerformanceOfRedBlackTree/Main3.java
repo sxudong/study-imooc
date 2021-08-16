@@ -2,12 +2,12 @@ package chap13.RedBlackTree.example5.ThePerformanceOfRedBlackTree;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.TreeMap;
 
 /**
  * 测试添加操作 （顺序添加）
  */
 public class Main3 {
-
     public static void main(String[] args) {
 
         int n = 20_000_000;
@@ -33,6 +33,7 @@ public class Main3 {
         startTime = System.nanoTime();
 
         RBTree<Integer, Integer> rbt = new RBTree<>();
+        //TreeMap<Integer, Integer> rbt = new TreeMap(); //使用Java自己的TreeMap也没有AVL快
         for (Integer x: testData)
             rbt.add(x, null);
 

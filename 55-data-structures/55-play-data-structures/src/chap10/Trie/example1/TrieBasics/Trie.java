@@ -1,4 +1,4 @@
-package chap10.Trie.example7.TrieBasics;
+package chap10.Trie.example1.TrieBasics;
 
 import java.util.TreeMap;
 
@@ -8,7 +8,6 @@ import java.util.TreeMap;
 public class Trie {
 
     private class Node{
-
         public boolean isWord; // 是否是一个单词
         public TreeMap<Character, Node> next; // Character 只适合英语
 
@@ -23,7 +22,7 @@ public class Trie {
     }
 
     private Node root;
-    private int size;
+    private int size;  //Trie中存储的单词数量
 
     public Trie(){
         root = new Node();
@@ -37,13 +36,12 @@ public class Trie {
 
     // 向Trie中添加一个新的单词word
     public void add(String word){
-
-        Node cur = root;
+        Node cur = root; //初始在root
         for(int i = 0 ; i < word.length() ; i ++){
             char c = word.charAt(i);
             // 将c这个字符做为一个节点插入到 Trie 中
             if(cur.next.get(c) == null) // 是否已经有了
-                cur.next.put(c, new Node());
+                cur.next.put(c, new Node()); // 添加新节点映射
             cur = cur.next.get(c);
         }
 

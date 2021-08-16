@@ -7,6 +7,7 @@ public class Main {
     /**
      * 测试前
      *    在IDEA 右上角锤子图标边的下拉菜单中找到“Edit Configurations”设置工作目录
+     *    \study-imooc\55-data-structures\55-play-data-structures\src\chap7\SetAndMap
      */
     public static void main(String[] args) {
 

@@ -23,7 +23,7 @@ public class Solution5 {
         }
 
         PriorityQueue<Integer> pq = new PriorityQueue<>(
-                (a, b) -> map.get(a) - map.get(b)
+                (a, b) -> map.get(a) - map.get(b) //这种表达式使用不好，引用了外部数据
             );
         for(int key: map.keySet()){
             if(pq.size() < k)
@@ -47,10 +47,9 @@ public class Solution5 {
     }
 
     public static void main(String[] args) {
-
         int[] nums = {1, 1, 1, 2, 2, 3};
         int k = 2;
-        printList((new Solution()).topKFrequent(nums, k));
+        printList((new Solution5()).topKFrequent(nums, k));
     }
 }
 /* Output:

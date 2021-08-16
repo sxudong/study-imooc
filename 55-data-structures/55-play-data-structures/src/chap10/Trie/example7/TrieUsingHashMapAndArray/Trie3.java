@@ -1,18 +1,15 @@
-package chap10.Trie.example8.TrieUsingHashMapAndArray;
+package chap10.Trie.example7.TrieUsingHashMapAndArray;
 
-import java.util.HashMap;
-
-// 使用HashMap的Trie
-public class Trie2 {
+public class Trie3 {
 
     private class Node{
 
         public boolean isWord;
-        public HashMap<Character, Node> next;
+        public Node[] next;
 
         public Node(boolean isWord){
             this.isWord = isWord;
-            next = new HashMap<>();
+            next = new Node[26];
         }
 
         public Node(){
@@ -23,7 +20,7 @@ public class Trie2 {
     private Node root;
     private int size;
 
-    public Trie2(){
+    public Trie3(){
         root = new Node();
         size = 0;
     }
@@ -39,9 +36,9 @@ public class Trie2 {
         Node cur = root;
         for(int i = 0 ; i < word.length() ; i ++){
             char c = word.charAt(i);
-            if(cur.next.get(c) == null)
-                cur.next.put(c, new Node());
-            cur = cur.next.get(c);
+            if(cur.next[c-'a'] == null)
+                cur.next[c-'a'] = new Node();
+            cur = cur.next[c-'a'];
         }
 
         if(!cur.isWord){
@@ -56,9 +53,9 @@ public class Trie2 {
         Node cur = root;
         for(int i = 0 ; i < word.length() ; i ++){
             char c = word.charAt(i);
-            if(cur.next.get(c) == null)
+            if(cur.next[c-'a'] == null)
                 return false;
-            cur = cur.next.get(c);
+            cur = cur.next[c-'a'];
         }
         return cur.isWord;
     }

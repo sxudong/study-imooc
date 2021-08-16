@@ -51,6 +51,7 @@ public class AVLTree<K extends Comparable<K>, V> {
         return true;
     }
 
+    // 中序排序
     private void inOrder(Node node, ArrayList<K> keys){
 
         if(node == null)
@@ -80,15 +81,17 @@ public class AVLTree<K extends Comparable<K>, V> {
 
     // 获得节点node的高度
     private int getHeight(Node node){
-        if(node == null)
+        if(node == null) //一个空的node，它的度度值就是0
             return 0;
         return node.height;
     }
 
     // 获得节点node的平衡因子
     private int getBalanceFactor(Node node){
+        //节点为空，平衡因子为0
         if(node == null)
             return 0;
+        //左子树的高度减去右子树的高度
         return getHeight(node.left) - getHeight(node.right);
     }
 
@@ -159,17 +162,17 @@ public class AVLTree<K extends Comparable<K>, V> {
         else // key.compareTo(node.key) == 0
             node.value = value;
 
-        // 更新height
+        // 1.更新height
         node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
 
-        // 计算平衡因子
+        // 2.计算平衡因子
         int balanceFactor = getBalanceFactor(node);
 
-        // 平衡维护
-        // LL
+        // 3.平衡维护
+        // LL 右旋转操作
         if (balanceFactor > 1 && getBalanceFactor(node.left) >= 0)
             return rightRotate(node);
-        // RR
+        // RR 左旋转操作
         if (balanceFactor < -1 && getBalanceFactor(node.right) <= 0)
             return leftRotate(node);
         // LR （左子树比右子树高，右子树比左子树高）
@@ -299,7 +302,6 @@ public class AVLTree<K extends Comparable<K>, V> {
     }
 
     public static void main(String[] args){
-
         System.out.println("Pride and Prejudice");
 
         ArrayList<String> words = new ArrayList<>();
@@ -315,11 +317,11 @@ public class AVLTree<K extends Comparable<K>, V> {
             }
 
             System.out.println("Total different words: " + map.getSize());
-            System.out.println("Frequency of PRIDE: " + map.get("pride"));
-            System.out.println("Frequency of PREJUDICE: " + map.get("prejudice"));
+            System.out.println("Frequency of PRIDE: " + map.get("pride")); //pride出现的词频
+            System.out.println("Frequency of PREJUDICE: " + map.get("prejudice")); //prejudice出现的词频
 
-            System.out.println("is BST : " + map.isBST());
-            System.out.println("is Balanced : " + map.isBalanced());
+            System.out.println("is BST : " + map.isBST()); //是不是一棵二分搜索树
+            System.out.println("is Balanced : " + map.isBalanced()); //是否是一棵平衡二叉树
         }
 
         System.out.println();
@@ -331,6 +333,6 @@ Total words: 125901
 Total different words: 6530
 Frequency of PRIDE: 53
 Frequency of PREJUDICE: 11
-is BST : true
-is Balanced : true
+is BST : true       //是一棵二分搜索树
+is Balanced : true  //是一棵平衡二叉树
 *///~

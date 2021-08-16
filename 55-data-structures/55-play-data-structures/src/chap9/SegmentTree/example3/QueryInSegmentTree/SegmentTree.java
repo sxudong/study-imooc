@@ -104,8 +104,8 @@ public class SegmentTree<E> {
         int mid = l + (r - l) / 2;
         // treeIndex的节点分为[l...mid]和[mid+1...r]两部分
 
-        int leftTreeIndex = leftChild(treeIndex);
-        int rightTreeIndex = rightChild(treeIndex);
+        int leftTreeIndex = leftChild(treeIndex);   //返回左子树
+        int rightTreeIndex = rightChild(treeIndex); //返回右子树
         if(queryL >= mid + 1) // 如果左边界大于中间数+1，去右支树查找
             return query(rightTreeIndex, mid + 1, r, queryL, queryR);
         else if(queryR <= mid) // 如果左边界小于中间数，去左支树查找

@@ -4,9 +4,7 @@ package chap9.SegmentTree.example3.QueryInSegmentTree;
 /// https://leetcode.com/problems/range-sum-query-immutable/description/
 
 public class Main {
-
     public static void main(String[] args) {
-
         Integer[] nums = {-2, 0, 3, -5, 2, -1};
 
         SegmentTree<Integer> segTree = new SegmentTree<>(nums,  (a, b) -> a + b);

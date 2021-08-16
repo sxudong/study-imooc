@@ -23,7 +23,7 @@ public class UnionFind1 implements UF {
 
     // 查找元素p所对应的集合编号
     // O(1)复杂度
-    private int find(int p) {
+    private int find(int p) { //不在接口中，是一个私有方法
         if(p < 0 || p >= id.length)
             throw new IllegalArgumentException("p is out of bound.");
 
@@ -50,7 +50,7 @@ public class UnionFind1 implements UF {
 
         // 合并过程需要遍历一遍所有元素, 将两个元素的所属集合编号合并
         for (int i = 0; i < id.length; i++)
-            if (id[i] == pID)
-                id[i] = qID;
+            if (id[i] == pID)  //将id值等于pID所对应的那个元素
+                id[i] = qID;   //将它的id值都改写成qID
     }
 }
