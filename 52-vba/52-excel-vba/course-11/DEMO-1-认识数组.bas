@@ -134,6 +134,7 @@ Dim arr()
 arr = Range("a1:a5")
 
 End Sub
+
 Private Sub Constant_demo_Click()
   Dim arr(2, 3) As Variant  ' Which has 3 rows and 4 columns
   arr(0, 0) = "Apple"
