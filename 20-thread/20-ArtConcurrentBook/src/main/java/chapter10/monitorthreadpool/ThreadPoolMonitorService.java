@@ -1,7 +1,7 @@
 package chapter10.monitorthreadpool;
 
 /**
- * œﬂ≥Ã≥ÿΩ”ø⁄
+ * Á∫øÁ®ãÊ±†Êé•Âè£
  */
 /*
 @Data
@@ -9,20 +9,20 @@ public class ThreadPoolMonitorService implements IThreadPoolMonitorService {
 
     private Logger logger = LoggerFactory.getLogger(ThreadPoolMonitorService.class);
 
-    //Õ®π˝Lombok µœ÷get/set
+    //ÈÄöËøáLombokÂÆûÁé∞get/set
     private ThreadPoolExecutor executor;
 
     private long monitoringPeriod;
 
     @Override
     public void monitorThreadPool() {
-        String buffer = "CurrentPoolSize£∫" + executor.getPoolSize() +
-                " - CorePoolSize£∫" + executor.getCorePoolSize() +
-                " - MaximumPoolSize£∫" + executor.getMaximumPoolSize() +
-                " - ActiveTaskCount£∫" + executor.getActiveCount() +
-                " - CompletedTaskCount£∫" + executor.getCompletedTaskCount() +
-                " - TotalTaskCount£∫" + executor.getTaskCount() +
-                " - isTerminated£∫" + executor.isTerminated();
+        String buffer = "CurrentPoolSizeÔºö" + executor.getPoolSize() +
+                " - CorePoolSizeÔºö" + executor.getCorePoolSize() +
+                " - MaximumPoolSizeÔºö" + executor.getMaximumPoolSize() +
+                " - ActiveTaskCountÔºö" + executor.getActiveCount() +
+                " - CompletedTaskCountÔºö" + executor.getCompletedTaskCount() +
+                " - TotalTaskCountÔºö" + executor.getTaskCount() +
+                " - isTerminatedÔºö" + executor.isTerminated();
         logger.debug(buffer);
     }
 

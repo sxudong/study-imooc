@@ -1,7 +1,7 @@
 package chapter11.example2;
 
 /**
- * 任务 生产者向缓冲区提交的数据
+ * 浠诲姟 鐢熶骇鑰呭悜缂撳啿鍖烘彁浜ょ殑鏁版嵁
  */
 public final class PCData {
     private final int intData;

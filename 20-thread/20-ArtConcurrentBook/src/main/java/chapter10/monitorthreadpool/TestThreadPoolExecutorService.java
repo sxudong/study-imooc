@@ -6,10 +6,10 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 线程池实现类
+ * 绾跨▼姹犲疄鐜扮被
  */
 /*
-@Data //通过Lombok实现get/set
+@Data //閫氳繃Lombok瀹炵幇get/set
 public class TestThreadPoolExecutorService implements ITestThreadPoolExecutorService {
 
     private int corePoolSize;

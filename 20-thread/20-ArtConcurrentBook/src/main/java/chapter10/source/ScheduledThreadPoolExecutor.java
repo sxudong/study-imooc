@@ -4,20 +4,20 @@ import java.util.concurrent.*;
 
 public class ScheduledThreadPoolExecutor {
 
-    // Ê×ÏÈÊÇschedule·½·¨£¬¸Ã·½·¨ÊÇÖ¸ÈÎÎñÔÚÖ¸¶¨ÑÓ³ÙÊ±¼äµ½´ïºó´¥·¢£¬Ö»»áÖ´ĞĞÒ»´Î¡£
+    // é¦–å…ˆæ˜¯scheduleæ–¹æ³•ï¼Œè¯¥æ–¹æ³•æ˜¯æŒ‡ä»»åŠ¡åœ¨æŒ‡å®šå»¶è¿Ÿæ—¶é—´åˆ°è¾¾åè§¦å‘ï¼Œåªä¼šæ‰§è¡Œä¸€æ¬¡ã€‚
     /*
     public ScheduledFuture<?> schedule(Runnable command,
                                        long delay,
                                        TimeUnit unit) {
-        //²ÎÊıĞ£Ñé
+        //å‚æ•°æ ¡éªŒ
         if (command == null || unit == null)
             throw new NullPointerException();
-        //ÕâÀïÊÇÒ»¸öÇ¶Ì×½á¹¹£¬Ê×ÏÈ°ÑÓÃ»§Ìá½»µÄÈÎÎñ°ü×°³ÉScheduledFutureTask
-        //È»ºóÔÚµ÷ÓÃdecorateTask½øĞĞ°ü×°£¬¸Ã·½·¨ÊÇÁô¸øÓÃ»§È¥À©Õ¹µÄ£¬Ä¬ÈÏÊÇ¸ö¿Õ·½·¨
+        //è¿™é‡Œæ˜¯ä¸€ä¸ªåµŒå¥—ç»“æ„ï¼Œé¦–å…ˆæŠŠç”¨æˆ·æäº¤çš„ä»»åŠ¡åŒ…è£…æˆScheduledFutureTask
+        //ç„¶ååœ¨è°ƒç”¨decorateTaskè¿›è¡ŒåŒ…è£…ï¼Œè¯¥æ–¹æ³•æ˜¯ç•™ç»™ç”¨æˆ·å»æ‰©å±•çš„ï¼Œé»˜è®¤æ˜¯ä¸ªç©ºæ–¹æ³•
         RunnableScheduledFuture<?> t = decorateTask(command,
                 new ScheduledFutureTask<Void>(command, null,
                         triggerTime(delay, unit)));
-        //°ü×°ºÃÈÎÎñÒÔºó£¬¾Í½øĞĞÌá½»ÁË
+        //åŒ…è£…å¥½ä»»åŠ¡ä»¥åï¼Œå°±è¿›è¡Œæäº¤äº†
         delayedExecute(t);
         return t;
     }
@@ -25,58 +25,58 @@ public class ScheduledThreadPoolExecutor {
 
     /*
         private void delayedExecute(RunnableScheduledFuture<?> task) {
-        //Èç¹ûÏß³Ì³ØÒÑ¾­¹Ø±Õ£¬ÔòÊ¹ÓÃ¾Ü¾ø²ßÂÔ°ÑÌá½»ÈÎÎñ¾Ü¾øµô
+        //å¦‚æœçº¿ç¨‹æ± å·²ç»å…³é—­ï¼Œåˆ™ä½¿ç”¨æ‹’ç»ç­–ç•¥æŠŠæäº¤ä»»åŠ¡æ‹’ç»æ‰
         if (isShutdown())
             reject(task);
         else {
-            //ÓëThreadPoolExecutor²»Í¬£¬ÕâÀïÖ±½Ó°ÑÈÎÎñ¼ÓÈëÑÓ³Ù¶ÓÁĞ
+            //ä¸ThreadPoolExecutorä¸åŒï¼Œè¿™é‡Œç›´æ¥æŠŠä»»åŠ¡åŠ å…¥å»¶è¿Ÿé˜Ÿåˆ—
             super.getQueue().add(task);
-            //Èç¹ûµ±Ç°×´Ì¬ÎŞ·¨Ö´ĞĞÈÎÎñ£¬ÔòÈ¡Ïû
+            //å¦‚æœå½“å‰çŠ¶æ€æ— æ³•æ‰§è¡Œä»»åŠ¡ï¼Œåˆ™å–æ¶ˆ
             if (isShutdown() &&
                 !canRunInCurrentRunState(task.isPeriodic()) &&
                 remove(task))
                 task.cancel(false);
             else
-                //ÕâÀïÊÇÔö¼ÓÒ»¸öworkerÏß³Ì£¬±ÜÃâÌá½»µÄÈÎÎñÃ»ÓĞworkerÈ¥Ö´ĞĞ
-                //Ô­Òò¾ÍÊÇ¸ÃÀàÃ»ÓĞÏñThreadPoolExecutorÒ»Ñù£¬wokerÂúÁË²Å·ÅÈë¶ÓÁĞ
+                //è¿™é‡Œæ˜¯å¢åŠ ä¸€ä¸ªworkerçº¿ç¨‹ï¼Œé¿å…æäº¤çš„ä»»åŠ¡æ²¡æœ‰workerå»æ‰§è¡Œ
+                //åŸå› å°±æ˜¯è¯¥ç±»æ²¡æœ‰åƒThreadPoolExecutorä¸€æ ·ï¼Œwokeræ»¡äº†æ‰æ”¾å…¥é˜Ÿåˆ—
                 ensurePrestart();
         }
     }
      */
 
-    // ½«Ö¸¶¨µÄÔªËØ²åÈëµ½¶ÓÁĞÖĞ
+    // å°†æŒ‡å®šçš„å…ƒç´ æ’å…¥åˆ°é˜Ÿåˆ—ä¸­
     /*
             public boolean offer(Runnable x) {
-            //²ÎÊıĞ£Ñé
+            //å‚æ•°æ ¡éªŒ
             if (x == null)
                 throw new NullPointerException();
             RunnableScheduledFuture<?> e = (RunnableScheduledFuture<?>)x;
             final ReentrantLock lock = this.lock;
             lock.lock();
             try {
-                //²é¿´µ±Ç°ÔªËØÊıÁ¿£¬Èç¹û´óÓÚ¶ÓÁĞ³¤¶ÈÔò½øĞĞÀ©Èİ
+                //æŸ¥çœ‹å½“å‰å…ƒç´ æ•°é‡ï¼Œå¦‚æœå¤§äºé˜Ÿåˆ—é•¿åº¦åˆ™è¿›è¡Œæ‰©å®¹
                 int i = size;
                 if (i >= queue.length)
                     grow();
-                //ÔªËØÊıÁ¿¼Ó1
+                //å…ƒç´ æ•°é‡åŠ 1
                 size = i + 1;
-                //Èç¹ûµ±Ç°¶ÓÁĞ»¹Ã»ÓĞÔªËØ£¬ÔòÖ±½Ó¼ÓÈëÍ·²¿
+                //å¦‚æœå½“å‰é˜Ÿåˆ—è¿˜æ²¡æœ‰å…ƒç´ ï¼Œåˆ™ç›´æ¥åŠ å…¥å¤´éƒ¨
                 if (i == 0) {
                     queue[0] = e;
-                    //¼ÇÂ¼Ë÷Òı
+                    //è®°å½•ç´¢å¼•
                     setIndex(e, 0);
                 } else {
-                    //°ÑÈÎÎñ¼ÓÈë¶ÑÖĞ£¬²¢µ÷Õû¶Ñ½á¹¹£¬ÕâÀï¾Í»á¸ù¾İÈÎÎñµÄ´¥·¢Ê±¼äÅÅÁĞ
-                    //°ÑĞèÒª×îÔçÖ´ĞĞµÄÈÎÎñ·ÅÔÚÇ°Ãæ
+                    //æŠŠä»»åŠ¡åŠ å…¥å †ä¸­ï¼Œå¹¶è°ƒæ•´å †ç»“æ„ï¼Œè¿™é‡Œå°±ä¼šæ ¹æ®ä»»åŠ¡çš„è§¦å‘æ—¶é—´æ’åˆ—
+                    //æŠŠéœ€è¦æœ€æ—©æ‰§è¡Œçš„ä»»åŠ¡æ”¾åœ¨å‰é¢
                     siftUp(i, e);
                 }
-                //Èç¹ûĞÂ¼ÓÈëµÄÔªËØ¾ÍÊÇ¶ÓÁĞÍ·£¬ÕâÀïÓĞÁ½ÖÖÇé¿ö
-                //1.ÕâÊÇÓÃ»§Ìá½»µÄµÚÒ»¸öÈÎÎñ
-                //2.ĞÂÈÎÎñ½øĞĞ¶Ñµ÷ÕûÒÔºó£¬ÅÅÔÚ¶ÓÁĞÍ·
+                //å¦‚æœæ–°åŠ å…¥çš„å…ƒç´ å°±æ˜¯é˜Ÿåˆ—å¤´ï¼Œè¿™é‡Œæœ‰ä¸¤ç§æƒ…å†µ
+                //1.è¿™æ˜¯ç”¨æˆ·æäº¤çš„ç¬¬ä¸€ä¸ªä»»åŠ¡
+                //2.æ–°ä»»åŠ¡è¿›è¡Œå †è°ƒæ•´ä»¥åï¼Œæ’åœ¨é˜Ÿåˆ—å¤´
                 if (queue[0] == e) {
-                    //Õâ¸ö±äÁ¿ÆğÓÅ»¯×÷ÓÃ£¬ºóÃæËµ
+                    //è¿™ä¸ªå˜é‡èµ·ä¼˜åŒ–ä½œç”¨ï¼Œåé¢è¯´
                     leader = null;
-                    //¼ÓÈëÔªËØÒÔºó£¬»½ĞÑworkerÏß³Ì
+                    //åŠ å…¥å…ƒç´ ä»¥åï¼Œå”¤é†’workerçº¿ç¨‹
                     available.signal();
                 }
             } finally {
@@ -93,31 +93,31 @@ public class ScheduledThreadPoolExecutor {
         lock.lockInterruptibly();
         try {
             for (;;) {
-                //È¡³ö¶ÓÁĞÖĞµÚÒ»¸öÔªËØ£¬¼´×îÔçĞèÒªÖ´ĞĞµÄÈÎÎñ
+                //å–å‡ºé˜Ÿåˆ—ä¸­ç¬¬ä¸€ä¸ªå…ƒç´ ï¼Œå³æœ€æ—©éœ€è¦æ‰§è¡Œçš„ä»»åŠ¡
                 RunnableScheduledFuture<?> first = queue[0];
-                //Èç¹û¶ÓÁĞÎª¿Õ£¬Ôò×èÈûµÈ´ı¼ÓÈëÔªËØÊ±»½ĞÑ
+                //å¦‚æœé˜Ÿåˆ—ä¸ºç©ºï¼Œåˆ™é˜»å¡ç­‰å¾…åŠ å…¥å…ƒç´ æ—¶å”¤é†’
                 if (first == null)
                     available.await();
                 else {
-                    //¼ÆËãÈÎÎñÖ´ĞĞÊ±¼ä£¬Õâ¸ödelayÊÇµ±Ç°Ê±¼ä¼õÈ¥ÈÎÎñ´¥·¢Ê±¼ä
+                    //è®¡ç®—ä»»åŠ¡æ‰§è¡Œæ—¶é—´ï¼Œè¿™ä¸ªdelayæ˜¯å½“å‰æ—¶é—´å‡å»ä»»åŠ¡è§¦å‘æ—¶é—´
                     long delay = first.getDelay(NANOSECONDS);
-                    //Èç¹ûµ½ÁË´¥·¢Ê±¼ä£¬ÔòÖ´ĞĞ³ö¶Ó²Ù×÷
+                    //å¦‚æœåˆ°äº†è§¦å‘æ—¶é—´ï¼Œåˆ™æ‰§è¡Œå‡ºé˜Ÿæ“ä½œ
                     if (delay <= 0)
                         return finishPoll(first);
                     first = null;
-                    //ÕâÀï±íÊ¾¸ÃÈÎÎñÒÑ¾­·ÖÅä¸øÁËÆäËûÏß³Ì£¬µ±Ç°Ïß³ÌµÈ´ı»½ĞÑ¾Í¿ÉÒÔ
+                    //è¿™é‡Œè¡¨ç¤ºè¯¥ä»»åŠ¡å·²ç»åˆ†é…ç»™äº†å…¶ä»–çº¿ç¨‹ï¼Œå½“å‰çº¿ç¨‹ç­‰å¾…å”¤é†’å°±å¯ä»¥
                     if (leader != null)
                         available.await();
                     else {
-                        //·ñÔò°Ñ¸øÈÎÎñ·ÖÅä¸øµ±Ç°Ïß³Ì
+                        //å¦åˆ™æŠŠç»™ä»»åŠ¡åˆ†é…ç»™å½“å‰çº¿ç¨‹
                         Thread thisThread = Thread.currentThread();
                         leader = thisThread;
                         try {
-                            //µ±Ç°Ïß³ÌµÈ´ıÈÎÎñÊ£ÓàÑÓ³ÙÊ±¼ä
+                            //å½“å‰çº¿ç¨‹ç­‰å¾…ä»»åŠ¡å‰©ä½™å»¶è¿Ÿæ—¶é—´
                             available.awaitNanos(delay);
                         } finally {
-                            //ÕâÀïÏß³ÌĞÑÀ´ÒÔºó£¬Ê²Ã´Ê±ºòleader»á·¢Éú±ä»¯ÄØ£¿
-                            //¾ÍÊÇÉÏÃæµÄÌí¼ÓÈÎÎñµÄÊ±ºò
+                            //è¿™é‡Œçº¿ç¨‹é†’æ¥ä»¥åï¼Œä»€ä¹ˆæ—¶å€™leaderä¼šå‘ç”Ÿå˜åŒ–å‘¢ï¼Ÿ
+                            //å°±æ˜¯ä¸Šé¢çš„æ·»åŠ ä»»åŠ¡çš„æ—¶å€™
                             if (leader == thisThread)
                                 leader = null;
                         }
@@ -125,7 +125,7 @@ public class ScheduledThreadPoolExecutor {
                 }
             }
         } finally {
-            //Èç¹û¶ÓÁĞ²»Îª¿Õ£¬Ôò»½ĞÑÆäËûwokerÏß³Ì
+            //å¦‚æœé˜Ÿåˆ—ä¸ä¸ºç©ºï¼Œåˆ™å”¤é†’å…¶ä»–wokerçº¿ç¨‹
             if (leader == null && queue[0] != null)
                 available.signal();
             lock.unlock();

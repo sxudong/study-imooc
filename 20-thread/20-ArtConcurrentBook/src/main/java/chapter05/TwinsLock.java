@@ -6,14 +6,14 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
 /**
- * 5.2.2 ¶ÓÁĞÍ¬²½Æ÷µÄÊµÏÖ·ÖÎö
- * 5-10 ×Ô¶¨ÒåÍ¬²½×é¼ş¡ª¡ªTwinsLock
+ * 5.2.2 é˜Ÿåˆ—åŒæ­¥å™¨çš„å®ç°åˆ†æ
+ * 5-10 è‡ªå®šä¹‰åŒæ­¥ç»„ä»¶â€”â€”TwinsLock
  */
 public class TwinsLock implements Lock {
     private final Sync sync = new Sync(2);
 
     /**
-     * ×Ô¶¨ÒåµÄÍ¬²½Æ÷
+     * è‡ªå®šä¹‰çš„åŒæ­¥å™¨
      */
     private static final class Sync extends AbstractQueuedSynchronizer {
         private static final long serialVersionUID = -7889272986162341211L;
@@ -26,16 +26,16 @@ public class TwinsLock implements Lock {
         }
 
         /**
-         * CASĞŞ¸ÄÍ¬²½³É¹¦ºóµÄ×´Ì¬
+         * CASä¿®æ”¹åŒæ­¥æˆåŠŸåçš„çŠ¶æ€
          * @param reduceCount
-         * @return ·µ»ØÖµ >= 0 Ê±£¬µ±Ç°Ïß³Ì»ñÈ¡µ½Í¬²½×´Ì¬
+         * @return è¿”å›å€¼ >= 0 æ—¶ï¼Œå½“å‰çº¿ç¨‹è·å–åˆ°åŒæ­¥çŠ¶æ€
          */
         @Override
         public int tryAcquireShared(int reduceCount) {
             for (;;) {
                 int current = getState();
                 int newCount = current - reduceCount;
-                // ÏÈ¼ÆËã»ñÈ¡ºóµÄÍ¬²½×´Ì¬,CASÈ·±£×´Ì¬µÄÕıÈ·ÉèÖÃ
+                // å…ˆè®¡ç®—è·å–åçš„åŒæ­¥çŠ¶æ€,CASç¡®ä¿çŠ¶æ€çš„æ­£ç¡®è®¾ç½®
                 if (newCount < 0 || compareAndSetState(current, newCount)) {
                     return newCount;
                 }
@@ -43,7 +43,7 @@ public class TwinsLock implements Lock {
         }
 
         /**
-         * CASĞŞ¸ÄÊÍ·ÅºóµÄ×´Ì¬
+         * CASä¿®æ”¹é‡Šæ”¾åçš„çŠ¶æ€
          * @param returnCount
          * @return
          */
@@ -52,7 +52,7 @@ public class TwinsLock implements Lock {
             for (;;) {
                 int current = getState();
                 int newCount = current + returnCount;
-                // ÏÈ¼ÆËã»ñÈ¡ºóµÄÍ¬²½×´Ì¬,CASÈ·±£×´Ì¬µÄÕıÈ·ÉèÖÃ
+                // å…ˆè®¡ç®—è·å–åçš„åŒæ­¥çŠ¶æ€,CASç¡®ä¿çŠ¶æ€çš„æ­£ç¡®è®¾ç½®
                 if (compareAndSetState(current, newCount)) {
                     return true;
                 }
@@ -64,12 +64,12 @@ public class TwinsLock implements Lock {
         }
     }
 
-    // ×èÈûĞÔ»ñÈ¡Ëø(»ñÈ¡µ½ËøµÄÏß³ÌÔÙ´Î»ñÈ¡Ëø»á±»×ÔÒÑ×èÈû£¬ÊôÓÚ²»¿ÉÖØÈëËø)
+    // é˜»å¡æ€§è·å–é”(è·å–åˆ°é”çš„çº¿ç¨‹å†æ¬¡è·å–é”ä¼šè¢«è‡ªå·²é˜»å¡ï¼Œå±äºä¸å¯é‡å…¥é”)
     public void lock() {
         sync.acquireShared(1);
     }
 
-    // ÊÍ·ÅËø
+    // é‡Šæ”¾é”
     public void unlock() {
         sync.releaseShared(1);
     }

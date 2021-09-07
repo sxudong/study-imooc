@@ -33,9 +33,13 @@ import java.util.function.ToIntFunction;
 import java.util.function.ToLongBiFunction;
 import java.util.function.ToLongFunction;
 
-
+/**
+ * é”™è¯¯ï¼šjava: ç¨‹åºåŒ…sun.miscä¸å­˜åœ¨
+ *
+ * å¤„ç†æ–¹æ³•ï¼Œåœ¨ Project setting ä¸­æŠŠ jdk çš„ç‰ˆæœ¬è®¾ç½®æˆ 1.8ç‰ˆæœ¬ å³å¯
+ */
 public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
-    implements ConcurrentMap<K,V>, Serializable {
+        implements ConcurrentMap<K,V>, Serializable {
     private static final long serialVersionUID = 7249069246763182397L;
 
 
@@ -139,9 +143,9 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     /** For serialization compatibility. */
     private static final ObjectStreamField[] serialPersistentFields = {
-        new ObjectStreamField("segments", Segment[].class),
-        new ObjectStreamField("segmentMask", Integer.TYPE),
-        new ObjectStreamField("segmentShift", Integer.TYPE)
+            new ObjectStreamField("segments", Segment[].class),
+            new ObjectStreamField("segmentMask", Integer.TYPE),
+            new ObjectStreamField("segmentShift", Integer.TYPE)
     };
 
     /* ---------------- Nodes -------------- */
@@ -193,7 +197,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 do {
                     K ek;
                     if (e.hash == h &&
-                        ((ek = e.key) == k || (ek != null && k.equals(ek))))
+                            ((ek = e.key) == k || (ek != null && k.equals(ek))))
                         return e;
                 } while ((e = e.next) != null);
             }
@@ -249,10 +253,10 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             if ((ts = c.getGenericInterfaces()) != null) {
                 for (int i = 0; i < ts.length; ++i) {
                     if (((t = ts[i]) instanceof ParameterizedType) &&
-                        ((p = (ParameterizedType)t).getRawType() ==
-                         Comparable.class) &&
-                        (as = p.getActualTypeArguments()) != null &&
-                        as.length == 1 && as[0] == c) // type arg is c
+                            ((p = (ParameterizedType)t).getRawType() ==
+                                    Comparable.class) &&
+                            (as = p.getActualTypeArguments()) != null &&
+                            as.length == 1 && as[0] == c) // type arg is c
                         return c;
                 }
             }
@@ -375,8 +379,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (initialCapacity < 0)
             throw new IllegalArgumentException();
         int cap = ((initialCapacity >= (MAXIMUM_CAPACITY >>> 1)) ?
-                   MAXIMUM_CAPACITY :
-                   tableSizeFor(initialCapacity + (initialCapacity >>> 1) + 1));
+                MAXIMUM_CAPACITY :
+                tableSizeFor(initialCapacity + (initialCapacity >>> 1) + 1));
         this.sizeCtl = cap;
     }
 
@@ -435,7 +439,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             initialCapacity = concurrencyLevel;   // as estimated threads
         long size = (long)(1.0 + (long)initialCapacity / loadFactor);
         int cap = (size >= (long)MAXIMUM_CAPACITY) ?
-            MAXIMUM_CAPACITY : tableSizeFor((int)size);
+                MAXIMUM_CAPACITY : tableSizeFor((int)size);
         this.sizeCtl = cap;
     }
 
@@ -448,7 +452,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         long n = sumCount();
         return ((n < 0L) ? 0 :
                 (n > (long)Integer.MAX_VALUE) ? Integer.MAX_VALUE :
-                (int)n);
+                        (int)n);
     }
 
     /**
@@ -473,7 +477,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         Node<K,V>[] tab; Node<K,V> e, p; int n, eh; K ek;
         int h = spread(key.hashCode());
         if ((tab = table) != null && (n = tab.length) > 0 &&
-            (e = tabAt(tab, (n - 1) & h)) != null) {
+                (e = tabAt(tab, (n - 1) & h)) != null) {
             if ((eh = e.hash) == h) {
                 if ((ek = e.key) == key || (ek != null && key.equals(ek)))
                     return e.val;
@@ -482,7 +486,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 return (p = e.find(h, key)) != null ? p.val : null;
             while ((e = e.next) != null) {
                 if (e.hash == h &&
-                    ((ek = e.key) == key || (ek != null && key.equals(ek))))
+                        ((ek = e.key) == key || (ek != null && key.equals(ek))))
                     return e.val;
             }
         }
@@ -547,84 +551,84 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
     /** Implementation for put and putIfAbsent */
     final V putVal(K key, V value, boolean onlyIfAbsent) {
         if (key == null || value == null) throw new NullPointerException();
-        //¸ù¾İ key Ëã³ö hash Öµ£¬È»ºóËã³öÊı×éÏÂ±ê£¨Í°µÄÎ»ÖÃ£©
+        //æ ¹æ® key ç®—å‡º hash å€¼ï¼Œç„¶åç®—å‡ºæ•°ç»„ä¸‹æ ‡ï¼ˆæ¡¶çš„ä½ç½®ï¼‰
         int hash = spread(key.hashCode());
-        //ÓÃÀ´¼ÆËãÔÚÕâ¸ö½Úµã×Ü¹²ÓĞ¶àÉÙ¸öÔªËØ£¬ÓÃÀ´¿ØÖÆÀ©Èİ»òÕß×ªÒÆÎªºìºÚÊ÷
+        //ç”¨æ¥è®¡ç®—åœ¨è¿™ä¸ªèŠ‚ç‚¹æ€»å…±æœ‰å¤šå°‘ä¸ªå…ƒç´ ï¼Œç”¨æ¥æ§åˆ¶æ‰©å®¹æˆ–è€…è½¬ç§»ä¸ºçº¢é»‘æ ‘
         int binCount = 0;
-        for (Node<K,V>[] tab = table;;) { //ËÀÑ­»·×ÔĞı
+        for (Node<K,V>[] tab = table;;) { //æ­»å¾ªç¯è‡ªæ—‹
             Node<K,V> f; int n, i, fh;
-            //Èç¹ûÊı×éÊÇ¿ÕµÄ£¬½øĞĞ³õÊ¼»¯
+            //å¦‚æœæ•°ç»„æ˜¯ç©ºçš„ï¼Œè¿›è¡Œåˆå§‹åŒ–
             if (tab == null || (n = tab.length) == 0)
-                //µÚÒ»´ÎputµÄÊ±ºòtableÃ»ÓĞ³õÊ¼»¯£¬Ôò³õÊ¼»¯table
+                //ç¬¬ä¸€æ¬¡putçš„æ—¶å€™tableæ²¡æœ‰åˆå§‹åŒ–ï¼Œåˆ™åˆå§‹åŒ–table
                 tab = initTable();
-            //Í¨¹ı¹şÏ£¼ÆËã³öÒ»¸ö±íÖĞµÄÎ»ÖÃ£¬ÒòÎªnÊÇÊı×éµÄ³¤¶È£¬ËùÒÔ(n-1)&hash¿Ï¶¨²»»á³öÏÖÊı×éÔ½½ç
-            //´ÓÊı×éÖĞÄÃµ½µÚi¸öµÄÖµ
+                //é€šè¿‡å“ˆå¸Œè®¡ç®—å‡ºä¸€ä¸ªè¡¨ä¸­çš„ä½ç½®ï¼Œå› ä¸ºnæ˜¯æ•°ç»„çš„é•¿åº¦ï¼Œæ‰€ä»¥(n-1)&hashè‚¯å®šä¸ä¼šå‡ºç°æ•°ç»„è¶Šç•Œ
+                //ä»æ•°ç»„ä¸­æ‹¿åˆ°ç¬¬iä¸ªçš„å€¼
             else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {
-                //Èç¹ûÕâ¸öÎ»ÖÃÃ»ÓĞÔªËØµÄ»°£¬ÔòÍ¨¹ıcasµÄ·½Ê½³¢ÊÔÌí¼Ó
-                //newÁËÒ»¸öNode£¬ÏòtabµÄµÚ i ¸öÎ»ÖÃÉèÖÃÖµ
+                //å¦‚æœè¿™ä¸ªä½ç½®æ²¡æœ‰å…ƒç´ çš„è¯ï¼Œåˆ™é€šè¿‡casçš„æ–¹å¼å°è¯•æ·»åŠ 
+                //newäº†ä¸€ä¸ªNodeï¼Œå‘tabçš„ç¬¬ i ä¸ªä½ç½®è®¾ç½®å€¼
                 if (casTabAt(tab, i, null,
-                             new Node<K,V>(hash, key, value, null)))
+                        new Node<K,V>(hash, key, value, null)))
                     break;                   // no lock when adding to empty bin
             }
             /*
-             * Èç¹û¼ì²âµ½Ä³¸ö½ÚµãµÄ hash ÖµÊÇ MOVED£¬Ôò±íÊ¾ÕıÔÚ½øĞĞÊı×éÀ©ÕÅµÄÊı¾İ¸´ÖÆ½×¶Î£¬
-             * Ôòµ±Ç°Ïß³ÌÒ²»á²ÎÓëÈ¥À©Èİ¸´ÖÆ£¬´Ó¶ø¼Ó¿ìÕûÀ©ÈİËÙ¶È¡£
+             * å¦‚æœæ£€æµ‹åˆ°æŸä¸ªèŠ‚ç‚¹çš„ hash å€¼æ˜¯ MOVEDï¼Œåˆ™è¡¨ç¤ºæ­£åœ¨è¿›è¡Œæ•°ç»„æ‰©å¼ çš„æ•°æ®å¤åˆ¶é˜¶æ®µï¼Œ
+             * åˆ™å½“å‰çº¿ç¨‹ä¹Ÿä¼šå‚ä¸å»æ‰©å®¹å¤åˆ¶ï¼Œä»è€ŒåŠ å¿«æ•´æ‰©å®¹é€Ÿåº¦ã€‚
              */
-            else if ((fh = f.hash) == MOVED) //ÕâÀïµÄ f ÔÚÉÏÒ»¸ö else if ÒÑ¾­¸³Öµ
-                // Èç¹ûÈ¡³öÀ´µÄ½ÚµãµÄ hash ÖµÊÇ MOVED(-1) µÄ»°£¬Ôò±íÊ¾µ±Ç°ÕıÔÚ¶ÔÕâ¸öÊı×é½øĞĞÀ©Èİ
+            else if ((fh = f.hash) == MOVED) //è¿™é‡Œçš„ f åœ¨ä¸Šä¸€ä¸ª else if å·²ç»èµ‹å€¼
+                // å¦‚æœå–å‡ºæ¥çš„èŠ‚ç‚¹çš„ hash å€¼æ˜¯ MOVED(-1) çš„è¯ï¼Œåˆ™è¡¨ç¤ºå½“å‰æ­£åœ¨å¯¹è¿™ä¸ªæ•°ç»„è¿›è¡Œæ‰©å®¹
                 tab = helpTransfer(tab, f);
             else {
                 /*
-                 * Èç¹ûÔÚÕâ¸öÎ»ÖÃÓĞÔªËØµÄ»°£¬ÓĞ¿ÉÄÜÏÂÃæÊÇÒ»¸öÁ¦Ö®²»¼°£¬Ò²ÓĞ¿ÉÄÜÊÇÒ»¸öºìºÚÊ÷£¬
-                 * ¾Í²ÉÓÃ synchronized µÄ·½Ê½¼ÓËø£º
-                 *  1.Èç¹ûÊÇÁ´±íµÄ»°(hash´óÓÚ0)£¬¾Í¶ÔÕâ¸öÁ´±íµÄËùÓĞÔªËØ½øĞĞ±éÀú£¬
-                 *         Èç¹ûÕÒµ½ÁËkeyºÍkeyµÄhashÖµ¶¼Ò»ÑùµÄ½Úµã£¬Ôò°ÑËüµÄÖµÌæ»»µ½
-                 *         Èç¹ûÃ»ÕÒµ½µÄ»°£¬ÔòÌí¼ÓÔÚÁ´±íµÄ×îºóÃæ
-                 *  2.·ñÔò£¬ÊÇÊ÷µÄ»°£¬Ôòµ÷ÓÃputTreeVal·½·¨Ìí¼Óµ½Ê÷ÖĞÈ¥
+                 * å¦‚æœåœ¨è¿™ä¸ªä½ç½®æœ‰å…ƒç´ çš„è¯ï¼Œæœ‰å¯èƒ½ä¸‹é¢æ˜¯ä¸€ä¸ªåŠ›ä¹‹ä¸åŠï¼Œä¹Ÿæœ‰å¯èƒ½æ˜¯ä¸€ä¸ªçº¢é»‘æ ‘ï¼Œ
+                 * å°±é‡‡ç”¨ synchronized çš„æ–¹å¼åŠ é”ï¼š
+                 *  1.å¦‚æœæ˜¯é“¾è¡¨çš„è¯(hashå¤§äº0)ï¼Œå°±å¯¹è¿™ä¸ªé“¾è¡¨çš„æ‰€æœ‰å…ƒç´ è¿›è¡Œéå†ï¼Œ
+                 *         å¦‚æœæ‰¾åˆ°äº†keyå’Œkeyçš„hashå€¼éƒ½ä¸€æ ·çš„èŠ‚ç‚¹ï¼Œåˆ™æŠŠå®ƒçš„å€¼æ›¿æ¢åˆ°
+                 *         å¦‚æœæ²¡æ‰¾åˆ°çš„è¯ï¼Œåˆ™æ·»åŠ åœ¨é“¾è¡¨çš„æœ€åé¢
+                 *  2.å¦åˆ™ï¼Œæ˜¯æ ‘çš„è¯ï¼Œåˆ™è°ƒç”¨putTreeValæ–¹æ³•æ·»åŠ åˆ°æ ‘ä¸­å»
                  *
                  *
-                 *  ÔÚÌí¼ÓÍêÖ®ºó£¬»á¶Ô¸Ã½ÚµãÉÏ¹ØÁªµÄµÄÊıÄ¿½øĞĞÅĞ¶Ï£¬
-                 *  Èç¹ûÔÚ8¸öÒÔÉÏµÄ»°£¬Ôò»áµ÷ÓÃtreeifyBin·½·¨£¬À´³¢ÊÔ×ª»¯ÎªÊ÷£¬»òÕßÊÇÀ©Èİ
+                 *  åœ¨æ·»åŠ å®Œä¹‹åï¼Œä¼šå¯¹è¯¥èŠ‚ç‚¹ä¸Šå…³è”çš„çš„æ•°ç›®è¿›è¡Œåˆ¤æ–­ï¼Œ
+                 *  å¦‚æœåœ¨8ä¸ªä»¥ä¸Šçš„è¯ï¼Œåˆ™ä¼šè°ƒç”¨treeifyBinæ–¹æ³•ï¼Œæ¥å°è¯•è½¬åŒ–ä¸ºæ ‘ï¼Œæˆ–è€…æ˜¯æ‰©å®¹
                  */
                 V oldVal = null;
-                synchronized (f) { //Á´±íµÄÍ·½Úµã»á×öÎªËøµÄ×ÊÔ´(Èç¹ûÊÇºìºÚÊ÷ÕâÀïËøµÄ¾ÍÊÇËüµÄroot¸ù½Úµã)
-                    //ÔÙ´ÎÈ¡³öÒª´æ´¢µÄÎ»ÖÃµÄÔªËØ£¬¸úÇ°ÃæÈ¡³öÀ´µÄ±È½Ï
+                synchronized (f) { //é“¾è¡¨çš„å¤´èŠ‚ç‚¹ä¼šåšä¸ºé”çš„èµ„æº(å¦‚æœæ˜¯çº¢é»‘æ ‘è¿™é‡Œé”çš„å°±æ˜¯å®ƒçš„rootæ ¹èŠ‚ç‚¹)
+                    //å†æ¬¡å–å‡ºè¦å­˜å‚¨çš„ä½ç½®çš„å…ƒç´ ï¼Œè·Ÿå‰é¢å–å‡ºæ¥çš„æ¯”è¾ƒ
                     if (tabAt(tab, i) == f) {
-                        //hashÖµ´óÓÚ0±íÊ¾ÊÇÒ»¸öÁ´±í£¨Èç¹ûÊÇÊ÷£¬hashÖµÎª-2£©
+                        //hashå€¼å¤§äº0è¡¨ç¤ºæ˜¯ä¸€ä¸ªé“¾è¡¨ï¼ˆå¦‚æœæ˜¯æ ‘ï¼Œhashå€¼ä¸º-2ï¼‰
                         if (fh >= 0) {
                             binCount = 1;
-                            //±éÀúÕâ¸öÁ´±í
+                            //éå†è¿™ä¸ªé“¾è¡¨
                             for (Node<K,V> e = f;; ++binCount) {
                                 K ek;
-                                //±È½ÏhashÖµºÍkeyÊÇ·ñÏàµÈ£¬keyÏàµÈËµÃ÷½ÚµãÒÑ¾­´æÔÚ£¬ĞŞ¸ÄÁ´±í½ÚµãµÄÖµ
-                                //Òª´æµÄÔªËØµÄ hash£¬key ¸úÒª´æ´¢µÄÎ»ÖÃµÄ½ÚµãµÄÏàÍ¬µÄÊ±ºò£¬¡°Ìæ»»¡±µô¸Ã½ÚµãµÄvalue¼´¿É
+                                //æ¯”è¾ƒhashå€¼å’Œkeyæ˜¯å¦ç›¸ç­‰ï¼Œkeyç›¸ç­‰è¯´æ˜èŠ‚ç‚¹å·²ç»å­˜åœ¨ï¼Œä¿®æ”¹é“¾è¡¨èŠ‚ç‚¹çš„å€¼
+                                //è¦å­˜çš„å…ƒç´ çš„ hashï¼Œkey è·Ÿè¦å­˜å‚¨çš„ä½ç½®çš„èŠ‚ç‚¹çš„ç›¸åŒçš„æ—¶å€™ï¼Œâ€œæ›¿æ¢â€æ‰è¯¥èŠ‚ç‚¹çš„valueå³å¯
                                 if (e.hash == hash &&
-                                    ((ek = e.key) == key ||
-                                     (ek != null && key.equals(ek)))) {
+                                        ((ek = e.key) == key ||
+                                                (ek != null && key.equals(ek)))) {
                                     oldVal = e.val;
-                                    //µ±Ê¹ÓÃputIfAbsentµÄÊ±ºò£¬Ö»ÓĞÔÚÕâ¸ökeyÃ»ÓĞÉèÖÃÖµµÃÊ±ºò²ÅÉèÖÃ£¬·ñÔòÅÜ³öÑ­»·
+                                    //å½“ä½¿ç”¨putIfAbsentçš„æ—¶å€™ï¼Œåªæœ‰åœ¨è¿™ä¸ªkeyæ²¡æœ‰è®¾ç½®å€¼å¾—æ—¶å€™æ‰è®¾ç½®ï¼Œå¦åˆ™è·‘å‡ºå¾ªç¯
                                     if (!onlyIfAbsent)
-                                        e.val = value; //ĞŞ¸ÄÁ´±í½ÚµãµÄÖµÎªĞÂµÄÖµ
-                                    break; //ÕÒµ½Õâ¸ökey£¬Ìø³ö±éÀúÕâ¸öÁ´±íµÄforÑ­»·
+                                        e.val = value; //ä¿®æ”¹é“¾è¡¨èŠ‚ç‚¹çš„å€¼ä¸ºæ–°çš„å€¼
+                                    break; //æ‰¾åˆ°è¿™ä¸ªkeyï¼Œè·³å‡ºéå†è¿™ä¸ªé“¾è¡¨çš„forå¾ªç¯
                                 }
                                 Node<K,V> pred = e;
-                                //·ñÔò½Úµã²»´æÔÚ£¬Ìí¼Óµ½Á´±íÄ©Î²
-                                //Èç¹û²»ÊÇÍ¬ÑùµÄ hash £¬Í¬ÑùµÄ key µÄÊ±ºò£¬ÔòÅĞ¶Ï¸Ã½ÚµãµÄ"ÏÂÒ»¸ö½Úµã"ÊÇ·ñÎª¿Õ?
+                                //å¦åˆ™èŠ‚ç‚¹ä¸å­˜åœ¨ï¼Œæ·»åŠ åˆ°é“¾è¡¨æœ«å°¾
+                                //å¦‚æœä¸æ˜¯åŒæ ·çš„ hash ï¼ŒåŒæ ·çš„ key çš„æ—¶å€™ï¼Œåˆ™åˆ¤æ–­è¯¥èŠ‚ç‚¹çš„"ä¸‹ä¸€ä¸ªèŠ‚ç‚¹"æ˜¯å¦ä¸ºç©º?
                                 if ((e = e.next) == null) {
-                                    //Îª¿ÕµÄ»°°ÑÕâ¸öÒª¼ÓÈëµÄ½ÚµãÉèÖÃÎªµ±Ç°½ÚµãµÄÏÂÒ»¸ö½Úµã
+                                    //ä¸ºç©ºçš„è¯æŠŠè¿™ä¸ªè¦åŠ å…¥çš„èŠ‚ç‚¹è®¾ç½®ä¸ºå½“å‰èŠ‚ç‚¹çš„ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
                                     pred.next = new Node<K,V>(hash, key,
-                                                              value, null);
+                                            value, null);
                                     break;
                                 }
                             }
                         }
-                        //±íÊ¾ÒÑ¾­×ª»¯³ÉºìºÚÊ÷ÀàĞÍÁË
-                        else if (f instanceof TreeBin) { // HashMapÊÇTreeNodeÀàĞÍ£¬ÕâÀïÊÇËüÃÇÖ®¼äµÄÇø±ğ
+                        //è¡¨ç¤ºå·²ç»è½¬åŒ–æˆçº¢é»‘æ ‘ç±»å‹äº†
+                        else if (f instanceof TreeBin) { // HashMapæ˜¯TreeNodeç±»å‹ï¼Œè¿™é‡Œæ˜¯å®ƒä»¬ä¹‹é—´çš„åŒºåˆ«
                             Node<K,V> p;
                             binCount = 2;
-                            //µ÷ÓÃ putTreeVal ·½·¨£¬½«¸Ã¡°ÔªËØ¡±µÄkeyºÍvalueÌí¼Óµ½ºìºÚÊ÷ÖĞÈ¥
+                            //è°ƒç”¨ putTreeVal æ–¹æ³•ï¼Œå°†è¯¥â€œå…ƒç´ â€çš„keyå’Œvalueæ·»åŠ åˆ°çº¢é»‘æ ‘ä¸­å»
                             if ((p = ((TreeBin<K,V>)f).putTreeVal(hash, key,
-                                                           value)) != null) {
+                                    value)) != null) {
                                 oldVal = p.val;
                                 if (!onlyIfAbsent)
                                     p.val = value;
@@ -633,9 +637,9 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                     }
                 }
                 if (binCount != 0) {
-                    //µ±ÔÚÍ¬Ò»¸ö½ÚµãµÄÊıÄ¿´ïµ½ 8 ¸öµÄÊ±ºò£¬ÔòÀ©ÕÅÊı×é»ò½«¸ø½ÚµãµÄÊı¾İ×ªÎª tree
+                    //å½“åœ¨åŒä¸€ä¸ªèŠ‚ç‚¹çš„æ•°ç›®è¾¾åˆ° 8 ä¸ªçš„æ—¶å€™ï¼Œåˆ™æ‰©å¼ æ•°ç»„æˆ–å°†ç»™èŠ‚ç‚¹çš„æ•°æ®è½¬ä¸º tree
                     if (binCount >= TREEIFY_THRESHOLD)
-                        //µ÷ÓÃ treeifyBin() ·½·¨À´³¢ÊÔ½«´¦µÄÁ´±í×ªÎª¡°ºìºÚÊ÷¡±
+                        //è°ƒç”¨ treeifyBin() æ–¹æ³•æ¥å°è¯•å°†å¤„çš„é“¾è¡¨è½¬ä¸ºâ€œçº¢é»‘æ ‘â€
                         treeifyBin(tab, i);
                     if (oldVal != null)
                         return oldVal;
@@ -643,7 +647,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 }
             }
         }
-        addCount(1L, binCount); //¼ÆÊı£¬¶Ôsize¼Ó1
+        addCount(1L, binCount); //è®¡æ•°ï¼Œå¯¹sizeåŠ 1
         return null;
     }
 
@@ -683,7 +687,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         for (Node<K,V>[] tab = table;;) {
             Node<K,V> f; int n, i, fh;
             if (tab == null || (n = tab.length) == 0 ||
-                (f = tabAt(tab, i = (n - 1) & hash)) == null)
+                    (f = tabAt(tab, i = (n - 1) & hash)) == null)
                 break;
             else if ((fh = f.hash) == MOVED)
                 tab = helpTransfer(tab, f);
@@ -697,11 +701,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                             for (Node<K,V> e = f, pred = null;;) {
                                 K ek;
                                 if (e.hash == hash &&
-                                    ((ek = e.key) == key ||
-                                     (ek != null && key.equals(ek)))) {
+                                        ((ek = e.key) == key ||
+                                                (ek != null && key.equals(ek)))) {
                                     V ev = e.val;
                                     if (cv == null || cv == ev ||
-                                        (ev != null && cv.equals(ev))) {
+                                            (ev != null && cv.equals(ev))) {
                                         oldVal = ev;
                                         if (value != null)
                                             e.val = value;
@@ -722,10 +726,10 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                             TreeBin<K,V> t = (TreeBin<K,V>)f;
                             TreeNode<K,V> r, p;
                             if ((r = t.root) != null &&
-                                (p = r.findTreeNode(hash, key, null)) != null) {
+                                    (p = r.findTreeNode(hash, key, null)) != null) {
                                 V pv = p.val;
                                 if (cv == null || cv == pv ||
-                                    (pv != null && cv.equals(pv))) {
+                                        (pv != null && cv.equals(pv))) {
                                     oldVal = pv;
                                     if (value != null)
                                         p.val = value;
@@ -769,8 +773,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 synchronized (f) {
                     if (tabAt(tab, i) == f) {
                         Node<K,V> p = (fh >= 0 ? f :
-                                       (f instanceof TreeBin) ?
-                                       ((TreeBin<K,V>)f).first : null);
+                                (f instanceof TreeBin) ?
+                                        ((TreeBin<K,V>)f).first : null);
                         while (p != null) {
                             --delta;
                             p = p.next;
@@ -930,9 +934,9 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             for (Map.Entry<?,?> e : m.entrySet()) {
                 Object mk, mv, v;
                 if ((mk = e.getKey()) == null ||
-                    (mv = e.getValue()) == null ||
-                    (v = get(mk)) == null ||
-                    (mv != v && !mv.equals(v)))
+                        (mv = e.getValue()) == null ||
+                        (v = get(mk)) == null ||
+                        (mv != v && !mv.equals(v)))
                     return false;
             }
         }
@@ -960,7 +964,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      * The key-value mappings are emitted in no particular order.
      */
     private void writeObject(java.io.ObjectOutputStream s)
-        throws java.io.IOException {
+            throws java.io.IOException {
         // For serialization compatibility
         // Emulate segment calculation from previous version of this class
         int sshift = 0;
@@ -973,7 +977,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         int segmentMask = ssize - 1;
         @SuppressWarnings("unchecked")
         Segment<K,V>[] segments = (Segment<K,V>[])
-            new Segment<?,?>[DEFAULT_CONCURRENCY_LEVEL];
+                new Segment<?,?>[DEFAULT_CONCURRENCY_LEVEL];
         for (int i = 0; i < segments.length; ++i)
             segments[i] = new Segment<K,V>(LOAD_FACTOR);
         s.putFields().put("segments", segments);
@@ -1002,7 +1006,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      * @throws java.io.IOException if an I/O error occurs
      */
     private void readObject(java.io.ObjectInputStream s)
-        throws java.io.IOException, ClassNotFoundException {
+            throws java.io.IOException, ClassNotFoundException {
         /*
          * To improve performance in typical cases, we create nodes
          * while reading, then place in table once size is known.
@@ -1060,8 +1064,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                         Node<K,V> q; K qk;
                         for (q = first; q != null; q = q.next) {
                             if (q.hash == h &&
-                                ((qk = q.key) == k ||
-                                 (qk != null && k.equals(qk)))) {
+                                    ((qk = q.key) == k ||
+                                            (qk != null && k.equals(qk)))) {
                                 insertAtFront = false;
                                 break;
                             }
@@ -1074,7 +1078,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                             TreeNode<K,V> hd = null, tl = null;
                             for (q = p; q != null; q = q.next) {
                                 TreeNode<K,V> t = new TreeNode<K,V>
-                                    (q.hash, q.key, q.val, null, null);
+                                        (q.hash, q.key, q.val, null, null);
                                 if ((t.prev = tl) == null)
                                     hd = t;
                                 else
@@ -1187,7 +1191,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                     if (newValue == null)
                         throw new NullPointerException();
                     if (replaceNode(key, newValue, oldValue) != null ||
-                        (oldValue = get(key)) == null)
+                            (oldValue = get(key)) == null)
                         break;
                 }
             }
@@ -1254,8 +1258,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                             for (Node<K,V> e = f;; ++binCount) {
                                 K ek; V ev;
                                 if (e.hash == h &&
-                                    ((ek = e.key) == key ||
-                                     (ek != null && key.equals(ek)))) {
+                                        ((ek = e.key) == key ||
+                                                (ek != null && key.equals(ek)))) {
                                     val = e.val;
                                     break;
                                 }
@@ -1274,7 +1278,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                             TreeBin<K,V> t = (TreeBin<K,V>)f;
                             TreeNode<K,V> r, p;
                             if ((r = t.root) != null &&
-                                (p = r.findTreeNode(h, key, null)) != null)
+                                    (p = r.findTreeNode(h, key, null)) != null)
                                 val = p.val;
                             else if ((val = mappingFunction.apply(key)) != null) {
                                 added = true;
@@ -1340,8 +1344,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                             for (Node<K,V> e = f, pred = null;; ++binCount) {
                                 K ek;
                                 if (e.hash == h &&
-                                    ((ek = e.key) == key ||
-                                     (ek != null && key.equals(ek)))) {
+                                        ((ek = e.key) == key ||
+                                                (ek != null && key.equals(ek)))) {
                                     val = remappingFunction.apply(key, e.val);
                                     if (val != null)
                                         e.val = val;
@@ -1365,7 +1369,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                             TreeBin<K,V> t = (TreeBin<K,V>)f;
                             TreeNode<K,V> r, p;
                             if ((r = t.root) != null &&
-                                (p = r.findTreeNode(h, key, null)) != null) {
+                                    (p = r.findTreeNode(h, key, null)) != null) {
                                 val = remappingFunction.apply(key, p.val);
                                 if (val != null)
                                     p.val = val;
@@ -1448,8 +1452,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                             for (Node<K,V> e = f, pred = null;; ++binCount) {
                                 K ek;
                                 if (e.hash == h &&
-                                    ((ek = e.key) == key ||
-                                     (ek != null && key.equals(ek)))) {
+                                        ((ek = e.key) == key ||
+                                                (ek != null && key.equals(ek)))) {
                                     val = remappingFunction.apply(key, e.val);
                                     if (val != null)
                                         e.val = val;
@@ -1469,7 +1473,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                                     if (val != null) {
                                         delta = 1;
                                         pred.next =
-                                            new Node<K,V>(h, key, val, null);
+                                                new Node<K,V>(h, key, val, null);
                                     }
                                     break;
                                 }
@@ -1561,8 +1565,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                             for (Node<K,V> e = f, pred = null;; ++binCount) {
                                 K ek;
                                 if (e.hash == h &&
-                                    ((ek = e.key) == key ||
-                                     (ek != null && key.equals(ek)))) {
+                                        ((ek = e.key) == key ||
+                                                (ek != null && key.equals(ek)))) {
                                     val = remappingFunction.apply(e.val, value);
                                     if (val != null)
                                         e.val = val;
@@ -1581,7 +1585,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                                     delta = 1;
                                     val = value;
                                     pred.next =
-                                        new Node<K,V>(h, key, val, null);
+                                            new Node<K,V>(h, key, val, null);
                                     break;
                                 }
                             }
@@ -1591,9 +1595,9 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                             TreeBin<K,V> t = (TreeBin<K,V>)f;
                             TreeNode<K,V> r = t.root;
                             TreeNode<K,V> p = (r == null) ? null :
-                                r.findTreeNode(h, key, null);
+                                    r.findTreeNode(h, key, null);
                             val = (p == null) ? value :
-                                remappingFunction.apply(p.val, value);
+                                    remappingFunction.apply(p.val, value);
                             if (val != null) {
                                 if (p != null)
                                     p.val = val;
@@ -1694,7 +1698,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      */
     public static <K> KeySetView<K,Boolean> newKeySet() {
         return new KeySetView<K,Boolean>
-            (new ConcurrentHashMap8<K,Boolean>(), Boolean.TRUE);
+                (new ConcurrentHashMap8<K,Boolean>(), Boolean.TRUE);
     }
 
     /**
@@ -1711,7 +1715,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      */
     public static <K> KeySetView<K,Boolean> newKeySet(int initialCapacity) {
         return new KeySetView<K,Boolean>
-            (new ConcurrentHashMap8<K,Boolean>(initialCapacity), Boolean.TRUE);
+                (new ConcurrentHashMap8<K,Boolean>(initialCapacity), Boolean.TRUE);
     }
 
     /**
@@ -1748,12 +1752,12 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             outer: for (Node<K,V>[] tab = nextTable;;) {
                 Node<K,V> e; int n;
                 if (k == null || tab == null || (n = tab.length) == 0 ||
-                    (e = tabAt(tab, (n - 1) & h)) == null)
+                        (e = tabAt(tab, (n - 1) & h)) == null)
                     return null;
                 for (;;) {
                     int eh; K ek;
                     if ((eh = e.hash) == h &&
-                        ((ek = e.key) == k || (ek != null && k.equals(ek))))
+                            ((ek = e.key) == k || (ek != null && k.equals(ek))))
                         return e;
                     if (eh < 0) {
                         if (e instanceof ForwardingNode) {
@@ -1798,23 +1802,23 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      */
     private final Node<K,V>[] initTable() {
         Node<K,V>[] tab; int sc;
-        //CAS×ÔĞı³õÊ¼»¯£¬¿ÕµÄtable²ÅÄÜ½øÈë³õÊ¼»¯²Ù×÷
+        //CASè‡ªæ—‹åˆå§‹åŒ–ï¼Œç©ºçš„tableæ‰èƒ½è¿›å…¥åˆå§‹åŒ–æ“ä½œ
         while ((tab = table) == null || tab.length == 0) {
-            //sizeCtl < 0 ±íÊ¾ÆäËûÏß³ÌÒÑ¾­ÔÚ³õÊ¼»¯ÁË»òÕßÀ©ÈİÁË£¬¹ÒÆğµ±Ç°Ïß³Ì¡£
+            //sizeCtl < 0 è¡¨ç¤ºå…¶ä»–çº¿ç¨‹å·²ç»åœ¨åˆå§‹åŒ–äº†æˆ–è€…æ‰©å®¹äº†ï¼ŒæŒ‚èµ·å½“å‰çº¿ç¨‹ã€‚
             if ((sc = sizeCtl) < 0) //sc == sizeCtl
-                Thread.yield(); // lost initialization race; just spin ½»¸øCPUµ÷¶È£¬±ÜÃâÑ­»·ÏûºÄCPU
-            //CAS ²Ù×÷ SIZECTL ¸ÄÎª"-1"£¬±íÊ¾"³õÊ¼»¯×´Ì¬"
+                Thread.yield(); // lost initialization race; just spin äº¤ç»™CPUè°ƒåº¦ï¼Œé¿å…å¾ªç¯æ¶ˆè€—CPU
+                //CAS æ“ä½œ SIZECTL æ”¹ä¸º"-1"ï¼Œè¡¨ç¤º"åˆå§‹åŒ–çŠ¶æ€"
             else if (U.compareAndSwapInt(this, SIZECTL, sc, -1)) {
                 try {
                     if ((tab = table) == null || tab.length == 0) {
-                        int n = (sc > 0) ? sc : DEFAULT_CAPACITY; //Ä¬ÈÏ³õÊ¼Îª16
+                        int n = (sc > 0) ? sc : DEFAULT_CAPACITY; //é»˜è®¤åˆå§‹ä¸º16
                         @SuppressWarnings("unchecked")
-                        Node<K,V>[] nt = (Node<K,V>[])new Node<?,?>[n]; //³õÊ¼»¯
+                        Node<K,V>[] nt = (Node<K,V>[])new Node<?,?>[n]; //åˆå§‹åŒ–
                         table = tab = nt;
-                        sc = n - (n >>> 2); //n×óÒÆÁ½Î»1/4£¬n - 1/4 = 3/4, 0.75n
+                        sc = n - (n >>> 2); //nå·¦ç§»ä¸¤ä½1/4ï¼Œn - 1/4 = 3/4, 0.75n
                     }
                 } finally {
-                    sizeCtl = sc; // 0.75nÓòÖµ
+                    sizeCtl = sc; // 0.75nåŸŸå€¼
                 }
                 break;
             }
@@ -1832,46 +1836,46 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      * @param x the count to add
      * @param check if <0, don't check resize, if <= 1 only check if uncontended
      */
-    // ½øĞĞ¼Ó1ºó£¬ÅĞ¶ÏÊÇ²»ÊÇ´óÓÚÀ©ÈİµÄÓòÖµ£¬´óÓÚÔòÀ©Èİ¡£
+    // è¿›è¡ŒåŠ 1åï¼Œåˆ¤æ–­æ˜¯ä¸æ˜¯å¤§äºæ‰©å®¹çš„åŸŸå€¼ï¼Œå¤§äºåˆ™æ‰©å®¹ã€‚
     private final void addCount(long x, int check) {
         CounterCell[] as; long b, s;
-        // ¸üĞÂ baseCount£¬tableµÄÊıÁ¿£¬counterCells±íÊ¾ÔªËØ¸öÊıµÄ±ä»¯
+        // æ›´æ–° baseCountï¼Œtableçš„æ•°é‡ï¼ŒcounterCellsè¡¨ç¤ºå…ƒç´ ä¸ªæ•°çš„å˜åŒ–
         if ((as = counterCells) != null ||
-            // CounterCell[] = null, CASÊ§°ÜÁË£¨baseCount¾ºÕùÊ§°Ü£©£¬²Å»á½øÈëifÀï
-            !U.compareAndSwapLong(this, BASECOUNT, b = baseCount, s = b + x)) {
+                // CounterCell[] = null, CASå¤±è´¥äº†ï¼ˆbaseCountç«äº‰å¤±è´¥ï¼‰ï¼Œæ‰ä¼šè¿›å…¥ifé‡Œ
+                !U.compareAndSwapLong(this, BASECOUNT, b = baseCount, s = b + x)) {
             CounterCell a; long v; int m;
             boolean uncontended = true;
-            //Èç¹û¶à¸öÏß³Ì¶¼ÔÚÖ´ĞĞ£¬ÔòCASÊ§°Ü£¬Ö´ĞĞ fullAddCount£¬È«²¿¼ÓÈëcount
+            //å¦‚æœå¤šä¸ªçº¿ç¨‹éƒ½åœ¨æ‰§è¡Œï¼Œåˆ™CASå¤±è´¥ï¼Œæ‰§è¡Œ fullAddCountï¼Œå…¨éƒ¨åŠ å…¥count
             if (as == null || (m = as.length - 1) < 0 ||
-                (a = as[ThreadLocalRandom.getProbe() & m]) == null || //Ã¿¸öÏß³ÌÉú³ÉÒ»¸öËæ»úÊı
-                !(uncontended =
-                  //Èç¹ûCounterCell[]ÏÂ±êÀïÓĞÖµ£¬ÔòCAS¶Ôvalue¼Ó1
-                  U.compareAndSwapLong(a, CELLVALUE, v = a.value, v + x))) {
-                // ¶àÏß³ÌĞŞ¸ÄbaseCountÊ±£¬¾ºÕùÊ§°ÜµÄÏß³Ì»áÖ´ĞĞfullAddCount(x, uncontended),°ÑxµÄÖµ²åÈëµ½counterCellÀàÖĞ
-                fullAddCount(x, uncontended); //³õÊ¼»¯CounterCell[]Êı×é
+                    (a = as[ThreadLocalRandom.getProbe() & m]) == null || //æ¯ä¸ªçº¿ç¨‹ç”Ÿæˆä¸€ä¸ªéšæœºæ•°
+                    !(uncontended =
+                            //å¦‚æœCounterCell[]ä¸‹æ ‡é‡Œæœ‰å€¼ï¼Œåˆ™CASå¯¹valueåŠ 1
+                            U.compareAndSwapLong(a, CELLVALUE, v = a.value, v + x))) {
+                // å¤šçº¿ç¨‹ä¿®æ”¹baseCountæ—¶ï¼Œç«äº‰å¤±è´¥çš„çº¿ç¨‹ä¼šæ‰§è¡ŒfullAddCount(x, uncontended),æŠŠxçš„å€¼æ’å…¥åˆ°counterCellç±»ä¸­
+                fullAddCount(x, uncontended); //åˆå§‹åŒ–CounterCell[]æ•°ç»„
                 return;
             }
             if (check <= 1)
                 return;
             s = sumCount();
         }
-        // check >= 0 ±íÊ¾ĞèÒª½øĞĞÀ©Èİ²Ù×÷
+        // check >= 0 è¡¨ç¤ºéœ€è¦è¿›è¡Œæ‰©å®¹æ“ä½œ
         if (check >= 0) {
             Node<K,V>[] tab, nt; int n, sc;
             while (s >= (long)(sc = sizeCtl) && (tab = table) != null &&
-                   (n = tab.length) < MAXIMUM_CAPACITY) {
+                    (n = tab.length) < MAXIMUM_CAPACITY) {
                 int rs = resizeStamp(n);
                 if (sc < 0) {
                     if ((sc >>> RESIZE_STAMP_SHIFT) != rs || sc == rs + 1 ||
-                        sc == rs + MAX_RESIZERS || (nt = nextTable) == null ||
-                        transferIndex <= 0)
+                            sc == rs + MAX_RESIZERS || (nt = nextTable) == null ||
+                            transferIndex <= 0)
                         break;
                     if (U.compareAndSwapInt(this, SIZECTL, sc, sc + 1))
                         transfer(tab, nt);
                 }
-                //µ±Ç°Ïß³Ì·¢ÆğÀ©Èİ²Ù×÷£¬nextTable = null
+                //å½“å‰çº¿ç¨‹å‘èµ·æ‰©å®¹æ“ä½œï¼ŒnextTable = null
                 else if (U.compareAndSwapInt(this, SIZECTL, sc,
-                                             (rs << RESIZE_STAMP_SHIFT) + 2)) // rs << RESIZE_STAMP_SHIFT ·µ»ØµÄ¾ÍÊÇÒ»¸ö¸ºÊı¸³Öµ¸ø sc
+                        (rs << RESIZE_STAMP_SHIFT) + 2)) // rs << RESIZE_STAMP_SHIFT è¿”å›çš„å°±æ˜¯ä¸€ä¸ªè´Ÿæ•°èµ‹å€¼ç»™ sc
                     transfer(tab, null);
                 s = sumCount();
             }
@@ -1880,21 +1884,21 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     /**
      * Helps transfer if a resize is in progress.
-     * Èç¹ûÈ¡³öÀ´µÄ½ÚµãµÄ hash ÖµÊÇ MOVED(-1) µÄ»°£¬Ôò±íÊ¾µ±Ç°ÕıÔÚ¶ÔÕâ¸öÊı×é½øĞĞÀ©Èİ
-     * °ïÖú´Ó¾ÉµÄ table µÄÔªËØ ¸´ÖÆµ½ => ĞÂµÄ table ÖĞ
+     * å¦‚æœå–å‡ºæ¥çš„èŠ‚ç‚¹çš„ hash å€¼æ˜¯ MOVED(-1) çš„è¯ï¼Œåˆ™è¡¨ç¤ºå½“å‰æ­£åœ¨å¯¹è¿™ä¸ªæ•°ç»„è¿›è¡Œæ‰©å®¹
+     * å¸®åŠ©ä»æ—§çš„ table çš„å…ƒç´  å¤åˆ¶åˆ° => æ–°çš„ table ä¸­
      */
     final Node<K,V>[] helpTransfer(Node<K,V>[] tab, Node<K,V> f) {
         Node<K,V>[] nextTab; int sc;
         if (tab != null && (f instanceof ForwardingNode) &&
-            (nextTab = ((ForwardingNode<K,V>)f).nextTable) != null) { //ĞÂµÄtable nextTba ÒÑ¾­´æÔÚµÄÇ°ÌáÏÂ²ÅÄÜ°ïÖúÀ©Èİ
+                (nextTab = ((ForwardingNode<K,V>)f).nextTable) != null) { //æ–°çš„table nextTba å·²ç»å­˜åœ¨çš„å‰æä¸‹æ‰èƒ½å¸®åŠ©æ‰©å®¹
             int rs = resizeStamp(tab.length);
             while (nextTab == nextTable && table == tab &&
-                   (sc = sizeCtl) < 0) {
+                    (sc = sizeCtl) < 0) {
                 if ((sc >>> RESIZE_STAMP_SHIFT) != rs || sc == rs + 1 ||
-                    sc == rs + MAX_RESIZERS || transferIndex <= 0)
+                        sc == rs + MAX_RESIZERS || transferIndex <= 0)
                     break;
                 if (U.compareAndSwapInt(this, SIZECTL, sc, sc + 1)) {
-                    transfer(tab, nextTab); //µ÷ÓÃÀ©Èİ·½·¨
+                    transfer(tab, nextTab); //è°ƒç”¨æ‰©å®¹æ–¹æ³•
                     break;
                 }
             }
@@ -1910,7 +1914,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      */
     private final void tryPresize(int size) {
         int c = (size >= (MAXIMUM_CAPACITY >>> 1)) ? MAXIMUM_CAPACITY :
-            tableSizeFor(size + (size >>> 1) + 1);
+                tableSizeFor(size + (size >>> 1) + 1);
         int sc;
         while ((sc = sizeCtl) >= 0) {
             Node<K,V>[] tab = table; int n;
@@ -1936,14 +1940,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 if (sc < 0) {
                     Node<K,V>[] nt;
                     if ((sc >>> RESIZE_STAMP_SHIFT) != rs || sc == rs + 1 ||
-                        sc == rs + MAX_RESIZERS || (nt = nextTable) == null ||
-                        transferIndex <= 0)
+                            sc == rs + MAX_RESIZERS || (nt = nextTable) == null ||
+                            transferIndex <= 0)
                         break;
                     if (U.compareAndSwapInt(this, SIZECTL, sc, sc + 1))
                         transfer(tab, nt);
                 }
                 else if (U.compareAndSwapInt(this, SIZECTL, sc,
-                                             (rs << RESIZE_STAMP_SHIFT) + 2))
+                        (rs << RESIZE_STAMP_SHIFT) + 2))
                     transfer(tab, null);
             }
         }
@@ -1955,30 +1959,30 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      */
     private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
         int n = tab.length, stride;
-        // NCPU > 1 CPUµÄºËÊı´óÓÚ1£¬Ã¿ºË´¦ÀíµÄÁ¿Ğ¡ÓÚ16£¬ÔòÇ¿ÖÆ¸³Öµ16
+        // NCPU > 1 CPUçš„æ ¸æ•°å¤§äº1ï¼Œæ¯æ ¸å¤„ç†çš„é‡å°äº16ï¼Œåˆ™å¼ºåˆ¶èµ‹å€¼16
         if ((stride = (NCPU > 1) ? (n >>> 3) / NCPU : n) < MIN_TRANSFER_STRIDE)
             stride = MIN_TRANSFER_STRIDE; // subdivide range
         if (nextTab == null) {            // initiating
             try {
                 @SuppressWarnings("unchecked")
-                Node<K,V>[] nt = (Node<K,V>[])new Node<?,?>[n << 1]; //¹¹½¨Ò»¸ö nextTable ¶ÔÏó£¬ÆäÈİÁ¿ÎªÔ­À´ÈİÁ¿µÄÁ½±¶
+                Node<K,V>[] nt = (Node<K,V>[])new Node<?,?>[n << 1]; //æ„å»ºä¸€ä¸ª nextTable å¯¹è±¡ï¼Œå…¶å®¹é‡ä¸ºåŸæ¥å®¹é‡çš„ä¸¤å€
                 nextTab = nt;
             } catch (Throwable ex) {      // try to cope with OOME
                 sizeCtl = Integer.MAX_VALUE;
                 return;
             }
-            nextTable = nextTab; //°ÑĞÂµÄÊı×é¸³Öµ¸øÕâ¸öÊôĞÔ
-            transferIndex = n;   //nÀ©ÈİÇ°Êı×éµÄ´óĞ¡
+            nextTable = nextTab; //æŠŠæ–°çš„æ•°ç»„èµ‹å€¼ç»™è¿™ä¸ªå±æ€§
+            transferIndex = n;   //næ‰©å®¹å‰æ•°ç»„çš„å¤§å°
         }
-        int nextn = nextTab.length; //ĞÂÊı×éµÄ³¤¶È
-        // Á¬½ÓµãÖ¸Õë£¬ÓÃÓÚ±êÖ¾Î»£¨fwdµÄhashÖµÎª-1£¬fwd.nextTable=nextTab£©
-        ForwardingNode<K,V> fwd = new ForwardingNode<K,V>(nextTab); //×ª·¢½Úµã
-        // µ± advance == true Ê±£¬±íÃ÷¸Ã½ÚµãÒÑ¾­´¦Àí¹ıÁË¡£advance±ê¼Ç ´ú±íĞè²»ĞèÒªÍùÇ°ÕÒ×ªÒÆµÄ½Úµã
+        int nextn = nextTab.length; //æ–°æ•°ç»„çš„é•¿åº¦
+        // è¿æ¥ç‚¹æŒ‡é’ˆï¼Œç”¨äºæ ‡å¿—ä½ï¼ˆfwdçš„hashå€¼ä¸º-1ï¼Œfwd.nextTable=nextTabï¼‰
+        ForwardingNode<K,V> fwd = new ForwardingNode<K,V>(nextTab); //è½¬å‘èŠ‚ç‚¹
+        // å½“ advance == true æ—¶ï¼Œè¡¨æ˜è¯¥èŠ‚ç‚¹å·²ç»å¤„ç†è¿‡äº†ã€‚advanceæ ‡è®° ä»£è¡¨éœ€ä¸éœ€è¦å¾€å‰æ‰¾è½¬ç§»çš„èŠ‚ç‚¹
         boolean advance = true;
-        boolean finishing = false; // to ensure sweep before committing nextTab µ±Ç°Õâ¸öÏß³Ì¶ÔÓÚÎÒÀ©ÈİµÄ¹¤×÷À´Ëµ£¬ÊÇ²»ÊÇÒÑ¾­ÒÑ¾­×öÍêÁË£¿Ğè²»ĞèÒªÎÒ×ªÒÆÁË¡£
-        for (int i = 0, bound = 0;;) { // ¼ÆËã×ªÒÆ²½³¤bound
+        boolean finishing = false; // to ensure sweep before committing nextTab å½“å‰è¿™ä¸ªçº¿ç¨‹å¯¹äºæˆ‘æ‰©å®¹çš„å·¥ä½œæ¥è¯´ï¼Œæ˜¯ä¸æ˜¯å·²ç»å·²ç»åšå®Œäº†ï¼Ÿéœ€ä¸éœ€è¦æˆ‘è½¬ç§»äº†ã€‚
+        for (int i = 0, bound = 0;;) { // è®¡ç®—è½¬ç§»æ­¥é•¿bound
             Node<K,V> f; int fh;
-            // ¿ØÖÆ --i ,±éÀúÔ­ hash ±íÖĞµÄ½Úµã
+            // æ§åˆ¶ --i ,éå†åŸ hash è¡¨ä¸­çš„èŠ‚ç‚¹
             while (advance) {
                 int nextIndex, nextBound;
                 if (--i >= bound || finishing)
@@ -1987,12 +1991,12 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                     i = -1;
                     advance = false;
                 }
-                // ÓÃ CAS ¼ÆËãµÃµ½µÄ transferIndex £¨µ±Ç°Ïß³Ì¿ØÖÆ×ªÒÆÊı×éÇøÓò£¬´ÓºóÍùÇ°£¬±ÈÈçÊı×é³¤¶È4£¬²½³¤2£¬µ±Ç°Êı×é¸ù¾İ²½³¤2×ªÒÆÊı×éÏÂ±ê2ºÍ3µÄÖµ£©
+                // ç”¨ CAS è®¡ç®—å¾—åˆ°çš„ transferIndex ï¼ˆå½“å‰çº¿ç¨‹æ§åˆ¶è½¬ç§»æ•°ç»„åŒºåŸŸï¼Œä»åå¾€å‰ï¼Œæ¯”å¦‚æ•°ç»„é•¿åº¦4ï¼Œæ­¥é•¿2ï¼Œå½“å‰æ•°ç»„æ ¹æ®æ­¥é•¿2è½¬ç§»æ•°ç»„ä¸‹æ ‡2å’Œ3çš„å€¼ï¼‰
                 else if (U.compareAndSwapInt
-                         (this, TRANSFERINDEX, nextIndex,
-                          nextBound = (nextIndex > stride ?
-                                       nextIndex - stride : 0))) {
-                    // Èç¹û²½³¤ÊÇ4£¬transferIndex = 4, nextIndex = 4, bound = 2, i = 4 -1, i = 3
+                        (this, TRANSFERINDEX, nextIndex,
+                                nextBound = (nextIndex > stride ?
+                                        nextIndex - stride : 0))) {
+                    // å¦‚æœæ­¥é•¿æ˜¯4ï¼ŒtransferIndex = 4, nextIndex = 4, bound = 2, i = 4 -1, i = 3
                     bound = nextBound;
                     i = nextIndex - 1;
                     advance = false;
@@ -2000,37 +2004,37 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             }
             if (i < 0 || i >= n || i + n >= nextn) {
                 int sc;
-                // ÒÑ¾­Íê³ÉËùÓĞ½Úµã¸´ÖÆÁË
+                // å·²ç»å®Œæˆæ‰€æœ‰èŠ‚ç‚¹å¤åˆ¶äº†
                 if (finishing) {
                     nextTable = null;
-                    table = nextTab;  // table Ö¸ÏònextTable
-                    sizeCtl = (n << 1) - (n >>> 1);  // sizeCtlãĞÖµÎªÔ­À´µÄ1.5±¶
+                    table = nextTab;  // table æŒ‡å‘nextTable
+                    sizeCtl = (n << 1) - (n >>> 1);  // sizeCtlé˜ˆå€¼ä¸ºåŸæ¥çš„1.5å€
                     return;
                 }
                 if (U.compareAndSwapInt(this, SIZECTL, sc = sizeCtl, sc - 1)) {
-                    // CAS ¸üÀ©ÈİãĞÖµ£¬ÔÚÕâÀïÃæsizectlÖµ¼õÒ»£¬ËµÃ÷ĞÂ¼ÓÈëÒ»¸öÏß³Ì²ÎÓëµ½À©Èİ²Ù×÷
+                    // CAS æ›´æ‰©å®¹é˜ˆå€¼ï¼Œåœ¨è¿™é‡Œé¢sizectlå€¼å‡ä¸€ï¼Œè¯´æ˜æ–°åŠ å…¥ä¸€ä¸ªçº¿ç¨‹å‚ä¸åˆ°æ‰©å®¹æ“ä½œ
                     if ((sc - 2) != resizeStamp(n) << RESIZE_STAMP_SHIFT)
                         return;
                     finishing = advance = true;
                     i = n; // recheck before commit
                 }
             }
-            // ±éÀúµÄ½ÚµãÎª null£¬Ôò·ÅÈëµ½ ForwardingNode Ö¸Õë½Úµã
+            // éå†çš„èŠ‚ç‚¹ä¸º nullï¼Œåˆ™æ”¾å…¥åˆ° ForwardingNode æŒ‡é’ˆèŠ‚ç‚¹
             else if ((f = tabAt(tab, i)) == null)
                 advance = casTabAt(tab, i, null, fwd);
-            // f.hash == -1 ±íÊ¾±éÀúµ½ÁË ForwardingNode ½Úµã£¬ÒâÎ¶×Å¸Ã½ÚµãÒÑ¾­´¦Àí¹ıÁË
-            // ÕâÀïÊÇ¿ØÖÆ²¢·¢À©ÈİµÄºËĞÄ
+                // f.hash == -1 è¡¨ç¤ºéå†åˆ°äº† ForwardingNode èŠ‚ç‚¹ï¼Œæ„å‘³ç€è¯¥èŠ‚ç‚¹å·²ç»å¤„ç†è¿‡äº†
+                // è¿™é‡Œæ˜¯æ§åˆ¶å¹¶å‘æ‰©å®¹çš„æ ¸å¿ƒ
             else if ((fh = f.hash) == MOVED)
                 advance = true; // already processed
             else {
-                // ½Úµã¼ÓËø
+                // èŠ‚ç‚¹åŠ é”
                 synchronized (f) {
-                    // ½Úµã¸´ÖÆ¹¤×÷
+                    // èŠ‚ç‚¹å¤åˆ¶å·¥ä½œ
                     if (tabAt(tab, i) == f) {
                         Node<K,V> ln, hn;
-                        // fh >= 0 ,±íÊ¾ÎªÁ´±í½Úµã
+                        // fh >= 0 ,è¡¨ç¤ºä¸ºé“¾è¡¨èŠ‚ç‚¹
                         if (fh >= 0) {
-                            // ¹¹ÔìÁ½¸öÁ´±í  Ò»¸öÊÇÔ­Á´±í  ÁíÒ»¸öÊÇÔ­Á´±íµÄ·´ĞòÅÅÁĞ
+                            // æ„é€ ä¸¤ä¸ªé“¾è¡¨  ä¸€ä¸ªæ˜¯åŸé“¾è¡¨  å¦ä¸€ä¸ªæ˜¯åŸé“¾è¡¨çš„ååºæ’åˆ—
                             int runBit = fh & n;
                             Node<K,V> lastRun = f;
                             for (Node<K,V> p = f.next; p != null; p = p.next) {
@@ -2055,16 +2059,16 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                                 else
                                     hn = new Node<K,V>(ph, pk, pv, hn);
                             }
-                            // ÔÚnextTable i Î»ÖÃ´¦²åÉÏÁ´±í
+                            // åœ¨nextTable i ä½ç½®å¤„æ’ä¸Šé“¾è¡¨
                             setTabAt(nextTab, i, ln);
-                            // ÔÚnextTable i + n Î»ÖÃ´¦²åÉÏÁ´±í
+                            // åœ¨nextTable i + n ä½ç½®å¤„æ’ä¸Šé“¾è¡¨
                             setTabAt(nextTab, i + n, hn);
-                            // ÔÚtable i Î»ÖÃ´¦²åÉÏForwardingNode ±íÊ¾¸Ã½ÚµãÒÑ¾­´¦Àí¹ıÁË
+                            // åœ¨table i ä½ç½®å¤„æ’ä¸ŠForwardingNode è¡¨ç¤ºè¯¥èŠ‚ç‚¹å·²ç»å¤„ç†è¿‡äº†
                             setTabAt(tab, i, fwd);
-                            // advance = true ¿ÉÒÔÖ´ĞĞ--i¶¯×÷£¬±éÀú½Úµã
+                            // advance = true å¯ä»¥æ‰§è¡Œ--iåŠ¨ä½œï¼Œéå†èŠ‚ç‚¹
                             advance = true;
                         }
-                        // Èç¹ûÊÇTreeBin£¬Ôò°´ÕÕºìºÚÊ÷½øĞĞ´¦Àí£¬´¦ÀíÂß¼­ÓëÉÏÃæÒ»ÖÂ
+                        // å¦‚æœæ˜¯TreeBinï¼Œåˆ™æŒ‰ç…§çº¢é»‘æ ‘è¿›è¡Œå¤„ç†ï¼Œå¤„ç†é€»è¾‘ä¸ä¸Šé¢ä¸€è‡´
                         else if (f instanceof TreeBin) {
                             TreeBin<K,V> t = (TreeBin<K,V>)f;
                             TreeNode<K,V> lo = null, loTail = null;
@@ -2073,7 +2077,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                             for (Node<K,V> e = t.first; e != null; e = e.next) {
                                 int h = e.hash;
                                 TreeNode<K,V> p = new TreeNode<K,V>
-                                    (h, e.key, e.val, null, null);
+                                        (h, e.key, e.val, null, null);
                                 if ((h & n) == 0) {
                                     if ((p.prev = loTail) == null)
                                         lo = p;
@@ -2091,11 +2095,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                                     ++hc;
                                 }
                             }
-                            // À©ÈİºóÊ÷½Úµã¸öÊıÈô<=6£¬½«Ê÷×ªÁ´±í
+                            // æ‰©å®¹åæ ‘èŠ‚ç‚¹ä¸ªæ•°è‹¥<=6ï¼Œå°†æ ‘è½¬é“¾è¡¨
                             ln = (lc <= UNTREEIFY_THRESHOLD) ? untreeify(lo) :
-                                (hc != 0) ? new TreeBin<K,V>(lo) : t;
+                                    (hc != 0) ? new TreeBin<K,V>(lo) : t;
                             hn = (hc <= UNTREEIFY_THRESHOLD) ? untreeify(hi) :
-                                (lc != 0) ? new TreeBin<K,V>(hi) : t;
+                                    (lc != 0) ? new TreeBin<K,V>(hi) : t;
                             setTabAt(nextTab, i, ln);
                             setTabAt(nextTab, i + n, hn);
                             setTabAt(tab, i, fwd);
@@ -2146,13 +2150,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                     if (cellsBusy == 0) {            // Try to attach new Cell
                         CounterCell r = new CounterCell(x); // Optimistic create
                         if (cellsBusy == 0 &&
-                            U.compareAndSwapInt(this, CELLSBUSY, 0, 1)) {
+                                U.compareAndSwapInt(this, CELLSBUSY, 0, 1)) {
                             boolean created = false;
                             try {               // Recheck under lock
                                 CounterCell[] rs; int m, j;
                                 if ((rs = counterCells) != null &&
-                                    (m = rs.length) > 0 &&
-                                    rs[j = (m - 1) & h] == null) {
+                                        (m = rs.length) > 0 &&
+                                        rs[j = (m - 1) & h] == null) {
                                     rs[j] = r;
                                     created = true;
                                 }
@@ -2175,7 +2179,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 else if (!collide)
                     collide = true;
                 else if (cellsBusy == 0 &&
-                         U.compareAndSwapInt(this, CELLSBUSY, 0, 1)) {
+                        U.compareAndSwapInt(this, CELLSBUSY, 0, 1)) {
                     try {
                         if (counterCells == as) {// Expand table unless stale
                             CounterCell[] rs = new CounterCell[n << 1];
@@ -2192,7 +2196,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 h = ThreadLocalRandom.advanceProbe(h);
             }
             else if (cellsBusy == 0 && counterCells == as &&
-                     U.compareAndSwapInt(this, CELLSBUSY, 0, 1)) {
+                    U.compareAndSwapInt(this, CELLSBUSY, 0, 1)) {
                 boolean init = false;
                 try {                           // Initialize table
                     if (counterCells == as) {
@@ -2217,34 +2221,34 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
     /**
      * Replaces all linked nodes in bin at given index unless table is
      * too small, in which case resizes instead.
-     * ³ı·Ç±íÌ«Ğ¡£¬·ñÔòÒÔ¸ø¶¨Ë÷ÒıÌæ»»binÖĞËùÓĞÁ´½ÓµÄ½Úµã£¬ÔÚÕâÖÖÇé¿öÏÂ£¬½«µ÷Õû´óĞ¡¡£
+     * é™¤éè¡¨å¤ªå°ï¼Œå¦åˆ™ä»¥ç»™å®šç´¢å¼•æ›¿æ¢binä¸­æ‰€æœ‰é“¾æ¥çš„èŠ‚ç‚¹ï¼Œåœ¨è¿™ç§æƒ…å†µä¸‹ï¼Œå°†è°ƒæ•´å¤§å°ã€‚
      */
-    //µ÷ÓÃ treeifyBin() ·½·¨À´³¢ÊÔ½«´¦µÄÁ´±í×ªÎª¡°ºìºÚÊ÷¡±
+    //è°ƒç”¨ treeifyBin() æ–¹æ³•æ¥å°è¯•å°†å¤„çš„é“¾è¡¨è½¬ä¸ºâ€œçº¢é»‘æ ‘â€
     private final void treeifyBin(Node<K,V>[] tab, int index) {
         Node<K,V> b; int n, sc;
         if (tab != null) {
-            //Èç¹ûÕû¸ö table µÄÊıÁ¿Ğ¡ÓÚ 64£¬¾ÍÀ©ÈİÖÁÔ­À´µÄÒ»±¶£¬²»×ªºìºÚÊ÷ÁË
-            //ÒòÎªÕâ¸öãĞÖµÀ©Èİ¿ÉÒÔ¼õÉÙ hash ³åÍ»£¬²»±ØÒªÈ¥×ªºìºÚÊ÷
+            //å¦‚æœæ•´ä¸ª table çš„æ•°é‡å°äº 64ï¼Œå°±æ‰©å®¹è‡³åŸæ¥çš„ä¸€å€ï¼Œä¸è½¬çº¢é»‘æ ‘äº†
+            //å› ä¸ºè¿™ä¸ªé˜ˆå€¼æ‰©å®¹å¯ä»¥å‡å°‘ hash å†²çªï¼Œä¸å¿…è¦å»è½¬çº¢é»‘æ ‘
             if ((n = tab.length) < MIN_TREEIFY_CAPACITY)
                 tryPresize(n << 1);
-            //tabAt¾ºÕùµ½Ëøºó£¬¸ÄÎªË«ÏòÁ´±í£¬×îºóÍ¨¹ı TreeBin ±ä³ÉºìºÚÊ÷¡£
-            //Á´±íÖ»ÊÇÒ»¸ö¸¨Öú×÷ÓÃÔÚ TreeBin¶ÔÏó Àï±éÀúÓÃ
+                //tabAtç«äº‰åˆ°é”åï¼Œæ”¹ä¸ºåŒå‘é“¾è¡¨ï¼Œæœ€åé€šè¿‡ TreeBin å˜æˆçº¢é»‘æ ‘ã€‚
+                //é“¾è¡¨åªæ˜¯ä¸€ä¸ªè¾…åŠ©ä½œç”¨åœ¨ TreeBinå¯¹è±¡ é‡Œéå†ç”¨
             else if ((b = tabAt(tab, index)) != null && b.hash >= 0) {
                 synchronized (b) {
                     if (tabAt(tab, index) == b) {
                         TreeNode<K,V> hd = null, tl = null;
                         for (Node<K,V> e = b; e != null; e = e.next) {
-                            //·â×°³ÉTreeNode
+                            //å°è£…æˆTreeNode
                             TreeNode<K,V> p =
-                                new TreeNode<K,V>(e.hash, e.key, e.val,
-                                                  null, null); //ÕâÀïÖ»ÊÇÀûÓÃÁËTreeNode·â×° ¶øÃ»ÓĞÀûÓÃTreeNodeµÄnextÓòºÍparentÓò
+                                    new TreeNode<K,V>(e.hash, e.key, e.val,
+                                            null, null); //è¿™é‡Œåªæ˜¯åˆ©ç”¨äº†TreeNodeå°è£… è€Œæ²¡æœ‰åˆ©ç”¨TreeNodeçš„nextåŸŸå’ŒparentåŸŸ
                             if ((p.prev = tl) == null)
                                 hd = p;
                             else
                                 tl.next = p;
                             tl = p;
                         }
-                        //Í¨¹ı TreeBin ¶ÔÏó¶Ô TreeNode ×ª»»³É¡°ºìºÚÊ÷¡±
+                        //é€šè¿‡ TreeBin å¯¹è±¡å¯¹ TreeNode è½¬æ¢æˆâ€œçº¢é»‘æ ‘â€
                         setTabAt(tab, index, new TreeBin<K,V>(hd));
                     }
                 }
@@ -2311,8 +2315,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                     else if (pr == null)
                         p = pl;
                     else if ((kc != null ||
-                              (kc = comparableClassFor(k)) != null) &&
-                             (dir = compareComparables(kc, k, pk)) != 0)
+                            (kc = comparableClassFor(k)) != null) &&
+                            (dir = compareComparables(kc, k, pk)) != 0)
                         p = (dir < 0) ? pl : pr;
                     else if ((q = pr.findTreeNode(h, k, kc)) != null)
                         return q;
@@ -2353,10 +2357,10 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         static int tieBreakOrder(Object a, Object b) {
             int d;
             if (a == null || b == null ||
-                (d = a.getClass().getName().
-                 compareTo(b.getClass().getName())) == 0)
+                    (d = a.getClass().getName().
+                            compareTo(b.getClass().getName())) == 0)
                 d = (System.identityHashCode(a) <= System.identityHashCode(b) ?
-                     -1 : 1);
+                        -1 : 1);
             return d;
         }
 
@@ -2387,10 +2391,10 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                         else if (ph < h)
                             dir = 1;
                         else if ((kc == null &&
-                                  (kc = comparableClassFor(k)) == null) ||
-                                 (dir = compareComparables(kc, k, pk)) == 0)
+                                (kc = comparableClassFor(k)) == null) ||
+                                (dir = compareComparables(kc, k, pk)) == 0)
                             dir = tieBreakOrder(k, pk);
-                            TreeNode<K,V> xp = p;
+                        TreeNode<K,V> xp = p;
                         if ((p = (dir <= 0) ? p.left : p.right) == null) {
                             x.parent = xp;
                             if (dir <= 0)
@@ -2457,20 +2461,20 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                     int s; K ek;
                     if (((s = lockState) & (WAITER|WRITER)) != 0) {
                         if (e.hash == h &&
-                            ((ek = e.key) == k || (ek != null && k.equals(ek))))
+                                ((ek = e.key) == k || (ek != null && k.equals(ek))))
                             return e;
                         e = e.next;
                     }
                     else if (U.compareAndSwapInt(this, LOCKSTATE, s,
-                                                 s + READER)) {
+                            s + READER)) {
                         TreeNode<K,V> r, p;
                         try {
                             p = ((r = root) == null ? null :
-                                 r.findTreeNode(h, k, null));
+                                    r.findTreeNode(h, k, null));
                         } finally {
                             Thread w;
                             if (U.getAndAddInt(this, LOCKSTATE, -READER) ==
-                                (READER|WAITER) && (w = waiter) != null)
+                                    (READER|WAITER) && (w = waiter) != null)
                                 LockSupport.unpark(w);
                         }
                         return p;
@@ -2500,15 +2504,15 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 else if ((pk = p.key) == k || (pk != null && k.equals(pk)))
                     return p;
                 else if ((kc == null &&
-                          (kc = comparableClassFor(k)) == null) ||
-                         (dir = compareComparables(kc, k, pk)) == 0) {
+                        (kc = comparableClassFor(k)) == null) ||
+                        (dir = compareComparables(kc, k, pk)) == 0) {
                     if (!searched) {
                         TreeNode<K,V> q, ch;
                         searched = true;
                         if (((ch = p.left) != null &&
-                             (q = ch.findTreeNode(h, k, kc)) != null) ||
-                            ((ch = p.right) != null &&
-                             (q = ch.findTreeNode(h, k, kc)) != null))
+                                (q = ch.findTreeNode(h, k, kc)) != null) ||
+                                ((ch = p.right) != null &&
+                                        (q = ch.findTreeNode(h, k, kc)) != null))
                             return q;
                     }
                     dir = tieBreakOrder(k, pk);
@@ -2566,7 +2570,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 return true;
             }
             if ((r = root) == null || r.right == null || // too small
-                (rl = r.left) == null || rl.left == null)
+                    (rl = r.left) == null || rl.left == null)
                 return true;
             lockRoot();
             try {
@@ -2766,7 +2770,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                     else {
                         TreeNode<K,V> sl = xpr.left, sr = xpr.right;
                         if ((sr == null || !sr.red) &&
-                            (sl == null || !sl.red)) {
+                                (sl == null || !sl.red)) {
                             xpr.red = true;
                             x = xp;
                         }
@@ -2777,7 +2781,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                                 xpr.red = true;
                                 root = rotateRight(root, xpr);
                                 xpr = (xp = x.parent) == null ?
-                                    null : xp.right;
+                                        null : xp.right;
                             }
                             if (xpr != null) {
                                 xpr.red = (xp == null) ? false : xp.red;
@@ -2804,7 +2808,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                     else {
                         TreeNode<K,V> sl = xpl.left, sr = xpl.right;
                         if ((sl == null || !sl.red) &&
-                            (sr == null || !sr.red)) {
+                                (sr == null || !sr.red)) {
                             xpl.red = true;
                             x = xp;
                         }
@@ -2815,7 +2819,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                                 xpl.red = true;
                                 root = rotateLeft(root, xpl);
                                 xpl = (xp = x.parent) == null ?
-                                    null : xp.left;
+                                        null : xp.left;
                             }
                             if (xpl != null) {
                                 xpl.red = (xp == null) ? false : xp.red;
@@ -2838,7 +2842,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
          */
         static <K,V> boolean checkInvariants(TreeNode<K,V> t) {
             TreeNode<K,V> tp = t.parent, tl = t.left, tr = t.right,
-                tb = t.prev, tn = (TreeNode<K,V>)t.next;
+                    tb = t.prev, tn = (TreeNode<K,V>)t.next;
             if (tb != null && tb.next != t)
                 return false;
             if (tn != null && tn.prev != t)
@@ -2865,7 +2869,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 U = sun.misc.Unsafe.getUnsafe();
                 Class<?> k = TreeBin.class;
                 LOCKSTATE = U.objectFieldOffset
-                    (k.getDeclaredField("lockState"));
+                        (k.getDeclaredField("lockState"));
             } catch (Exception e) {
                 throw new Error(e);
             }
@@ -2936,7 +2940,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 if (e != null)
                     return next = e;
                 if (baseIndex >= baseLimit || (t = tab) == null ||
-                    (n = t.length) <= (i = index) || i < 0)
+                        (n = t.length) <= (i = index) || i < 0)
                     return next = null;
                 if ((e = tabAt(t, i)) != null && e.hash < 0) {
                     if (e instanceof ForwardingNode) {
@@ -3003,7 +3007,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         final ConcurrentHashMap8<K,V> map;
         Node<K,V> lastReturned;
         BaseIterator(Node<K,V>[] tab, int size, int index, int limit,
-                    ConcurrentHashMap8<K,V> map) {
+                     ConcurrentHashMap8<K,V> map) {
             super(tab, size, index, limit);
             this.map = map;
             advance();
@@ -3022,7 +3026,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
     }
 
     static final class KeyIterator<K,V> extends BaseIterator<K,V>
-        implements Iterator<K>, Enumeration<K> {
+            implements Iterator<K>, Enumeration<K> {
         KeyIterator(Node<K,V>[] tab, int index, int size, int limit,
                     ConcurrentHashMap8<K,V> map) {
             super(tab, index, size, limit, map);
@@ -3042,7 +3046,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
     }
 
     static final class ValueIterator<K,V> extends BaseIterator<K,V>
-        implements Iterator<V>, Enumeration<V> {
+            implements Iterator<V>, Enumeration<V> {
         ValueIterator(Node<K,V>[] tab, int index, int size, int limit,
                       ConcurrentHashMap8<K,V> map) {
             super(tab, index, size, limit, map);
@@ -3062,7 +3066,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
     }
 
     static final class EntryIterator<K,V> extends BaseIterator<K,V>
-        implements Iterator<Map.Entry<K,V>> {
+            implements Iterator<Map.Entry<K,V>> {
         EntryIterator(Node<K,V>[] tab, int index, int size, int limit,
                       ConcurrentHashMap8<K,V> map) {
             super(tab, index, size, limit, map);
@@ -3124,7 +3128,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
     }
 
     static final class KeySpliterator<K,V> extends Traverser<K,V>
-        implements Spliterator<K> {
+            implements Spliterator<K> {
         long est;               // size estimate
         KeySpliterator(Node<K,V>[] tab, int size, int index, int limit,
                        long est) {
@@ -3135,8 +3139,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         public Spliterator<K> trySplit() {
             int i, f, h;
             return (h = ((i = baseIndex) + (f = baseLimit)) >>> 1) <= i ? null :
-                new KeySpliterator<K,V>(tab, baseSize, baseLimit = h,
-                                        f, est >>>= 1);
+                    new KeySpliterator<K,V>(tab, baseSize, baseLimit = h,
+                            f, est >>>= 1);
         }
 
         public void forEachRemaining(Consumer<? super K> action) {
@@ -3158,12 +3162,12 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
         public int characteristics() {
             return Spliterator.DISTINCT | Spliterator.CONCURRENT |
-                Spliterator.NONNULL;
+                    Spliterator.NONNULL;
         }
     }
 
     static final class ValueSpliterator<K,V> extends Traverser<K,V>
-        implements Spliterator<V> {
+            implements Spliterator<V> {
         long est;               // size estimate
         ValueSpliterator(Node<K,V>[] tab, int size, int index, int limit,
                          long est) {
@@ -3174,8 +3178,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         public Spliterator<V> trySplit() {
             int i, f, h;
             return (h = ((i = baseIndex) + (f = baseLimit)) >>> 1) <= i ? null :
-                new ValueSpliterator<K,V>(tab, baseSize, baseLimit = h,
-                                          f, est >>>= 1);
+                    new ValueSpliterator<K,V>(tab, baseSize, baseLimit = h,
+                            f, est >>>= 1);
         }
 
         public void forEachRemaining(Consumer<? super V> action) {
@@ -3201,7 +3205,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
     }
 
     static final class EntrySpliterator<K,V> extends Traverser<K,V>
-        implements Spliterator<Map.Entry<K,V>> {
+            implements Spliterator<Map.Entry<K,V>> {
         final ConcurrentHashMap8<K,V> map; // To export MapEntry
         long est;               // size estimate
         EntrySpliterator(Node<K,V>[] tab, int size, int index, int limit,
@@ -3214,8 +3218,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         public Spliterator<Map.Entry<K,V>> trySplit() {
             int i, f, h;
             return (h = ((i = baseIndex) + (f = baseLimit)) >>> 1) <= i ? null :
-                new EntrySpliterator<K,V>(tab, baseSize, baseLimit = h,
-                                          f, est >>>= 1, map);
+                    new EntrySpliterator<K,V>(tab, baseSize, baseLimit = h,
+                            f, est >>>= 1, map);
         }
 
         public void forEachRemaining(Consumer<? super Map.Entry<K,V>> action) {
@@ -3237,7 +3241,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
         public int characteristics() {
             return Spliterator.DISTINCT | Spliterator.CONCURRENT |
-                Spliterator.NONNULL;
+                    Spliterator.NONNULL;
         }
     }
 
@@ -3271,8 +3275,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                         BiConsumer<? super K,? super V> action) {
         if (action == null) throw new NullPointerException();
         new ForEachMappingTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             action).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        action).invoke();
     }
 
     /**
@@ -3294,8 +3298,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || action == null)
             throw new NullPointerException();
         new ForEachTransformedMappingTask<K,V,U>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             transformer, action).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        transformer, action).invoke();
     }
 
     /**
@@ -3318,8 +3322,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                         BiFunction<? super K, ? super V, ? extends U> searchFunction) {
         if (searchFunction == null) throw new NullPointerException();
         return new SearchMappingsTask<K,V,U>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             searchFunction, new AtomicReference<U>()).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        searchFunction, new AtomicReference<U>()).invoke();
     }
 
     /**
@@ -3344,8 +3348,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceMappingsTask<K,V,U>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, reducer).invoke();
     }
 
     /**
@@ -3370,8 +3374,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceMappingsToDoubleTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, basis, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, basis, reducer).invoke();
     }
 
     /**
@@ -3396,8 +3400,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceMappingsToLongTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, basis, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, basis, reducer).invoke();
     }
 
     /**
@@ -3422,8 +3426,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceMappingsToIntTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, basis, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, basis, reducer).invoke();
     }
 
     /**
@@ -3438,8 +3442,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                            Consumer<? super K> action) {
         if (action == null) throw new NullPointerException();
         new ForEachKeyTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             action).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        action).invoke();
     }
 
     /**
@@ -3461,8 +3465,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || action == null)
             throw new NullPointerException();
         new ForEachTransformedKeyTask<K,V,U>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             transformer, action).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        transformer, action).invoke();
     }
 
     /**
@@ -3485,8 +3489,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                             Function<? super K, ? extends U> searchFunction) {
         if (searchFunction == null) throw new NullPointerException();
         return new SearchKeysTask<K,V,U>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             searchFunction, new AtomicReference<U>()).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        searchFunction, new AtomicReference<U>()).invoke();
     }
 
     /**
@@ -3504,8 +3508,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                         BiFunction<? super K, ? super K, ? extends K> reducer) {
         if (reducer == null) throw new NullPointerException();
         return new ReduceKeysTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, reducer).invoke();
     }
 
     /**
@@ -3526,12 +3530,12 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      */
     public <U> U reduceKeys(long parallelismThreshold,
                             Function<? super K, ? extends U> transformer,
-         BiFunction<? super U, ? super U, ? extends U> reducer) {
+                            BiFunction<? super U, ? super U, ? extends U> reducer) {
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceKeysTask<K,V,U>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, reducer).invoke();
     }
 
     /**
@@ -3556,8 +3560,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceKeysToDoubleTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, basis, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, basis, reducer).invoke();
     }
 
     /**
@@ -3582,8 +3586,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceKeysToLongTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, basis, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, basis, reducer).invoke();
     }
 
     /**
@@ -3608,8 +3612,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceKeysToIntTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, basis, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, basis, reducer).invoke();
     }
 
     /**
@@ -3625,8 +3629,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (action == null)
             throw new NullPointerException();
         new ForEachValueTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             action).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        action).invoke();
     }
 
     /**
@@ -3648,8 +3652,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || action == null)
             throw new NullPointerException();
         new ForEachTransformedValueTask<K,V,U>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             transformer, action).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        transformer, action).invoke();
     }
 
     /**
@@ -3672,8 +3676,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                               Function<? super V, ? extends U> searchFunction) {
         if (searchFunction == null) throw new NullPointerException();
         return new SearchValuesTask<K,V,U>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             searchFunction, new AtomicReference<U>()).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        searchFunction, new AtomicReference<U>()).invoke();
     }
 
     /**
@@ -3690,8 +3694,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                           BiFunction<? super V, ? super V, ? extends V> reducer) {
         if (reducer == null) throw new NullPointerException();
         return new ReduceValuesTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, reducer).invoke();
     }
 
     /**
@@ -3716,8 +3720,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceValuesTask<K,V,U>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, reducer).invoke();
     }
 
     /**
@@ -3742,8 +3746,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceValuesToDoubleTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, basis, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, basis, reducer).invoke();
     }
 
     /**
@@ -3768,8 +3772,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceValuesToLongTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, basis, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, basis, reducer).invoke();
     }
 
     /**
@@ -3794,8 +3798,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceValuesToIntTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, basis, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, basis, reducer).invoke();
     }
 
     /**
@@ -3810,7 +3814,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                              Consumer<? super Map.Entry<K,V>> action) {
         if (action == null) throw new NullPointerException();
         new ForEachEntryTask<K,V>(null, batchFor(parallelismThreshold), 0, 0, table,
-                                  action).invoke();
+                action).invoke();
     }
 
     /**
@@ -3832,8 +3836,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || action == null)
             throw new NullPointerException();
         new ForEachTransformedEntryTask<K,V,U>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             transformer, action).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        transformer, action).invoke();
     }
 
     /**
@@ -3856,8 +3860,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                                Function<Map.Entry<K,V>, ? extends U> searchFunction) {
         if (searchFunction == null) throw new NullPointerException();
         return new SearchEntriesTask<K,V,U>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             searchFunction, new AtomicReference<U>()).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        searchFunction, new AtomicReference<U>()).invoke();
     }
 
     /**
@@ -3874,8 +3878,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                                         BiFunction<Map.Entry<K,V>, Map.Entry<K,V>, ? extends Map.Entry<K,V>> reducer) {
         if (reducer == null) throw new NullPointerException();
         return new ReduceEntriesTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, reducer).invoke();
     }
 
     /**
@@ -3900,8 +3904,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceEntriesTask<K,V,U>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, reducer).invoke();
     }
 
     /**
@@ -3926,8 +3930,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceEntriesToDoubleTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, basis, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, basis, reducer).invoke();
     }
 
     /**
@@ -3952,8 +3956,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceEntriesToLongTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, basis, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, basis, reducer).invoke();
     }
 
     /**
@@ -3978,8 +3982,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
         if (transformer == null || reducer == null)
             throw new NullPointerException();
         return new MapReduceEntriesToIntTask<K,V>
-            (null, batchFor(parallelismThreshold), 0, 0, table,
-             null, transformer, basis, reducer).invoke();
+                (null, batchFor(parallelismThreshold), 0, 0, table,
+                        null, transformer, basis, reducer).invoke();
     }
 
 
@@ -3989,7 +3993,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      * Base class for views.
      */
     abstract static class CollectionView<K,V,E>
-        implements Collection<E>, java.io.Serializable {
+            implements Collection<E>, java.io.Serializable {
         private static final long serialVersionUID = 7249069246763182397L;
         final ConcurrentHashMap8<K,V> map;
         CollectionView(ConcurrentHashMap8<K,V> map)  { this.map = map; }
@@ -4054,8 +4058,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 throw new OutOfMemoryError(oomeMsg);
             int m = (int)sz;
             T[] r = (a.length >= m) ? a :
-                (T[])java.lang.reflect.Array
-                .newInstance(a.getClass().getComponentType(), m);
+                    (T[])java.lang.reflect.Array
+                            .newInstance(a.getClass().getComponentType(), m);
             int n = r.length;
             int i = 0;
             for (E e : this) {
@@ -4152,7 +4156,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      * @since 1.8
      */
     public static class KeySetView<K,V> extends CollectionView<K,V,K>
-        implements Set<K>, java.io.Serializable {
+            implements Set<K>, java.io.Serializable {
         private static final long serialVersionUID = 7249069246763182397L;
         private final V value;
         KeySetView(ConcurrentHashMap8<K,V> map, V value) {  // non-public
@@ -4247,7 +4251,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             Set<?> c;
             return ((o instanceof Set) &&
                     ((c = (Set<?>)o) == this ||
-                     (containsAll(c) && c.containsAll(this))));
+                            (containsAll(c) && c.containsAll(this))));
         }
 
         public Spliterator<K> spliterator() {
@@ -4275,7 +4279,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      * directly instantiated. See {@link #values()}.
      */
     static final class ValuesView<K,V> extends CollectionView<K,V,V>
-        implements Collection<V>, java.io.Serializable {
+            implements Collection<V>, java.io.Serializable {
         private static final long serialVersionUID = 2249069246763182397L;
         ValuesView(ConcurrentHashMap8<K,V> map) { super(map); }
         public final boolean contains(Object o) {
@@ -4333,7 +4337,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      * {@link #entrySet()}.
      */
     static final class EntrySetView<K,V> extends CollectionView<K,V,Map.Entry<K,V>>
-        implements Set<Map.Entry<K,V>>, java.io.Serializable {
+            implements Set<Map.Entry<K,V>>, java.io.Serializable {
         private static final long serialVersionUID = 2249069246763182397L;
         EntrySetView(ConcurrentHashMap8<K,V> map) { super(map); }
 
@@ -4393,7 +4397,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             Set<?> c;
             return ((o instanceof Set) &&
                     ((c = (Set<?>)o) == this ||
-                     (containsAll(c) && c.containsAll(this))));
+                            (containsAll(c) && c.containsAll(this))));
         }
 
         public Spliterator<Map.Entry<K,V>> spliterator() {
@@ -4459,7 +4463,7 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 if (e != null)
                     return next = e;
                 if (baseIndex >= baseLimit || (t = tab) == null ||
-                    (n = t.length) <= (i = index) || i < 0)
+                        (n = t.length) <= (i = index) || i < 0)
                     return next = null;
                 if ((e = tabAt(t, i)) != null && e.hash < 0) {
                     if (e instanceof ForwardingNode) {
@@ -4519,11 +4523,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
      */
     @SuppressWarnings("serial")
     static final class ForEachKeyTask<K,V>
-        extends BulkTask<K,V,Void> {
+            extends BulkTask<K,V,Void> {
         final Consumer<? super K> action;
         ForEachKeyTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             Consumer<? super K> action) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 Consumer<? super K> action) {
             super(p, b, i, f, t);
             this.action = action;
         }
@@ -4531,11 +4535,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final Consumer<? super K> action;
             if ((action = this.action) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     new ForEachKeyTask<K,V>
-                        (this, batch >>>= 1, baseLimit = h, f, tab,
-                         action).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    action).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null;)
                     action.accept(p.key);
@@ -4546,11 +4550,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class ForEachValueTask<K,V>
-        extends BulkTask<K,V,Void> {
+            extends BulkTask<K,V,Void> {
         final Consumer<? super V> action;
         ForEachValueTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             Consumer<? super V> action) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 Consumer<? super V> action) {
             super(p, b, i, f, t);
             this.action = action;
         }
@@ -4558,11 +4562,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final Consumer<? super V> action;
             if ((action = this.action) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     new ForEachValueTask<K,V>
-                        (this, batch >>>= 1, baseLimit = h, f, tab,
-                         action).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    action).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null;)
                     action.accept(p.val);
@@ -4573,11 +4577,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class ForEachEntryTask<K,V>
-        extends BulkTask<K,V,Void> {
+            extends BulkTask<K,V,Void> {
         final Consumer<? super Entry<K,V>> action;
         ForEachEntryTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             Consumer<? super Entry<K,V>> action) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 Consumer<? super Entry<K,V>> action) {
             super(p, b, i, f, t);
             this.action = action;
         }
@@ -4585,11 +4589,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final Consumer<? super Entry<K,V>> action;
             if ((action = this.action) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     new ForEachEntryTask<K,V>
-                        (this, batch >>>= 1, baseLimit = h, f, tab,
-                         action).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    action).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     action.accept(p);
@@ -4600,11 +4604,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class ForEachMappingTask<K,V>
-        extends BulkTask<K,V,Void> {
+            extends BulkTask<K,V,Void> {
         final BiConsumer<? super K, ? super V> action;
         ForEachMappingTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             BiConsumer<? super K,? super V> action) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 BiConsumer<? super K,? super V> action) {
             super(p, b, i, f, t);
             this.action = action;
         }
@@ -4612,11 +4616,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final BiConsumer<? super K, ? super V> action;
             if ((action = this.action) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     new ForEachMappingTask<K,V>
-                        (this, batch >>>= 1, baseLimit = h, f, tab,
-                         action).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    action).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     action.accept(p.key, p.val);
@@ -4627,12 +4631,12 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class ForEachTransformedKeyTask<K,V,U>
-        extends BulkTask<K,V,Void> {
+            extends BulkTask<K,V,Void> {
         final Function<? super K, ? extends U> transformer;
         final Consumer<? super U> action;
         ForEachTransformedKeyTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             Function<? super K, ? extends U> transformer, Consumer<? super U> action) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 Function<? super K, ? extends U> transformer, Consumer<? super U> action) {
             super(p, b, i, f, t);
             this.transformer = transformer; this.action = action;
         }
@@ -4640,13 +4644,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final Function<? super K, ? extends U> transformer;
             final Consumer<? super U> action;
             if ((transformer = this.transformer) != null &&
-                (action = this.action) != null) {
+                    (action = this.action) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     new ForEachTransformedKeyTask<K,V,U>
-                        (this, batch >>>= 1, baseLimit = h, f, tab,
-                         transformer, action).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    transformer, action).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; ) {
                     U u;
@@ -4660,12 +4664,12 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class ForEachTransformedValueTask<K,V,U>
-        extends BulkTask<K,V,Void> {
+            extends BulkTask<K,V,Void> {
         final Function<? super V, ? extends U> transformer;
         final Consumer<? super U> action;
         ForEachTransformedValueTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             Function<? super V, ? extends U> transformer, Consumer<? super U> action) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 Function<? super V, ? extends U> transformer, Consumer<? super U> action) {
             super(p, b, i, f, t);
             this.transformer = transformer; this.action = action;
         }
@@ -4673,13 +4677,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final Function<? super V, ? extends U> transformer;
             final Consumer<? super U> action;
             if ((transformer = this.transformer) != null &&
-                (action = this.action) != null) {
+                    (action = this.action) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     new ForEachTransformedValueTask<K,V,U>
-                        (this, batch >>>= 1, baseLimit = h, f, tab,
-                         transformer, action).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    transformer, action).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; ) {
                     U u;
@@ -4693,12 +4697,12 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class ForEachTransformedEntryTask<K,V,U>
-        extends BulkTask<K,V,Void> {
+            extends BulkTask<K,V,Void> {
         final Function<Map.Entry<K,V>, ? extends U> transformer;
         final Consumer<? super U> action;
         ForEachTransformedEntryTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             Function<Map.Entry<K,V>, ? extends U> transformer, Consumer<? super U> action) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 Function<Map.Entry<K,V>, ? extends U> transformer, Consumer<? super U> action) {
             super(p, b, i, f, t);
             this.transformer = transformer; this.action = action;
         }
@@ -4706,13 +4710,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final Function<Map.Entry<K,V>, ? extends U> transformer;
             final Consumer<? super U> action;
             if ((transformer = this.transformer) != null &&
-                (action = this.action) != null) {
+                    (action = this.action) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     new ForEachTransformedEntryTask<K,V,U>
-                        (this, batch >>>= 1, baseLimit = h, f, tab,
-                         transformer, action).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    transformer, action).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; ) {
                     U u;
@@ -4726,13 +4730,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class ForEachTransformedMappingTask<K,V,U>
-        extends BulkTask<K,V,Void> {
+            extends BulkTask<K,V,Void> {
         final BiFunction<? super K, ? super V, ? extends U> transformer;
         final Consumer<? super U> action;
         ForEachTransformedMappingTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             BiFunction<? super K, ? super V, ? extends U> transformer,
-             Consumer<? super U> action) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 BiFunction<? super K, ? super V, ? extends U> transformer,
+                 Consumer<? super U> action) {
             super(p, b, i, f, t);
             this.transformer = transformer; this.action = action;
         }
@@ -4740,13 +4744,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final BiFunction<? super K, ? super V, ? extends U> transformer;
             final Consumer<? super U> action;
             if ((transformer = this.transformer) != null &&
-                (action = this.action) != null) {
+                    (action = this.action) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     new ForEachTransformedMappingTask<K,V,U>
-                        (this, batch >>>= 1, baseLimit = h, f, tab,
-                         transformer, action).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    transformer, action).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; ) {
                     U u;
@@ -4760,13 +4764,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class SearchKeysTask<K,V,U>
-        extends BulkTask<K,V,U> {
+            extends BulkTask<K,V,U> {
         final Function<? super K, ? extends U> searchFunction;
         final AtomicReference<U> result;
         SearchKeysTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             Function<? super K, ? extends U> searchFunction,
-             AtomicReference<U> result) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 Function<? super K, ? extends U> searchFunction,
+                 AtomicReference<U> result) {
             super(p, b, i, f, t);
             this.searchFunction = searchFunction; this.result = result;
         }
@@ -4775,15 +4779,15 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final Function<? super K, ? extends U> searchFunction;
             final AtomicReference<U> result;
             if ((searchFunction = this.searchFunction) != null &&
-                (result = this.result) != null) {
+                    (result = this.result) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     if (result.get() != null)
                         return;
                     addToPendingCount(1);
                     new SearchKeysTask<K,V,U>
-                        (this, batch >>>= 1, baseLimit = h, f, tab,
-                         searchFunction, result).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    searchFunction, result).fork();
                 }
                 while (result.get() == null) {
                     U u;
@@ -4804,13 +4808,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class SearchValuesTask<K,V,U>
-        extends BulkTask<K,V,U> {
+            extends BulkTask<K,V,U> {
         final Function<? super V, ? extends U> searchFunction;
         final AtomicReference<U> result;
         SearchValuesTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             Function<? super V, ? extends U> searchFunction,
-             AtomicReference<U> result) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 Function<? super V, ? extends U> searchFunction,
+                 AtomicReference<U> result) {
             super(p, b, i, f, t);
             this.searchFunction = searchFunction; this.result = result;
         }
@@ -4819,15 +4823,15 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final Function<? super V, ? extends U> searchFunction;
             final AtomicReference<U> result;
             if ((searchFunction = this.searchFunction) != null &&
-                (result = this.result) != null) {
+                    (result = this.result) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     if (result.get() != null)
                         return;
                     addToPendingCount(1);
                     new SearchValuesTask<K,V,U>
-                        (this, batch >>>= 1, baseLimit = h, f, tab,
-                         searchFunction, result).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    searchFunction, result).fork();
                 }
                 while (result.get() == null) {
                     U u;
@@ -4848,13 +4852,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class SearchEntriesTask<K,V,U>
-        extends BulkTask<K,V,U> {
+            extends BulkTask<K,V,U> {
         final Function<Entry<K,V>, ? extends U> searchFunction;
         final AtomicReference<U> result;
         SearchEntriesTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             Function<Entry<K,V>, ? extends U> searchFunction,
-             AtomicReference<U> result) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 Function<Entry<K,V>, ? extends U> searchFunction,
+                 AtomicReference<U> result) {
             super(p, b, i, f, t);
             this.searchFunction = searchFunction; this.result = result;
         }
@@ -4863,15 +4867,15 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final Function<Entry<K,V>, ? extends U> searchFunction;
             final AtomicReference<U> result;
             if ((searchFunction = this.searchFunction) != null &&
-                (result = this.result) != null) {
+                    (result = this.result) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     if (result.get() != null)
                         return;
                     addToPendingCount(1);
                     new SearchEntriesTask<K,V,U>
-                        (this, batch >>>= 1, baseLimit = h, f, tab,
-                         searchFunction, result).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    searchFunction, result).fork();
                 }
                 while (result.get() == null) {
                     U u;
@@ -4892,13 +4896,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class SearchMappingsTask<K,V,U>
-        extends BulkTask<K,V,U> {
+            extends BulkTask<K,V,U> {
         final BiFunction<? super K, ? super V, ? extends U> searchFunction;
         final AtomicReference<U> result;
         SearchMappingsTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             BiFunction<? super K, ? super V, ? extends U> searchFunction,
-             AtomicReference<U> result) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 BiFunction<? super K, ? super V, ? extends U> searchFunction,
+                 AtomicReference<U> result) {
             super(p, b, i, f, t);
             this.searchFunction = searchFunction; this.result = result;
         }
@@ -4907,15 +4911,15 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final BiFunction<? super K, ? super V, ? extends U> searchFunction;
             final AtomicReference<U> result;
             if ((searchFunction = this.searchFunction) != null &&
-                (result = this.result) != null) {
+                    (result = this.result) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     if (result.get() != null)
                         return;
                     addToPendingCount(1);
                     new SearchMappingsTask<K,V,U>
-                        (this, batch >>>= 1, baseLimit = h, f, tab,
-                         searchFunction, result).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    searchFunction, result).fork();
                 }
                 while (result.get() == null) {
                     U u;
@@ -4936,14 +4940,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class ReduceKeysTask<K,V>
-        extends BulkTask<K,V,K> {
+            extends BulkTask<K,V,K> {
         final BiFunction<? super K, ? super K, ? extends K> reducer;
         K result;
         ReduceKeysTask<K,V> rights, nextRight;
         ReduceKeysTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             ReduceKeysTask<K,V> nextRight,
-             BiFunction<? super K, ? super K, ? extends K> reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 ReduceKeysTask<K,V> nextRight,
+                 BiFunction<? super K, ? super K, ? extends K> reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.reducer = reducer;
         }
@@ -4952,11 +4956,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final BiFunction<? super K, ? super K, ? extends K> reducer;
             if ((reducer = this.reducer) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new ReduceKeysTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, reducer)).fork();
                 }
                 K r = null;
                 for (Node<K,V> p; (p = advance()) != null; ) {
@@ -4968,13 +4972,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     ReduceKeysTask<K,V>
-                        t = (ReduceKeysTask<K,V>)c,
-                        s = t.rights;
+                            t = (ReduceKeysTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         K tr, sr;
                         if ((sr = s.result) != null)
                             t.result = (((tr = t.result) == null) ? sr :
-                                        reducer.apply(tr, sr));
+                                    reducer.apply(tr, sr));
                         s = t.rights = s.nextRight;
                     }
                 }
@@ -4984,14 +4988,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class ReduceValuesTask<K,V>
-        extends BulkTask<K,V,V> {
+            extends BulkTask<K,V,V> {
         final BiFunction<? super V, ? super V, ? extends V> reducer;
         V result;
         ReduceValuesTask<K,V> rights, nextRight;
         ReduceValuesTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             ReduceValuesTask<K,V> nextRight,
-             BiFunction<? super V, ? super V, ? extends V> reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 ReduceValuesTask<K,V> nextRight,
+                 BiFunction<? super V, ? super V, ? extends V> reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.reducer = reducer;
         }
@@ -5000,11 +5004,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final BiFunction<? super V, ? super V, ? extends V> reducer;
             if ((reducer = this.reducer) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new ReduceValuesTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, reducer)).fork();
                 }
                 V r = null;
                 for (Node<K,V> p; (p = advance()) != null; ) {
@@ -5016,13 +5020,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     ReduceValuesTask<K,V>
-                        t = (ReduceValuesTask<K,V>)c,
-                        s = t.rights;
+                            t = (ReduceValuesTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         V tr, sr;
                         if ((sr = s.result) != null)
                             t.result = (((tr = t.result) == null) ? sr :
-                                        reducer.apply(tr, sr));
+                                    reducer.apply(tr, sr));
                         s = t.rights = s.nextRight;
                     }
                 }
@@ -5032,14 +5036,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class ReduceEntriesTask<K,V>
-        extends BulkTask<K,V,Map.Entry<K,V>> {
+            extends BulkTask<K,V,Map.Entry<K,V>> {
         final BiFunction<Map.Entry<K,V>, Map.Entry<K,V>, ? extends Map.Entry<K,V>> reducer;
         Map.Entry<K,V> result;
         ReduceEntriesTask<K,V> rights, nextRight;
         ReduceEntriesTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             ReduceEntriesTask<K,V> nextRight,
-             BiFunction<Entry<K,V>, Map.Entry<K,V>, ? extends Map.Entry<K,V>> reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 ReduceEntriesTask<K,V> nextRight,
+                 BiFunction<Entry<K,V>, Map.Entry<K,V>, ? extends Map.Entry<K,V>> reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.reducer = reducer;
         }
@@ -5048,11 +5052,11 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final BiFunction<Map.Entry<K,V>, Map.Entry<K,V>, ? extends Map.Entry<K,V>> reducer;
             if ((reducer = this.reducer) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new ReduceEntriesTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, reducer)).fork();
                 }
                 Map.Entry<K,V> r = null;
                 for (Node<K,V> p; (p = advance()) != null; )
@@ -5062,13 +5066,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     ReduceEntriesTask<K,V>
-                        t = (ReduceEntriesTask<K,V>)c,
-                        s = t.rights;
+                            t = (ReduceEntriesTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         Map.Entry<K,V> tr, sr;
                         if ((sr = s.result) != null)
                             t.result = (((tr = t.result) == null) ? sr :
-                                        reducer.apply(tr, sr));
+                                    reducer.apply(tr, sr));
                         s = t.rights = s.nextRight;
                     }
                 }
@@ -5078,16 +5082,16 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceKeysTask<K,V,U>
-        extends BulkTask<K,V,U> {
+            extends BulkTask<K,V,U> {
         final Function<? super K, ? extends U> transformer;
         final BiFunction<? super U, ? super U, ? extends U> reducer;
         U result;
         MapReduceKeysTask<K,V,U> rights, nextRight;
         MapReduceKeysTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceKeysTask<K,V,U> nextRight,
-             Function<? super K, ? extends U> transformer,
-             BiFunction<? super U, ? super U, ? extends U> reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceKeysTask<K,V,U> nextRight,
+                 Function<? super K, ? extends U> transformer,
+                 BiFunction<? super U, ? super U, ? extends U> reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.reducer = reducer;
@@ -5097,13 +5101,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final Function<? super K, ? extends U> transformer;
             final BiFunction<? super U, ? super U, ? extends U> reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceKeysTask<K,V,U>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, reducer)).fork();
                 }
                 U r = null;
                 for (Node<K,V> p; (p = advance()) != null; ) {
@@ -5116,13 +5120,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceKeysTask<K,V,U>
-                        t = (MapReduceKeysTask<K,V,U>)c,
-                        s = t.rights;
+                            t = (MapReduceKeysTask<K,V,U>)c,
+                            s = t.rights;
                     while (s != null) {
                         U tr, sr;
                         if ((sr = s.result) != null)
                             t.result = (((tr = t.result) == null) ? sr :
-                                        reducer.apply(tr, sr));
+                                    reducer.apply(tr, sr));
                         s = t.rights = s.nextRight;
                     }
                 }
@@ -5132,16 +5136,16 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceValuesTask<K,V,U>
-        extends BulkTask<K,V,U> {
+            extends BulkTask<K,V,U> {
         final Function<? super V, ? extends U> transformer;
         final BiFunction<? super U, ? super U, ? extends U> reducer;
         U result;
         MapReduceValuesTask<K,V,U> rights, nextRight;
         MapReduceValuesTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceValuesTask<K,V,U> nextRight,
-             Function<? super V, ? extends U> transformer,
-             BiFunction<? super U, ? super U, ? extends U> reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceValuesTask<K,V,U> nextRight,
+                 Function<? super V, ? extends U> transformer,
+                 BiFunction<? super U, ? super U, ? extends U> reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.reducer = reducer;
@@ -5151,13 +5155,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final Function<? super V, ? extends U> transformer;
             final BiFunction<? super U, ? super U, ? extends U> reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceValuesTask<K,V,U>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, reducer)).fork();
                 }
                 U r = null;
                 for (Node<K,V> p; (p = advance()) != null; ) {
@@ -5170,13 +5174,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceValuesTask<K,V,U>
-                        t = (MapReduceValuesTask<K,V,U>)c,
-                        s = t.rights;
+                            t = (MapReduceValuesTask<K,V,U>)c,
+                            s = t.rights;
                     while (s != null) {
                         U tr, sr;
                         if ((sr = s.result) != null)
                             t.result = (((tr = t.result) == null) ? sr :
-                                        reducer.apply(tr, sr));
+                                    reducer.apply(tr, sr));
                         s = t.rights = s.nextRight;
                     }
                 }
@@ -5186,16 +5190,16 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceEntriesTask<K,V,U>
-        extends BulkTask<K,V,U> {
+            extends BulkTask<K,V,U> {
         final Function<Map.Entry<K,V>, ? extends U> transformer;
         final BiFunction<? super U, ? super U, ? extends U> reducer;
         U result;
         MapReduceEntriesTask<K,V,U> rights, nextRight;
         MapReduceEntriesTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceEntriesTask<K,V,U> nextRight,
-             Function<Map.Entry<K,V>, ? extends U> transformer,
-             BiFunction<? super U, ? super U, ? extends U> reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceEntriesTask<K,V,U> nextRight,
+                 Function<Map.Entry<K,V>, ? extends U> transformer,
+                 BiFunction<? super U, ? super U, ? extends U> reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.reducer = reducer;
@@ -5205,13 +5209,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final Function<Map.Entry<K,V>, ? extends U> transformer;
             final BiFunction<? super U, ? super U, ? extends U> reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceEntriesTask<K,V,U>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, reducer)).fork();
                 }
                 U r = null;
                 for (Node<K,V> p; (p = advance()) != null; ) {
@@ -5224,13 +5228,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceEntriesTask<K,V,U>
-                        t = (MapReduceEntriesTask<K,V,U>)c,
-                        s = t.rights;
+                            t = (MapReduceEntriesTask<K,V,U>)c,
+                            s = t.rights;
                     while (s != null) {
                         U tr, sr;
                         if ((sr = s.result) != null)
                             t.result = (((tr = t.result) == null) ? sr :
-                                        reducer.apply(tr, sr));
+                                    reducer.apply(tr, sr));
                         s = t.rights = s.nextRight;
                     }
                 }
@@ -5240,16 +5244,16 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceMappingsTask<K,V,U>
-        extends BulkTask<K,V,U> {
+            extends BulkTask<K,V,U> {
         final BiFunction<? super K, ? super V, ? extends U> transformer;
         final BiFunction<? super U, ? super U, ? extends U> reducer;
         U result;
         MapReduceMappingsTask<K,V,U> rights, nextRight;
         MapReduceMappingsTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceMappingsTask<K,V,U> nextRight,
-             BiFunction<? super K, ? super V, ? extends U> transformer,
-             BiFunction<? super U, ? super U, ? extends U> reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceMappingsTask<K,V,U> nextRight,
+                 BiFunction<? super K, ? super V, ? extends U> transformer,
+                 BiFunction<? super U, ? super U, ? extends U> reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.reducer = reducer;
@@ -5259,13 +5263,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final BiFunction<? super K, ? super V, ? extends U> transformer;
             final BiFunction<? super U, ? super U, ? extends U> reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceMappingsTask<K,V,U>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, reducer)).fork();
                 }
                 U r = null;
                 for (Node<K,V> p; (p = advance()) != null; ) {
@@ -5278,13 +5282,13 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceMappingsTask<K,V,U>
-                        t = (MapReduceMappingsTask<K,V,U>)c,
-                        s = t.rights;
+                            t = (MapReduceMappingsTask<K,V,U>)c,
+                            s = t.rights;
                     while (s != null) {
                         U tr, sr;
                         if ((sr = s.result) != null)
                             t.result = (((tr = t.result) == null) ? sr :
-                                        reducer.apply(tr, sr));
+                                    reducer.apply(tr, sr));
                         s = t.rights = s.nextRight;
                     }
                 }
@@ -5294,18 +5298,18 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceKeysToDoubleTask<K,V>
-        extends BulkTask<K,V,Double> {
+            extends BulkTask<K,V,Double> {
         final ToDoubleFunction<? super K> transformer;
         final DoubleBinaryOperator reducer;
         final double basis;
         double result;
         MapReduceKeysToDoubleTask<K,V> rights, nextRight;
         MapReduceKeysToDoubleTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceKeysToDoubleTask<K,V> nextRight,
-             ToDoubleFunction<? super K> transformer,
-             double basis,
-             DoubleBinaryOperator reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceKeysToDoubleTask<K,V> nextRight,
+                 ToDoubleFunction<? super K> transformer,
+                 double basis,
+                 DoubleBinaryOperator reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.basis = basis; this.reducer = reducer;
@@ -5315,14 +5319,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final ToDoubleFunction<? super K> transformer;
             final DoubleBinaryOperator reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 double r = this.basis;
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceKeysToDoubleTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, r, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, r, reducer)).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     r = reducer.applyAsDouble(r, transformer.applyAsDouble(p.key));
@@ -5331,8 +5335,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceKeysToDoubleTask<K,V>
-                        t = (MapReduceKeysToDoubleTask<K,V>)c,
-                        s = t.rights;
+                            t = (MapReduceKeysToDoubleTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         t.result = reducer.applyAsDouble(t.result, s.result);
                         s = t.rights = s.nextRight;
@@ -5344,18 +5348,18 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceValuesToDoubleTask<K,V>
-        extends BulkTask<K,V,Double> {
+            extends BulkTask<K,V,Double> {
         final ToDoubleFunction<? super V> transformer;
         final DoubleBinaryOperator reducer;
         final double basis;
         double result;
         MapReduceValuesToDoubleTask<K,V> rights, nextRight;
         MapReduceValuesToDoubleTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceValuesToDoubleTask<K,V> nextRight,
-             ToDoubleFunction<? super V> transformer,
-             double basis,
-             DoubleBinaryOperator reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceValuesToDoubleTask<K,V> nextRight,
+                 ToDoubleFunction<? super V> transformer,
+                 double basis,
+                 DoubleBinaryOperator reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.basis = basis; this.reducer = reducer;
@@ -5365,14 +5369,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final ToDoubleFunction<? super V> transformer;
             final DoubleBinaryOperator reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 double r = this.basis;
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceValuesToDoubleTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, r, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, r, reducer)).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     r = reducer.applyAsDouble(r, transformer.applyAsDouble(p.val));
@@ -5381,8 +5385,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceValuesToDoubleTask<K,V>
-                        t = (MapReduceValuesToDoubleTask<K,V>)c,
-                        s = t.rights;
+                            t = (MapReduceValuesToDoubleTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         t.result = reducer.applyAsDouble(t.result, s.result);
                         s = t.rights = s.nextRight;
@@ -5394,18 +5398,18 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceEntriesToDoubleTask<K,V>
-        extends BulkTask<K,V,Double> {
+            extends BulkTask<K,V,Double> {
         final ToDoubleFunction<Map.Entry<K,V>> transformer;
         final DoubleBinaryOperator reducer;
         final double basis;
         double result;
         MapReduceEntriesToDoubleTask<K,V> rights, nextRight;
         MapReduceEntriesToDoubleTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceEntriesToDoubleTask<K,V> nextRight,
-             ToDoubleFunction<Map.Entry<K,V>> transformer,
-             double basis,
-             DoubleBinaryOperator reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceEntriesToDoubleTask<K,V> nextRight,
+                 ToDoubleFunction<Map.Entry<K,V>> transformer,
+                 double basis,
+                 DoubleBinaryOperator reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.basis = basis; this.reducer = reducer;
@@ -5415,14 +5419,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final ToDoubleFunction<Map.Entry<K,V>> transformer;
             final DoubleBinaryOperator reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 double r = this.basis;
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceEntriesToDoubleTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, r, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, r, reducer)).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     r = reducer.applyAsDouble(r, transformer.applyAsDouble(p));
@@ -5431,8 +5435,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceEntriesToDoubleTask<K,V>
-                        t = (MapReduceEntriesToDoubleTask<K,V>)c,
-                        s = t.rights;
+                            t = (MapReduceEntriesToDoubleTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         t.result = reducer.applyAsDouble(t.result, s.result);
                         s = t.rights = s.nextRight;
@@ -5444,18 +5448,18 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceMappingsToDoubleTask<K,V>
-        extends BulkTask<K,V,Double> {
+            extends BulkTask<K,V,Double> {
         final ToDoubleBiFunction<? super K, ? super V> transformer;
         final DoubleBinaryOperator reducer;
         final double basis;
         double result;
         MapReduceMappingsToDoubleTask<K,V> rights, nextRight;
         MapReduceMappingsToDoubleTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceMappingsToDoubleTask<K,V> nextRight,
-             ToDoubleBiFunction<? super K, ? super V> transformer,
-             double basis,
-             DoubleBinaryOperator reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceMappingsToDoubleTask<K,V> nextRight,
+                 ToDoubleBiFunction<? super K, ? super V> transformer,
+                 double basis,
+                 DoubleBinaryOperator reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.basis = basis; this.reducer = reducer;
@@ -5465,14 +5469,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final ToDoubleBiFunction<? super K, ? super V> transformer;
             final DoubleBinaryOperator reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 double r = this.basis;
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceMappingsToDoubleTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, r, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, r, reducer)).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     r = reducer.applyAsDouble(r, transformer.applyAsDouble(p.key, p.val));
@@ -5481,8 +5485,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceMappingsToDoubleTask<K,V>
-                        t = (MapReduceMappingsToDoubleTask<K,V>)c,
-                        s = t.rights;
+                            t = (MapReduceMappingsToDoubleTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         t.result = reducer.applyAsDouble(t.result, s.result);
                         s = t.rights = s.nextRight;
@@ -5494,18 +5498,18 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceKeysToLongTask<K,V>
-        extends BulkTask<K,V,Long> {
+            extends BulkTask<K,V,Long> {
         final ToLongFunction<? super K> transformer;
         final LongBinaryOperator reducer;
         final long basis;
         long result;
         MapReduceKeysToLongTask<K,V> rights, nextRight;
         MapReduceKeysToLongTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceKeysToLongTask<K,V> nextRight,
-             ToLongFunction<? super K> transformer,
-             long basis,
-             LongBinaryOperator reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceKeysToLongTask<K,V> nextRight,
+                 ToLongFunction<? super K> transformer,
+                 long basis,
+                 LongBinaryOperator reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.basis = basis; this.reducer = reducer;
@@ -5515,14 +5519,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final ToLongFunction<? super K> transformer;
             final LongBinaryOperator reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 long r = this.basis;
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceKeysToLongTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, r, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, r, reducer)).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     r = reducer.applyAsLong(r, transformer.applyAsLong(p.key));
@@ -5531,8 +5535,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceKeysToLongTask<K,V>
-                        t = (MapReduceKeysToLongTask<K,V>)c,
-                        s = t.rights;
+                            t = (MapReduceKeysToLongTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         t.result = reducer.applyAsLong(t.result, s.result);
                         s = t.rights = s.nextRight;
@@ -5544,18 +5548,18 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceValuesToLongTask<K,V>
-        extends BulkTask<K,V,Long> {
+            extends BulkTask<K,V,Long> {
         final ToLongFunction<? super V> transformer;
         final LongBinaryOperator reducer;
         final long basis;
         long result;
         MapReduceValuesToLongTask<K,V> rights, nextRight;
         MapReduceValuesToLongTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceValuesToLongTask<K,V> nextRight,
-             ToLongFunction<? super V> transformer,
-             long basis,
-             LongBinaryOperator reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceValuesToLongTask<K,V> nextRight,
+                 ToLongFunction<? super V> transformer,
+                 long basis,
+                 LongBinaryOperator reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.basis = basis; this.reducer = reducer;
@@ -5565,14 +5569,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final ToLongFunction<? super V> transformer;
             final LongBinaryOperator reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 long r = this.basis;
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceValuesToLongTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, r, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, r, reducer)).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     r = reducer.applyAsLong(r, transformer.applyAsLong(p.val));
@@ -5581,8 +5585,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceValuesToLongTask<K,V>
-                        t = (MapReduceValuesToLongTask<K,V>)c,
-                        s = t.rights;
+                            t = (MapReduceValuesToLongTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         t.result = reducer.applyAsLong(t.result, s.result);
                         s = t.rights = s.nextRight;
@@ -5594,18 +5598,18 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceEntriesToLongTask<K,V>
-        extends BulkTask<K,V,Long> {
+            extends BulkTask<K,V,Long> {
         final ToLongFunction<Map.Entry<K,V>> transformer;
         final LongBinaryOperator reducer;
         final long basis;
         long result;
         MapReduceEntriesToLongTask<K,V> rights, nextRight;
         MapReduceEntriesToLongTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceEntriesToLongTask<K,V> nextRight,
-             ToLongFunction<Map.Entry<K,V>> transformer,
-             long basis,
-             LongBinaryOperator reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceEntriesToLongTask<K,V> nextRight,
+                 ToLongFunction<Map.Entry<K,V>> transformer,
+                 long basis,
+                 LongBinaryOperator reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.basis = basis; this.reducer = reducer;
@@ -5615,14 +5619,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final ToLongFunction<Map.Entry<K,V>> transformer;
             final LongBinaryOperator reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 long r = this.basis;
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceEntriesToLongTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, r, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, r, reducer)).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     r = reducer.applyAsLong(r, transformer.applyAsLong(p));
@@ -5631,8 +5635,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceEntriesToLongTask<K,V>
-                        t = (MapReduceEntriesToLongTask<K,V>)c,
-                        s = t.rights;
+                            t = (MapReduceEntriesToLongTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         t.result = reducer.applyAsLong(t.result, s.result);
                         s = t.rights = s.nextRight;
@@ -5644,18 +5648,18 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceMappingsToLongTask<K,V>
-        extends BulkTask<K,V,Long> {
+            extends BulkTask<K,V,Long> {
         final ToLongBiFunction<? super K, ? super V> transformer;
         final LongBinaryOperator reducer;
         final long basis;
         long result;
         MapReduceMappingsToLongTask<K,V> rights, nextRight;
         MapReduceMappingsToLongTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceMappingsToLongTask<K,V> nextRight,
-             ToLongBiFunction<? super K, ? super V> transformer,
-             long basis,
-             LongBinaryOperator reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceMappingsToLongTask<K,V> nextRight,
+                 ToLongBiFunction<? super K, ? super V> transformer,
+                 long basis,
+                 LongBinaryOperator reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.basis = basis; this.reducer = reducer;
@@ -5665,14 +5669,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final ToLongBiFunction<? super K, ? super V> transformer;
             final LongBinaryOperator reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 long r = this.basis;
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceMappingsToLongTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, r, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, r, reducer)).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     r = reducer.applyAsLong(r, transformer.applyAsLong(p.key, p.val));
@@ -5681,8 +5685,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceMappingsToLongTask<K,V>
-                        t = (MapReduceMappingsToLongTask<K,V>)c,
-                        s = t.rights;
+                            t = (MapReduceMappingsToLongTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         t.result = reducer.applyAsLong(t.result, s.result);
                         s = t.rights = s.nextRight;
@@ -5694,18 +5698,18 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceKeysToIntTask<K,V>
-        extends BulkTask<K,V,Integer> {
+            extends BulkTask<K,V,Integer> {
         final ToIntFunction<? super K> transformer;
         final IntBinaryOperator reducer;
         final int basis;
         int result;
         MapReduceKeysToIntTask<K,V> rights, nextRight;
         MapReduceKeysToIntTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceKeysToIntTask<K,V> nextRight,
-             ToIntFunction<? super K> transformer,
-             int basis,
-             IntBinaryOperator reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceKeysToIntTask<K,V> nextRight,
+                 ToIntFunction<? super K> transformer,
+                 int basis,
+                 IntBinaryOperator reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.basis = basis; this.reducer = reducer;
@@ -5715,14 +5719,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final ToIntFunction<? super K> transformer;
             final IntBinaryOperator reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 int r = this.basis;
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceKeysToIntTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, r, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, r, reducer)).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     r = reducer.applyAsInt(r, transformer.applyAsInt(p.key));
@@ -5731,8 +5735,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceKeysToIntTask<K,V>
-                        t = (MapReduceKeysToIntTask<K,V>)c,
-                        s = t.rights;
+                            t = (MapReduceKeysToIntTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         t.result = reducer.applyAsInt(t.result, s.result);
                         s = t.rights = s.nextRight;
@@ -5744,18 +5748,18 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceValuesToIntTask<K,V>
-        extends BulkTask<K,V,Integer> {
+            extends BulkTask<K,V,Integer> {
         final ToIntFunction<? super V> transformer;
         final IntBinaryOperator reducer;
         final int basis;
         int result;
         MapReduceValuesToIntTask<K,V> rights, nextRight;
         MapReduceValuesToIntTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceValuesToIntTask<K,V> nextRight,
-             ToIntFunction<? super V> transformer,
-             int basis,
-             IntBinaryOperator reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceValuesToIntTask<K,V> nextRight,
+                 ToIntFunction<? super V> transformer,
+                 int basis,
+                 IntBinaryOperator reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.basis = basis; this.reducer = reducer;
@@ -5765,14 +5769,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final ToIntFunction<? super V> transformer;
             final IntBinaryOperator reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 int r = this.basis;
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceValuesToIntTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, r, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, r, reducer)).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     r = reducer.applyAsInt(r, transformer.applyAsInt(p.val));
@@ -5781,8 +5785,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceValuesToIntTask<K,V>
-                        t = (MapReduceValuesToIntTask<K,V>)c,
-                        s = t.rights;
+                            t = (MapReduceValuesToIntTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         t.result = reducer.applyAsInt(t.result, s.result);
                         s = t.rights = s.nextRight;
@@ -5794,18 +5798,18 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceEntriesToIntTask<K,V>
-        extends BulkTask<K,V,Integer> {
+            extends BulkTask<K,V,Integer> {
         final ToIntFunction<Map.Entry<K,V>> transformer;
         final IntBinaryOperator reducer;
         final int basis;
         int result;
         MapReduceEntriesToIntTask<K,V> rights, nextRight;
         MapReduceEntriesToIntTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceEntriesToIntTask<K,V> nextRight,
-             ToIntFunction<Map.Entry<K,V>> transformer,
-             int basis,
-             IntBinaryOperator reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceEntriesToIntTask<K,V> nextRight,
+                 ToIntFunction<Map.Entry<K,V>> transformer,
+                 int basis,
+                 IntBinaryOperator reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.basis = basis; this.reducer = reducer;
@@ -5815,14 +5819,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final ToIntFunction<Map.Entry<K,V>> transformer;
             final IntBinaryOperator reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 int r = this.basis;
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceEntriesToIntTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, r, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, r, reducer)).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     r = reducer.applyAsInt(r, transformer.applyAsInt(p));
@@ -5831,8 +5835,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceEntriesToIntTask<K,V>
-                        t = (MapReduceEntriesToIntTask<K,V>)c,
-                        s = t.rights;
+                            t = (MapReduceEntriesToIntTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         t.result = reducer.applyAsInt(t.result, s.result);
                         s = t.rights = s.nextRight;
@@ -5844,18 +5848,18 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
 
     @SuppressWarnings("serial")
     static final class MapReduceMappingsToIntTask<K,V>
-        extends BulkTask<K,V,Integer> {
+            extends BulkTask<K,V,Integer> {
         final ToIntBiFunction<? super K, ? super V> transformer;
         final IntBinaryOperator reducer;
         final int basis;
         int result;
         MapReduceMappingsToIntTask<K,V> rights, nextRight;
         MapReduceMappingsToIntTask
-            (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
-             MapReduceMappingsToIntTask<K,V> nextRight,
-             ToIntBiFunction<? super K, ? super V> transformer,
-             int basis,
-             IntBinaryOperator reducer) {
+                (BulkTask<K,V,?> p, int b, int i, int f, Node<K,V>[] t,
+                 MapReduceMappingsToIntTask<K,V> nextRight,
+                 ToIntBiFunction<? super K, ? super V> transformer,
+                 int basis,
+                 IntBinaryOperator reducer) {
             super(p, b, i, f, t); this.nextRight = nextRight;
             this.transformer = transformer;
             this.basis = basis; this.reducer = reducer;
@@ -5865,14 +5869,14 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             final ToIntBiFunction<? super K, ? super V> transformer;
             final IntBinaryOperator reducer;
             if ((transformer = this.transformer) != null &&
-                (reducer = this.reducer) != null) {
+                    (reducer = this.reducer) != null) {
                 int r = this.basis;
                 for (int i = baseIndex, f, h; batch > 0 &&
-                         (h = ((f = baseLimit) + i) >>> 1) > i;) {
+                        (h = ((f = baseLimit) + i) >>> 1) > i;) {
                     addToPendingCount(1);
                     (rights = new MapReduceMappingsToIntTask<K,V>
-                     (this, batch >>>= 1, baseLimit = h, f, tab,
-                      rights, transformer, r, reducer)).fork();
+                            (this, batch >>>= 1, baseLimit = h, f, tab,
+                                    rights, transformer, r, reducer)).fork();
                 }
                 for (Node<K,V> p; (p = advance()) != null; )
                     r = reducer.applyAsInt(r, transformer.applyAsInt(p.key, p.val));
@@ -5881,8 +5885,8 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
                 for (c = firstComplete(); c != null; c = c.nextComplete()) {
                     @SuppressWarnings("unchecked")
                     MapReduceMappingsToIntTask<K,V>
-                        t = (MapReduceMappingsToIntTask<K,V>)c,
-                        s = t.rights;
+                            t = (MapReduceMappingsToIntTask<K,V>)c,
+                            s = t.rights;
                     while (s != null) {
                         t.result = reducer.applyAsInt(t.result, s.result);
                         s = t.rights = s.nextRight;
@@ -5907,16 +5911,16 @@ public class ConcurrentHashMap8<K,V> extends AbstractMap<K,V>
             U = sun.misc.Unsafe.getUnsafe();
             Class<?> k = ConcurrentHashMap8.class;
             SIZECTL = U.objectFieldOffset
-                (k.getDeclaredField("sizeCtl"));
+                    (k.getDeclaredField("sizeCtl"));
             TRANSFERINDEX = U.objectFieldOffset
-                (k.getDeclaredField("transferIndex"));
+                    (k.getDeclaredField("transferIndex"));
             BASECOUNT = U.objectFieldOffset
-                (k.getDeclaredField("baseCount"));
+                    (k.getDeclaredField("baseCount"));
             CELLSBUSY = U.objectFieldOffset
-                (k.getDeclaredField("cellsBusy"));
+                    (k.getDeclaredField("cellsBusy"));
             Class<?> ck = CounterCell.class;
             CELLVALUE = U.objectFieldOffset
-                (ck.getDeclaredField("value"));
+                    (ck.getDeclaredField("value"));
             Class<?> ak = Node[].class;
             ABASE = U.arrayBaseOffset(ak);
             int scale = U.arrayIndexScale(ak);

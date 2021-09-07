@@ -6,7 +6,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 10.3 ScheduledThreadPoolExecutor Ê¾Àý
+ * 10.3 ScheduledThreadPoolExecutor ç¤ºä¾‹
  */
 public class newScheduledThreadPool {
 	public static void main(String[] args) {

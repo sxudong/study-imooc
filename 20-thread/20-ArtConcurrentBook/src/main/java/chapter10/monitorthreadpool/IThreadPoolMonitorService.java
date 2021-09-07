@@ -2,8 +2,9 @@ package chapter10.monitorthreadpool;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
+
 /**
- * �̳߳ؼ�ؽӿ�
+ * 线程池监控接口
  */
 public interface IThreadPoolMonitorService extends Runnable {
 

@@ -1,5 +1,5 @@
-
 package chapter05.sourcecode;
+
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,12 +12,12 @@ import java.util.concurrent.locks.LockSupport;
 import sun.misc.Unsafe;
 
 /**
- * AbstractQueuedSynchronizer Í¬²½Æ÷Ô´´úÂë
+ * AbstractQueuedSynchronizer åŒæ­¥å™¨æºä»£ç 
  * https://blog.51cto.com/14220760/2390586
  */
 public abstract class AbstractQueuedSynchronizer
-    extends AbstractOwnableSynchronizer
-    implements java.io.Serializable {
+        extends AbstractOwnableSynchronizer
+        implements java.io.Serializable {
 
     private static final long serialVersionUID = 7373984972572414691L;
 
@@ -331,21 +331,21 @@ public abstract class AbstractQueuedSynchronizer
      * @param mode Node.EXCLUSIVE for exclusive, Node.SHARED for shared
      * @return the new node
      */
-    //Õâ¸ö·½·¨ÆäÊµ¾ÍÊÇ°Ñµ±Ç°½Úµã¼ÓÈëµ½Í¬²½¶ÓÁĞ£¬¼ÓÈë³É¹¦²Å·µ»Ø£¬ÆäÊµ¶ÓÁĞ³õÊ¼»¯
-    // Ê±»áÖÆÔìÒ»¸ö¿ÕµÄ½Úµã£¬È»ºóÔÚ¿ÕµÄ½ÚµãºóÃæÉèÖÃÍ¬²½½Úµã.
+    //è¿™ä¸ªæ–¹æ³•å…¶å®å°±æ˜¯æŠŠå½“å‰èŠ‚ç‚¹åŠ å…¥åˆ°åŒæ­¥é˜Ÿåˆ—ï¼ŒåŠ å…¥æˆåŠŸæ‰è¿”å›ï¼Œå…¶å®é˜Ÿåˆ—åˆå§‹åŒ–
+    // æ—¶ä¼šåˆ¶é€ ä¸€ä¸ªç©ºçš„èŠ‚ç‚¹ï¼Œç„¶ååœ¨ç©ºçš„èŠ‚ç‚¹åé¢è®¾ç½®åŒæ­¥èŠ‚ç‚¹.
     private Node addWaiter(Node mode) {
-        // ¹¹ÔìÒ»¸ö½Úµã
+        // æ„é€ ä¸€ä¸ªèŠ‚ç‚¹
         Node node = new Node(Thread.currentThread(), mode);
         // Try the fast path of enq; backup to full enq on failure
-        // »ñÈ¡Î²½Úµã
+        // è·å–å°¾èŠ‚ç‚¹
         Node pred = tail;
-        // ÅĞ¶ÏÎ²½ÚµãÊÇ·ñÎª¿Õ
+        // åˆ¤æ–­å°¾èŠ‚ç‚¹æ˜¯å¦ä¸ºç©º
         if (pred != null) {
-            // ²»Îª¿Õ£¬ÉèÖÃnode½ÚµãµÄÉÏÒ»¸ö½ÚµãÎªpred£¨Ò²¾ÍÊÇÎ²½Úµã£©
+            // ä¸ä¸ºç©ºï¼Œè®¾ç½®nodeèŠ‚ç‚¹çš„ä¸Šä¸€ä¸ªèŠ‚ç‚¹ä¸ºpredï¼ˆä¹Ÿå°±æ˜¯å°¾èŠ‚ç‚¹ï¼‰
             node.prev = pred;
-            // casÉèÖÃÎ²½Úµã
+            // casè®¾ç½®å°¾èŠ‚ç‚¹
             if (compareAndSetTail(pred, node)) {
-                // ³É¹¦ºó£¬ÉèÖÃpred½ÚµãµÄnext½ÚµãÎªnode,·µ»Ø
+                // æˆåŠŸåï¼Œè®¾ç½®predèŠ‚ç‚¹çš„nextèŠ‚ç‚¹ä¸ºnode,è¿”å›
                 pred.next = node;
                 return node;
             }
@@ -361,12 +361,12 @@ public abstract class AbstractQueuedSynchronizer
      *
      * @param node the node
      */
-    // ¶ÓÁĞ³õÊ¼»¯Ê±»áÖÆÔìÒ»¸ö¿ÕµÄ½Úµã£¬È»ºóÔÚ¿ÕµÄ½ÚµãºóÃæÉèÖÃÍ¬²½½Úµã,ËùÒÔÍ·½ÚµãÊÇÒ»¸ö¿Õ½Úµã¡£
-    // ÉèÖÃ×Ô¼ºÎªÍ·½Úµã£¬±ä³ÉÒ»¸ö¿Õ½Úµã
+    // é˜Ÿåˆ—åˆå§‹åŒ–æ—¶ä¼šåˆ¶é€ ä¸€ä¸ªç©ºçš„èŠ‚ç‚¹ï¼Œç„¶ååœ¨ç©ºçš„èŠ‚ç‚¹åé¢è®¾ç½®åŒæ­¥èŠ‚ç‚¹,æ‰€ä»¥å¤´èŠ‚ç‚¹æ˜¯ä¸€ä¸ªç©ºèŠ‚ç‚¹ã€‚
+    // è®¾ç½®è‡ªå·±ä¸ºå¤´èŠ‚ç‚¹ï¼Œå˜æˆä¸€ä¸ªç©ºèŠ‚ç‚¹
     private void setHead(Node node) {
-        head = node; // Éı¼¶ÎªÍ·½Úµã
-        node.thread = null; // Ö¸Ïò¿Õ£¨Ã¿¸öÏß³Ì¶¼ÔÚ×ÔĞı£¬ÕâÀï¼´±ãÃ»ÓĞ£¬ËüÍ¨¹ı Thread.currentThread(); Ò²ÄÜ»ñÈ¡µ±Ç°Ö´ĞĞµÄÏß³Ì£©
-        node.prev = null; //ËüÊÇÍ·½Úµã£¬ËùÒÔÇ°ÃæÊÇ¿Õ
+        head = node; // å‡çº§ä¸ºå¤´èŠ‚ç‚¹
+        node.thread = null; // æŒ‡å‘ç©ºï¼ˆæ¯ä¸ªçº¿ç¨‹éƒ½åœ¨è‡ªæ—‹ï¼Œè¿™é‡Œå³ä¾¿æ²¡æœ‰ï¼Œå®ƒé€šè¿‡ Thread.currentThread(); ä¹Ÿèƒ½è·å–å½“å‰æ‰§è¡Œçš„çº¿ç¨‹ï¼‰
+        node.prev = null; //å®ƒæ˜¯å¤´èŠ‚ç‚¹ï¼Œæ‰€ä»¥å‰é¢æ˜¯ç©º
     }
 
     /**
@@ -374,9 +374,9 @@ public abstract class AbstractQueuedSynchronizer
      *
      * @param node the node
      *
-     * unparkSuccessor()·½·¨£¬»½ĞÑ½Úµã£¬»½ĞÑµÄnodeµÄºóÖÃ½Úµã£¬ÒòÎªÔÚ»ñÈ¡Í¬²½×´Ì¬
-     * ÊÇÎÒÃÇ×èÈûµÄÒ²ÊÇºóÖÃ½Úµã£¬»½ĞÑºóÖÃ½Úµãºó£¬»áÈ¥ÕÒµ½Ç°½Úµã£¬Ò²¾ÍÊÇµ±Ç°µÄ½áµã
-     * È¥»ñÈ¡Í¬²½×´Ì¬£¬È»ºóÔÙ°Ñ×Ô¼º±ä³ÉÍ·½áµã¡£
+     * unparkSuccessor()æ–¹æ³•ï¼Œå”¤é†’èŠ‚ç‚¹ï¼Œå”¤é†’çš„nodeçš„åç½®èŠ‚ç‚¹ï¼Œå› ä¸ºåœ¨è·å–åŒæ­¥çŠ¶æ€
+     * æ˜¯æˆ‘ä»¬é˜»å¡çš„ä¹Ÿæ˜¯åç½®èŠ‚ç‚¹ï¼Œå”¤é†’åç½®èŠ‚ç‚¹åï¼Œä¼šå»æ‰¾åˆ°å‰èŠ‚ç‚¹ï¼Œä¹Ÿå°±æ˜¯å½“å‰çš„ç»“ç‚¹
+     * å»è·å–åŒæ­¥çŠ¶æ€ï¼Œç„¶åå†æŠŠè‡ªå·±å˜æˆå¤´ç»“ç‚¹ã€‚
      */
     private void unparkSuccessor(Node node) {
         /*
@@ -395,14 +395,14 @@ public abstract class AbstractQueuedSynchronizer
          * non-cancelled successor.
          */
         Node s = node.next;
-        // Ã»ÓĞÕâ¸ö½Úµã»òÕß³¬Ê±»òÕß±»ÖĞ¶ÏÁË£¬²éÕÒÒ»¸ö¿ÉÒÔÓÃµÄ½Úµã
+        // æ²¡æœ‰è¿™ä¸ªèŠ‚ç‚¹æˆ–è€…è¶…æ—¶æˆ–è€…è¢«ä¸­æ–­äº†ï¼ŒæŸ¥æ‰¾ä¸€ä¸ªå¯ä»¥ç”¨çš„èŠ‚ç‚¹
         if (s == null || s.waitStatus > 0) {
             s = null;
             for (Node t = tail; t != null && t != node; t = t.prev)
                 if (t.waitStatus <= 0)
                     s = t;
         }
-        // Ö¤Ã÷ÓĞÕâ¸ö½Úµã
+        // è¯æ˜æœ‰è¿™ä¸ªèŠ‚ç‚¹
         if (s != null)
             LockSupport.unpark(s.thread);
     }
@@ -411,23 +411,23 @@ public abstract class AbstractQueuedSynchronizer
      * Release action for shared mode -- signals successor and ensures
      * propagation. (Note: For exclusive mode, release just amounts
      * to calling unparkSuccessor of head if it needs signal.)
-     * ÊÍ·Å¹²ÏíÄ£Ê½µÄ¶¯×÷ -- Ïòºó¼Ì·¢³öĞÅºÅ²¢È·±£´«²¥¡££¨×¢Òâ£º¶ÔÓÚ¶ÀÕ¼Ä£Ê½£¬
-     * Èç¹ûĞèÒªĞÅºÅ£¬ÊÍ·Å½öÏàµ±ÓÚµ÷ÓÃheadµÄunparkSuccessor¡££©
+     * é‡Šæ”¾å…±äº«æ¨¡å¼çš„åŠ¨ä½œ -- å‘åç»§å‘å‡ºä¿¡å·å¹¶ç¡®ä¿ä¼ æ’­ã€‚ï¼ˆæ³¨æ„ï¼šå¯¹äºç‹¬å æ¨¡å¼ï¼Œ
+     * å¦‚æœéœ€è¦ä¿¡å·ï¼Œé‡Šæ”¾ä»…ç›¸å½“äºè°ƒç”¨headçš„unparkSuccessorã€‚ï¼‰
      *
-     * Ö÷ÒªÀ´·ÖÎöÈı¸öifµÄº¬Òå£¬µÚÒ»¸ö if (ws == Node.SIGNAL) ±íÊ¾µ±Ç°nodeĞèÒª±»»½ĞÑ£¬
-     * È»ºóºóÃæÀûÓÃcasÉèÖÃwaitStatusÎª0£¬ÒòÎªÊÇ¹²ÏíÄ£Ê½¿ÉÄÜÓĞ¶à¸öÏß³ÌÍ¬Ê±À´ÊÍ·ÅÍ¬²½×´Ì¬£¬Ëù
-     * ÒÔÖ»ÄÜÓĞÒ»¸öÊÍ·Å³É¹¦£¬ÁíÍâÒ»¸öÖØÊÔ£»
+     * ä¸»è¦æ¥åˆ†æä¸‰ä¸ªifçš„å«ä¹‰ï¼Œç¬¬ä¸€ä¸ª if (ws == Node.SIGNAL) è¡¨ç¤ºå½“å‰nodeéœ€è¦è¢«å”¤é†’ï¼Œ
+     * ç„¶ååé¢åˆ©ç”¨casè®¾ç½®waitStatusä¸º0ï¼Œå› ä¸ºæ˜¯å…±äº«æ¨¡å¼å¯èƒ½æœ‰å¤šä¸ªçº¿ç¨‹åŒæ—¶æ¥é‡Šæ”¾åŒæ­¥çŠ¶æ€ï¼Œæ‰€
+     * ä»¥åªèƒ½æœ‰ä¸€ä¸ªé‡Šæ”¾æˆåŠŸï¼Œå¦å¤–ä¸€ä¸ªé‡è¯•ï¼›
      *
-     * µÚ¶ş¸öelse if (ws == 0 && !compareAndSetWaitStatus(h, 0, Node.PROPAGATE)),
-     * ÆäÊµÒ²ÊÇÓÃÀ´´¦Àí²¢·¢µÄ£¬µ±µÚÒ»´Î²¢·¢Ê§°ÜµÄÏß³ÌµÚ¶ş´Î½øÈëÊ±£¬¿ÉÄÜ»á¿´µ½wsµÈÓÚ0
-     * £¨ÒòÎª³É¹¦µÄÏß³ÌÉèÖÃµÄ£©£¬ËùÒÔÀûÓÃ cas ÉèÖÃÎª PROPAGATE£¬±íÊ¾´«µİ£¬ÕâÀï²¹³äÒ»ÏÂ²»
-     * ¹ÜÊÇ0»òÕß PROPAGATE£¬¶¼»á±»»½ĞÑµÄÏß³ÌÀûÓÃcasÉèÖÃÎªSIGNAL£¨²Î¿¼shouldParkAfterFailedAcquire·½·¨£©£»
+     * ç¬¬äºŒä¸ªelse if (ws == 0 && !compareAndSetWaitStatus(h, 0, Node.PROPAGATE)),
+     * å…¶å®ä¹Ÿæ˜¯ç”¨æ¥å¤„ç†å¹¶å‘çš„ï¼Œå½“ç¬¬ä¸€æ¬¡å¹¶å‘å¤±è´¥çš„çº¿ç¨‹ç¬¬äºŒæ¬¡è¿›å…¥æ—¶ï¼Œå¯èƒ½ä¼šçœ‹åˆ°wsç­‰äº0
+     * ï¼ˆå› ä¸ºæˆåŠŸçš„çº¿ç¨‹è®¾ç½®çš„ï¼‰ï¼Œæ‰€ä»¥åˆ©ç”¨ cas è®¾ç½®ä¸º PROPAGATEï¼Œè¡¨ç¤ºä¼ é€’ï¼Œè¿™é‡Œè¡¥å……ä¸€ä¸‹ä¸
+     * ç®¡æ˜¯0æˆ–è€… PROPAGATEï¼Œéƒ½ä¼šè¢«å”¤é†’çš„çº¿ç¨‹åˆ©ç”¨casè®¾ç½®ä¸ºSIGNALï¼ˆå‚è€ƒshouldParkAfterFailedAcquireæ–¹æ³•ï¼‰ï¼›
      *
-     * µÚÈı¸ö(h == head)
-     * 1.head.waitStatusµÄ³õÊ¼Öµ±ØÈ»ÎªSIGNAL£¬Òò´ËÔÚ²¢·¢Ê±£¬±ØÈ»Ö»ÓĞÒ»¸öÏß³ÌAÄÜ½«µÈ´ı×´Ì¬ÓÉ SIGNAL CAS¸üĞÂÎª 0£¬¸ÃÏß³ÌA»á»½ĞÑÆäËûÏß³ÌB
-     * 2.±»»½ĞÑµÄÏß³ÌB»áÊ×ÏÈÖ´ĞĞsetHead
-     *   Òò´ËÈç¹û×îºóh!=head£¬ËµÃ÷ĞÂÒ»ÂÖµÄ»½ĞÑ¾ºÕùÒÑ¾­¿ªÊ¼£¬µ±Ç°Ïß³ÌcÒÑ¾­¾õ²ìµ½£¬Òò´Ë¼ÌĞø²ÎÓë¾ºÕù£¬¼Ó¿ì»½ĞÑ
-     *   Òò´ËÈç¹û×îºóh==head£¬ËµÃ÷ĞÂÒ»ÂÖµÄ»½ĞÑ¾ºÕùÉĞÎ´¿ªÊ¼£¬¶ø±»»½ĞÑµÄÏß³ÌB±ØÈ»»á¿ªÆôĞÂÒ»ÂÖµÄ»½ĞÑ¾ºÕù£¬¶øµ±Ç°Ïß³Ìc¿ÉÒÔ°²ĞÄÍË³ö»½ĞÑ¾ºÑ¡
+     * ç¬¬ä¸‰ä¸ª(h == head)
+     * 1.head.waitStatusçš„åˆå§‹å€¼å¿…ç„¶ä¸ºSIGNALï¼Œå› æ­¤åœ¨å¹¶å‘æ—¶ï¼Œå¿…ç„¶åªæœ‰ä¸€ä¸ªçº¿ç¨‹Aèƒ½å°†ç­‰å¾…çŠ¶æ€ç”± SIGNAL CASæ›´æ–°ä¸º 0ï¼Œè¯¥çº¿ç¨‹Aä¼šå”¤é†’å…¶ä»–çº¿ç¨‹B
+     * 2.è¢«å”¤é†’çš„çº¿ç¨‹Bä¼šé¦–å…ˆæ‰§è¡ŒsetHead
+     *   å› æ­¤å¦‚æœæœ€åh!=headï¼Œè¯´æ˜æ–°ä¸€è½®çš„å”¤é†’ç«äº‰å·²ç»å¼€å§‹ï¼Œå½“å‰çº¿ç¨‹cå·²ç»è§‰å¯Ÿåˆ°ï¼Œå› æ­¤ç»§ç»­å‚ä¸ç«äº‰ï¼ŒåŠ å¿«å”¤é†’
+     *   å› æ­¤å¦‚æœæœ€åh==headï¼Œè¯´æ˜æ–°ä¸€è½®çš„å”¤é†’ç«äº‰å°šæœªå¼€å§‹ï¼Œè€Œè¢«å”¤é†’çš„çº¿ç¨‹Bå¿…ç„¶ä¼šå¼€å¯æ–°ä¸€è½®çš„å”¤é†’ç«äº‰ï¼Œè€Œå½“å‰çº¿ç¨‹cå¯ä»¥å®‰å¿ƒé€€å‡ºå”¤é†’ç«é€‰
      */
     private void doReleaseShared() {
         /*
@@ -442,25 +442,25 @@ public abstract class AbstractQueuedSynchronizer
          * fails, if so rechecking.
          */
         for (;;) {
-            // Í·½áµã
+            // å¤´ç»“ç‚¹
             Node h = head;
             if (h != null && h != tail) {
                 int ws = h.waitStatus;
-                // ±íÊ¾ºóÃæ½ÚµãĞèÒª»½ĞÑ
+                // è¡¨ç¤ºåé¢èŠ‚ç‚¹éœ€è¦å”¤é†’
                 if (ws == Node.SIGNAL) {
-                    // ¶àÏß³Ì¿ØÖÆ²¢·¢ £¬¿ÉÄÜ´æÔÚ¶à¸öÏß³ÌÍ¬Ê±À´ĞŞ¸Ä
+                    // å¤šçº¿ç¨‹æ§åˆ¶å¹¶å‘ ï¼Œå¯èƒ½å­˜åœ¨å¤šä¸ªçº¿ç¨‹åŒæ—¶æ¥ä¿®æ”¹
                     if (!compareAndSetWaitStatus(h, Node.SIGNAL, 0))
                         continue;            // loop to recheck cases
                     unparkSuccessor(h);
                 }
-                // Èç¹ûwsµÈÓÚ0£¬³¢ÊÔ°ÑcasÉèÖÃ waitStatus Îª PROPAGATE £¬´«µİÏÂÈ¥
-                // ÇëÁªÏµ shouldParkAfterFailedAcquire ·½·¨Ò»Æğ¿´
+                // å¦‚æœwsç­‰äº0ï¼Œå°è¯•æŠŠcasè®¾ç½® waitStatus ä¸º PROPAGATE ï¼Œä¼ é€’ä¸‹å»
+                // è¯·è”ç³» shouldParkAfterFailedAcquire æ–¹æ³•ä¸€èµ·çœ‹
                 else if (ws == 0 &&
-                         !compareAndSetWaitStatus(h, 0, Node.PROPAGATE))
+                        !compareAndSetWaitStatus(h, 0, Node.PROPAGATE))
                     continue;                // loop on failed CAS
             }
-            //Èç¹ûÍ·½áµãÃ»ÓĞ·¢Éú±ä»¯£¬±íÊ¾ÉèÖÃÍê³É£¬ÍË³öÑ­»·
-            // Èç¹û·¢Éú±ä»¯£¬¼ÓÈë»½ĞÑµÄ¹ı³Ì£¨¼ÓËÙ»½ĞÑ£¬¿ÉÄÜ´æÔÚ¶à¸öÏß³ÌÔÚ»½ĞÑÕâĞ©node£¬ËÙ¶È±ÈÒ»¸ö½ÓÒ»¸öÒª¿ì£©
+            //å¦‚æœå¤´ç»“ç‚¹æ²¡æœ‰å‘ç”Ÿå˜åŒ–ï¼Œè¡¨ç¤ºè®¾ç½®å®Œæˆï¼Œé€€å‡ºå¾ªç¯
+            // å¦‚æœå‘ç”Ÿå˜åŒ–ï¼ŒåŠ å…¥å”¤é†’çš„è¿‡ç¨‹ï¼ˆåŠ é€Ÿå”¤é†’ï¼Œå¯èƒ½å­˜åœ¨å¤šä¸ªçº¿ç¨‹åœ¨å”¤é†’è¿™äº›nodeï¼Œé€Ÿåº¦æ¯”ä¸€ä¸ªæ¥ä¸€ä¸ªè¦å¿«ï¼‰
             if (h == head)                   // loop if head changed
                 break;
         }
@@ -474,13 +474,13 @@ public abstract class AbstractQueuedSynchronizer
      * @param node the node
      * @param propagate the return value from a tryAcquireShared
      *
-     * setHeadAndPropagate()·½·¨£¬ÉèÖÃÍ·½áµã£¬ÉèÖÃ waitStatusÎª Propagate£¬ÎªÈç¹û»¹ÓĞ×ÊÔ´£¬
-     * »½ĞÑºóÃæµÄ½Úµã£¬µ÷ÓÃ doReleaseShared ·½·¨£¨Õâ¸ö·½·¨»áÔÚ¹²ÏíÊ½ÊÍ·ÅÍ¬²½×´Ì¬Ïê½â£©
+     * setHeadAndPropagate()æ–¹æ³•ï¼Œè®¾ç½®å¤´ç»“ç‚¹ï¼Œè®¾ç½® waitStatusä¸º Propagateï¼Œä¸ºå¦‚æœè¿˜æœ‰èµ„æºï¼Œ
+     * å”¤é†’åé¢çš„èŠ‚ç‚¹ï¼Œè°ƒç”¨ doReleaseShared æ–¹æ³•ï¼ˆè¿™ä¸ªæ–¹æ³•ä¼šåœ¨å…±äº«å¼é‡Šæ”¾åŒæ­¥çŠ¶æ€è¯¦è§£ï¼‰
      */
     private void setHeadAndPropagate(Node node, int propagate) {
-        // Í·½áµã
+        // å¤´ç»“ç‚¹
         Node h = head; // Record old head for check below
-        // ÉèÖÃÍ·½áµãÎªnode
+        // è®¾ç½®å¤´ç»“ç‚¹ä¸ºnode
         setHead(node);
         /*
          * Try to signal next queued node if:
@@ -498,13 +498,13 @@ public abstract class AbstractQueuedSynchronizer
          * racing acquires/releases, so most need signals now or soon
          * anyway.
          */
-        // »¹ÓĞ×ÊÔ´
+        // è¿˜æœ‰èµ„æº
         if (propagate > 0 || h == null || h.waitStatus < 0 ||
-            (h = head) == null || h.waitStatus < 0) {
+                (h = head) == null || h.waitStatus < 0) {
             Node s = node.next;
-            // µ±Ç°½ÚµãµÄnext½ÚµãÊÇ¹²Ïí»òÕßÃ»ÓĞnext½Úµã
+            // å½“å‰èŠ‚ç‚¹çš„nextèŠ‚ç‚¹æ˜¯å…±äº«æˆ–è€…æ²¡æœ‰nextèŠ‚ç‚¹
             if (s == null || s.isShared())
-                // »½ĞÑºóÖÃ½Úµã
+                // å”¤é†’åç½®èŠ‚ç‚¹
                 doReleaseShared();
         }
     }
@@ -516,7 +516,7 @@ public abstract class AbstractQueuedSynchronizer
      *
      * @param node the node
      */
-    // Òì³£ºó£¬finallyÀïÃæÖ´ĞĞµÄ·½·¨
+    // å¼‚å¸¸åï¼Œfinallyé‡Œé¢æ‰§è¡Œçš„æ–¹æ³•
     private void cancelAcquire(Node node) {
         // Ignore if node doesn't exist
         if (node == null)
@@ -540,7 +540,7 @@ public abstract class AbstractQueuedSynchronizer
         node.waitStatus = Node.CANCELLED;
 
         // If we are the tail, remove ourselves.
-        // nodeÊÇÎª½Úµã£¬ÉèÖÃÎ²½ÚµãÊÇpred
+        // nodeæ˜¯ä¸ºèŠ‚ç‚¹ï¼Œè®¾ç½®å°¾èŠ‚ç‚¹æ˜¯pred
         if (node == tail && compareAndSetTail(node, pred)) {
             compareAndSetNext(pred, predNext, null);
         } else {
@@ -548,11 +548,11 @@ public abstract class AbstractQueuedSynchronizer
             // so it will get one. Otherwise wake it up to propagate.
             int ws;
             if (pred != head &&
-                ((ws = pred.waitStatus) == Node.SIGNAL ||
-                 (ws <= 0 && compareAndSetWaitStatus(pred, ws, Node.SIGNAL))) &&
-                pred.thread != null) {
+                    ((ws = pred.waitStatus) == Node.SIGNAL ||
+                            (ws <= 0 && compareAndSetWaitStatus(pred, ws, Node.SIGNAL))) &&
+                    pred.thread != null) {
                 Node next = node.next;
-                // ²»ÊÇÍ·½áµãºÍÎ²½Úµã£¬Ç°½ÚµãÊÇSIGNAL
+                // ä¸æ˜¯å¤´ç»“ç‚¹å’Œå°¾èŠ‚ç‚¹ï¼Œå‰èŠ‚ç‚¹æ˜¯SIGNAL
                 if (next != null && next.waitStatus <= 0)
                     compareAndSetNext(pred, predNext, next);
             } else {
@@ -572,27 +572,27 @@ public abstract class AbstractQueuedSynchronizer
      * @param node the node
      * @return {@code true} if thread should block
      *
-     * Õâ¸ö·½·¨Ö÷Òª×öÈı¼şÊÂ£¬ÅĞ¶Ï×Ô¼ºµÄÇ°ÖÃ½ÚµãÊÇ·ñÊÇ SIGNAL£¬·µ»Ø true£¬¾Í¿É
-     * ÒÔ×èÈûÁË£¬²»ÊÇÈç¹û×´Ì¬´óÓÚ 0£¬Ö¤Ã÷Ç°ÃæµÄ½Úµã±»ÖĞ¶Ï»òÕß³¬Ê±ÁË£¬ĞèÒª´Ó¶Ó
-     * ÁĞÇåÀíÁË£¬²»ÊÇ´óÓÚ 0£¬¾ÍÀûÓÃ cas ÉèÖÃÇ°ÖÃ½ÚµãÎª SIGNAL£¬·µ»Ø false¡£
+     * è¿™ä¸ªæ–¹æ³•ä¸»è¦åšä¸‰ä»¶äº‹ï¼Œåˆ¤æ–­è‡ªå·±çš„å‰ç½®èŠ‚ç‚¹æ˜¯å¦æ˜¯ SIGNALï¼Œè¿”å› trueï¼Œå°±å¯
+     * ä»¥é˜»å¡äº†ï¼Œä¸æ˜¯å¦‚æœçŠ¶æ€å¤§äº 0ï¼Œè¯æ˜å‰é¢çš„èŠ‚ç‚¹è¢«ä¸­æ–­æˆ–è€…è¶…æ—¶äº†ï¼Œéœ€è¦ä»é˜Ÿ
+     * åˆ—æ¸…ç†äº†ï¼Œä¸æ˜¯å¤§äº 0ï¼Œå°±åˆ©ç”¨ cas è®¾ç½®å‰ç½®èŠ‚ç‚¹ä¸º SIGNALï¼Œè¿”å› falseã€‚
      */
     private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
-        // »ñÈ¡nodeÇ°½ÚµãµÄ×´Ì¬
+        // è·å–nodeå‰èŠ‚ç‚¹çš„çŠ¶æ€
         int ws = pred.waitStatus;
         if (ws == Node.SIGNAL)
             /*
              * This node has already set status asking a release
              * to signal it, so it can safely park.
              */
-            // Èç¹û pred ½ÚµãÊÍ·ÅÁË×´Ì¬£¬»áÍ¨Öª×Ô¼º
+            // å¦‚æœ pred èŠ‚ç‚¹é‡Šæ”¾äº†çŠ¶æ€ï¼Œä¼šé€šçŸ¥è‡ªå·±
             return true;
         if (ws > 0) {
             /*
              * Predecessor was cancelled. Skip over predecessors and
              * indicate retry.
              */
-            // ´óÓÚ0Ö¤Ã÷£¬Ç°ÃæµÄÏß³ÌµÈ´ı³¬Ê±»òÕßÒÑ¾­±»ÖĞ¶Ï£¬ĞèÒª´Ó½ÚµãÖĞÒÆ³ı
-            // ĞèÒªÕÒµ½²»´óÓÚ0µÄÄÇ¸ö½Úµã
+            // å¤§äº0è¯æ˜ï¼Œå‰é¢çš„çº¿ç¨‹ç­‰å¾…è¶…æ—¶æˆ–è€…å·²ç»è¢«ä¸­æ–­ï¼Œéœ€è¦ä»èŠ‚ç‚¹ä¸­ç§»é™¤
+            // éœ€è¦æ‰¾åˆ°ä¸å¤§äº0çš„é‚£ä¸ªèŠ‚ç‚¹
             do {
                 node.prev = pred = pred.prev;
             } while (pred.waitStatus > 0);
@@ -603,8 +603,8 @@ public abstract class AbstractQueuedSynchronizer
              * need a signal, but don't park yet.  Caller will need to
              * retry to make sure it cannot acquire before parking.
              */
-            // ÕÒµ½Ğ¡ÓÚµÈÓÚ 0 µÄÇ°½Úµã£¬ÉèÖÃÎª SIGNAL
-            // Õâ¸öµØ·½ ws ÖµÖ»»áÎª PROPAGATE »òÕß0
+            // æ‰¾åˆ°å°äºç­‰äº 0 çš„å‰èŠ‚ç‚¹ï¼Œè®¾ç½®ä¸º SIGNAL
+            // è¿™ä¸ªåœ°æ–¹ ws å€¼åªä¼šä¸º PROPAGATE æˆ–è€…0
             compareAndSetWaitStatus(pred, ws, Node.SIGNAL);
         }
         return false;
@@ -622,12 +622,12 @@ public abstract class AbstractQueuedSynchronizer
      *
      * @return {@code true} if interrupted
      *
-     * Õâ¸ö·½·¨ĞèÒªÇ°ÃæµÄ·½·¨·µ»Ø true ²Å»áÖ´ĞĞ£¬Ëü»á×èÈû node µÄÕâ¸öÏß³Ì£¬
-     * ·µ»ØÏß³ÌµÄÖĞ¶ÏÖĞ¶Ï×´Ì¬²¢ÇåÀí Thread.interrupted()£¬ËùÒÔ¶ÀÕ¼Ê½»ñÈ¡
-     * Í¬²½×´Ì¬¶ÔÖĞ¶Ï²»ÏìÓ¦µÄ¡£
+     * è¿™ä¸ªæ–¹æ³•éœ€è¦å‰é¢çš„æ–¹æ³•è¿”å› true æ‰ä¼šæ‰§è¡Œï¼Œå®ƒä¼šé˜»å¡ node çš„è¿™ä¸ªçº¿ç¨‹ï¼Œ
+     * è¿”å›çº¿ç¨‹çš„ä¸­æ–­ä¸­æ–­çŠ¶æ€å¹¶æ¸…ç† Thread.interrupted()ï¼Œæ‰€ä»¥ç‹¬å å¼è·å–
+     * åŒæ­¥çŠ¶æ€å¯¹ä¸­æ–­ä¸å“åº”çš„ã€‚
      */
     private final boolean parkAndCheckInterrupt() {
-        // ×èÈûÏß³Ì
+        // é˜»å¡çº¿ç¨‹
         LockSupport.park(this);
         return Thread.interrupted();
     }
@@ -653,27 +653,27 @@ public abstract class AbstractQueuedSynchronizer
         boolean failed = true;
         try {
             boolean interrupted = false;
-            //¡°ËÀÑ­»·¡±ÖĞ³¢ÊÔ»ñÈ¡Í¬²½×´Ì¬
+            //â€œæ­»å¾ªç¯â€ä¸­å°è¯•è·å–åŒæ­¥çŠ¶æ€
             for (;;) {
-                // »ñÈ¡Ç°Ò»¸ö½Úµã
+                // è·å–å‰ä¸€ä¸ªèŠ‚ç‚¹
                 final Node p = node.predecessor();
-                // Èç¹ûpÊÇÍ·½Úµã£¬²¢³¢ÊÔ»ñÈ¡Í¬²½×´Ì¬³É¹¦£¬Ôò½«µ±Ç°½ÚµãÉèÖÃÎªÍ·½áµãÍ¬Ê±ÍË³ö×ÔĞı×´Ì¬
+                // å¦‚æœpæ˜¯å¤´èŠ‚ç‚¹ï¼Œå¹¶å°è¯•è·å–åŒæ­¥çŠ¶æ€æˆåŠŸï¼Œåˆ™å°†å½“å‰èŠ‚ç‚¹è®¾ç½®ä¸ºå¤´ç»“ç‚¹åŒæ—¶é€€å‡ºè‡ªæ—‹çŠ¶æ€
                 if (p == head && tryAcquire(arg)) {
-                    // ÉèÖÃ×Ô¼ºÎªÍ·½Úµã£¬±ä³ÉÒ»¸ö¿Õ½Úµã
+                    // è®¾ç½®è‡ªå·±ä¸ºå¤´èŠ‚ç‚¹ï¼Œå˜æˆä¸€ä¸ªç©ºèŠ‚ç‚¹
                     setHead(node);
-                    p.next = null; // help GC Í·½ÚµãÖ¸Ïò¿Õ£¬GC»ØÊÕ
+                    p.next = null; // help GC å¤´èŠ‚ç‚¹æŒ‡å‘ç©ºï¼ŒGCå›æ”¶
                     failed = false;
                     return interrupted;
                 }
-                // ÕÒµ½Ç°½ÚµãÎªsignal£¬È»ºó×èÈû×Ô¼º
-                // ÇåÀíµÈ´ı³¬Ê±»òÕßÖĞ¶ÏµÄ½Úµã
-                // ³¢ÊÔÉèÖÃÏß³ÌµÄ×´Ì¬Îªsignal
+                // æ‰¾åˆ°å‰èŠ‚ç‚¹ä¸ºsignalï¼Œç„¶åé˜»å¡è‡ªå·±
+                // æ¸…ç†ç­‰å¾…è¶…æ—¶æˆ–è€…ä¸­æ–­çš„èŠ‚ç‚¹
+                // å°è¯•è®¾ç½®çº¿ç¨‹çš„çŠ¶æ€ä¸ºsignal
                 if (shouldParkAfterFailedAcquire(p, node) &&
-                    parkAndCheckInterrupt())
+                        parkAndCheckInterrupt())
                     interrupted = true;
             }
         } finally {
-            // ³öÏÖÒì³£
+            // å‡ºç°å¼‚å¸¸
             if (failed)
                 cancelAcquire(node);
         }
@@ -684,7 +684,7 @@ public abstract class AbstractQueuedSynchronizer
      * @param arg the acquire argument
      */
     private void doAcquireInterruptibly(int arg)
-        throws InterruptedException {
+            throws InterruptedException {
         final Node node = addWaiter(Node.EXCLUSIVE);
         boolean failed = true;
         try {
@@ -697,7 +697,7 @@ public abstract class AbstractQueuedSynchronizer
                     return;
                 }
                 if (shouldParkAfterFailedAcquire(p, node) &&
-                    parkAndCheckInterrupt())
+                        parkAndCheckInterrupt())
                     throw new InterruptedException();
             }
         } finally {
@@ -716,16 +716,16 @@ public abstract class AbstractQueuedSynchronizer
     private boolean doAcquireNanos(int arg, long nanosTimeout) throws InterruptedException {
         if (nanosTimeout <= 0L)
             return false;
-        // ¼ÆËã×îÖÕÑÓÊ±Ê±¼ä£¬±»³ÆÎªËÀÍöÏß deadline
+        // è®¡ç®—æœ€ç»ˆå»¶æ—¶æ—¶é—´ï¼Œè¢«ç§°ä¸ºæ­»äº¡çº¿ deadline
         final long deadline = System.nanoTime() + nanosTimeout;
-        // ¶¨ÒåÒ»¸öÍ¬²½¶ÓÁĞÖĞµÄ½Úµã£¬²¢Ìí¼Óµ½Í¬²½¶ÓÁĞÖĞ
+        // å®šä¹‰ä¸€ä¸ªåŒæ­¥é˜Ÿåˆ—ä¸­çš„èŠ‚ç‚¹ï¼Œå¹¶æ·»åŠ åˆ°åŒæ­¥é˜Ÿåˆ—ä¸­
         final Node node = addWaiter(Node.EXCLUSIVE);
         boolean failed = true;
         try {
-            // ²»¶ÏµÄ×ÔĞı³¢ÊÔ»ñÈ¡Í¬²½×´Ì¬
+            // ä¸æ–­çš„è‡ªæ—‹å°è¯•è·å–åŒæ­¥çŠ¶æ€
             for (;;) {
-                // ºÍÆÕÍ¨Çé¿öÏÂ»ñÈ¡Í¬²½×´Ì¬Ò»Ñù£¬ÅĞ¶Ïµ±Ç°Ç°Çı½ÚµãÊÇ·ñÊÇÍ·½áµã£¬ÊÇµÄ»°Ôò³¢ÊÔ»ñÈ¡Í¬²½×´Ì¬
-                // ²»ÊìÏ¤µÄ¶ÁÕß¿ÉÒÔÏÈÔÄ¶ÁÖ®Ç°µÄÎÄÕÂ  https://www.zhoutao123.com/page/book/java/category/rcuy1l µÄ1.4 ÕÂ½Ú
+                // å’Œæ™®é€šæƒ…å†µä¸‹è·å–åŒæ­¥çŠ¶æ€ä¸€æ ·ï¼Œåˆ¤æ–­å½“å‰å‰é©±èŠ‚ç‚¹æ˜¯å¦æ˜¯å¤´ç»“ç‚¹ï¼Œæ˜¯çš„è¯åˆ™å°è¯•è·å–åŒæ­¥çŠ¶æ€
+                // ä¸ç†Ÿæ‚‰çš„è¯»è€…å¯ä»¥å…ˆé˜…è¯»ä¹‹å‰çš„æ–‡ç«   https://www.zhoutao123.com/page/book/java/category/rcuy1l çš„1.4 ç« èŠ‚
                 final Node p = node.predecessor();
                 if (p == head && tryAcquire(arg)) {
                     setHead(node);
@@ -733,14 +733,14 @@ public abstract class AbstractQueuedSynchronizer
                     failed = false;
                     return true;
                 }
-                // ¼ÆËãÏß³ÌÑÓÊ±Ê±¼ä
+                // è®¡ç®—çº¿ç¨‹å»¶æ—¶æ—¶é—´
                 nanosTimeout = deadline - System.nanoTime();
-                // ×îÖÕ³¬Ê±µÄ»°Ö±½Ó·µ»Øfalse
+                // æœ€ç»ˆè¶…æ—¶çš„è¯ç›´æ¥è¿”å›false
                 if (nanosTimeout <= 0L) return false;
-                // ÕâÀïĞèÒª×¢Òâ£¬Èç¹ûÊ£ÓàÊ±¼äĞ¡ÓÚ spinForTimeoutThreshold (1S) ÔòÏß³Ì²¢²»»á½øÈëparkNanos() ¶ø»á¿ìËÙµÄ½øĞĞ×ÔĞı(¼ÌĞø×ÔĞı)
+                // è¿™é‡Œéœ€è¦æ³¨æ„ï¼Œå¦‚æœå‰©ä½™æ—¶é—´å°äº spinForTimeoutThreshold (1S) åˆ™çº¿ç¨‹å¹¶ä¸ä¼šè¿›å…¥parkNanos() è€Œä¼šå¿«é€Ÿçš„è¿›è¡Œè‡ªæ—‹(ç»§ç»­è‡ªæ—‹)
                 if (shouldParkAfterFailedAcquire(p, node) && nanosTimeout > spinForTimeoutThreshold)
                     LockSupport.parkNanos(this, nanosTimeout);
-                // ÔÙ´Î¼ì²éÏß³ÌÊÇ·ñ±»ÖĞ¶Ï£¬ÊÇµÄ»°Ö±½ÓÅ×³öÖĞ¶ÏÒì³£
+                // å†æ¬¡æ£€æŸ¥çº¿ç¨‹æ˜¯å¦è¢«ä¸­æ–­ï¼Œæ˜¯çš„è¯ç›´æ¥æŠ›å‡ºä¸­æ–­å¼‚å¸¸
                 if (Thread.interrupted()) throw new InterruptedException();
             }
         } finally {
@@ -753,27 +753,27 @@ public abstract class AbstractQueuedSynchronizer
      * Acquires in shared uninterruptible mode.
      * @param arg the acquire argument
      *
-     * doAcquireShared()·½·¨,Ê×ÏÈ¹¹Ôì½Úµã¼ÓÈë¶ÓÁĞ addWaiter£¬È»ºó»ñÈ¡ node µÄÇ°½Úµã£¬
-     * ÅĞ¶Ï node µÄÇ°½ÚµãÊÇ·ñÎªÍ·½áµã£¬Èç¹ûÊÇ£¬»ñÈ¡×ÊÔ´µÄ¸öÊı£¬Èç¹û×ÊÔ´´óÓÚµÈÓÚ0£¬µ÷ÓÃ
-     * setHeadAndPropagate ·½·¨£¬È»ºó·µ»Ø£¬²»Âú×ã£¬µ÷ÓÃ shouldParkAfterFailedAcquire
-     * ºÍparkAndCheckInterrupt ·½·¨ºÍ¶ÀÕ¼Ê½Ò»Ñù¡£
+     * doAcquireShared()æ–¹æ³•,é¦–å…ˆæ„é€ èŠ‚ç‚¹åŠ å…¥é˜Ÿåˆ— addWaiterï¼Œç„¶åè·å– node çš„å‰èŠ‚ç‚¹ï¼Œ
+     * åˆ¤æ–­ node çš„å‰èŠ‚ç‚¹æ˜¯å¦ä¸ºå¤´ç»“ç‚¹ï¼Œå¦‚æœæ˜¯ï¼Œè·å–èµ„æºçš„ä¸ªæ•°ï¼Œå¦‚æœèµ„æºå¤§äºç­‰äº0ï¼Œè°ƒç”¨
+     * setHeadAndPropagate æ–¹æ³•ï¼Œç„¶åè¿”å›ï¼Œä¸æ»¡è¶³ï¼Œè°ƒç”¨ shouldParkAfterFailedAcquire
+     * å’ŒparkAndCheckInterrupt æ–¹æ³•å’Œç‹¬å å¼ä¸€æ ·ã€‚
      */
     private void doAcquireShared(int arg) {
-        // ¹¹½¨¹²Ïí½Úµã
+        // æ„å»ºå…±äº«èŠ‚ç‚¹
         final Node node = addWaiter(Node.SHARED);
         boolean failed = true;
         try {
             boolean interrupted = false;
             for (;;) {
-                // »ñÈ¡nodeµÄÇ°½Úµã
+                // è·å–nodeçš„å‰èŠ‚ç‚¹
                 final Node p = node.predecessor();
-                // Ç°½ÚµãÊÇ·ñÊÇÍ·½Úµã
+                // å‰èŠ‚ç‚¹æ˜¯å¦æ˜¯å¤´èŠ‚ç‚¹
                 if (p == head) {
-                    // »ñÈ¡ËøµÄ¸öÊı,Í¬¶ÀÕ¼Ê½Ò»Ñù£¬Èç¹ûÇ°Çı½ÚµãÊÇÍ·½áµã && »ñÈ¡Í¬²½×´Ì¬³É¹¦£¬ÄÇÃ´½«×Ô¼ºÉèÖÃÎªÍ·½áµã
+                    // è·å–é”çš„ä¸ªæ•°,åŒç‹¬å å¼ä¸€æ ·ï¼Œå¦‚æœå‰é©±èŠ‚ç‚¹æ˜¯å¤´ç»“ç‚¹ && è·å–åŒæ­¥çŠ¶æ€æˆåŠŸï¼Œé‚£ä¹ˆå°†è‡ªå·±è®¾ç½®ä¸ºå¤´ç»“ç‚¹
                     int r = tryAcquireShared(arg);
-                    // ´óÓÚµÈÓÚ0£¬»ñÈ¡Ëø³É¹¦
+                    // å¤§äºç­‰äº0ï¼Œè·å–é”æˆåŠŸ
                     if (r >= 0) {
-                        setHeadAndPropagate(node, r); // ÉèÖÃÍ·½áµã£¬Èç¹ûÓĞ¶àÓà×ÊÔ´½Ó×Å»½ĞÑ
+                        setHeadAndPropagate(node, r); // è®¾ç½®å¤´ç»“ç‚¹ï¼Œå¦‚æœæœ‰å¤šä½™èµ„æºæ¥ç€å”¤é†’
                         p.next = null; // help GC
                         if (interrupted)
                             selfInterrupt();
@@ -781,9 +781,9 @@ public abstract class AbstractQueuedSynchronizer
                         return;
                     }
                 }
-                // »ñÈ¡Ê§°Ü×èÈû¸ÃÏß³Ì
+                // è·å–å¤±è´¥é˜»å¡è¯¥çº¿ç¨‹
                 if (shouldParkAfterFailedAcquire(p, node) &&
-                    parkAndCheckInterrupt())
+                        parkAndCheckInterrupt())
                     interrupted = true;
             }
         } finally {
@@ -797,7 +797,7 @@ public abstract class AbstractQueuedSynchronizer
      * @param arg the acquire argument
      */
     private void doAcquireSharedInterruptibly(int arg)
-        throws InterruptedException {
+            throws InterruptedException {
         final Node node = addWaiter(Node.SHARED);
         boolean failed = true;
         try {
@@ -813,7 +813,7 @@ public abstract class AbstractQueuedSynchronizer
                     }
                 }
                 if (shouldParkAfterFailedAcquire(p, node) &&
-                    parkAndCheckInterrupt())
+                        parkAndCheckInterrupt())
                     throw new InterruptedException();
             }
         } finally {
@@ -852,7 +852,7 @@ public abstract class AbstractQueuedSynchronizer
                 if (nanosTimeout <= 0L)
                     return false;
                 if (shouldParkAfterFailedAcquire(p, node) &&
-                    nanosTimeout > spinForTimeoutThreshold)
+                        nanosTimeout > spinForTimeoutThreshold)
                     LockSupport.parkNanos(this, nanosTimeout);
                 if (Thread.interrupted())
                     throw new InterruptedException();
@@ -1013,15 +1013,15 @@ public abstract class AbstractQueuedSynchronizer
      *        {@link #tryAcquire} but is otherwise uninterpreted and
      *        can represent anything you like.
      */
-    // »ñÈ¡ËøµÄ·½·¨£¨¶ÀÕ¼Ä£Ê½£©
+    // è·å–é”çš„æ–¹æ³•ï¼ˆç‹¬å æ¨¡å¼ï¼‰
     public final void acquire(int arg) {
-        //  tryAcquire·½·¨¾ÍÊÇÁô¸ø×ÓÀàÊµÏÖµÄ£¬µ÷ÓÃ×ÓÀàÖØĞ´µÄ tryAcquire ·½·¨³¢ÊÔ»ñÈ¡Ëø
-        //  Èç£ºReentrantLock.NonfairSync#tryAcquire()
+        //  tryAcquireæ–¹æ³•å°±æ˜¯ç•™ç»™å­ç±»å®ç°çš„ï¼Œè°ƒç”¨å­ç±»é‡å†™çš„ tryAcquire æ–¹æ³•å°è¯•è·å–é”
+        //  å¦‚ï¼šReentrantLock.NonfairSync#tryAcquire()
         if (!tryAcquire(arg) &&
-            // »ñÈ¡Ê§°ÜÔò¹¹½¨¶ÀÕ¼Ê½ Node Í¬Ê±Ìí¼ÓÍ¬²½¶ÓÁĞÎ²²¿£¨AQS×èÈû¶ÓÁĞÖĞ£©
-            // ×îºóµ÷ÓÃacquireQueued()Ê¹µÃ½ÚµãÒÔ¡°ËÀÑ­»·¡±µÄ·½Ê½»ñÈ¡Í¬²½×´Ì¬¡£
-            // Èç¹ûÈ¡²»µ½Ôò×èÈû½ÚµãÖĞµÄÏß³Ì£¬¶ø±»×èÈûÏß³ÌµÄ»½ĞÑÖ÷ÒªÒÀ¿¿Ç°Çı½ÚµãµÄ³ö¶ÓÀ´ÊµÏÖ¡£
-            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+                // è·å–å¤±è´¥åˆ™æ„å»ºç‹¬å å¼ Node åŒæ—¶æ·»åŠ åŒæ­¥é˜Ÿåˆ—å°¾éƒ¨ï¼ˆAQSé˜»å¡é˜Ÿåˆ—ä¸­ï¼‰
+                // æœ€åè°ƒç”¨acquireQueued()ä½¿å¾—èŠ‚ç‚¹ä»¥â€œæ­»å¾ªç¯â€çš„æ–¹å¼è·å–åŒæ­¥çŠ¶æ€ã€‚
+                // å¦‚æœå–ä¸åˆ°åˆ™é˜»å¡èŠ‚ç‚¹ä¸­çš„çº¿ç¨‹ï¼Œè€Œè¢«é˜»å¡çº¿ç¨‹çš„å”¤é†’ä¸»è¦ä¾é å‰é©±èŠ‚ç‚¹çš„å‡ºé˜Ÿæ¥å®ç°ã€‚
+                acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
             selfInterrupt();
     }
 
@@ -1039,18 +1039,18 @@ public abstract class AbstractQueuedSynchronizer
      *        can represent anything you like.
      * @throws InterruptedException if the current thread is interrupted
      *
-     * ¸Ã·½·¨Óë lock ·½·¨ÀàËÆ£¬²»Í¬µãÔÚÓÚ£¬ËüÄÜ¶ÔÖĞ¶Ï½øĞĞÏàÓ¦£º
-     *   µ±Ç°Ïß³ÌÔÚµ÷ÓÃ¸Ã·½·¨Ê±£¬Èç¹ûÆäËûÏß³Ìµ÷ÓÃÁËµ±Ç°Ïß³ÌµÄ interrupt()
-     *   ·½·¨£¬µ±Ç°Ïß³Ì»áÅ×³ö InterruptedException Òì³££¬È»ºó·µ»Ø¡£
+     * è¯¥æ–¹æ³•ä¸ lock æ–¹æ³•ç±»ä¼¼ï¼Œä¸åŒç‚¹åœ¨äºï¼Œå®ƒèƒ½å¯¹ä¸­æ–­è¿›è¡Œç›¸åº”ï¼š
+     *   å½“å‰çº¿ç¨‹åœ¨è°ƒç”¨è¯¥æ–¹æ³•æ—¶ï¼Œå¦‚æœå…¶ä»–çº¿ç¨‹è°ƒç”¨äº†å½“å‰çº¿ç¨‹çš„ interrupt()
+     *   æ–¹æ³•ï¼Œå½“å‰çº¿ç¨‹ä¼šæŠ›å‡º InterruptedException å¼‚å¸¸ï¼Œç„¶åè¿”å›ã€‚
      */
     public final void acquireInterruptibly(int arg)
             throws InterruptedException {
-        // Èç¹ûµ±Ç°Ïß³Ì±»ÖĞ¶Ï£¬ÔòÖ±½ÓÅ×³öÒì³£
+        // å¦‚æœå½“å‰çº¿ç¨‹è¢«ä¸­æ–­ï¼Œåˆ™ç›´æ¥æŠ›å‡ºå¼‚å¸¸
         if (Thread.interrupted())
             throw new InterruptedException();
-        // ³¢ÊÔ»ñÈ¡×ÊÔ´
+        // å°è¯•è·å–èµ„æº
         if (!tryAcquire(arg))
-            // µ÷ÓÃAQS¿É±»ÖĞ¶ÏµÄ·½·¨
+            // è°ƒç”¨AQSå¯è¢«ä¸­æ–­çš„æ–¹æ³•
             doAcquireInterruptibly(arg);
     }
 
@@ -1073,12 +1073,12 @@ public abstract class AbstractQueuedSynchronizer
      */
     public final boolean tryAcquireNanos(int arg, long nanosTimeout)
             throws InterruptedException {
-        // ¼ì²éÏß³ÌÊÇ·ñ±»ÖĞ¶Ï£¬ÊÇµÄ»°Ö±½ÓÅ×³öÖĞ¶ÏÒì³£
+        // æ£€æŸ¥çº¿ç¨‹æ˜¯å¦è¢«ä¸­æ–­ï¼Œæ˜¯çš„è¯ç›´æ¥æŠ›å‡ºä¸­æ–­å¼‚å¸¸
         if (Thread.interrupted())
             throw new InterruptedException();
-        // ³¢ÊÔ»ñÈ¡Í¬²½×´Ì¬£¬»ñÈ¡Ê§°ÜÔò½øÈë doAcquireNanos ·½·¨½øĞĞ»ñÈ¡
+        // å°è¯•è·å–åŒæ­¥çŠ¶æ€ï¼Œè·å–å¤±è´¥åˆ™è¿›å…¥ doAcquireNanos æ–¹æ³•è¿›è¡Œè·å–
         return tryAcquire(arg) ||
-            doAcquireNanos(arg, nanosTimeout);
+                doAcquireNanos(arg, nanosTimeout);
     }
 
     /**
@@ -1091,23 +1091,23 @@ public abstract class AbstractQueuedSynchronizer
      *        can represent anything you like.
      * @return the value returned from {@link #tryRelease}
      *
-     * release()¶ÀÕ¼Ê½ÊÍ·ÅÍ¬²½×´Ì¬,ÊÍ·ÅÏß³Ìºó»½ĞÑ½Úµã¡£
+     * release()ç‹¬å å¼é‡Šæ”¾åŒæ­¥çŠ¶æ€,é‡Šæ”¾çº¿ç¨‹åå”¤é†’èŠ‚ç‚¹ã€‚
      *
-     * ÆäÖĞ tryRelease Ò²ĞèÒªÍ¬²½×é¼ş×Ô¼ºÈ¥ÊµÏÖ£¬ÓïÒåÒ²±» AQS Ëù¶¨Òå£¬true ´ú±íÊÍ·Å³É¹¦£¬
-     * false ´ú±íÊ§°Ü£¬Èç¹ûÎª true£¬¾ÍĞèÒª¾ö¶¨ÊÇ·ñÈ¥»½ĞÑ½Úµã£¬Ê×ÏÈ»ñÈ¡Í¬²½¶ÓÁĞµÄÍ·½Úµã£¬
-     * ÅĞ¶ÏÍ·½áµã²»ÊÇ¿Õ£¬Ö¤Ã÷ÓĞÍ¬²½¶Ô±ğÓĞ½Úµã²ÅĞèÒª»½ĞÑ£¬ÅĞ¶ÏÍ·½áµã²»ÊÇ¸Õ¸Õ³õÊ¼»¯£¬Èç
-     * ¹ûÊÇ¸Õ¸Õ³õÊ¼»¯£¬¾Í»¹Ã»ÓĞ×èÈû£¬Çë²Î¿¼ acquire µÄ acquireQueued ´¦Àí½ÚµãµÄÂß¼­£¬¶¼
-     * Îª true Ö´ĞĞ unparkSuccessor ·½·¨£¬false·µ»Ø¡£
+     * å…¶ä¸­ tryRelease ä¹Ÿéœ€è¦åŒæ­¥ç»„ä»¶è‡ªå·±å»å®ç°ï¼Œè¯­ä¹‰ä¹Ÿè¢« AQS æ‰€å®šä¹‰ï¼Œtrue ä»£è¡¨é‡Šæ”¾æˆåŠŸï¼Œ
+     * false ä»£è¡¨å¤±è´¥ï¼Œå¦‚æœä¸º trueï¼Œå°±éœ€è¦å†³å®šæ˜¯å¦å»å”¤é†’èŠ‚ç‚¹ï¼Œé¦–å…ˆè·å–åŒæ­¥é˜Ÿåˆ—çš„å¤´èŠ‚ç‚¹ï¼Œ
+     * åˆ¤æ–­å¤´ç»“ç‚¹ä¸æ˜¯ç©ºï¼Œè¯æ˜æœ‰åŒæ­¥å¯¹åˆ«æœ‰èŠ‚ç‚¹æ‰éœ€è¦å”¤é†’ï¼Œåˆ¤æ–­å¤´ç»“ç‚¹ä¸æ˜¯åˆšåˆšåˆå§‹åŒ–ï¼Œå¦‚
+     * æœæ˜¯åˆšåˆšåˆå§‹åŒ–ï¼Œå°±è¿˜æ²¡æœ‰é˜»å¡ï¼Œè¯·å‚è€ƒ acquire çš„ acquireQueued å¤„ç†èŠ‚ç‚¹çš„é€»è¾‘ï¼Œéƒ½
+     * ä¸º true æ‰§è¡Œ unparkSuccessor æ–¹æ³•ï¼Œfalseè¿”å›ã€‚
      */
     public final boolean release(int arg) {
-        // ÊÍ·ÅËø,×ÓÀàÊµÏÖ tryRelease() ÊÍ·ÅÍ¬²½×´Ì¬
+        // é‡Šæ”¾é”,å­ç±»å®ç° tryRelease() é‡Šæ”¾åŒæ­¥çŠ¶æ€
         if (tryRelease(arg)) {
-            // »ñÈ¡Í·½áµã
+            // è·å–å¤´ç»“ç‚¹
             Node h = head;
-            // Í·½áµã²»Îª¿Õ£¬Ö¤Ã÷³õÊ¼»¯ÁË
-            // Ö¤Ã÷Í·½áµã²»ÊÇ¸Õ¸Õ´´½¨
-            // ÄÇ¾Í¿ÉÒÔÈ¥»½ĞÑÍ·½áµã»òÕßËüµÄºó¼Ì½Úµã
-            // Îª 0 ¾ÍÖ¤Ã÷Ã»ÓĞÆäËû½ÚµãÁË£¬²»ĞèÒª»½ĞÑ
+            // å¤´ç»“ç‚¹ä¸ä¸ºç©ºï¼Œè¯æ˜åˆå§‹åŒ–äº†
+            // è¯æ˜å¤´ç»“ç‚¹ä¸æ˜¯åˆšåˆšåˆ›å»º
+            // é‚£å°±å¯ä»¥å»å”¤é†’å¤´ç»“ç‚¹æˆ–è€…å®ƒçš„åç»§èŠ‚ç‚¹
+            // ä¸º 0 å°±è¯æ˜æ²¡æœ‰å…¶ä»–èŠ‚ç‚¹äº†ï¼Œä¸éœ€è¦å”¤é†’
             if (h != null && h.waitStatus != 0)
                 unparkSuccessor(h);
             return true;
@@ -1127,9 +1127,9 @@ public abstract class AbstractQueuedSynchronizer
      *        and can represent anything you like.
      */
     public final void acquireShared(int arg) {
-        // tryAcquireShared(arg)³¢ÊÔ»ñÈ¡Í¬²½×´Ì¬
+        // tryAcquireShared(arg)å°è¯•è·å–åŒæ­¥çŠ¶æ€
         if (tryAcquireShared(arg) < 0)
-            // »ñÈ¡Ê§°Ü£¬Ôò¹¹½¨½Úµã½øÈëÍ¬²½¶ÓÁĞ
+            // è·å–å¤±è´¥ï¼Œåˆ™æ„å»ºèŠ‚ç‚¹è¿›å…¥åŒæ­¥é˜Ÿåˆ—
             doAcquireShared(arg);
     }
 
@@ -1175,7 +1175,7 @@ public abstract class AbstractQueuedSynchronizer
         if (Thread.interrupted())
             throw new InterruptedException();
         return tryAcquireShared(arg) >= 0 ||
-            doAcquireSharedNanos(arg, nanosTimeout);
+                doAcquireSharedNanos(arg, nanosTimeout);
     }
 
     /**
@@ -1256,9 +1256,9 @@ public abstract class AbstractQueuedSynchronizer
         Node h, s;
         Thread st;
         if (((h = head) != null && (s = h.next) != null &&
-             s.prev == head && (st = s.thread) != null) ||
-            ((h = head) != null && (s = h.next) != null &&
-             s.prev == head && (st = s.thread) != null))
+                s.prev == head && (st = s.thread) != null) ||
+                ((h = head) != null && (s = h.next) != null &&
+                        s.prev == head && (st = s.thread) != null))
             return st;
 
         /*
@@ -1311,9 +1311,9 @@ public abstract class AbstractQueuedSynchronizer
     final boolean apparentlyFirstQueuedIsExclusive() {
         Node h, s;
         return (h = head) != null &&
-            (s = h.next)  != null &&
-            !s.isShared()         &&
-            s.thread != null;
+                (s = h.next)  != null &&
+                !s.isShared()         &&
+                s.thread != null;
     }
 
     /**
@@ -1359,12 +1359,12 @@ public abstract class AbstractQueuedSynchronizer
      *         is at the head of the queue or the queue is empty
      * @since 1.7
      *
-     * ¸Ã·½·¨£ºÈç¹ûµ±Ç°Ïß³ÌÓĞÇ°Çı½Úµã¾Í·µ»Ø true£¬ÄÇÃ´ÎÒÃÇÏë£¬²»ÊÇÇ°Çı½ÚµãµÄÇé¿öÓĞÄÄĞ©ÄØ£¿
-     *   1. ¶ÓÁĞÎª¿Õ
-     *   2. ¶ÓÁĞ²»Îª¿Õ£¬µ«µ±Ç°Ïß³Ì½ÚµãÊÇ AQS µÄµÚÒ»¸ö½Úµã¡£
+     * è¯¥æ–¹æ³•ï¼šå¦‚æœå½“å‰çº¿ç¨‹æœ‰å‰é©±èŠ‚ç‚¹å°±è¿”å› trueï¼Œé‚£ä¹ˆæˆ‘ä»¬æƒ³ï¼Œä¸æ˜¯å‰é©±èŠ‚ç‚¹çš„æƒ…å†µæœ‰å“ªäº›å‘¢ï¼Ÿ
+     *   1. é˜Ÿåˆ—ä¸ºç©º
+     *   2. é˜Ÿåˆ—ä¸ä¸ºç©ºï¼Œä½†å½“å‰çº¿ç¨‹èŠ‚ç‚¹æ˜¯ AQS çš„ç¬¬ä¸€ä¸ªèŠ‚ç‚¹ã€‚
      *
-     *   ¶ÓÁĞÀïÃæµÄµÚÒ»¸öÔªËØ²»ÊÇµ±Ç°Ïß³Ì£¬·µ»Ø true£¬ËµÃ÷ÔÚÄãÖ®Ç°»¹ÓĞÈËÅÅ×Å¶ÓÄØ£¬ÄãÏÈ±ğÇÀ£¬
-     *   ÏÈµ½ÏÈµÃ¡£
+     *   é˜Ÿåˆ—é‡Œé¢çš„ç¬¬ä¸€ä¸ªå…ƒç´ ä¸æ˜¯å½“å‰çº¿ç¨‹ï¼Œè¿”å› trueï¼Œè¯´æ˜åœ¨ä½ ä¹‹å‰è¿˜æœ‰äººæ’ç€é˜Ÿå‘¢ï¼Œä½ å…ˆåˆ«æŠ¢ï¼Œ
+     *   å…ˆåˆ°å…ˆå¾—ã€‚
      */
     public final boolean hasQueuedPredecessors() {
         // The correctness of this depends on head being initialized
@@ -1374,7 +1374,7 @@ public abstract class AbstractQueuedSynchronizer
         Node h = head;
         Node s;
         return h != t &&
-            ((s = h.next) == null || s.thread != Thread.currentThread());
+                ((s = h.next) == null || s.thread != Thread.currentThread());
     }
 
 
@@ -1473,7 +1473,7 @@ public abstract class AbstractQueuedSynchronizer
         int s = getState();
         String q  = hasQueuedThreads() ? "non" : "";
         return super.toString() +
-            "[State = " + s + ", " + q + "empty queue]";
+                "[State = " + s + ", " + q + "empty queue]";
     }
 
 
@@ -1485,12 +1485,12 @@ public abstract class AbstractQueuedSynchronizer
      * @param node the node
      * @return true if is reacquiring
      */
-    //isOnSyncQueue·½·¨ÅĞ¶ÏnodeÊÇ·ñÔÚÍ¬²½¶ÓÁĞÖĞ
+    //isOnSyncQueueæ–¹æ³•åˆ¤æ–­nodeæ˜¯å¦åœ¨åŒæ­¥é˜Ÿåˆ—ä¸­
     final boolean isOnSyncQueue(Node node) {
-        // ½Úµã×´Ì¬ÎªCONDITION £¬»òÕßnode.prev == null µÈ´ı½ÚµãÃ»ÓĞÇ°ÖÃ½Úµã
+        // èŠ‚ç‚¹çŠ¶æ€ä¸ºCONDITION ï¼Œæˆ–è€…node.prev == null ç­‰å¾…èŠ‚ç‚¹æ²¡æœ‰å‰ç½®èŠ‚ç‚¹
         if (node.waitStatus == Node.CONDITION || node.prev == null)
             return false;
-        // µÈ´ı½ÚµãÃ»ÓĞnext½Úµã
+        // ç­‰å¾…èŠ‚ç‚¹æ²¡æœ‰nextèŠ‚ç‚¹
         if (node.next != null) // If has successor, it must be on queue
             return true;
         /*
@@ -1501,7 +1501,7 @@ public abstract class AbstractQueuedSynchronizer
          * unless the CAS failed (which is unlikely), it will be
          * there, so we hardly ever traverse much.
          */
-        // Ñ­»·²éÕÒ
+        // å¾ªç¯æŸ¥æ‰¾
         return findNodeFromTail(node);
     }
 
@@ -1556,7 +1556,7 @@ public abstract class AbstractQueuedSynchronizer
      * @return true if cancelled before the node was signalled
      */
     final boolean transferAfterCancelledWait(Node node) {
-        // ÉèÖÃ³É¹¦±íÊ¾ÔÚ signal Ö´ĞĞÖ®Ç°
+        // è®¾ç½®æˆåŠŸè¡¨ç¤ºåœ¨ signal æ‰§è¡Œä¹‹å‰
         if (compareAndSetWaitStatus(node, Node.CONDITION, 0)) {
             enq(node);
             return true;
@@ -1567,7 +1567,7 @@ public abstract class AbstractQueuedSynchronizer
          * incomplete transfer is both rare and transient, so just
          * spin.
          */
-        // ÉèÖÃ³É¹¦±íÊ¾ÔÚsignal Ö´ĞĞÖ®ºó
+        // è®¾ç½®æˆåŠŸè¡¨ç¤ºåœ¨signal æ‰§è¡Œä¹‹å
         while (!isOnSyncQueue(node))
             Thread.yield();
         return false;
@@ -1708,9 +1708,9 @@ public abstract class AbstractQueuedSynchronizer
          * Adds a new waiter to wait queue.
          * @return its new wait node
          */
-        //addConditionWaiter·½·¨Ã¿´Î¶¼ÊÇ¼ÓÈë¶ÓÁĞµÄÎ²²¿
+        //addConditionWaiteræ–¹æ³•æ¯æ¬¡éƒ½æ˜¯åŠ å…¥é˜Ÿåˆ—çš„å°¾éƒ¨
         private Node addConditionWaiter() {
-            Node t = lastWaiter; // ConditionObject µÄÎ²½Úµã
+            Node t = lastWaiter; // ConditionObject çš„å°¾èŠ‚ç‚¹
             // If lastWaiter is cancelled, clean out.
             if (t != null && t.waitStatus != Node.CONDITION) {
                 unlinkCancelledWaiters();
@@ -1731,18 +1731,18 @@ public abstract class AbstractQueuedSynchronizer
          * to inline the case of no waiters.
          * @param first (non-null) the first node on condition queue
          */
-        // doSignal·½·¨£¬Ê×ÏÈ°ÑÕâ¸öfirst½ÚµãºÍµÈ´ı¶ÓÁĞ¶Ï¿ªÁ¬½Ó£¬È»ºó°Ñµ÷ÓÃ
-        // transferForSignal ·½·¨°Ñ½Úµã´ÓµÈ´ı¶ÓÁĞ¼ÓÈëÍ¬²½¶ÓÁĞ£¬»½ĞÑ½ÚµãµÄ
-        // Ïß³Ì£¬È»ºó±»»½ĞÑµÄÏß³Ì¾Í»áÔÚ await ·½·¨ÀïÃæÖ´ĞĞ acquireQueued Õâ¸ö·½·¨¡£
+        // doSignalæ–¹æ³•ï¼Œé¦–å…ˆæŠŠè¿™ä¸ªfirstèŠ‚ç‚¹å’Œç­‰å¾…é˜Ÿåˆ—æ–­å¼€è¿æ¥ï¼Œç„¶åæŠŠè°ƒç”¨
+        // transferForSignal æ–¹æ³•æŠŠèŠ‚ç‚¹ä»ç­‰å¾…é˜Ÿåˆ—åŠ å…¥åŒæ­¥é˜Ÿåˆ—ï¼Œå”¤é†’èŠ‚ç‚¹çš„
+        // çº¿ç¨‹ï¼Œç„¶åè¢«å”¤é†’çš„çº¿ç¨‹å°±ä¼šåœ¨ await æ–¹æ³•é‡Œé¢æ‰§è¡Œ acquireQueued è¿™ä¸ªæ–¹æ³•ã€‚
         private void doSignal(Node first) {
             do {
-                // ¶ÓÁĞÀïÃæ¼´½«Ã»ÓĞ½Úµã£¬ËùÒÔÊ×Î²¶¼ÒªÎªnull
+                // é˜Ÿåˆ—é‡Œé¢å³å°†æ²¡æœ‰èŠ‚ç‚¹ï¼Œæ‰€ä»¥é¦–å°¾éƒ½è¦ä¸ºnull
                 if ( (firstWaiter = first.nextWaiter) == null)
                     lastWaiter = null;
-                // °Ñ first ¶Ï¿ªÁ¬½Ó
+                // æŠŠ first æ–­å¼€è¿æ¥
                 first.nextWaiter = null;
             } while (!transferForSignal(first) &&
-                     (first = firstWaiter) != null);
+                    (first = firstWaiter) != null);
         }
 
         /**
@@ -1750,9 +1750,9 @@ public abstract class AbstractQueuedSynchronizer
          * @param first (non-null) the first node on condition queue
          */
         private void doSignalAll(Node first) {
-            // ¶ÓÁĞÉèÖÃÎªnull
+            // é˜Ÿåˆ—è®¾ç½®ä¸ºnull
             lastWaiter = firstWaiter = null;
-            // ´ÓÊ×½Úµã¿ªÊ¼¼ÓÈëÍ¬²½¶ÓÁĞ£¬ÖªµÀ¶ÓÁĞÎª¿Õ
+            // ä»é¦–èŠ‚ç‚¹å¼€å§‹åŠ å…¥åŒæ­¥é˜Ÿåˆ—ï¼ŒçŸ¥é“é˜Ÿåˆ—ä¸ºç©º
             do {
                 Node next = first.nextWaiter;
                 first.nextWaiter = null;
@@ -1776,14 +1776,14 @@ public abstract class AbstractQueuedSynchronizer
          * storms.
          */
         private void unlinkCancelledWaiters() {
-            // »ñÈ¡µÚÒ»¸ö
+            // è·å–ç¬¬ä¸€ä¸ª
             Node t = firstWaiter;
             Node trail = null;
             while (t != null) {
-                // »ñÈ¡µÚÒ»¸öµÄÏÂÒ»¸ö
+                // è·å–ç¬¬ä¸€ä¸ªçš„ä¸‹ä¸€ä¸ª
                 Node next = t.nextWaiter;
                 if (t.waitStatus != Node.CONDITION) {
-                    // t ĞèÒª¶Ï¿ªÁ¬½Ó
+                    // t éœ€è¦æ–­å¼€è¿æ¥
                     t.nextWaiter = null;
                     if (trail == null)
                         firstWaiter = next;
@@ -1808,12 +1808,12 @@ public abstract class AbstractQueuedSynchronizer
          * @throws IllegalMonitorStateException if {@link #isHeldExclusively}
          *         returns {@code false}
          */
-        //signal·½·¨£¬»½ĞÑµÚÒ»¸öµÈ´ı¶ÓÁĞµÄnode¡£
+        //signalæ–¹æ³•ï¼Œå”¤é†’ç¬¬ä¸€ä¸ªç­‰å¾…é˜Ÿåˆ—çš„nodeã€‚
         public final void signal() {
-            // ÅĞ¶ÏÊÇ·ñ»ñÈ¡Ëø
+            // åˆ¤æ–­æ˜¯å¦è·å–é”
             if (!isHeldExclusively())
                 throw new IllegalMonitorStateException();
-            // ³õÊ¼»¯
+            // åˆå§‹åŒ–
             Node first = firstWaiter;
             if (first != null)
                 doSignal(first);
@@ -1826,12 +1826,12 @@ public abstract class AbstractQueuedSynchronizer
          * @throws IllegalMonitorStateException if {@link #isHeldExclusively}
          *         returns {@code false}
          */
-        //signalAll»½ĞÑËùÓĞµÈ´ı¶ÓÁĞµÄ½Úµã¼ÓÈëÍ¬²½¶ÓÁĞ,²¢ÇÒÇå¿ÕµÈ´ı¶ÓÁĞ
+        //signalAllå”¤é†’æ‰€æœ‰ç­‰å¾…é˜Ÿåˆ—çš„èŠ‚ç‚¹åŠ å…¥åŒæ­¥é˜Ÿåˆ—,å¹¶ä¸”æ¸…ç©ºç­‰å¾…é˜Ÿåˆ—
         public final void signalAll() {
-            // ÅĞ¶ÏÊÇ·ñ»ñÈ¡Ëø
+            // åˆ¤æ–­æ˜¯å¦è·å–é”
             if (!isHeldExclusively())
                 throw new IllegalMonitorStateException();
-            // »ñÈ¡µÚÒ»¸ö½Úµã
+            // è·å–ç¬¬ä¸€ä¸ªèŠ‚ç‚¹
             Node first = firstWaiter;
             if (first != null)
                 doSignalAll(first);
@@ -1848,8 +1848,8 @@ public abstract class AbstractQueuedSynchronizer
          *      {@link #acquire} with saved state as argument.
          * </ol>
          */
-        // awaitUninterruptibly ²»ÏìÓ¦ÖĞ¶Ï·½·¨£¬·¢ÏÖÀïÃæ¶¼Ã»ÓĞÅĞ¶ÏÊÇ¶¼·¢ÉúÖĞ¶ÏµÄ±ê¼Ç£¬
-        //Ö»ÓĞµ÷ÓÃ signal »½ĞÑ node£¬Ñ­»·²Å»á½áÊø£¬È»ºóµ÷ÓÃ acquireQueued ´¦ÀíÕâ¸ö½Úµã£¨×èÈû»¹ÊÇÆäËü£©
+        // awaitUninterruptibly ä¸å“åº”ä¸­æ–­æ–¹æ³•ï¼Œå‘ç°é‡Œé¢éƒ½æ²¡æœ‰åˆ¤æ–­æ˜¯éƒ½å‘ç”Ÿä¸­æ–­çš„æ ‡è®°ï¼Œ
+        //åªæœ‰è°ƒç”¨ signal å”¤é†’ nodeï¼Œå¾ªç¯æ‰ä¼šç»“æŸï¼Œç„¶åè°ƒç”¨ acquireQueued å¤„ç†è¿™ä¸ªèŠ‚ç‚¹ï¼ˆé˜»å¡è¿˜æ˜¯å…¶å®ƒï¼‰
         public final void awaitUninterruptibly() {
             Node node = addConditionWaiter();
             int savedState = fullyRelease(node);
@@ -1880,13 +1880,13 @@ public abstract class AbstractQueuedSynchronizer
          * before signalled, REINTERRUPT if after signalled, or
          * 0 if not interrupted.
          */
-        // checkInterruptWhileWaiting ·½·¨£¬ÅĞ¶ÏÊÇ·ñÊÇÖĞ¶Ï»½ĞÑ£¬Õâ·½·¨¾ÍÊÇ
-        //ÎªÁËÈ·ÈÏÖĞ¶ÏµÄÊ±»úÊÇÔÚ signal ·¢ËÍĞÅÏ¢µÄÇ°Ãæ»¹ÊÇºóÃæ signal£¬ÒòÎªĞèÒªÏìÓ¦ÖĞ¶Ï
+        // checkInterruptWhileWaiting æ–¹æ³•ï¼Œåˆ¤æ–­æ˜¯å¦æ˜¯ä¸­æ–­å”¤é†’ï¼Œè¿™æ–¹æ³•å°±æ˜¯
+        //ä¸ºäº†ç¡®è®¤ä¸­æ–­çš„æ—¶æœºæ˜¯åœ¨ signal å‘é€ä¿¡æ¯çš„å‰é¢è¿˜æ˜¯åé¢ signalï¼Œå› ä¸ºéœ€è¦å“åº”ä¸­æ–­
         private int checkInterruptWhileWaiting(Node node) {
-            // ÅĞ¶ÏÊÇ·ñÊÇÏß³ÌÖĞ¶Ï»½ĞÑ£¨ÊÇÖĞ¶ÏµÄ·µ»Øtrue£©
+            // åˆ¤æ–­æ˜¯å¦æ˜¯çº¿ç¨‹ä¸­æ–­å”¤é†’ï¼ˆæ˜¯ä¸­æ–­çš„è¿”å›trueï¼‰
             return Thread.interrupted() ?
-                (transferAfterCancelledWait(node) ? THROW_IE : REINTERRUPT) :
-                0;
+                    (transferAfterCancelledWait(node) ? THROW_IE : REINTERRUPT) :
+                    0;
         }
 
         /**
@@ -1894,7 +1894,7 @@ public abstract class AbstractQueuedSynchronizer
          * does nothing, depending on mode.
          */
         private void reportInterruptAfterWait(int interruptMode)
-            throws InterruptedException {
+                throws InterruptedException {
             if (interruptMode == THROW_IE)
                 throw new InterruptedException();
             else if (interruptMode == REINTERRUPT)
@@ -1914,39 +1914,39 @@ public abstract class AbstractQueuedSynchronizer
          * <li> If interrupted while blocked in step 4, throw InterruptedException.
          * </ol>
          */
-        //await()·½·¨£¬ÀàËÆObjectµÄ await() ·½·¨£¬×èÈûÏß³ÌÊÍ·ÅËø¡£
-        //µÚÒ»²½ÊÇµ÷ÓÃaddConditionWaiter·½·¨£¬ËüµÄ×÷ÓÃÊÇ¹¹½¨µÈ´ı½Úµã¼ÓÈë¶ÓÁĞµÄÎ²²¿£¬Ê¹ÓÃµÄÒ²ÊÇAQSµÄNode,¶ÓÁĞÀïÃæË³±ãÒ²»áÇåÀíÇå³ıNode²»ÎªCONDITIONµÄ½Úµã£»
-        //µÚ¶ş²½ĞèÒªÊÍ·ÅÏß³Ì»ñÈ¡µÄÍ¬²½×´Ì¬fullyRelease·½·¨£»
-        //µÚÈı²½£º×èÈûÏß³Ì£¬ÕÒµ½Ïß³ÌÖĞ¶ÏÊ±»ú£¬Ò²¾ÍÊÇµ÷ÓÃsignal·½·¨µÄÇ°ºóË³Ğò£»
-        //µÚËÄ²½£ºµ÷ÓÃacquireQueued·½·¨´¦Àí½Úµã£¨×èÈû»¹ÊÇÆäËü£©£»
-        //µÚÎå²½£ºÇåÀí½ÚµãunlinkCancelledWaiters·½·¨£¨Çå³ıNode²»ÎªCONDITIONµÄ½Úµã£©£»
-        //µÚÁù²½£ºÏìÓ¦awaitÓïÒå£¬await×èÈûÏß³ÌÊ±µ÷ÓÃinterrupt·½·¨»áÅ×Òì³£reportInterruptAfterWait·½·¨¡£
+        //await()æ–¹æ³•ï¼Œç±»ä¼¼Objectçš„ await() æ–¹æ³•ï¼Œé˜»å¡çº¿ç¨‹é‡Šæ”¾é”ã€‚
+        //ç¬¬ä¸€æ­¥æ˜¯è°ƒç”¨addConditionWaiteræ–¹æ³•ï¼Œå®ƒçš„ä½œç”¨æ˜¯æ„å»ºç­‰å¾…èŠ‚ç‚¹åŠ å…¥é˜Ÿåˆ—çš„å°¾éƒ¨ï¼Œä½¿ç”¨çš„ä¹Ÿæ˜¯AQSçš„Node,é˜Ÿåˆ—é‡Œé¢é¡ºä¾¿ä¹Ÿä¼šæ¸…ç†æ¸…é™¤Nodeä¸ä¸ºCONDITIONçš„èŠ‚ç‚¹ï¼›
+        //ç¬¬äºŒæ­¥éœ€è¦é‡Šæ”¾çº¿ç¨‹è·å–çš„åŒæ­¥çŠ¶æ€fullyReleaseæ–¹æ³•ï¼›
+        //ç¬¬ä¸‰æ­¥ï¼šé˜»å¡çº¿ç¨‹ï¼Œæ‰¾åˆ°çº¿ç¨‹ä¸­æ–­æ—¶æœºï¼Œä¹Ÿå°±æ˜¯è°ƒç”¨signalæ–¹æ³•çš„å‰åé¡ºåºï¼›
+        //ç¬¬å››æ­¥ï¼šè°ƒç”¨acquireQueuedæ–¹æ³•å¤„ç†èŠ‚ç‚¹ï¼ˆé˜»å¡è¿˜æ˜¯å…¶å®ƒï¼‰ï¼›
+        //ç¬¬äº”æ­¥ï¼šæ¸…ç†èŠ‚ç‚¹unlinkCancelledWaitersæ–¹æ³•ï¼ˆæ¸…é™¤Nodeä¸ä¸ºCONDITIONçš„èŠ‚ç‚¹ï¼‰ï¼›
+        //ç¬¬å…­æ­¥ï¼šå“åº”awaitè¯­ä¹‰ï¼Œawaité˜»å¡çº¿ç¨‹æ—¶è°ƒç”¨interruptæ–¹æ³•ä¼šæŠ›å¼‚å¸¸reportInterruptAfterWaitæ–¹æ³•ã€‚
         public final void await() throws InterruptedException {
             if (Thread.interrupted())
                 throw new InterruptedException();
-            // ¼ÓÈëµÈ´ı¶ÓÁĞ£¬Çå³ı½Úµã
+            // åŠ å…¥ç­‰å¾…é˜Ÿåˆ—ï¼Œæ¸…é™¤èŠ‚ç‚¹
             Node node = addConditionWaiter();
-            // ÊÍ·ÅÍ¬²½×´Ì¬
+            // é‡Šæ”¾åŒæ­¥çŠ¶æ€
             int savedState = fullyRelease(node);
             int interruptMode = 0;
-            //±»»½ĞÑºóµÄÏß³Ì£¬½«´Ó await() ·½·¨ÖĞµÄ while Ñ­»·ÖĞÍË³ö£¨isOnSyncQueue(Node node) ·½·¨
-            //·µ»Ø true£¬½ÚµãÒÑ¾­ÔÚÍ¬²½¶ÓÁĞÖĞ£©£¬½ø¶øµ÷ÓÃÍ¬²½Æ÷µÄ acquireQueued() ·½·¨¼ÓÈëµ½»ñÈ¡Í¬²½×´
-            //Ì¬µÄ¾ºÕùÖĞ¡£
+            //è¢«å”¤é†’åçš„çº¿ç¨‹ï¼Œå°†ä» await() æ–¹æ³•ä¸­çš„ while å¾ªç¯ä¸­é€€å‡ºï¼ˆisOnSyncQueue(Node node) æ–¹æ³•
+            //è¿”å› trueï¼ŒèŠ‚ç‚¹å·²ç»åœ¨åŒæ­¥é˜Ÿåˆ—ä¸­ï¼‰ï¼Œè¿›è€Œè°ƒç”¨åŒæ­¥å™¨çš„ acquireQueued() æ–¹æ³•åŠ å…¥åˆ°è·å–åŒæ­¥çŠ¶
+            //æ€çš„ç«äº‰ä¸­ã€‚
             while (!isOnSyncQueue(node)) {
-                // ×èÈûÏß³Ì
-                LockSupport.park(this); //±»»½ĞÑºó·µ»Øµ½Ñ­»·ÖĞ
-                // Èç¹ûÏß³ÌÊÇ±»ÖĞ¶Ï»½ĞÑµÄ£¬Ö±½ÓÌø³öÑ­»·
+                // é˜»å¡çº¿ç¨‹
+                LockSupport.park(this); //è¢«å”¤é†’åè¿”å›åˆ°å¾ªç¯ä¸­
+                // å¦‚æœçº¿ç¨‹æ˜¯è¢«ä¸­æ–­å”¤é†’çš„ï¼Œç›´æ¥è·³å‡ºå¾ªç¯
                 if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
                     break;
             }
-            // »ñÈ¡Í¬²½×´Ì¬£¬Ö»ÓĞÒ»¸öÏß³ÌÄÜ¹»³É¹¦»ñÈ¡Í¬²½×´Ì¬
+            // è·å–åŒæ­¥çŠ¶æ€ï¼Œåªæœ‰ä¸€ä¸ªçº¿ç¨‹èƒ½å¤ŸæˆåŠŸè·å–åŒæ­¥çŠ¶æ€
             if (acquireQueued(node, savedState) && interruptMode != THROW_IE)
                 interruptMode = REINTERRUPT;
             if (node.nextWaiter != null) // clean up if cancelled
-                // ÇåÀí½Úµã
+                // æ¸…ç†èŠ‚ç‚¹
                 unlinkCancelledWaiters();
             if (interruptMode != 0)
-                // ÏìÓ¦ÖĞ¶Ï  awaitÓïÒå
+                // å“åº”ä¸­æ–­  awaitè¯­ä¹‰
                 reportInterruptAfterWait(interruptMode);
         }
 
@@ -1963,8 +1963,8 @@ public abstract class AbstractQueuedSynchronizer
          * <li> If interrupted while blocked in step 4, throw InterruptedException.
          * </ol>
          */
-        //awaitNanos(long nanosTimeout) ºÍ awaitUntil(Date deadline) ¶¼ÊÇÌá¹©ÁË³¬Ê±Ê±¼ä£¬
-        //ºÍawait·½·¨ÀàËÆ£¬Ö»ÊÇ¼ÓÈëÁËÊ±¼ä»úÖÆ¡£
+        //awaitNanos(long nanosTimeout) å’Œ awaitUntil(Date deadline) éƒ½æ˜¯æä¾›äº†è¶…æ—¶æ—¶é—´ï¼Œ
+        //å’Œawaitæ–¹æ³•ç±»ä¼¼ï¼Œåªæ˜¯åŠ å…¥äº†æ—¶é—´æœºåˆ¶ã€‚
         public final long awaitNanos(long nanosTimeout)
                 throws InterruptedException {
             if (Thread.interrupted())
@@ -2007,8 +2007,8 @@ public abstract class AbstractQueuedSynchronizer
          * <li> If timed out while blocked in step 4, return false, else true.
          * </ol>
          */
-        //awaitNanos(long nanosTimeout) ºÍ awaitUntil(Date deadline) ¶¼ÊÇÌá¹©ÁË³¬Ê±Ê±¼ä£¬
-        //ºÍawait·½·¨ÀàËÆ£¬Ö»ÊÇ¼ÓÈëÁËÊ±¼ä»úÖÆ¡£
+        //awaitNanos(long nanosTimeout) å’Œ awaitUntil(Date deadline) éƒ½æ˜¯æä¾›äº†è¶…æ—¶æ—¶é—´ï¼Œ
+        //å’Œawaitæ–¹æ³•ç±»ä¼¼ï¼Œåªæ˜¯åŠ å…¥äº†æ—¶é—´æœºåˆ¶ã€‚
         public final boolean awaitUntil(Date deadline)
                 throws InterruptedException {
             long abstime = deadline.getTime();
@@ -2173,15 +2173,15 @@ public abstract class AbstractQueuedSynchronizer
     static {
         try {
             stateOffset = unsafe.objectFieldOffset
-                (AbstractQueuedSynchronizer.class.getDeclaredField("state"));
+                    (AbstractQueuedSynchronizer.class.getDeclaredField("state"));
             headOffset = unsafe.objectFieldOffset
-                (AbstractQueuedSynchronizer.class.getDeclaredField("head"));
+                    (AbstractQueuedSynchronizer.class.getDeclaredField("head"));
             tailOffset = unsafe.objectFieldOffset
-                (AbstractQueuedSynchronizer.class.getDeclaredField("tail"));
+                    (AbstractQueuedSynchronizer.class.getDeclaredField("tail"));
             waitStatusOffset = unsafe.objectFieldOffset
-                (Node.class.getDeclaredField("waitStatus"));
+                    (Node.class.getDeclaredField("waitStatus"));
             nextOffset = unsafe.objectFieldOffset
-                (Node.class.getDeclaredField("next"));
+                    (Node.class.getDeclaredField("next"));
 
         } catch (Exception ex) { throw new Error(ex); }
     }
@@ -2207,7 +2207,7 @@ public abstract class AbstractQueuedSynchronizer
                                                          int expect,
                                                          int update) {
         return unsafe.compareAndSwapInt(node, waitStatusOffset,
-                                        expect, update);
+                expect, update);
     }
 
     /**

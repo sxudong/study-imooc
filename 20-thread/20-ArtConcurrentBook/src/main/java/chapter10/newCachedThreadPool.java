@@ -5,8 +5,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * 10.2.3 CachedThreadPoolÏê½â
- * CachedThreadPoolÊÇÒ»¸ö»á¸ù¾İĞèÒª´´½¨ĞÂÏß³ÌµÄÏß³Ì³Ø¡£
+ * 10.2.3 CachedThreadPoolè¯¦è§£
+ * CachedThreadPoolæ˜¯ä¸€ä¸ªä¼šæ ¹æ®éœ€è¦åˆ›å»ºæ–°çº¿ç¨‹çš„çº¿ç¨‹æ± ã€‚
  *
  * public static ExecutorService newCachedThreadPool() {
  *      return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
@@ -14,15 +14,15 @@ import java.util.concurrent.ThreadPoolExecutor;
  *                                   new SynchronousQueue<Runnable>());
  * }
  *
- * corePoolSize ±»ÉèÖÃÎª 0£¬¼´ corePool Îª¿Õ£»
- * maximumPoolSize ±»ÉèÖÃÎª Integer.MAX_VALUE£¬¼´ maximumPool ÊÇÎŞ½çµÄ¡£
- * keepAliveTime ÉèÖÃÎª 60L£¬ÒâÎ¶×Å CachedThreadPool ÖĞµÄ¿ÕÏĞÏß³ÌµÈ´ıĞÂ
- * ÈÎÎñµÄ×î³¤Ê±¼äÎª 60 Ãë£¬¿ÕÏĞÏß³Ì³¬¹ı 60 Ãëºó½«»á±»ÖÕÖ¹¡£
+ * corePoolSize è¢«è®¾ç½®ä¸º 0ï¼Œå³ corePool ä¸ºç©ºï¼›
+ * maximumPoolSize è¢«è®¾ç½®ä¸º Integer.MAX_VALUEï¼Œå³ maximumPool æ˜¯æ— ç•Œçš„ã€‚
+ * keepAliveTime è®¾ç½®ä¸º 60Lï¼Œæ„å‘³ç€ CachedThreadPool ä¸­çš„ç©ºé—²çº¿ç¨‹ç­‰å¾…æ–°
+ * ä»»åŠ¡çš„æœ€é•¿æ—¶é—´ä¸º 60 ç§’ï¼Œç©ºé—²çº¿ç¨‹è¶…è¿‡ 60 ç§’åå°†ä¼šè¢«ç»ˆæ­¢ã€‚
  */
 public class newCachedThreadPool {
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newCachedThreadPool();
- 
+
         for (int i = 0; i < 10; i++) {
             final int index = i;
             // executorService.execute(() -> log.info("task:{}", index));
@@ -38,7 +38,7 @@ public class newCachedThreadPool {
         System.out.println(threadPoolExecutor.getTaskCount());
     }
 }
-/* Ã¿ÔËĞĞÒ»´ÎÒ»¸öĞÂµÄÏß³ÌÖ´ĞĞ£º
+/* æ¯è¿è¡Œä¸€æ¬¡ä¸€ä¸ªæ–°çš„çº¿ç¨‹æ‰§è¡Œï¼š
 19:22:30.173 [pool-1-thread-6] INFO com.mmall.concurrency.example.threadPool.ThreadPoolExample1 - task:5
 19:22:30.173 [pool-1-thread-1] INFO com.mmall.concurrency.example.threadPool.ThreadPoolExample1 - task:0
 19:22:30.173 [pool-1-thread-4] INFO com.mmall.concurrency.example.threadPool.ThreadPoolExample1 - task:3

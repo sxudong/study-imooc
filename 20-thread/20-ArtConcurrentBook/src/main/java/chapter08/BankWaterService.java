@@ -5,27 +5,27 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 8.2.2 CyclicBarrierµÄÓ¦ÓÃ³¡¾° ´úÂëÇåµ¥8-5
+ * 8.2.2 CyclicBarrierçš„åº”ç”¨åœºæ™¯ ä»£ç æ¸…å•8-5
  *
- * ÓÃÒ»¸öExcel±£´æÁËÓÃ»§ËùÓĞÒøĞĞÁ÷Ë®£¬Ã¿¸ö Sheet ±£´æÒ»¸öÕË»§½üÒ»ÄêµÄÃ¿±ÊÒøĞĞÁ÷Ë®£¬ÏÖÔÚĞè
- * ÒªÍ³¼ÆÓÃ»§µÄÈÕ¾ùÒøĞĞÁ÷Ë®£¬ÏÈÓÃ¶àÏß³Ì´¦ÀíÃ¿¸ö sheet ÀïµÄÒøĞĞÁ÷Ë®£¬¶¼Ö´ĞĞÍêÖ®ºó£¬µÃµ½Ã¿¸ö
- * sheet µÄÈÕ¾ùÒøĞĞÁ÷Ë®£¬×îºó£¬ÔÙÓÃbarrierActionÓÃÕâĞ©Ïß³ÌµÄ¼ÆËã½á¹û£¬¼ÆËã³öÕû¸ö Excel
- * µÄÈÕ¾ùÒøĞĞÁ÷Ë®£¬ÈçÏÂ´úÂëËùÊ¾£º
+ * ç”¨ä¸€ä¸ªExcelä¿å­˜äº†ç”¨æˆ·æ‰€æœ‰é“¶è¡Œæµæ°´ï¼Œæ¯ä¸ª Sheet ä¿å­˜ä¸€ä¸ªè´¦æˆ·è¿‘ä¸€å¹´çš„æ¯ç¬”é“¶è¡Œæµæ°´ï¼Œç°åœ¨éœ€
+ * è¦ç»Ÿè®¡ç”¨æˆ·çš„æ—¥å‡é“¶è¡Œæµæ°´ï¼Œå…ˆç”¨å¤šçº¿ç¨‹å¤„ç†æ¯ä¸ª sheet é‡Œçš„é“¶è¡Œæµæ°´ï¼Œéƒ½æ‰§è¡Œå®Œä¹‹åï¼Œå¾—åˆ°æ¯ä¸ª
+ * sheet çš„æ—¥å‡é“¶è¡Œæµæ°´ï¼Œæœ€åï¼Œå†ç”¨barrierActionç”¨è¿™äº›çº¿ç¨‹çš„è®¡ç®—ç»“æœï¼Œè®¡ç®—å‡ºæ•´ä¸ª Excel
+ * çš„æ—¥å‡é“¶è¡Œæµæ°´ï¼Œå¦‚ä¸‹ä»£ç æ‰€ç¤ºï¼š
  */
 public class BankWaterService implements Runnable {
     /**
-     * ´´½¨ 4 ¸öÆÁÕÏ£¬´¦ÀíÍêÖ®ºóÖ´ĞĞµ±Ç°ÀàµÄ run ·½·¨
+     * åˆ›å»º 4 ä¸ªå±éšœï¼Œå¤„ç†å®Œä¹‹åæ‰§è¡Œå½“å‰ç±»çš„ run æ–¹æ³•
      *
-     * CyclicBarrier Ìá¹©Ò»¸ö¸ü¸ß¼¶µÄ¹¹Ôìº¯Êı CyclicBarrier£¨int parties£¬Runnable barrierAction£©£¬
-     * ÓÃÓÚÔÚÏß³Ìµ½´ïÆÁÕÏÊ±£¬ÓÅÏÈÖ´ĞĞ barrierAction£¬·½±ã´¦Àí¸ü¸´ÔÓµÄÒµÎñ³¡¾°
+     * CyclicBarrier æä¾›ä¸€ä¸ªæ›´é«˜çº§çš„æ„é€ å‡½æ•° CyclicBarrierï¼ˆint partiesï¼ŒRunnable barrierActionï¼‰ï¼Œ
+     * ç”¨äºåœ¨çº¿ç¨‹åˆ°è¾¾å±éšœæ—¶ï¼Œä¼˜å…ˆæ‰§è¡Œ barrierActionï¼Œæ–¹ä¾¿å¤„ç†æ›´å¤æ‚çš„ä¸šåŠ¡åœºæ™¯
      */
     private CyclicBarrier c = new CyclicBarrier(4, this);
     /**
-     * ¼ÙÉèÖ»ÓĞ 4 ¸ösheet£¬ËùÒÔÖ»Æô¶¯ 4 ¸öÏß³Ì
+     * å‡è®¾åªæœ‰ 4 ä¸ªsheetï¼Œæ‰€ä»¥åªå¯åŠ¨ 4 ä¸ªçº¿ç¨‹
      */
     private ExecutorService executor = Executors.newFixedThreadPool(4);
     /**
-     * ±£´æÃ¿¸ö sheet ¼ÆËã³öµÄÒøÁ÷½á¹û
+     * ä¿å­˜æ¯ä¸ª sheet è®¡ç®—å‡ºçš„é“¶æµç»“æœ
      */
     private ConcurrentHashMap<String, Integer> sheetBankWaterCount = new ConcurrentHashMap<>();
 
@@ -36,11 +36,11 @@ public class BankWaterService implements Runnable {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    // ¼ÆËãµ±Ç°sheetµÄÒøÁ÷Êı¾İ£¬¼ÆËã´úÂëÊ¡ÂÔ
+                    // è®¡ç®—å½“å‰sheetçš„é“¶æµæ•°æ®ï¼Œè®¡ç®—ä»£ç çœç•¥
                     sheetBankWaterCount.put(Thread.currentThread().getName(), 1);
-                    // ÒøÁ÷¼ÆËãÍê³É£¬²åÈëÒ»¸öÆÁÕÏ
+                    // é“¶æµè®¡ç®—å®Œæˆï¼Œæ’å…¥ä¸€ä¸ªå±éšœ
                     try {
-                        c.await(); //ÔÚ4¸öÏß³Ì¶¼ÕâÀï¹ÒÆğºó£¬CyclicBarrier c = new CyclicBarrier(4, this); this.runÏÈÔËĞĞ¼ÆËã¡£
+                        c.await(); //åœ¨4ä¸ªçº¿ç¨‹éƒ½è¿™é‡ŒæŒ‚èµ·åï¼ŒCyclicBarrier c = new CyclicBarrier(4, this); this.runå…ˆè¿è¡Œè®¡ç®—ã€‚
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (BrokenBarrierException e) {
@@ -52,26 +52,26 @@ public class BankWaterService implements Runnable {
         }
         executor.shutdown();
     }
- 
+
     @Override
     public void run() {
         int result = 0;
-        // »ã×ÜÃ¿¸ösheet¼ÆËã³öµÄ½á¹û
+        // æ±‡æ€»æ¯ä¸ªsheetè®¡ç®—å‡ºçš„ç»“æœ
         for (Map.Entry<String, Integer> sheet : sheetBankWaterCount.entrySet()) {
             result += sheet.getValue();
         }
-        // ½«½á¹ûÊä³ö
+        // å°†ç»“æœè¾“å‡º
         sheetBankWaterCount.put("result", result);
         System.out.println(result);
     }
- 
+
     public static void main(String[] args) {
         BankWaterService bankWaterCount = new BankWaterService();
         bankWaterCount.count();
     }
 }
-// Ê¹ÓÃÏß³Ì³Ø´´½¨4¸öÏß³Ì£¬·Ö±ğ¼ÆËãÃ¿¸ösheetÀïµÄÊı¾İ£¬Ã¿¸ösheet¼ÆËã½á¹ûÊÇ1£¬ÔÙÓÉ
-// BankWaterServiceÏß³Ì»ã×Ü4¸ösheet¼ÆËã³öµÄ½á¹û£¬Êä³ö½á¹ûÈçÏÂ:
+// ä½¿ç”¨çº¿ç¨‹æ± åˆ›å»º4ä¸ªçº¿ç¨‹ï¼Œåˆ†åˆ«è®¡ç®—æ¯ä¸ªsheeté‡Œçš„æ•°æ®ï¼Œæ¯ä¸ªsheetè®¡ç®—ç»“æœæ˜¯1ï¼Œå†ç”±
+// BankWaterServiceçº¿ç¨‹æ±‡æ€»4ä¸ªsheetè®¡ç®—å‡ºçš„ç»“æœï¼Œè¾“å‡ºç»“æœå¦‚ä¸‹:
 /*
 4
- */
+*/

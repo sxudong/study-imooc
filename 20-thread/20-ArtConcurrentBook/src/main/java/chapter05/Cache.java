@@ -6,21 +6,21 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * 5-16 Í¨¹ıÒ»¸ö»º´æÊ¾ÀıËµÃ÷¶ÁĞ´ËøµÄÊ¹ÓÃ·½Ê½
- * 5.4.1 ¶ÁĞ´ËøµÄ½Ó¿ÚÓëÊ¾Àı ReentrantReadWriteLock
+ * 5-16 é€šè¿‡ä¸€ä¸ªç¼“å­˜ç¤ºä¾‹è¯´æ˜è¯»å†™é”çš„ä½¿ç”¨æ–¹å¼
+ * 5.4.1 è¯»å†™é”çš„æ¥å£ä¸ç¤ºä¾‹ ReentrantReadWriteLock
  *
- * Cache Ê¹ÓÃ"¶ÁĞ´Ëø"ÌáÉı"¶Á²Ù×÷"µÄ²¢·¢ĞÔ£¬Ò²±£Ö¤Ã¿´Î"Ğ´²Ù×÷"
- * ¶ÔËùÓĞµÄ"¶ÁĞ´²Ù×÷"µÄ¿É¼ûĞÔ£¬Í¬Ê±¼ò»¯ÁË±à³Ì·½Ê½¡£
+ * Cache ä½¿ç”¨"è¯»å†™é”"æå‡"è¯»æ“ä½œ"çš„å¹¶å‘æ€§ï¼Œä¹Ÿä¿è¯æ¯æ¬¡"å†™æ“ä½œ"
+ * å¯¹æ‰€æœ‰çš„"è¯»å†™æ“ä½œ"çš„å¯è§æ€§ï¼ŒåŒæ—¶ç®€åŒ–äº†ç¼–ç¨‹æ–¹å¼ã€‚
  */
 public class Cache {
-    //·ÇÏß³Ì°²È«µÄ HashMap ×÷Îª»º´æµÄÊµÏÖ
+    //éçº¿ç¨‹å®‰å…¨çš„ HashMap ä½œä¸ºç¼“å­˜çš„å®ç°
     private static final Map<String, Object>    map = new HashMap<String, Object>();
-    //Ê¹ÓÃ¶ÁĞ´ËøµÄ"¶ÁËø"ºÍ"Ğ´Ëø"À´±£Ö¤ Cache ÊÇÏß³Ì°²È«µÄ
+    //ä½¿ç”¨è¯»å†™é”çš„"è¯»é”"å’Œ"å†™é”"æ¥ä¿è¯ Cache æ˜¯çº¿ç¨‹å®‰å…¨çš„
     private static final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
     private static final Lock                   r   = rwl.readLock();
     private static final Lock                   w   = rwl.writeLock();
 
-    //ÔÚ¶Á²Ù×÷get(String key)·½·¨ÖĞ£¬ĞèÒª»ñÈ¡¶ÁËø£¬ÕâÊ¹/µÃ²¢·¢·ÃÎÊ¸Ã·½·¨Ê±²»»á±»×èÈû
+    //åœ¨è¯»æ“ä½œget(String key)æ–¹æ³•ä¸­ï¼Œéœ€è¦è·å–è¯»é”ï¼Œè¿™ä½¿/å¾—å¹¶å‘è®¿é—®è¯¥æ–¹æ³•æ—¶ä¸ä¼šè¢«é˜»å¡
     public static final Object get(String key) {
         r.lock();
         try {
@@ -30,9 +30,9 @@ public class Cache {
         }
     }
 
-    //Ğ´²Ù×÷ put(String key,Object value) ·½·¨ºÍ clear() ·½·¨£¬ÔÚ¸üĞÂ HashMap Ê±±ØĞë
-    //ÌáÇ°»ñÈ¡"Ğ´Ëø"£¬µ±»ñÈ¡"Ğ´Ëø"ºó£¬ÆäËûÏß³Ì¶ÔÓÚ"¶ÁËø"ºÍ"Ğ´Ëø"µÄ»ñÈ¡¾ù±»×èÈû£¬¶øÖ»ÓĞ
-    //"Ğ´Ëø"±»ÊÍ·ÅÖ®ºó£¬ÆäËû"¶ÁĞ´²Ù×÷"²ÅÄÜ¼ÌĞø¡£
+    //å†™æ“ä½œ put(String key,Object value) æ–¹æ³•å’Œ clear() æ–¹æ³•ï¼Œåœ¨æ›´æ–° HashMap æ—¶å¿…é¡»
+    //æå‰è·å–"å†™é”"ï¼Œå½“è·å–"å†™é”"åï¼Œå…¶ä»–çº¿ç¨‹å¯¹äº"è¯»é”"å’Œ"å†™é”"çš„è·å–å‡è¢«é˜»å¡ï¼Œè€Œåªæœ‰
+    //"å†™é”"è¢«é‡Šæ”¾ä¹‹åï¼Œå…¶ä»–"è¯»å†™æ“ä½œ"æ‰èƒ½ç»§ç»­ã€‚
     public static final Object put(String key, Object value) {
         w.lock();
         try {

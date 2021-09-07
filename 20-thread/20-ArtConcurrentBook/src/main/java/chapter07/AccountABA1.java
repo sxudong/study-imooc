@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static java.lang.Thread.sleep;
 
 /**
- * 展示 CAS 中的 ABA 问题
+ * 灞曠ず CAS 涓殑 ABA 闂
  */
 public class AccountABA1 {
     static AtomicReference<String> reference = new AtomicReference<>("A");
@@ -18,7 +18,7 @@ public class AccountABA1 {
         System.out.println(Thread.currentThread().getName() + " change: A -> C : " + reference.compareAndSet(prev, "C"));
     }
 
-    //展示CAS中的ABA问题
+    //灞曠ずCAS涓殑ABA闂
     private static void other() throws InterruptedException {
         new Thread(() -> {
             System.out.println("change A -> B : " + reference.compareAndSet(reference.get(), "B"));

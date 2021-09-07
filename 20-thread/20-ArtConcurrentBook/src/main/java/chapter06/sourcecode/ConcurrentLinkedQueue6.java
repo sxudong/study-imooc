@@ -30,15 +30,15 @@ public class ConcurrentLinkedQueue6<E> extends AbstractQueue<E>
         private volatile Node<E> next;
 
         private static final
-            AtomicReferenceFieldUpdater<Node, Node>
-            nextUpdater =
-            AtomicReferenceFieldUpdater.newUpdater
-            (Node.class, Node.class, "next");
+        AtomicReferenceFieldUpdater<Node, Node>
+                nextUpdater =
+                AtomicReferenceFieldUpdater.newUpdater
+                        (Node.class, Node.class, "next");
         private static final
-            AtomicReferenceFieldUpdater<Node, Object>
-            itemUpdater =
-            AtomicReferenceFieldUpdater.newUpdater
-            (Node.class, Object.class, "item");
+        AtomicReferenceFieldUpdater<Node, Object>
+                itemUpdater =
+                AtomicReferenceFieldUpdater.newUpdater
+                        (Node.class, Object.class, "item");
 
         Node(E x) { item = x; }
 
@@ -71,15 +71,15 @@ public class ConcurrentLinkedQueue6<E> extends AbstractQueue<E>
     }
 
     private static final
-        AtomicReferenceFieldUpdater<ConcurrentLinkedQueue6, Node>
-        tailUpdater =
-        AtomicReferenceFieldUpdater.newUpdater
-        (ConcurrentLinkedQueue6.class, Node.class, "tail");
+    AtomicReferenceFieldUpdater<ConcurrentLinkedQueue6, Node>
+            tailUpdater =
+            AtomicReferenceFieldUpdater.newUpdater
+                    (ConcurrentLinkedQueue6.class, Node.class, "tail");
     private static final
-        AtomicReferenceFieldUpdater<ConcurrentLinkedQueue6, Node>
-        headUpdater =
-        AtomicReferenceFieldUpdater.newUpdater
-        (ConcurrentLinkedQueue6.class,  Node.class, "head");
+    AtomicReferenceFieldUpdater<ConcurrentLinkedQueue6, Node>
+            headUpdater =
+            AtomicReferenceFieldUpdater.newUpdater
+                    (ConcurrentLinkedQueue6.class,  Node.class, "head");
 
     private boolean casTail(Node<E> cmp, Node<E> val) {
         return tailUpdater.compareAndSet(this, cmp, val);
@@ -138,25 +138,25 @@ public class ConcurrentLinkedQueue6<E> extends AbstractQueue<E>
      */
     public boolean offer(E e) {
         if (e == null) throw new NullPointerException();
-        //Èë¶ÓÇ°£¬´´½¨Ò»¸öÈë¶Ó½Úµã
+        //å…¥é˜Ÿå‰ï¼Œåˆ›å»ºä¸€ä¸ªå…¥é˜ŸèŠ‚ç‚¹
         Node<E> n = new Node<E>(e, null);
-        //ËÀÑ­»·£¬Èë¶Ó²»³É¹¦·´¸´Èë¶Ó
+        //æ­»å¾ªç¯ï¼Œå…¥é˜Ÿä¸æˆåŠŸåå¤å…¥é˜Ÿ
         for (;;) {
-            //´´½¨Ò»¸öÖ¸Ïò tail µÄ½ÚµãÒıÓÃ
+            //åˆ›å»ºä¸€ä¸ªæŒ‡å‘ tail çš„èŠ‚ç‚¹å¼•ç”¨
             Node<E> t = tail;
-            //»ñµÃ tail ½ÚµãµÄÏÂÒ»¸ö½Úµã
+            //è·å¾— tail èŠ‚ç‚¹çš„ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
             Node<E> s = t.getNext();
             if (t == tail) {
-                // Èç¹ûµÈÓÚ¿Õ£¬ËµÃ÷ t ÊÇÎ²½Úµã
+                // å¦‚æœç­‰äºç©ºï¼Œè¯´æ˜ t æ˜¯å°¾èŠ‚ç‚¹
                 if (s == null) {
-                    //Èç¹û t ÊÇÎ²½Úµã£¬ÔòÉèÖÃ t ½ÚµãµÄ next ½ÚµãÎªÈë¶Ó½Úµã
-                    if (t.casNext(s, n)) { // s == null, n ÊÇnewµÄ½Úµã£¬ÉèÖÃnÎªÎ²½Úµã
-                        //½«Èë¶Ó½ÚµãÉèÖÃ³É tail ½Úµã£¬
-                        //¸üĞÂÊ§°ÜÁËÒ²Ã»¹ØÏµ£¬ÒòÎªÊ§°ÜÁË±íÊ¾ÓĞÆäËûÏß³Ì³É¹¦¸üĞÂÁËtail½Úµã
+                    //å¦‚æœ t æ˜¯å°¾èŠ‚ç‚¹ï¼Œåˆ™è®¾ç½® t èŠ‚ç‚¹çš„ next èŠ‚ç‚¹ä¸ºå…¥é˜ŸèŠ‚ç‚¹
+                    if (t.casNext(s, n)) { // s == null, n æ˜¯newçš„èŠ‚ç‚¹ï¼Œè®¾ç½®nä¸ºå°¾èŠ‚ç‚¹
+                        //å°†å…¥é˜ŸèŠ‚ç‚¹è®¾ç½®æˆ tail èŠ‚ç‚¹ï¼Œ
+                        //æ›´æ–°å¤±è´¥äº†ä¹Ÿæ²¡å…³ç³»ï¼Œå› ä¸ºå¤±è´¥äº†è¡¨ç¤ºæœ‰å…¶ä»–çº¿ç¨‹æˆåŠŸæ›´æ–°äº†tailèŠ‚ç‚¹
                         casTail(t, n);
                         return true;
                     }
-                } else { // t µÄ next ½Úµã s ²»µÈÓÚnull£¬ÔòĞè¸üĞÂ s ÎªÎ²½Úµã
+                } else { // t çš„ next èŠ‚ç‚¹ s ä¸ç­‰äºnullï¼Œåˆ™éœ€æ›´æ–° s ä¸ºå°¾èŠ‚ç‚¹
                     casTail(t, s);
                 }
             }
@@ -282,7 +282,7 @@ public class ConcurrentLinkedQueue6<E> extends AbstractQueue<E>
         for (Node<E> p = first(); p != null; p = p.getNext()) {
             E item = p.getItem();
             if (item != null &&
-                o.equals(item))
+                    o.equals(item))
                 return true;
         }
         return false;
@@ -304,8 +304,8 @@ public class ConcurrentLinkedQueue6<E> extends AbstractQueue<E>
         for (Node<E> p = first(); p != null; p = p.getNext()) {
             E item = p.getItem();
             if (item != null &&
-                o.equals(item) &&
-                p.casItem(item, null))
+                    o.equals(item) &&
+                    p.casItem(item, null))
                 return true;
         }
         return false;
@@ -484,7 +484,7 @@ public class ConcurrentLinkedQueue6<E> extends AbstractQueue<E>
      * @param s the stream
      */
     private void writeObject(java.io.ObjectOutputStream s)
-        throws java.io.IOException {
+            throws java.io.IOException {
 
         // Write out any hidden stuff
         s.defaultWriteObject();
@@ -506,7 +506,7 @@ public class ConcurrentLinkedQueue6<E> extends AbstractQueue<E>
      * @param s the stream
      */
     private void readObject(java.io.ObjectInputStream s)
-        throws java.io.IOException, ClassNotFoundException {
+            throws java.io.IOException, ClassNotFoundException {
         // Read in capacity, and any hidden stuff
         s.defaultReadObject();
         head = new Node<E>(null, null);

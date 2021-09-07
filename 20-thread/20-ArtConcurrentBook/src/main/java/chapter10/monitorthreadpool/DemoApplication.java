@@ -1,10 +1,10 @@
 package chapter10.monitorthreadpool;
 
 /**
- * demoÆô¶¯Àà
+ * demoå¯åŠ¨ç±»
  *
  * https://blog.csdn.net/wang704987562/article/details/88858852
- * Ä¿±ê£º´´½¨Ïß³Ì³ØºÍÒ»¸ö¼à¿ØÏß³Ì£¬¼à¿ØÏß³Ì³ÖÓĞÏß³Ì³ØÒıÓÃ£¬½Ó×Å¶¨Ê±´òÓ¡Ïß³Ì³ØÏà¹ØĞÅÏ¢£¬Ê¹ÓÃspringboot´´½¨demo¡£
+ * ç›®æ ‡ï¼šåˆ›å»ºçº¿ç¨‹æ± å’Œä¸€ä¸ªç›‘æ§çº¿ç¨‹ï¼Œç›‘æ§çº¿ç¨‹æŒæœ‰çº¿ç¨‹æ± å¼•ç”¨ï¼Œæ¥ç€å®šæ—¶æ‰“å°çº¿ç¨‹æ± ç›¸å…³ä¿¡æ¯ï¼Œä½¿ç”¨springbootåˆ›å»ºdemoã€‚
  */
 /*
 @SpringBootApplication
@@ -42,13 +42,13 @@ public class DemoApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        //Ïß³Ì³Ø¼à¿Ø²âÊÔ
+        //çº¿ç¨‹æ± ç›‘æ§æµ‹è¯•
         executorStarter.start();
     }
 }
 */
 /* Output:
-00:03:11.915 logback [Thread-10] DEBUG c.e.d.s.t.ThreadPoolMonitorService - CurrentPoolSize£º0 - CorePoolSize£º1 - MaximumPoolSize£º3 - ActiveTaskCount£º0 - CompletedTaskCount£º0 - TotalTaskCount£º0 - isTerminated£ºfalse
+00:03:11.915 logback [Thread-10] DEBUG c.e.d.s.t.ThreadPoolMonitorService - CurrentPoolSizeï¼š0 - CorePoolSizeï¼š1 - MaximumPoolSizeï¼š3 - ActiveTaskCountï¼š0 - CompletedTaskCountï¼š0 - TotalTaskCountï¼š0 - isTerminatedï¼šfalse
 00:03:11.916 logback [restartedMain] DEBUG c.e.d.s.t.TestRejectedExecutionHandler - task7: has been rejected.
 00:03:11.916 logback [pool-2-thread-3] DEBUG c.e.demo.service.threadpool.TestTask - task6 is started.
 00:03:11.916 logback [pool-2-thread-1] DEBUG c.e.demo.service.threadpool.TestTask - task1 is started.
@@ -65,6 +65,6 @@ public class DemoApplication implements CommandLineRunner {
 00:03:13.918 logback [pool-2-thread-1] DEBUG c.e.demo.service.threadpool.TestTask - task3 is completed.
 00:03:13.918 logback [pool-2-thread-3] DEBUG c.e.demo.service.threadpool.TestTask - task2 is completed.
 00:03:13.918 logback [pool-2-thread-2] DEBUG c.e.demo.service.threadpool.TestTask - task4 is completed.
-00:03:14.915 logback [Thread-10] DEBUG c.e.d.s.t.ThreadPoolMonitorService - CurrentPoolSize£º3 - CorePoolSize£º1 - MaximumPoolSize£º3 - ActiveTaskCount£º0 - CompletedTaskCount£º6 - TotalTaskCount£º6 - isTerminated£ºfalse
-00:03:17.916 logback [Thread-10] DEBUG c.e.d.s.t.ThreadPoolMonitorService - CurrentPoolSize£º3 - CorePoolSize£º1 - MaximumPoolSize£º3 - ActiveTaskCount£º0 - CompletedTaskCount£º6 - TotalTaskCount£º6 - isTerminated£ºfalse
+00:03:14.915 logback [Thread-10] DEBUG c.e.d.s.t.ThreadPoolMonitorService - CurrentPoolSizeï¼š3 - CorePoolSizeï¼š1 - MaximumPoolSizeï¼š3 - ActiveTaskCountï¼š0 - CompletedTaskCountï¼š6 - TotalTaskCountï¼š6 - isTerminatedï¼šfalse
+00:03:17.916 logback [Thread-10] DEBUG c.e.d.s.t.ThreadPoolMonitorService - CurrentPoolSizeï¼š3 - CorePoolSizeï¼š1 - MaximumPoolSizeï¼š3 - ActiveTaskCountï¼š0 - CompletedTaskCountï¼š6 - TotalTaskCountï¼š6 - isTerminatedï¼šfalse
  */

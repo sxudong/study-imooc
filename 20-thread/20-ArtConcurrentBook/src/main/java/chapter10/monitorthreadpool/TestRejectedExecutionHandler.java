@@ -4,7 +4,7 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * 任务拒绝执行策略
+ * 浠诲姟鎷掔粷鎵ц绛栫暐
  */
 /*
 public class TestRejectedExecutionHandler implements RejectedExecutionHandler {

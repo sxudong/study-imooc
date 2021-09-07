@@ -1,7 +1,7 @@
 package chapter10.monitorthreadpool;
 
 /**
- * 普通任务类
+ * 鏅�氫换鍔＄被
  */
 /*
 public class TestTask implements Runnable {

@@ -14,10 +14,10 @@ import java.util.Spliterators;
 import java.util.function.Consumer;
 
 /**
- * 6.3.3 ×èÈû¶ÓÁĞµÄÊµÏÖÔ­Àí LinkedBlockingQueue Ô´Âë
+ * 6.3.3 é˜»å¡é˜Ÿåˆ—çš„å®ç°åŸç† LinkedBlockingQueue æºç 
  *
- * Í¨¹ı²é¿´JDKÔ´Âë·¢ÏÖ LinkedBlockingQueue Ê¹ÓÃÁË Condition À´ÊµÏÖ
- * ConditionObject µ÷ÓÃÁË¹¤¾ß LockSupport.park(this)
+ * é€šè¿‡æŸ¥çœ‹JDKæºç å‘ç° LinkedBlockingQueue ä½¿ç”¨äº† Condition æ¥å®ç°
+ * ConditionObject è°ƒç”¨äº†å·¥å…· LockSupport.park(this)
  * @param <E>
  */
 public class LinkedBlockingQueue<E> extends AbstractQueue<E>
@@ -272,18 +272,18 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
      * @throws NullPointerException {@inheritDoc}
      */
     public void put(E e) throws InterruptedException {
-        // ²»¿ÉÒÔÎªnull
+        // ä¸å¯ä»¥ä¸ºnull
         if (e == null) throw new NullPointerException();
         // Note: convention in all put/take/etc is to preset local var
         // holding count negative to indicate failure unless set.
         int c = -1;
-        // ¹¹½¨Ò»¸ö½Úµã
+        // æ„å»ºä¸€ä¸ªèŠ‚ç‚¹
         Node<E> node = new Node<E>(e);
-        // »ñÈ¡putËø
+        // è·å–puté”
         final ReentrantLock putLock = this.putLock;
-        // »ñÈ¡count
+        // è·å–count
         final AtomicInteger count = this.count;
-        // µ÷ÓÃ»ñÈ¡ËøµÄ·½·¨£¬Ö§³ÖÖĞ¶Ï
+        // è°ƒç”¨è·å–é”çš„æ–¹æ³•ï¼Œæ”¯æŒä¸­æ–­
         putLock.lockInterruptibly();
         try {
             /*
@@ -294,22 +294,22 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
              * signalled if it ever changes from capacity. Similarly
              * for all other uses of count in other wait guards.
              */
-            // µÈÓÚÁË¶ÓÁĞµÄÈİÁ¿
+            // ç­‰äºäº†é˜Ÿåˆ—çš„å®¹é‡
             while (count.get() == capacity) {
-                // ½øÈë×èÈû¶ÓÁĞ
+                // è¿›å…¥é˜»å¡é˜Ÿåˆ—
                 notFull.await();
             }
-            // Èë¶Ó
+            // å…¥é˜Ÿ
             enqueue(node);
-            // ·µ»ØµÄÊÇ×ÔÔöÇ°µÄÖµ
+            // è¿”å›çš„æ˜¯è‡ªå¢å‰çš„å€¼
             c = count.getAndIncrement();
-            // Èç¹ûÕâ¸öÔªËØÈë¶ÓÒÔºó£¬»¹ÓĞ¶àÓÚµÄ¿Õ¼ä£¬»½ĞÑµÈ´ı¶ÓÁĞµÄÏß³Ì
+            // å¦‚æœè¿™ä¸ªå…ƒç´ å…¥é˜Ÿä»¥åï¼Œè¿˜æœ‰å¤šäºçš„ç©ºé—´ï¼Œå”¤é†’ç­‰å¾…é˜Ÿåˆ—çš„çº¿ç¨‹
             if (c + 1 < capacity)
                 notFull.signal();
         } finally {
             putLock.unlock();
         }
-        // c==0,Ö¤Ã÷Ö®Ç°¶ÓÁĞÊÇ¿ÕµÄ£¬»½ĞÑÒ»¸ö»ñÈ¡Ïß³Ì
+        // c==0,è¯æ˜ä¹‹å‰é˜Ÿåˆ—æ˜¯ç©ºçš„ï¼Œå”¤é†’ä¸€ä¸ªè·å–çº¿ç¨‹
         if (c == 0)
             signalNotEmpty();
     }
@@ -324,7 +324,7 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
      * @throws NullPointerException {@inheritDoc}
      */
     public boolean offer(E e, long timeout, TimeUnit unit)
-        throws InterruptedException {
+            throws InterruptedException {
 
         if (e == null) throw new NullPointerException();
         long nanos = unit.toNanos(timeout);
@@ -385,7 +385,7 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
         return c >= 0;
     }
 
-    // »ñÈ¡ÔªËØ
+    // è·å–å…ƒç´ 
     public E take() throws InterruptedException {
         E x;
         int c = -1;
@@ -393,7 +393,7 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
         final ReentrantLock takeLock = this.takeLock;
         takeLock.lockInterruptibly();
         try {
-            // ¶ÓÁĞÎª null ¾Í×èÈû
+            // é˜Ÿåˆ—ä¸º null å°±é˜»å¡
             while (count.get() == 0) {
                 notEmpty.await();
             }
@@ -404,20 +404,20 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
         } finally {
             takeLock.unlock();
         }
-        // ¶ÓÁĞÏû·ÑÒ»¸öÔªËØ£¬¿ÉÒÔ»½ĞÑÒ»¸öÉú²úÏß³ÌÁË
+        // é˜Ÿåˆ—æ¶ˆè´¹ä¸€ä¸ªå…ƒç´ ï¼Œå¯ä»¥å”¤é†’ä¸€ä¸ªç”Ÿäº§çº¿ç¨‹äº†
         if (c == capacity)
             signalNotFull();
         return x;
     }
 
-    // ´ø³¬Ê±Ê±¼äµÄÏû·ÑÒ»¸öÔªËØ
+    // å¸¦è¶…æ—¶æ—¶é—´çš„æ¶ˆè´¹ä¸€ä¸ªå…ƒç´ 
     public E poll(long timeout, TimeUnit unit) throws InterruptedException {
         E x = null;
         int c = -1;
         long nanos = unit.toNanos(timeout);
         final AtomicInteger count = this.count;
         final ReentrantLock takeLock = this.takeLock;
-        // Ö§³ÖÖĞ¶ÏµÄ»ñÈ¡Ëø
+        // æ”¯æŒä¸­æ–­çš„è·å–é”
         takeLock.lockInterruptibly();
         try {
             while (count.get() == 0) {
@@ -426,15 +426,15 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
                 nanos = notEmpty.awaitNanos(nanos);
             }
             x = dequeue();
-            // count-- ·µ»Ø¾ÉÖµ
+            // count-- è¿”å›æ—§å€¼
             c = count.getAndDecrement();
-            // »¹ÓĞÔªËØ£¬»½ĞÑÒ»¸öµÈ´ı»ñÈ¡µÄÏß³Ì
+            // è¿˜æœ‰å…ƒç´ ï¼Œå”¤é†’ä¸€ä¸ªç­‰å¾…è·å–çš„çº¿ç¨‹
             if (c > 1)
                 notEmpty.signal();
         } finally {
             takeLock.unlock();
         }
-        // ¶ÓÁĞ»¹ÓĞÒ»¸öÎ»ÖÃ£¬»½ĞÑÒ»¸öÈë¶ÓÏß³Ì
+        // é˜Ÿåˆ—è¿˜æœ‰ä¸€ä¸ªä½ç½®ï¼Œå”¤é†’ä¸€ä¸ªå…¥é˜Ÿçº¿ç¨‹
         if (c == capacity)
             signalNotFull();
         return x;
@@ -463,7 +463,7 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
         return x;
     }
 
-    // »ñÈ¡µÚÒ»¸öÔªËØ
+    // è·å–ç¬¬ä¸€ä¸ªå…ƒç´ 
     public E peek() {
         if (count.get() == 0)
             return null;
@@ -614,7 +614,7 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
             int size = count.get();
             if (a.length < size)
                 a = (T[])java.lang.reflect.Array.newInstance
-                    (a.getClass().getComponentType(), size);
+                        (a.getClass().getComponentType(), size);
 
             int k = 0;
             for (Node<E> p = head.next; p != null; p = p.next)
@@ -839,8 +839,8 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
             int b = batch;
             int n = (b <= 0) ? 1 : (b >= MAX_BATCH) ? MAX_BATCH : b + 1;
             if (!exhausted &&
-                ((h = current) != null || (h = q.head.next) != null) &&
-                h.next != null) {
+                    ((h = current) != null || (h = q.head.next) != null) &&
+                    h.next != null) {
                 Object[] a = new Object[n];
                 int i = 0;
                 Node<E> p = current;
@@ -864,8 +864,8 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
                 if (i > 0) {
                     batch = i;
                     return Spliterators.spliterator
-                        (a, 0, i, Spliterator.ORDERED | Spliterator.NONNULL |
-                         Spliterator.CONCURRENT);
+                            (a, 0, i, Spliterator.ORDERED | Spliterator.NONNULL |
+                                    Spliterator.CONCURRENT);
                 }
             }
             return null;
@@ -928,7 +928,7 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
 
         public int characteristics() {
             return Spliterator.ORDERED | Spliterator.NONNULL |
-                Spliterator.CONCURRENT;
+                    Spliterator.CONCURRENT;
         }
     }
 
@@ -962,7 +962,7 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
      * followed by a null
      */
     private void writeObject(java.io.ObjectOutputStream s)
-        throws java.io.IOException {
+            throws java.io.IOException {
 
         fullyLock();
         try {
@@ -988,7 +988,7 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
      * @throws java.io.IOException if an I/O error occurs
      */
     private void readObject(java.io.ObjectInputStream s)
-        throws java.io.IOException, ClassNotFoundException {
+            throws java.io.IOException, ClassNotFoundException {
         // Read in capacity, and any hidden stuff
         s.defaultReadObject();
 

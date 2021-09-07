@@ -12,9 +12,9 @@ import java.util.Spliterators;
 import java.util.Spliterator;
 
 /**
- * 6.3.3 ×èÈû¶ÓÁĞµÄÊµÏÖÔ­Àí ArrayBlockingQueue Ô´Âë
+ * 6.3.3 é˜»å¡é˜Ÿåˆ—çš„å®ç°åŸç† ArrayBlockingQueue æºç 
  *
- * Í¨¹ı²é¿´JDKÔ´Âë·¢ÏÖ ArrayBlockingQueue Ê¹ÓÃÁË Condition À´ÊµÏÖ
+ * é€šè¿‡æŸ¥çœ‹JDKæºç å‘ç° ArrayBlockingQueue ä½¿ç”¨äº† Condition æ¥å®ç°
  * @param <E>
  */
 public class ArrayBlockingQueue<E> extends AbstractQueue<E>
@@ -29,19 +29,19 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
     private static final long serialVersionUID = -817911632652898426L;
 
     /** The queued items */
-    // ¼ÇÂ¼Êı¾İµÄÊı×é
+    // è®°å½•æ•°æ®çš„æ•°ç»„
     final Object[] items;
 
     /** items index for next take, poll, peek or remove */
-    // Ë÷ÒıÓÃÓÚ take,poll,peek,remove µÈ·½·¨
+    // ç´¢å¼•ç”¨äº take,poll,peek,remove ç­‰æ–¹æ³•
     int takeIndex;
 
     /** items index for next put, offer, or add */
-    // Ë÷ÒıÓÃÓÚ put,offer,or add µÈ·½·¨
+    // ç´¢å¼•ç”¨äº put,offer,or add ç­‰æ–¹æ³•
     int putIndex;
 
     /** Number of elements in the queue */
-    // ×ÜÊı
+    // æ€»æ•°
     int count;
 
     /*
@@ -50,15 +50,15 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
      */
 
     /** Main lock guarding all access */
-    // ¶ÓÁĞµÄËø
+    // é˜Ÿåˆ—çš„é”
     final ReentrantLock lock;
 
     /** Condition for waiting takes */
-    // ÓÃÓÚÈÃÏß³ÌµÈ´ı£¬Ïû·ÑÊ±¶ÓÁĞÎª¿Õ
+    // ç”¨äºè®©çº¿ç¨‹ç­‰å¾…ï¼Œæ¶ˆè´¹æ—¶é˜Ÿåˆ—ä¸ºç©º
     private final Condition notEmpty;
 
     /** Condition for waiting puts */
-    // ÓÃÓÚÈÃÏß³ÌµÈ´ı£¬Éú²úÊ±¶ÓÁĞÂú
+    // ç”¨äºè®©çº¿ç¨‹ç­‰å¾…ï¼Œç”Ÿäº§æ—¶é˜Ÿåˆ—æ»¡
     private final Condition notFull;
 
     /**
@@ -102,13 +102,13 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
     private void enqueue(E x) {
         // assert lock.getHoldCount() == 1;
         // assert items[putIndex] == null;
-        // »ñÈ¡Êı×é
+        // è·å–æ•°ç»„
         final Object[] items = this.items;
         items[putIndex] = x;
         if (++putIndex == items.length)
             putIndex = 0;
         count++;
-        // »½ĞÑÏû·Ñ×èÈûµÄ¶ÓÁĞ
+        // å”¤é†’æ¶ˆè´¹é˜»å¡çš„é˜Ÿåˆ—
         notEmpty.signal();
     }
 
@@ -196,17 +196,17 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
      *        if {@code false} the access order is unspecified.
      * @throws IllegalArgumentException if {@code capacity < 1}
      */
-    // ³õÊ¼»¯Ò»¸öArrayBlockingQueue
+    // åˆå§‹åŒ–ä¸€ä¸ªArrayBlockingQueue
     public ArrayBlockingQueue(int capacity, boolean fair) {
         if (capacity <= 0)
             throw new IllegalArgumentException();
-        // ³õÊ¼»¯Ò»¸öÊı×é
+        // åˆå§‹åŒ–ä¸€ä¸ªæ•°ç»„
         this.items = new Object[capacity];
-        // ³õÊ¼»¯Ò»¸öËø
+        // åˆå§‹åŒ–ä¸€ä¸ªé”
         lock = new ReentrantLock(fair);
-        // ÓÃÀ´´æ·ÅÏû·ÑÕßµÄ×èÈûÏß³Ì
+        // ç”¨æ¥å­˜æ”¾æ¶ˆè´¹è€…çš„é˜»å¡çº¿ç¨‹
         notEmpty = lock.newCondition();
-        // ÓÃÀ´´æ·ÅÉú²úÕßµÄÏß³Ì
+        // ç”¨æ¥å­˜æ”¾ç”Ÿäº§è€…çš„çº¿ç¨‹
         notFull =  lock.newCondition();
     }
 
@@ -261,7 +261,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
      * @throws NullPointerException if the specified element is null
      */
     public boolean add(E e) {
-        // µ÷ÓÃ¸¸ÀàµÄ·½·¨
+        // è°ƒç”¨çˆ¶ç±»çš„æ–¹æ³•
         return super.add(e);
     }
 
@@ -274,15 +274,15 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
      *
      * @throws NullPointerException if the specified element is null
      */
-    // offer¼ÓÈëÔªËØ
+    // offeråŠ å…¥å…ƒç´ 
     public boolean offer(E e) {
-        // ²»ÄÜÎªnull
+        // ä¸èƒ½ä¸ºnull
         checkNotNull(e);
-        // »ñÈ¡Ëø
+        // è·å–é”
         final ReentrantLock lock = this.lock;
         lock.lock();
         try {
-            // Èç¹ûÊı×éÂúÁË£¬·µ»Øfalse
+            // å¦‚æœæ•°ç»„æ»¡äº†ï¼Œè¿”å›false
             if (count == items.length)
                 return false;
             else {
@@ -302,16 +302,16 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
      * @throws NullPointerException {@inheritDoc}
      */
     public void put(E e) throws InterruptedException {
-        // ²»ÄÜÎªnull
+        // ä¸èƒ½ä¸ºnull
         checkNotNull(e);
-        // »ñÈ¡Ëø
+        // è·å–é”
         final ReentrantLock lock = this.lock;
-        // Ö§³ÖÖĞ¶Ï
+        // æ”¯æŒä¸­æ–­
         lock.lockInterruptibly();
         try {
-            // µÈÓÚÊı×éµÄÈİÁ¿
+            // ç­‰äºæ•°ç»„çš„å®¹é‡
             while (count == items.length)
-                // µÈ´ı
+                // ç­‰å¾…
                 notFull.await();
             enqueue(e);
         } finally {
@@ -328,7 +328,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
      * @throws NullPointerException {@inheritDoc}
      */
     public boolean offer(E e, long timeout, TimeUnit unit)
-        throws InterruptedException {
+            throws InterruptedException {
 
         checkNotNull(e);
         long nanos = unit.toNanos(timeout);
@@ -357,16 +357,16 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
         }
     }
 
-    // Ïû·Ñ
+    // æ¶ˆè´¹
     public E take() throws InterruptedException {
-        // »ñÈ¡Ëø
+        // è·å–é”
         final ReentrantLock lock = this.lock;
-        // Ö§³ÖÖĞ¶Ï
+        // æ”¯æŒä¸­æ–­
         lock.lockInterruptibly();
         try {
-            // ¶ÓÁĞÎª¿Õ
+            // é˜Ÿåˆ—ä¸ºç©º
             while (count == 0)
-                // ×èÈû
+                // é˜»å¡
                 notEmpty.await();
             return dequeue();
         } finally {
@@ -390,7 +390,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
         }
     }
 
-    // »ñÈ¡¶ÓÎ²µÄÔªËØ ²»É¾³ı
+    // è·å–é˜Ÿå°¾çš„å…ƒç´  ä¸åˆ é™¤
     public E peek() {
         final ReentrantLock lock = this.lock;
         lock.lock();
@@ -408,7 +408,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
      *
      * @return the number of elements in this queue
      */
-    // Í³¼Æ¸öÊı sizeÊÇ×¼È·Öµ
+    // ç»Ÿè®¡ä¸ªæ•° sizeæ˜¯å‡†ç¡®å€¼
     public int size() {
         final ReentrantLock lock = this.lock;
         lock.lock();
@@ -591,7 +591,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
             final int len = a.length;
             if (len < count)
                 a = (T[])java.lang.reflect.Array.newInstance(
-                    a.getClass().getComponentType(), count);
+                        a.getClass().getComponentType(), count);
             int n = items.length - takeIndex;
             if (count <= n)
                 System.arraycopy(items, takeIndex, a, 0, count);
@@ -1105,7 +1105,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
                 // how far takeIndex has advanced since the previous
                 // operation of this iterator
                 long dequeues = (cycles - prevCycles) * len
-                    + (takeIndex - prevTakeIndex);
+                        + (takeIndex - prevTakeIndex);
 
                 // Check indices for invalidation
                 if (invalidated(lastRet, prevTakeIndex, dequeues, len))
@@ -1292,7 +1292,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
             if (removedIndex < takeIndex)
                 cycleDiff++;
             final int removedDistance =
-                (cycleDiff * len) + (removedIndex - prevTakeIndex);
+                    (cycleDiff * len) + (removedIndex - prevTakeIndex);
             // assert removedDistance >= 0;
             int cursor = this.cursor;
             if (cursor >= 0) {
@@ -1379,8 +1379,8 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
      */
     public Spliterator<E> spliterator() {
         return Spliterators.spliterator
-            (this, Spliterator.ORDERED | Spliterator.NONNULL |
-             Spliterator.CONCURRENT);
+                (this, Spliterator.ORDERED | Spliterator.NONNULL |
+                        Spliterator.CONCURRENT);
     }
 
     /**
@@ -1393,7 +1393,7 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
      * @throws java.io.IOException if an I/O error occurs
      */
     private void readObject(java.io.ObjectInputStream s)
-        throws java.io.IOException, ClassNotFoundException {
+            throws java.io.IOException, ClassNotFoundException {
 
         // Read in items array and various fields
         s.defaultReadObject();
@@ -1401,11 +1401,11 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
         // Check invariants over count and index fields. Note that
         // if putIndex==takeIndex, count can be either 0 or items.length.
         if (items.length == 0 ||
-            takeIndex < 0 || takeIndex >= items.length ||
-            putIndex  < 0 || putIndex  >= items.length ||
-            count < 0     || count     >  items.length ||
-            Math.floorMod(putIndex - takeIndex, items.length) !=
-            Math.floorMod(count, items.length)) {
+                takeIndex < 0 || takeIndex >= items.length ||
+                putIndex  < 0 || putIndex  >= items.length ||
+                count < 0     || count     >  items.length ||
+                Math.floorMod(putIndex - takeIndex, items.length) !=
+                        Math.floorMod(count, items.length)) {
             throw new java.io.InvalidObjectException("invariants violated");
         }
     }

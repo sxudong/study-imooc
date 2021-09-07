@@ -6,23 +6,23 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Ê¹ÓÃÉú²úÕßºÍÏû·ÑÕßµÄ¿Í»§¶Ë
+ * ä½¿ç”¨ç”Ÿäº§è€…å’Œæ¶ˆè´¹è€…çš„å®¢æˆ·ç«¯
  */
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        //½¨Á¢»º³åÇø
+        //å»ºç«‹ç¼“å†²åŒº
         BlockingQueue<PCData> q = new LinkedBlockingQueue<>();
-        //½¨Á¢Éú²úÕß
+        //å»ºç«‹ç”Ÿäº§è€…
         Producer p1 = new Producer(q);
         Producer p2 = new Producer(q);
         Producer p3 = new Producer(q);
 
-        //½¨Á¢Ïû·ÑÕß
+        //å»ºç«‹æ¶ˆè´¹è€…
         Consumer c1 = new Consumer(q);
         Consumer c2 = new Consumer(q);
         Consumer c3 = new Consumer(q);
 
-        //½¨Á¢Ïß³Ì³Ø
+        //å»ºç«‹çº¿ç¨‹æ± 
         ExecutorService service = Executors.newCachedThreadPool();
         service.execute(p1);
         service.execute(p2);
@@ -32,7 +32,7 @@ public class Main {
         service.execute(c3);
         Thread.sleep(10000);
 
-        //Í£Ö¹Éú²úÕß
+        //åœæ­¢ç”Ÿäº§è€…
         p1.stop();
         p2.stop();
         p3.stop();

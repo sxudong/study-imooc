@@ -1,8 +1,8 @@
 package chapter04;
 
 /**
- * ´úÂëÇåµ¥ 4-5
- * 4.1.5 Daemon£¨ºóÌ¨£©Ïß³Ì
+ * ä»£ç æ¸…å• 4-5
+ * 4.1.5 Daemonï¼ˆåå°ï¼‰çº¿ç¨‹
  */
 public class Daemon {
     public static void main(String[] args) {
@@ -17,7 +17,7 @@ public class Daemon {
             try {
                 SleepUtils.second(10);
             } finally {
-                //ÉèÖÃÎªÊØ»¤Ïß³Ìºó£¬Ç°Ì¨²»»á´òÓ¡
+                //è®¾ç½®ä¸ºå®ˆæŠ¤çº¿ç¨‹åï¼Œå‰å°ä¸ä¼šæ‰“å°
                 System.out.println("DaemonThread finally run.");
             }
         }

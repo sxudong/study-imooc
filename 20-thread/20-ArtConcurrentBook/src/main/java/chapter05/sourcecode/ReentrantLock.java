@@ -7,7 +7,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
 /**
- * ReentrantLock ÖØÈëËøÔ´Âë
+ * ReentrantLock é‡å…¥é”æºç 
  * https://blog.51cto.com/14220760/2391256
  */
 public class ReentrantLock implements Lock, java.io.Serializable {
@@ -30,31 +30,31 @@ public class ReentrantLock implements Lock, java.io.Serializable {
         abstract void lock();
 
         /**
-         * ·Ç¹«Æ½Ëø
+         * éå…¬å¹³é”
          * Performs non-fair tryLock.  tryAcquire is implemented in
          * subclasses, but both need nonfair try for trylock method.
-         * 1¡¢Èç¹ûÊÇ 0£¬¾Í CAS ³¢ÊÔ»ñÈ¡Ëø£¬½«×´Ì¬´Ó 0 ±äµ½ 1£¬²¢ÇÒÉèÖÃËøµÄ³ÖÓĞÕßÎªµ±Ç°Ïß³Ì£¬ºÍÖ®Ç°µÄÂß¼­Ò»ÑùÀ²¡£
-         * 2¡¢Èç¹û²»ÊÇ 0£¬±íÊ¾ÒÑ¾­±»Ä³¸öÏß³Ì³ÖÓĞÀ²£¬¿´¿´³ÖÓĞËøµÄÈËÊÇË­ÄØ£¿Èç¹ûÊÇ×Ô¼º£¬ÄÇÃ´ºÃ°ì£¬ÖØÈëßÂ£¬
-         *    ½« state ±äÎª nextc¡¾Ô­ÏÈ state + ´«ÈëµÄ acquires¡¿£¬·µ»Ø true¡£ÕâÀïÒª×¢Òâ£ºnextc < 0 ±íÊ¾¿ÉÖØÈë´ÎÊıÒç³ö¡£
-         * 3¡¢ËøÒÑ¾­±»±ğÈË°ÔÕ¼ÁË£¬ÄÇ¾Í·µ»Øfalse¿©£¬µÈ´ıºóĞøacquireQueued(addWaiter(Node.EXCLUSIVE), arg))·½·¨£¬
-         *    ±»ÖÃÈëAQS×èÈû¶ÓÁĞÖĞ¡£
+         * 1ã€å¦‚æœæ˜¯ 0ï¼Œå°± CAS å°è¯•è·å–é”ï¼Œå°†çŠ¶æ€ä» 0 å˜åˆ° 1ï¼Œå¹¶ä¸”è®¾ç½®é”çš„æŒæœ‰è€…ä¸ºå½“å‰çº¿ç¨‹ï¼Œå’Œä¹‹å‰çš„é€»è¾‘ä¸€æ ·å•¦ã€‚
+         * 2ã€å¦‚æœä¸æ˜¯ 0ï¼Œè¡¨ç¤ºå·²ç»è¢«æŸä¸ªçº¿ç¨‹æŒæœ‰å•¦ï¼Œçœ‹çœ‹æŒæœ‰é”çš„äººæ˜¯è°å‘¢ï¼Ÿå¦‚æœæ˜¯è‡ªå·±ï¼Œé‚£ä¹ˆå¥½åŠï¼Œé‡å…¥å‘—ï¼Œ
+         *    å°† state å˜ä¸º nextcã€åŸå…ˆ state + ä¼ å…¥çš„ acquiresã€‘ï¼Œè¿”å› trueã€‚è¿™é‡Œè¦æ³¨æ„ï¼šnextc < 0 è¡¨ç¤ºå¯é‡å…¥æ¬¡æ•°æº¢å‡ºã€‚
+         * 3ã€é”å·²ç»è¢«åˆ«äººéœ¸å äº†ï¼Œé‚£å°±è¿”å›falseå’¯ï¼Œç­‰å¾…åç»­acquireQueued(addWaiter(Node.EXCLUSIVE), arg))æ–¹æ³•ï¼Œ
+         *    è¢«ç½®å…¥AQSé˜»å¡é˜Ÿåˆ—ä¸­ã€‚
          */
         final boolean nonfairTryAcquire(int acquires) {
-            final Thread current = Thread.currentThread(); //»ñÈ¡µ±Ç°Ö´ĞĞµÄÏß³Ì
-            int c = getState(); //»ñµÃstateµÄÖµ
-            //0±íÊ¾ÎŞËø×´Ì¬£¬0 ±íÊ¾Î´ÓĞÏß³Ì³ÖÓĞ£¬> 0 ±íÊ¾ËøÖØÈëµÄ´ÎÊı
+            final Thread current = Thread.currentThread(); //è·å–å½“å‰æ‰§è¡Œçš„çº¿ç¨‹
+            int c = getState(); //è·å¾—stateçš„å€¼
+            //0è¡¨ç¤ºæ— é”çŠ¶æ€ï¼Œ0 è¡¨ç¤ºæœªæœ‰çº¿ç¨‹æŒæœ‰ï¼Œ> 0 è¡¨ç¤ºé”é‡å…¥çš„æ¬¡æ•°
             if (c == 0) {
-                //casÌæ»»stateµÄÖµ£¬acquiresÖµÊÇ1£¬´Ó0±äµ½1£¬±íÊ¾»ñÈ¡Ëø³É¹¦
+                //casæ›¿æ¢stateçš„å€¼ï¼Œacquireså€¼æ˜¯1ï¼Œä»0å˜åˆ°1ï¼Œè¡¨ç¤ºè·å–é”æˆåŠŸ
                 if (compareAndSetState(0, acquires)) {
-                    //±£´æµ±Ç°»ñµÃËøµÄÏß³Ì,ÏÂ´ÎÔÙÀ´µÄÊ±ºò²»ÒªÔÙ³¢ÊÔ¾ºÕùËø
+                    //ä¿å­˜å½“å‰è·å¾—é”çš„çº¿ç¨‹,ä¸‹æ¬¡å†æ¥çš„æ—¶å€™ä¸è¦å†å°è¯•ç«äº‰é”
                     setExclusiveOwnerThread(current);
                     return true;
                 }
             }
-            // Í¨¹ıÅĞ¶Ïµ±Ç°Ïß³ÌÊÇ·ñÎª»ñÈ¡ËøµÄÏß³ÌÀ´¾ö¶¨»ñÈ¡²Ù×÷ÊÇ·ñ³É¹¦£¬¿´¿´µ±Ç°µÄÏß³ÌÊÇ²»ÊÇËøµÄ³ÖÓĞÕß
-            // Èç¹ûÊÇ»ñÈ¡ËøµÄÏß³ÌÔÙ´ÎÇëÇó£¬Ôò½«Í¬²½×´Ì¬Öµ½øĞĞÔö¼Ó²¢·µ»Øtrue£¬±íÊ¾»ñÈ¡Í¬²½×´Ì¬³É¹¦¡£
-            else if (current == getExclusiveOwnerThread()) { //Èç¹ûÍ¬Ò»¸öÏß³ÌÀ´»ñµÃËø£¬Ö±½ÓÔö¼ÓÖØÈë´ÎÊı
-                int nextc = c + acquires; //Ôö¼ÓÍ¬²½×´Ì¬Öµ
+            // é€šè¿‡åˆ¤æ–­å½“å‰çº¿ç¨‹æ˜¯å¦ä¸ºè·å–é”çš„çº¿ç¨‹æ¥å†³å®šè·å–æ“ä½œæ˜¯å¦æˆåŠŸï¼Œçœ‹çœ‹å½“å‰çš„çº¿ç¨‹æ˜¯ä¸æ˜¯é”çš„æŒæœ‰è€…
+            // å¦‚æœæ˜¯è·å–é”çš„çº¿ç¨‹å†æ¬¡è¯·æ±‚ï¼Œåˆ™å°†åŒæ­¥çŠ¶æ€å€¼è¿›è¡Œå¢åŠ å¹¶è¿”å›trueï¼Œè¡¨ç¤ºè·å–åŒæ­¥çŠ¶æ€æˆåŠŸã€‚
+            else if (current == getExclusiveOwnerThread()) { //å¦‚æœåŒä¸€ä¸ªçº¿ç¨‹æ¥è·å¾—é”ï¼Œç›´æ¥å¢åŠ é‡å…¥æ¬¡æ•°
+                int nextc = c + acquires; //å¢åŠ åŒæ­¥çŠ¶æ€å€¼
                 if (nextc < 0) // overflow
                     throw new Error("Maximum lock count exceeded");
                 setState(nextc);
@@ -63,22 +63,22 @@ public class ReentrantLock implements Lock, java.io.Serializable {
             return false;
         }
 
-        // ÊÍ·ÅÍ¬²½×´Ì¬Ê±¼õÉÙÍ¬²½×´Ì¬Öµ
-        // ¸Ã·½·¨Âß¼­£º
-        //   ³¢ÊÔÊÍ·ÅËø£¬Èç¹ûµ±Ç°Ïß³Ì³ÖÓĞ¸ÃËø£¬µ÷ÓÃ¸Ã·½·¨Ä¬ÈÏ»áÈÃ AQS µÄ state ¼õ1¡£
-        //   Èç¹û¼õ 1 Ö®ºó£¬state Îª 0£¬µ±Ç°Ïß³Ì»áÊÍ·ÅËø¡£
-        //   Èç¹ûµ±Ç°Ïß³Ì²»ÊÇËø³ÖÓĞÕß¶øÆóÍ¼µ÷ÓÃ¸Ã·½·¨£¬ÔòÅ×³ö IllegalMonitorStateException Òì³£¡£
+        // é‡Šæ”¾åŒæ­¥çŠ¶æ€æ—¶å‡å°‘åŒæ­¥çŠ¶æ€å€¼
+        // è¯¥æ–¹æ³•é€»è¾‘ï¼š
+        //   å°è¯•é‡Šæ”¾é”ï¼Œå¦‚æœå½“å‰çº¿ç¨‹æŒæœ‰è¯¥é”ï¼Œè°ƒç”¨è¯¥æ–¹æ³•é»˜è®¤ä¼šè®© AQS çš„ state å‡1ã€‚
+        //   å¦‚æœå‡ 1 ä¹‹åï¼Œstate ä¸º 0ï¼Œå½“å‰çº¿ç¨‹ä¼šé‡Šæ”¾é”ã€‚
+        //   å¦‚æœå½“å‰çº¿ç¨‹ä¸æ˜¯é”æŒæœ‰è€…è€Œä¼å›¾è°ƒç”¨è¯¥æ–¹æ³•ï¼Œåˆ™æŠ›å‡º IllegalMonitorStateException å¼‚å¸¸ã€‚
         protected final boolean tryRelease(int releases) {
             int c = getState() - releases;
             if (Thread.currentThread() != getExclusiveOwnerThread())
                 throw new IllegalMonitorStateException();
             boolean free = false;
-            // µ±Í¬²½×´Ì¬Îª0Ê±£¬½«Õ¼ÓĞÏß³ÌÉèÖÃÎª null Çå¿ÕËø³ÖÓĞÏß³Ì£¬²¢·µ»Øtrue£¬±íÊ¾ÊÍ·Å³É¹¦¡£
+            // å½“åŒæ­¥çŠ¶æ€ä¸º0æ—¶ï¼Œå°†å æœ‰çº¿ç¨‹è®¾ç½®ä¸º null æ¸…ç©ºé”æŒæœ‰çº¿ç¨‹ï¼Œå¹¶è¿”å›trueï¼Œè¡¨ç¤ºé‡Šæ”¾æˆåŠŸã€‚
             if (c == 0) {
                 free = true;
                 setExclusiveOwnerThread(null);
             }
-            // ¿ÉÖØÈë´ÎÊı»¹Ã»µ½0£¬Ö»ĞèÒª¸Ä±äÒ»ÏÂ state ¾Í¿É
+            // å¯é‡å…¥æ¬¡æ•°è¿˜æ²¡åˆ°0ï¼Œåªéœ€è¦æ”¹å˜ä¸€ä¸‹ state å°±å¯
             setState(c);
             return free;
         }
@@ -111,15 +111,15 @@ public class ReentrantLock implements Lock, java.io.Serializable {
          * Reconstitutes the instance from a stream (that is, deserializes it).
          */
         private void readObject(java.io.ObjectInputStream s)
-            throws java.io.IOException, ClassNotFoundException {
+                throws java.io.IOException, ClassNotFoundException {
             s.defaultReadObject();
             setState(0); // reset to unlocked state
         }
     }
 
     /**
-     * Sync object for non-fair locks Í¬²½¶ÔÏóµÄ·Ç¹«Æ½Ëø
-     * ²»¹Ü¶ÓÁĞÓĞÃ»ÓĞ node£¬×Ô¼º¶¼¿ÉÒÔÈ¥»ñÈ¡Ëø£¬²»ĞèÒªÅÅ¶Ó¡£
+     * Sync object for non-fair locks åŒæ­¥å¯¹è±¡çš„éå…¬å¹³é”
+     * ä¸ç®¡é˜Ÿåˆ—æœ‰æ²¡æœ‰ nodeï¼Œè‡ªå·±éƒ½å¯ä»¥å»è·å–é”ï¼Œä¸éœ€è¦æ’é˜Ÿã€‚
      */
     static final class NonfairSync extends Sync {
         private static final long serialVersionUID = 7316153563782823691L;
@@ -128,62 +128,62 @@ public class ReentrantLock implements Lock, java.io.Serializable {
          * Performs lock.  Try immediate barge, backing up to normal
          * acquire on failure.
          *
-         * state ÖµµÄ³õÊ¼×´Ì¬Îª 0£¬Ò²¾ÍÊÇËµ£¬µÚÒ»¸öÏß³ÌµÄ CAS ²Ù×÷»á³É¹¦½« 0 ÉèÖÃÎª 1£¬
-         * ±íÊ¾µ±Ç°Ïß³Ì»ñÈ¡µ½ÁËËø£¬È»ºóÍ¨¹ı setExclusiveOwnerThread ·½·¨½«µ±Ç°Ïß³Ì
-         * ÉèÖÃÎªËøµÄ³ÖÓĞÕß¡£
+         * state å€¼çš„åˆå§‹çŠ¶æ€ä¸º 0ï¼Œä¹Ÿå°±æ˜¯è¯´ï¼Œç¬¬ä¸€ä¸ªçº¿ç¨‹çš„ CAS æ“ä½œä¼šæˆåŠŸå°† 0 è®¾ç½®ä¸º 1ï¼Œ
+         * è¡¨ç¤ºå½“å‰çº¿ç¨‹è·å–åˆ°äº†é”ï¼Œç„¶åé€šè¿‡ setExclusiveOwnerThread æ–¹æ³•å°†å½“å‰çº¿ç¨‹
+         * è®¾ç½®ä¸ºé”çš„æŒæœ‰è€…ã€‚
          */
         final void lock() {
-            // CAS ÉèÖÃ»ñÈ¡stateÖµ
+            // CAS è®¾ç½®è·å–stateå€¼
             if (compareAndSetState(0, 1))
-                // ½«µ±Ç°Ïß³ÌÉèÖÃÎªËøµÄ³ÖÓĞÕß
+                // å°†å½“å‰çº¿ç¨‹è®¾ç½®ä¸ºé”çš„æŒæœ‰è€…
                 setExclusiveOwnerThread(Thread.currentThread());
             else
-                // ÉèÖÃÊ§°Ü£¬ µ÷ÓÃAQSµÄacquire·½·¨
+                // è®¾ç½®å¤±è´¥ï¼Œ è°ƒç”¨AQSçš„acquireæ–¹æ³•
                 acquire(1);
         }
 
-        // Í¬²½×´Ì¬µÄ»ñÈ¡
+        // åŒæ­¥çŠ¶æ€çš„è·å–
         protected final boolean tryAcquire(int acquires) {
             return nonfairTryAcquire(acquires);
         }
     }
 
     /**
-     * Sync object for fair locks Í¬²½¶ÔÏóÒÔ»ñÈ¡¹«Æ½Ëø
+     * Sync object for fair locks åŒæ­¥å¯¹è±¡ä»¥è·å–å…¬å¹³é”
      */
     static final class FairSync extends Sync {
         private static final long serialVersionUID = -3000897897090466540L;
 
         final void lock() {
-            //µ÷ÓÃ¸¸Àà AbstractQueuedSynchronizer#acquire()
-            //»ñÈ¡µ½Í¬²½×´Ì¬ºó£¬ÔÙµ÷ÓÃ acquireQueued(addWaiter(Node.EXCLUSIVE), arg))£¬¼ÓÈëµ½Î²½Úµã£¬ÔÙ×ÔĞı
+            //è°ƒç”¨çˆ¶ç±» AbstractQueuedSynchronizer#acquire()
+            //è·å–åˆ°åŒæ­¥çŠ¶æ€åï¼Œå†è°ƒç”¨ acquireQueued(addWaiter(Node.EXCLUSIVE), arg))ï¼ŒåŠ å…¥åˆ°å°¾èŠ‚ç‚¹ï¼Œå†è‡ªæ—‹
             acquire(1);
         }
 
         /**
          * Fair version of tryAcquire.  Don't grant access unless
          * recursive call or no waiters or is first.
-         * ÕâÀï·Ç¹«Æ½ÌåÏÖÔÚ»ñÈ¡ËøµÄÊ±ºò£¬Ã»ÓĞ²é¿´µ±Ç° AQS ¶ÓÁĞÖĞÊÇ·ñÓĞ±È×Ô¼º¸üÔçÇëÇó¸ÃËøµÄÏß³Ì´æÔÚ£¬¶øÊÇ²ÉÈ¡ÁËÇÀ¶á²ßÂÔ¡£
+         * è¿™é‡Œéå…¬å¹³ä½“ç°åœ¨è·å–é”çš„æ—¶å€™ï¼Œæ²¡æœ‰æŸ¥çœ‹å½“å‰ AQS é˜Ÿåˆ—ä¸­æ˜¯å¦æœ‰æ¯”è‡ªå·±æ›´æ—©è¯·æ±‚è¯¥é”çš„çº¿ç¨‹å­˜åœ¨ï¼Œè€Œæ˜¯é‡‡å–äº†æŠ¢å¤ºç­–ç•¥ã€‚
          */
         protected final boolean tryAcquire(int acquires) {
             final Thread current = Thread.currentThread();
             int c = getState();
-            //±íÊ¾ÎŞËø×´Ì¬£¬0 ±íÊ¾Î´ÓĞÏß³Ì³ÖÓĞ£¬> 0 ±íÊ¾ËøÖØÈëµÄ´ÎÊı
+            //è¡¨ç¤ºæ— é”çŠ¶æ€ï¼Œ0 è¡¨ç¤ºæœªæœ‰çº¿ç¨‹æŒæœ‰ï¼Œ> 0 è¡¨ç¤ºé”é‡å…¥çš„æ¬¡æ•°
             if (c == 0) {
-                // !hasQueuedPredecessors() ¿´¿´¶ÓÁĞÀïÃæÔÚÎÒÖ®Ç°ÓĞÃ»ÓĞÏß³ÌÔÚµÈ
-                // Èç¹ûÓĞ,ÄÇÃ´ËµÃ÷¶ÓÁĞµÄÇ°Ãæ»¹ÓĞÆäËû½ÚµãµÈ´ı»ñÈ¡Í¬²½×´Ì¬£¬
-                // Òò´ËĞèÒªµÈ´ıÇ°Çı½Úµã»ñÈ¡²¢ÊÍ·ÅËøÍê³ÉÖ®ºó²ÅÄÜ¼ÌĞø³¢ÊÔ»ñÈ¡Ëø¡£
+                // !hasQueuedPredecessors() çœ‹çœ‹é˜Ÿåˆ—é‡Œé¢åœ¨æˆ‘ä¹‹å‰æœ‰æ²¡æœ‰çº¿ç¨‹åœ¨ç­‰
+                // å¦‚æœæœ‰,é‚£ä¹ˆè¯´æ˜é˜Ÿåˆ—çš„å‰é¢è¿˜æœ‰å…¶ä»–èŠ‚ç‚¹ç­‰å¾…è·å–åŒæ­¥çŠ¶æ€ï¼Œ
+                // å› æ­¤éœ€è¦ç­‰å¾…å‰é©±èŠ‚ç‚¹è·å–å¹¶é‡Šæ”¾é”å®Œæˆä¹‹åæ‰èƒ½ç»§ç»­å°è¯•è·å–é”ã€‚
                 if (!hasQueuedPredecessors() &&
-                    compareAndSetState(0, acquires)) { //Í¨¹ıCASÌæ»»stateµÄÖµ
+                        compareAndSetState(0, acquires)) { //é€šè¿‡CASæ›¿æ¢stateçš„å€¼
                     setExclusiveOwnerThread(current);
                     return true;
                 }
             }
-            // Í¨¹ıÅĞ¶Ïµ±Ç°Ïß³ÌÊÇ·ñÎª»ñÈ¡ËøµÄÏß³ÌÀ´¾ö¶¨»ñÈ¡²Ù×÷ÊÇ·ñ³É¹¦£¬
-            // Èç¹ûÊÇ»ñÈ¡ËøµÄÏß³ÌÔÙ´ÎÇëÇó£¬Ôò½«Í¬²½×´Ì¬Öµ½øĞĞÔö¼Ó²¢·µ»Øtrue£¬±íÊ¾»ñÈ¡Í¬²½×´Ì¬³É¹¦¡£
+            // é€šè¿‡åˆ¤æ–­å½“å‰çº¿ç¨‹æ˜¯å¦ä¸ºè·å–é”çš„çº¿ç¨‹æ¥å†³å®šè·å–æ“ä½œæ˜¯å¦æˆåŠŸï¼Œ
+            // å¦‚æœæ˜¯è·å–é”çš„çº¿ç¨‹å†æ¬¡è¯·æ±‚ï¼Œåˆ™å°†åŒæ­¥çŠ¶æ€å€¼è¿›è¡Œå¢åŠ å¹¶è¿”å›trueï¼Œè¡¨ç¤ºè·å–åŒæ­¥çŠ¶æ€æˆåŠŸã€‚
             else if (current == getExclusiveOwnerThread()) {
                 int nextc = c + acquires;
-                // Ö»ÓĞÍ¬²½»¥×´Ì¬Ğ¡ÓÚ0µÄÊ±ºò£¬²ÅÕæÕıµÄÊÍ·ÅÍ¬²½×´Ì¬
+                // åªæœ‰åŒæ­¥äº’çŠ¶æ€å°äº0çš„æ—¶å€™ï¼Œæ‰çœŸæ­£çš„é‡Šæ”¾åŒæ­¥çŠ¶æ€
                 if (nextc < 0)
                     throw new Error("Maximum lock count exceeded");
                 setState(nextc);
@@ -197,7 +197,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
      * Creates an instance of {@code ReentrantLock}.
      * This is equivalent to using {@code ReentrantLock(false)}.
      */
-    public ReentrantLock() { // Ä¬ÈÏÊ¹ÓÃµÄÊÇ ·Ç¹«Æ½µÄ²ßÂÔ
+    public ReentrantLock() { // é»˜è®¤ä½¿ç”¨çš„æ˜¯ éå…¬å¹³çš„ç­–ç•¥
         sync = new NonfairSync();
     }
 
@@ -208,7 +208,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
      * @param fair {@code true} if this lock should use a fair ordering policy
      */
     public ReentrantLock(boolean fair) {
-        // Í¨¹ı fair ²ÎÊıÖ¸¶¨²ßÂÔ
+        // é€šè¿‡ fair å‚æ•°æŒ‡å®šç­–ç•¥
         sync = fair ? new FairSync() : new NonfairSync();
     }
 
@@ -306,12 +306,12 @@ public class ReentrantLock implements Lock, java.io.Serializable {
      *         current thread, or the lock was already held by the current
      *         thread; and {@code false} otherwise
      *
-     * ³¢ÊÔ»ñÈ¡Ëø£¬Èç¹ûµ±Ç°¸ÃËøÃ»ÓĞ±»ÆäËûÏß³Ì³ÖÓĞ£¬Ôòµ±Ç°Ïß³Ì»ñÈ¡¸ÃËø²¢·µ»Ø true£¬·ñÔò·µ»Ø false¡£
-     * ´óÖÂÂß¼­ºÍ·Ç¹«Æ½Ëø lock ·½·¨ÀàËÆ£¬µ«¸Ã·½·¨»áÖ±½Ó·µ»Ø»ñÈ¡ËøµÄ½á¹û£¬ÎŞÂÛ true »òÕß false£¬Ëü²»»á×èÈû¡£
+     * å°è¯•è·å–é”ï¼Œå¦‚æœå½“å‰è¯¥é”æ²¡æœ‰è¢«å…¶ä»–çº¿ç¨‹æŒæœ‰ï¼Œåˆ™å½“å‰çº¿ç¨‹è·å–è¯¥é”å¹¶è¿”å› trueï¼Œå¦åˆ™è¿”å› falseã€‚
+     * å¤§è‡´é€»è¾‘å’Œéå…¬å¹³é” lock æ–¹æ³•ç±»ä¼¼ï¼Œä½†è¯¥æ–¹æ³•ä¼šç›´æ¥è¿”å›è·å–é”çš„ç»“æœï¼Œæ— è®º true æˆ–è€… falseï¼Œå®ƒä¸ä¼šé˜»å¡ã€‚
      *
-     * tryLock()?ÊµÏÖ·½·¨£¬ÔÚÊµÏÖÊ±£¬Ï£ÍûÄÜ¿ìËÙµØ»ñµÃÊÇ·ñÄÜ¹»»ñµÃµ½Ëø£¬Òò´Ë¼´Ê¹ÔÚÉèÖÃÎª fair = true ( Ê¹ÓÃ¹«Æ½Ëø )£¬
-     * ÒÀÈ»µ÷ÓÃ Sync#nonfairTryAcquire(int acquires) ·½·¨¡£
-     * Èç¹ûÕæµÄÏ£Íû tryLock() »¹ÊÇ°´ÕÕÊÇ·ñ¹«Æ½ËøµÄ·½Ê½À´£¬¿ÉÒÔµ÷ÓÃ #tryLock(0, TimeUnit) ·½·¨À´ÊµÏÖ¡£
+     * tryLock()?å®ç°æ–¹æ³•ï¼Œåœ¨å®ç°æ—¶ï¼Œå¸Œæœ›èƒ½å¿«é€Ÿåœ°è·å¾—æ˜¯å¦èƒ½å¤Ÿè·å¾—åˆ°é”ï¼Œå› æ­¤å³ä½¿åœ¨è®¾ç½®ä¸º fair = true ( ä½¿ç”¨å…¬å¹³é” )ï¼Œ
+     * ä¾ç„¶è°ƒç”¨ Sync#nonfairTryAcquire(int acquires) æ–¹æ³•ã€‚
+     * å¦‚æœçœŸçš„å¸Œæœ› tryLock() è¿˜æ˜¯æŒ‰ç…§æ˜¯å¦å…¬å¹³é”çš„æ–¹å¼æ¥ï¼Œå¯ä»¥è°ƒç”¨ #tryLock(0, TimeUnit) æ–¹æ³•æ¥å®ç°ã€‚
      */
     public boolean tryLock() {
         return sync.nonfairTryAcquire(1);
@@ -389,8 +389,8 @@ public class ReentrantLock implements Lock, java.io.Serializable {
      * @throws InterruptedException if the current thread is interrupted
      * @throws NullPointerException if the time unit is null
      *
-     * ³¢ÊÔ»ñÈ¡Ëø£¬Èç¹û»ñÈ¡Ê§°Ü»á½«µ±Ç°Ïß³Ì¹ÒÆğÖ¸¶¨Ê±¼ä£¬Ê±¼äµ½ÁËÖ®ºóµ±Ç°Ïß³Ì±»¼¤»î£¬Èç¹û»¹ÊÇÃ»ÓĞ»ñÈ¡µ½Ëø£¬¾Í·µ»Ø false¡£
-     * ÁíÍâ£¬¸Ã·½·¨»á¶ÔÖĞ¶Ï½øĞĞµÄÏìÓ¦£¬Èç¹ûÆäËûÏß³Ìµ÷ÓÃÁËµ±Ç°Ïß³ÌµÄ interrupt() ·½·¨£¬ÏìÓ¦ÖĞ¶Ï£¬Å×³öÒì³£¡£
+     * å°è¯•è·å–é”ï¼Œå¦‚æœè·å–å¤±è´¥ä¼šå°†å½“å‰çº¿ç¨‹æŒ‚èµ·æŒ‡å®šæ—¶é—´ï¼Œæ—¶é—´åˆ°äº†ä¹‹åå½“å‰çº¿ç¨‹è¢«æ¿€æ´»ï¼Œå¦‚æœè¿˜æ˜¯æ²¡æœ‰è·å–åˆ°é”ï¼Œå°±è¿”å› falseã€‚
+     * å¦å¤–ï¼Œè¯¥æ–¹æ³•ä¼šå¯¹ä¸­æ–­è¿›è¡Œçš„å“åº”ï¼Œå¦‚æœå…¶ä»–çº¿ç¨‹è°ƒç”¨äº†å½“å‰çº¿ç¨‹çš„ interrupt() æ–¹æ³•ï¼Œå“åº”ä¸­æ–­ï¼ŒæŠ›å‡ºå¼‚å¸¸ã€‚
      */
     public boolean tryLock(long timeout, TimeUnit unit)
             throws InterruptedException {
@@ -711,7 +711,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
     public String toString() {
         Thread o = sync.getOwner();
         return super.toString() + ((o == null) ?
-                                   "[Unlocked]" :
-                                   "[Locked by thread " + o.getName() + "]");
+                "[Unlocked]" :
+                "[Locked by thread " + o.getName() + "]");
     }
 }

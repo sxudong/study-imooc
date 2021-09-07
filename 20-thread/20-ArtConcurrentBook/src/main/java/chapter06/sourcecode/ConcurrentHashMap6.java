@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * JDK1.6 °æ±¾
+ * JDK1.6 ç‰ˆæœ¬
  * @param <K>
  * @param <V>
  */
@@ -358,9 +358,9 @@ public class ConcurrentHashMap6<K, V> extends AbstractMap<K, V>
             lock();
             try {
                 int c = count;
-                //ÅĞ¶ÏÊÇ·ñĞèÒªÀ©Èİ£¬Èç¹û³¬¹ıthreshold·§Öµ£¬¶ÔÆäÀ©Èİ
+                //åˆ¤æ–­æ˜¯å¦éœ€è¦æ‰©å®¹ï¼Œå¦‚æœè¶…è¿‡thresholdé˜€å€¼ï¼Œå¯¹å…¶æ‰©å®¹
                 if (c++ > threshold) // ensure capacity
-                    rehash(); //À©Èİ
+                    rehash(); //æ‰©å®¹
                 HashEntry<K,V>[] tab = table;
                 int index = hash & (tab.length - 1);
                 HashEntry<K,V> first = tab[index];
@@ -405,9 +405,9 @@ public class ConcurrentHashMap6<K, V> extends AbstractMap<K, V>
              * reader thread that may be in the midst of traversing table
              * right now.
              */
-            //Ê×ÏÈ»á´´½¨Ò»¸öÈİÁ¿ÊÇÔ­À´ÈİÁ¿Á½±¶µÄÊı×é£¬È»ºó½«Ô­Êı×éÀïµÄÔªËØ½øĞĞÔÙÉ¢ÁĞºó
-            //²åÈëµ½ĞÂµÄÊı×éÀï¡£ÎªÁË¸ßĞ§£¬ConcurrentHashMap²»»á¶ÔÕû¸öÈİÆ÷½øĞĞÀ©Èİ£¬¶ø
-            //Ö»¶ÔÄ³¸ö segment ½øĞĞÀ©Èİ¡£
+            //é¦–å…ˆä¼šåˆ›å»ºä¸€ä¸ªå®¹é‡æ˜¯åŸæ¥å®¹é‡ä¸¤å€çš„æ•°ç»„ï¼Œç„¶åå°†åŸæ•°ç»„é‡Œçš„å…ƒç´ è¿›è¡Œå†æ•£åˆ—å
+            //æ’å…¥åˆ°æ–°çš„æ•°ç»„é‡Œã€‚ä¸ºäº†é«˜æ•ˆï¼ŒConcurrentHashMapä¸ä¼šå¯¹æ•´ä¸ªå®¹å™¨è¿›è¡Œæ‰©å®¹ï¼Œè€Œ
+            //åªå¯¹æŸä¸ª segment è¿›è¡Œæ‰©å®¹ã€‚
             HashEntry<K,V>[] newTable = HashEntry.newArray(oldCapacity<<1);
             threshold = (int)(newTable.length * loadFactor);
             int sizeMask = newTable.length - 1;
@@ -444,7 +444,7 @@ public class ConcurrentHashMap6<K, V> extends AbstractMap<K, V>
                             int k = p.hash & sizeMask;
                             HashEntry<K,V> n = newTable[k];
                             newTable[k] = new HashEntry<K,V>(p.key, p.hash,
-                                                             n, p.value);
+                                    n, p.value);
                         }
                     }
                 }
@@ -478,7 +478,7 @@ public class ConcurrentHashMap6<K, V> extends AbstractMap<K, V>
                         HashEntry<K,V> newFirst = e.next;
                         for (HashEntry<K,V> p = first; p != e; p = p.next)
                             newFirst = new HashEntry<K,V>(p.key, p.hash,
-                                                          newFirst, p.value);
+                                    newFirst, p.value);
                         tab[index] = newFirst;
                         count = c; // write-volatile
                     }
@@ -606,8 +606,8 @@ public class ConcurrentHashMap6<K, V> extends AbstractMap<K, V>
      */
     public ConcurrentHashMap6(Map<? extends K, ? extends V> m) {
         this(Math.max((int) (m.size() / DEFAULT_LOAD_FACTOR) + 1,
-                      DEFAULT_INITIAL_CAPACITY),
-             DEFAULT_LOAD_FACTOR, DEFAULT_CONCURRENCY_LEVEL);
+                DEFAULT_INITIAL_CAPACITY),
+                DEFAULT_LOAD_FACTOR, DEFAULT_CONCURRENCY_LEVEL);
         putAll(m);
     }
 
@@ -641,7 +641,7 @@ public class ConcurrentHashMap6<K, V> extends AbstractMap<K, V>
         if (mcsum != 0) {
             for (int i = 0; i < segments.length; ++i) {
                 if (segments[i].count != 0 ||
-                    mc[i] != segments[i].modCount)
+                        mc[i] != segments[i].modCount)
                     return false;
             }
         }
@@ -1055,16 +1055,16 @@ public class ConcurrentHashMap6<K, V> extends AbstractMap<K, V>
     }
 
     final class KeyIterator
-        extends HashIterator
-        implements Iterator<K>, Enumeration<K>
+            extends HashIterator
+            implements Iterator<K>, Enumeration<K>
     {
         public K next()        { return super.nextEntry().key; }
         public K nextElement() { return super.nextEntry().key; }
     }
 
     final class ValueIterator
-        extends HashIterator
-        implements Iterator<V>, Enumeration<V>
+            extends HashIterator
+            implements Iterator<V>, Enumeration<V>
     {
         public V next()        { return super.nextEntry().value; }
         public V nextElement() { return super.nextEntry().value; }
@@ -1075,7 +1075,7 @@ public class ConcurrentHashMap6<K, V> extends AbstractMap<K, V>
      * setValue changes to the underlying map.
      */
     final class WriteThroughEntry
-        extends SimpleEntry<K,V>
+            extends SimpleEntry<K,V>
     {
         WriteThroughEntry(K k, V v) {
             super(k,v);
@@ -1099,8 +1099,8 @@ public class ConcurrentHashMap6<K, V> extends AbstractMap<K, V>
     }
 
     final class EntryIterator
-        extends HashIterator
-        implements Iterator<Entry<K,V>>
+            extends HashIterator
+            implements Iterator<Entry<K,V>>
     {
         public Entry<K,V> next() {
             HashEntry<K,V> e = super.nextEntry();
@@ -1214,7 +1214,7 @@ public class ConcurrentHashMap6<K, V> extends AbstractMap<K, V>
      * @param s the stream
      */
     private void readObject(ObjectInputStream s)
-        throws IOException, ClassNotFoundException  {
+            throws IOException, ClassNotFoundException  {
         s.defaultReadObject();
 
         // Initialize each segment to be minimally sized, and let grow.

@@ -2,24 +2,24 @@ package chapter02.synchronizedLock;
 
 import java.util.concurrent.TimeUnit;
 /**
- * 8ËøÎÊÌâ·ÖÎö£¬ÒÔÏÂ°ËÖÖÇéÐÎ£º
- *   1.±ê×¼·ÃÎÊ£¬ÏÈ·¢ËÍÓÊ¼þ»¹ÊÇ¶ÌÐÅ
- *   2.ÔÚÓÊ¼þ·½·¨ÄÚÔÝÍ£4Ãë£¬ÏÈ·¢ËÍÓÊ¼þ»¹ÊÇ¶ÌÐÅ
- *   3.ÐÂÔöÆÕÍ¨µÄhello·½·¨£¬ÏÈ´òÓ¡hello»¹ÊÇÏÈ·¢ËÍÓÊ¼þ
- *   4.ÏÖÓÐÁ½¸öÊÖ»úÊµÀý¶ÔÏó£¬ÏÈ´òÓ¡¶ÌÐÅ»¹ÊÇÏÈ·¢ËÍÓÊ¼þ
- *   5.2¸ö¾²Ì¬Í¬²½·½·¨£¬Ò»¸öÊÖ»úÊµÀý£¬ÏÈ·¢¶ÌÐÅ»¹ÊÇÏÈ·¢ÓÊ¼þ
- *   6.2¸ö¾²Ì¬Í¬²½·½·¨£¬Á½¸öÊÖ»úÊµÀý£¬ÏÈ·¢¶ÌÐÅ»¹ÊÇÏÈ·¢ÓÊ¼þ
- *   7.1¸ö¾²Ì¬Í¬²½·½·¨£¬1¸öÆÕÍ¨Í¬²½·½·¨£¬Ò»¸öÊÖ»úÊµÀý£¬ÏÈ·¢¶ÌÐÅ»¹ÊÇÏÈ·¢ÓÊ¼þ
- *   8.1¸ö¾²Ì¬Í¬²½·½·¨£¬1¸öÆÕÍ¨Í¬²½·½·¨£¬Á½¸öÊÖ»úÊµÀý£¬ÏÈ·¢¶ÌÐÅ»¹ÊÇÏÈ·¢ÓÊ¼þ
+ * 8é”é—®é¢˜åˆ†æžï¼Œä»¥ä¸‹å…«ç§æƒ…å½¢ï¼š
+ *   1.æ ‡å‡†è®¿é—®ï¼Œå…ˆå‘é€é‚®ä»¶è¿˜æ˜¯çŸ­ä¿¡
+ *   2.åœ¨é‚®ä»¶æ–¹æ³•å†…æš‚åœ4ç§’ï¼Œå…ˆå‘é€é‚®ä»¶è¿˜æ˜¯çŸ­ä¿¡
+ *   3.æ–°å¢žæ™®é€šçš„helloæ–¹æ³•ï¼Œå…ˆæ‰“å°helloè¿˜æ˜¯å…ˆå‘é€é‚®ä»¶
+ *   4.çŽ°æœ‰ä¸¤ä¸ªæ‰‹æœºå®žä¾‹å¯¹è±¡ï¼Œå…ˆæ‰“å°çŸ­ä¿¡è¿˜æ˜¯å…ˆå‘é€é‚®ä»¶
+ *   5.2ä¸ªé™æ€åŒæ­¥æ–¹æ³•ï¼Œä¸€ä¸ªæ‰‹æœºå®žä¾‹ï¼Œå…ˆå‘çŸ­ä¿¡è¿˜æ˜¯å…ˆå‘é‚®ä»¶
+ *   6.2ä¸ªé™æ€åŒæ­¥æ–¹æ³•ï¼Œä¸¤ä¸ªæ‰‹æœºå®žä¾‹ï¼Œå…ˆå‘çŸ­ä¿¡è¿˜æ˜¯å…ˆå‘é‚®ä»¶
+ *   7.1ä¸ªé™æ€åŒæ­¥æ–¹æ³•ï¼Œ1ä¸ªæ™®é€šåŒæ­¥æ–¹æ³•ï¼Œä¸€ä¸ªæ‰‹æœºå®žä¾‹ï¼Œå…ˆå‘çŸ­ä¿¡è¿˜æ˜¯å…ˆå‘é‚®ä»¶
+ *   8.1ä¸ªé™æ€åŒæ­¥æ–¹æ³•ï¼Œ1ä¸ªæ™®é€šåŒæ­¥æ–¹æ³•ï¼Œä¸¤ä¸ªæ‰‹æœºå®žä¾‹ï¼Œå…ˆå‘çŸ­ä¿¡è¿˜æ˜¯å…ˆå‘é‚®ä»¶
  *
- * ±¾Ê¾ÀýÊµÏÖµÚ1ÖÖ£¬ºÍµÚ2ÖÖÇéÐÎ
+ * æœ¬ç¤ºä¾‹å®žçŽ°ç¬¬1ç§ï¼Œå’Œç¬¬2ç§æƒ…å½¢
  *
- * Ô­ÎÄÁ´½Ó£ºhttps://blog.csdn.net/weixin_44868739/article/details/114868470
+ * åŽŸæ–‡é“¾æŽ¥ï¼šhttps://blog.csdn.net/weixin_44868739/article/details/114868470
  */
 class Phone {
 
     public synchronized void send_email() throws Exception {
-        // ÓÊ¼þ·½·¨ÖÐÔÝÍ£ 4 Ãë
+        // é‚®ä»¶æ–¹æ³•ä¸­æš‚åœ 4 ç§’
         TimeUnit.SECONDS.sleep(4);
         System.out.println("-------send e-mail-----");
     }
@@ -31,8 +31,8 @@ class Phone {
 
 public class Thread8LocksDemo1 {
     /**
-     * ±»Ïß³Ì²Ù×÷µÄ×ÊÔ´Àà Phone£¬°üº¬Á½¸ö synchronized Í¬²½·½·¨£¨·¢ÓÊ¼þºÍ·¢¶ÌÐÅ£©
-     * main ·½·¨ÖÐ new ³öÒ»¸ö Phone ÊµÀý¶ÔÏó£¬²¢´´½¨ A, B Á½¸öÏß³ÌÈ¥µ÷ÓÃphone¶ÔÏó
+     * è¢«çº¿ç¨‹æ“ä½œçš„èµ„æºç±» Phoneï¼ŒåŒ…å«ä¸¤ä¸ª synchronized åŒæ­¥æ–¹æ³•ï¼ˆå‘é‚®ä»¶å’Œå‘çŸ­ä¿¡ï¼‰
+     * main æ–¹æ³•ä¸­ new å‡ºä¸€ä¸ª Phone å®žä¾‹å¯¹è±¡ï¼Œå¹¶åˆ›å»º A, B ä¸¤ä¸ªçº¿ç¨‹åŽ»è°ƒç”¨phoneå¯¹è±¡
      */
     public static void main(String[] args) throws InterruptedException {
         Phone phone = new Phone();
@@ -47,6 +47,7 @@ public class Thread8LocksDemo1 {
 
         Thread.sleep(100);
         System.out.println("Thread B begin start");
+
         new Thread(() -> {
             try {
                 phone.send_message();
@@ -55,16 +56,16 @@ public class Thread8LocksDemo1 {
             }
         }, "B").start();
     }
-    /* ´Ó½á¹û¿ÉÒÔ¿´³ö£º
-     * ÔËÐÐ½á¹ûÈÔÈ»ÊÇÏÈ·¢ËÍÓÊ¼þÔÙ·¢ËÍ¶ÌÐÅ£¬²¢ÇÒÔÚ´òÓ¡Ö®Ç°µÈ´ýÁË4Ãë
+    /* ä»Žç»“æžœå¯ä»¥çœ‹å‡ºï¼š
+     * è¿è¡Œç»“æžœä»ç„¶æ˜¯å…ˆå‘é€é‚®ä»¶å†å‘é€çŸ­ä¿¡ï¼Œå¹¶ä¸”åœ¨æ‰“å°ä¹‹å‰ç­‰å¾…äº†4ç§’
      *
-     * ¿ÉÒÔÍÆ¶Ï£¬Ò»¸ö¶ÔÏóÀïÃæÈç¹ûÓÐ¶à¸ö synchronized ·½·¨£¬ÔÚÄ³Ò»Ê±¿ÌÖ»ÒªÓÐÒ»¸öÏß³ÌÈ¥·ÃÎÊÆäÖÐÒ»¸ö
-     * Í¬²½·½·¨£¬ÆäËûÏß³Ì¶¼Ö»ÄÜµÈ´ý£¬¼´ Ä³Ò»Ê±¿ÌÄÚ£¬Ö»ÄÜÓÐÎ¨Ò»Ò»¸öÏß³ÌÈ¥·ÃÎÊÕâÐ© synchronized ·½·¨¡£
-     * Ò²¾ÍÊÇËµ synchronized ËøµÄÊÇÕû¸ö phoneÊµÀý¶ÔÏó£¬¶ø²»ÊÇÆäÖÐÒ»¸ö·½·¨¡£
+     * å¯ä»¥æŽ¨æ–­ï¼Œä¸€ä¸ªå¯¹è±¡é‡Œé¢å¦‚æžœæœ‰å¤šä¸ª synchronized æ–¹æ³•ï¼Œåœ¨æŸä¸€æ—¶åˆ»åªè¦æœ‰ä¸€ä¸ªçº¿ç¨‹åŽ»è®¿é—®å…¶ä¸­ä¸€ä¸ª
+     * åŒæ­¥æ–¹æ³•ï¼Œå…¶ä»–çº¿ç¨‹éƒ½åªèƒ½ç­‰å¾…ï¼Œå³ æŸä¸€æ—¶åˆ»å†…ï¼Œåªèƒ½æœ‰å”¯ä¸€ä¸€ä¸ªçº¿ç¨‹åŽ»è®¿é—®è¿™äº› synchronized æ–¹æ³•ã€‚
+     * ä¹Ÿå°±æ˜¯è¯´ synchronized é”çš„æ˜¯æ•´ä¸ª phoneå®žä¾‹å¯¹è±¡ï¼Œè€Œä¸æ˜¯å…¶ä¸­ä¸€ä¸ªæ–¹æ³•ã€‚
      *
-     * ¿ÉÒÔÓÃÉú»îÖÐµÄ°¸Àý°ïÖú¼ÇÒä£º
-     *     ÏÖÔÚÖ»ÓÐÒ»Ì¨iphone12£¬ÎÒÒªÓÃËü·¢ÓÊ¼þ£¬°¢Ç¿ÒªÓÃËüÀ´·¢¶ÌÐÅ£¬ÏÖÔÚÎÒÏÈÄÃµ½ÊÖ»ú£¬°¢Ç¿Ö»ÄÜµÈ
-     *     ÎÒ±à¼­·¢ËÍÍêÓÊ¼þ£¬°ÑÊÖ»ú´«¸øËû£¬²ÅÄÜ½øÐÐ²Ù×÷£¬¶ø²»¿ÉÒÔÍ¬Ê±½øÐÐ¡£
+     * å¯ä»¥ç”¨ç”Ÿæ´»ä¸­çš„æ¡ˆä¾‹å¸®åŠ©è®°å¿†ï¼š
+     *     çŽ°åœ¨åªæœ‰ä¸€å°iphone12ï¼Œæˆ‘è¦ç”¨å®ƒå‘é‚®ä»¶ï¼Œé˜¿å¼ºè¦ç”¨å®ƒæ¥å‘çŸ­ä¿¡ï¼ŒçŽ°åœ¨æˆ‘å…ˆæ‹¿åˆ°æ‰‹æœºï¼Œé˜¿å¼ºåªèƒ½ç­‰
+     *     æˆ‘ç¼–è¾‘å‘é€å®Œé‚®ä»¶ï¼ŒæŠŠæ‰‹æœºä¼ ç»™ä»–ï¼Œæ‰èƒ½è¿›è¡Œæ“ä½œï¼Œè€Œä¸å¯ä»¥åŒæ—¶è¿›è¡Œã€‚
      */
 }
 /* Output:

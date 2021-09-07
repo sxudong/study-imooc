@@ -3,7 +3,7 @@ package chapter10.monitorthreadpool;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * 通过设置的参数创建线程池
+ * 閫氳繃璁剧疆鐨勫弬鏁板垱寤虹嚎绋嬫睜
  */
 public interface ITestThreadPoolExecutorService {
 
