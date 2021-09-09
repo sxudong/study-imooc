@@ -19,6 +19,7 @@ import java.util.Objects;
  * Thumbnail 控制层
  *
  * @author zc 2017-07-19
+ * 慕课网《Java实现图片等比例缩略图》学习源码
  */
 @Controller
 @RequestMapping("/")

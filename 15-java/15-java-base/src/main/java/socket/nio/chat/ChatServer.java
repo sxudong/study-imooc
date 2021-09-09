@@ -10,6 +10,13 @@ import java.util.Set;
 
 /**
  * 第7章 实战：使用 NIO 改造多人聊天室 - 服务端
+ *
+ * Java的Selector封装了底层epoll和poll的API，可以通过指定如下参数来调用执行的内核调用, 在Linux平台，如果指定
+ *   -Djava.nio.channels.spi.SelectorProvider=sun.nio.ch.PollSelectorProvider
+ * 则底层调用poll，
+ * 指定为：
+ *   -Djava.nio.channels.spi.SelectorProvider=sun.nio.ch.EPollSelectorProvider
+ * 或者不指定，则底层调用epoll。
  */
 public class ChatServer {
 
@@ -72,18 +79,21 @@ public class ChatServer {
             serverSocketChannel.configureBlocking(false);
             // 绑定到监听端口
             serverSocketChannel.socket().bind(new InetSocketAddress(port));
-            // 创建 selector 选择器,负责注册监听所有事件
+            // /创建一个 selector 多路复用选择器,负责注册监听所有事件
             selector = Selector.open();
             /** 1. “服务端通道”上注册需要监听的 ACCEPT 客户端连接请求事件 */
+            // 把需要处理的“IO事件”注册给 Selector。
+            // Selector内部的原理为：对所有注册的 Channel 进行轮询访问，一旦轮询到一个 Channel_1 有注册的事件发生，它就会通知
+            // selectedKey 的方式来通知开发人员对 Channel_1 和一个特定的 selector 之间的关系。
             // 底层调用 Selector.register() 注册通道：((AbstractSelector)selector).register(this, ops, att);
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
             System.out.println("启动服务器，监听端口:" + port + ".....");
 
             // 进入监听模式
              while (true) {
-                // select()函数是阻塞式的,直到有事件触发了才会返回
+                // select()函数是阻塞式的,直到有事件触发了才会返回。如果事件没到达就一直阻塞着。
                 selector.select();
-                // 获取监听事件，返回的是所有触发了的事件所对应的 SelectionKey 对象的集合，
+                // 获取监听事件，返回的是所有触发了的事件所对应的 SelectionKey 对象的集合，拿到 Selector 关心的已经到达事件的 SelectionKey 集合
                 // 每一个被触发的事件与他相关的信息都包装在 SelectionKey 中。
                 Set<SelectionKey> selectionKeys = selector.selectedKeys();
                 for (SelectionKey selectionKey : selectionKeys) {  //迭代触发事件

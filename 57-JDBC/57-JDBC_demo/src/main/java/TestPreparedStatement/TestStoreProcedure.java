@@ -5,7 +5,7 @@ import java.sql.*;
 /**
  * Java程序员面试笔试》 4.11.4 Statement、 PreparedStatement 和 CallableStatement 有什么区别
  *
- * PreparedStatement 表示预编译的SQL语句的对象，用于执行带参数的预编译SQL语句。
+ * PreparedStatement 表示预编译的 SQL 语句的对象，用于执行带参数的预编译 SQL 语句。
  *
  * 安全性更好。使用 PreparedStatement 能够预防 SQL 注入攻击。所谓 SQL 注入，
  * 指的是通过把 SQL 命令插入到 Web 表单递交或输入域名或页面请求的查询字符串，最
@@ -87,9 +87,9 @@ public class TestStoreProcedure {
     }
 
     /**
-     * 调用存储过程
+     * 使用 PreparedStatement 查询SQL
      */
-    public static void execProcedure() {
+    public static void execPreparedStatement() {
         Connection conn = null; // 数据库连接对象
         PreparedStatement stmt = null; // CallableStatement对象
         ResultSet res = null; // 结果集对象
@@ -124,7 +124,7 @@ public class TestStoreProcedure {
     }
 
     public static void main(String[] args) {
-        execProcedure();
+        execPreparedStatement();
     }
 }
 /* Output:

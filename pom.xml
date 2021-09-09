@@ -90,6 +90,7 @@
         <module>55-data-structures</module>
         <module>56-CandCLanguage</module>
         <module>57-JDBC</module>
+        <module>58-JSP</module>
     </modules>
 
     <properties>

@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <!-- 在 Run 中 EditConfigurations 添加本地的 Tomcat -->
+  <!-- Tomcat中的乱码解决：
+    在 tomcat / conf 目录下，设置 logging.properties ，增加参数  java.util.logging.ConsoleHandler.encoding = GBK
+    https://www.cnblogs.com/shej123/p/10312806.html
+   -->
+  <parent>
+    <artifactId>58-JSP</artifactId>
+    <groupId>com.myimooc</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>jsp7</artifactId>
+  <packaging>war</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.2</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>
