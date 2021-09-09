@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- 
+		1.完整路径
+		http://localhost:8080/servlet2/register
+		2.绝对路径：
+			有固定的格式：/项目名/Servlet路径（网 ）
+			举例：/Servlet2/register
+		3.相对路径(*)：
+			没有固定的格式，需要写出当前页面和
+			目标Servlet之间的相对位置。
+			因为打开网页和访问Serlvet都是浏览器
+			实现的，站在浏览器的角度来说：
+			当前页面：/Servlet2/register.html
+			Servlet访问目标：/Servlet2/register
+			二者是平级关系，所以相对路径为register
+			注意：相对路径不能以/开头
+	-->
+	<form action="register" method="post">
+		<p>
+			账号:<input type="text" name="userName"/>
+		</p>
+		<p>
+			密码：<input type="password" name="pwd"/>
+		</p>
+		<p>
+			性别：
+			<input type="radio" name="sex" value="M"/>男
+			<input type="radio" name="sex" value="F"/>女
+		</p>
+		<p>
+			兴趣:
+			<input type="checkbox" name="interest" value="qin"/>琴
+			<input type="checkbox" name="interest" value="qi"/>棋
+			<input type="checkbox" name="interest" value="book"/>书
+			<input type="checkbox" name="interest" value="picture"/>画
+		</p>
+		<p>
+			<input type="submit" value="注册"/>
+		</p>
+	</form>
+</body>
+</html>

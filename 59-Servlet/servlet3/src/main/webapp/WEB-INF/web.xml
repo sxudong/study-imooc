@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+
+  <servlet>
+  	 <servlet-name>abc</servlet-name>
+  	 <servlet-class>web.AbcServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+  	 <servlet-name>abc</servlet-name>
+  	 <!-- 1.精确匹配 -->
+  	 <!--<url-pattern>/abc</url-pattern>-->
+  	 <!-- 2.通配符 -->
+  	 <!-- <url-pattern>/*</url-pattern>-->
+  	 <!-- 3.后缀 :不允许以/开头-->
+  	 <url-pattern>*.duang</url-pattern>
+  </servlet-mapping>
+
+</web-app>

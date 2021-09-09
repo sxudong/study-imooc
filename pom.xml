@@ -91,6 +91,7 @@
         <module>56-CandCLanguage</module>
         <module>57-JDBC</module>
         <module>58-JSP</module>
+        <module>59-Servlet</module>
     </modules>
 
     <properties>

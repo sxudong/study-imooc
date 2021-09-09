@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <!-- 1.声明Servlet的类型，并给它承一个别名（小名） -->
+  <servlet>
+    <servlet-name>time</servlet-name>
+    <!-- 完整类名-->
+    <servlet-class>web.TimeServlet</servlet-class>
+  </servlet>
+  
+  <!-- 2.通过别名引用Servlet，并给它取一个网名（访问路径） -->
+  <servlet-mapping>
+    <servlet-name>time</servlet-name>
+    <!-- 网名以/开头 -->
+    <url-pattern>/ts</url-pattern>
+  </servlet-mapping>
+</web-app>
