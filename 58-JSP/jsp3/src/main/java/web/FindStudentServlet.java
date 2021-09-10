@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import entity.Course;
 import entity.Student;
 
+
+/**
+ * 浏览器访问 http://localhost:8080/jsp3_war_exploded/findStudent
+ */
 public class FindStudentServlet extends HttpServlet {
 
 	@Override
