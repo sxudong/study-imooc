@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.myimooc</groupId>
+        <artifactId>study-imooc</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+	
+    <artifactId>60-JavaWeb</artifactId>
+    <packaging>pom</packaging>
+    <description>黑马 30天精通JavaWeb（IDEA版）</description>
+
+    <modules>
+        <module>day01_Basic</module>
+        <module>day05_jdbc</module>
+        <module>day06_dataSource_jdbcTemplate</module>
+        <module>day13_TomcatAndServlet</module>
+        <module>day14_ServletAndHttpAndRequest</module>
+        <module>day15_response</module>
+        <module>day16_CookieAndSession</module>
+        <module>day17_EL_and_JSTL</module>
+        <module>day18_综合练习</module>
+        <module>day19_FilterAndListener</module>
+        <module>day22_AjaxAndJson</module>
+        <module>day23_redis</module>
+        <module>day24-maven</module>
+        <module>day28_综合案例4</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+</project>
