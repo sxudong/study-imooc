@@ -92,6 +92,8 @@
         <module>57-JDBC</module>
         <module>58-JSP</module>
         <module>59-Servlet</module>
+		<module>60-JavaWeb</module>
+		
     </modules>
 
     <properties>
