@@ -1,7 +1,7 @@
 #pragma once
 
 /*
-* 12.2.1 ¾²Ì¬¿âµÄ´´½¨
+* 12.2.1 é™æ€åº“çš„åˆ›å»º
 */
 #ifdef __cplusplus
 extern "C"{
@@ -12,3 +12,4 @@ extern "C"{
 #ifdef __cplusplus
 }
 #endif
+

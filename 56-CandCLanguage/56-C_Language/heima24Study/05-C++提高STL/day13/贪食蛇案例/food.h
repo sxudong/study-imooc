@@ -1,10 +1,10 @@
 #pragma  once
 #include <iostream>
 #include "wall.h"
-using namespace std; //使用空间
+using namespace std; //浣跨敤绌洪棿
 
 /*
-* 食物
+* 椋熺墿
 */
 class Food
 {
@@ -15,6 +15,7 @@ public:
 
 	Food(Wall & tempWall);
 
-	//设置食物
+	//璁剧疆椋熺墿
 	void setFood();
 };
+

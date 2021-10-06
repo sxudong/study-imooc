@@ -1,5 +1,5 @@
 /*
-* 4.4 ³£ÓÃ²éÕÒËã·¨
+* 4.4 å¸¸ç”¨æŸ¥æ‰¾ç®—æ³•
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
@@ -11,12 +11,12 @@ using namespace std;
 
 
 /*
-* findËã·¨  ²éÕÒÔªËØ
-* 
-* @param beg  ÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @param end  ÈİÆ÷½áÊøµü´úÆ÷
-* @param value  ²éÕÒµÄÔªËØ
-* @return  ·µ»Ø²éÕÒÔªËØµÄÎ»ÖÃ
+* findç®—æ³•  æŸ¥æ‰¾å…ƒç´ 
+*
+* @param beg  å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @param end  å®¹å™¨ç»“æŸè¿­ä»£å™¨
+* @param value  æŸ¥æ‰¾çš„å…ƒç´ 
+* @return  è¿”å›æŸ¥æ‰¾å…ƒç´ çš„ä½ç½®
 */
 void test01()
 {
@@ -26,12 +26,12 @@ void test01()
 
 	vector<int>::iterator pos = find(v.begin(), v.end(), 5);
 	if (pos != v.end())
-		cout << "ÕÒµ½ÁËÊı¾İ£º" << *pos << endl;
+		cout << "æ‰¾åˆ°äº†æ•°æ®ï¼š" << *pos << endl;
 	else
-		cout << "Î´ÕÒµ½" << endl;
+		cout << "æœªæ‰¾åˆ°" << endl;
 }
 /* Output:
-ÕÒµ½ÁËÊı¾İ£º5
+æ‰¾åˆ°äº†æ•°æ®ï¼š5
 */
 
 
@@ -46,7 +46,7 @@ public:
 		this->m_Age = age;
 	}
 
-	//ÖØÔØ operator==
+	//é‡è½½ operator==
 	bool operator== ( const Person&p){
 		if (this->m_Name == p.m_Name && this->m_Age == p.m_Age)
 			return true;
@@ -56,7 +56,7 @@ public:
 };
 
 /*
-* ÀûÓÃfind²éÕÒ×Ô¶¨ÒåÊı¾İÀàĞÍ
+* åˆ©ç”¨findæŸ¥æ‰¾è‡ªå®šä¹‰æ•°æ®ç±»å‹
 */
 void test02()
 {
@@ -73,21 +73,21 @@ void test02()
 	v.push_back(p4);
 
 	vector<Person>::iterator pos = find(v.begin(), v.end(), p2);
-	
+
 	if (pos != v.end())
-		cout << "ÕÒµ½ÁËÊı¾İĞÕÃû£º" << (*pos).m_Name << " ÄêÁä£º" << pos->m_Age << endl;
+		cout << "æ‰¾åˆ°äº†æ•°æ®å§“åï¼š" << (*pos).m_Name << " å¹´é¾„ï¼š" << pos->m_Age << endl;
 	else
-		cout << "Î´ÕÒµ½" << endl;
+		cout << "æœªæ‰¾åˆ°" << endl;
 }
 /* Output:
-ÕÒµ½ÁËÊı¾İĞÕÃû£ºbbb ÄêÁä£º20
+æ‰¾åˆ°äº†æ•°æ®å§“åï¼šbbb å¹´é¾„ï¼š20
 */
 
 
 class MyCompare : public binary_function<Person*, Person* ,bool>
 {
 public:
-	// ÖØĞ´ operator()
+	// é‡å†™ operator()
 	bool operator()( Person * p1 , Person * p2) const{
 		if (p1->m_Name == p2->m_Name && p1->m_Age == p2->m_Age)
 			return true;
@@ -115,22 +115,22 @@ void test03()
 	vector<Person*>::iterator pos = find_if(v.begin(), v.end(),  bind2nd( MyCompare(), p));
 
 	if (pos != v.end())
-		cout << "ÕÒµ½ÁËÊı¾İĞÕÃû£º" << (*pos)->m_Name << " ÄêÁä£º" << (*pos)->m_Age << endl;
+		cout << "æ‰¾åˆ°äº†æ•°æ®å§“åï¼š" << (*pos)->m_Name << " å¹´é¾„ï¼š" << (*pos)->m_Age << endl;
 	else
-		cout << "Î´ÕÒµ½" << endl;
+		cout << "æœªæ‰¾åˆ°" << endl;
 }
 /* Output:
-ÕÒµ½ÁËÊı¾İĞÕÃû£ºbbb ÄêÁä£º20
+æ‰¾åˆ°äº†æ•°æ®å§“åï¼šbbb å¹´é¾„ï¼š20
 */
 
 
 /*
-* adjacent_findËã·¨  ²éÕÒÏàÁÚÖØ¸´ÔªËØ
-* 
-* @param beg  ÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @param end  ÈİÆ÷½áÊøµü´úÆ÷
-* @param  _callback  »Øµ÷º¯Êı»òÕßÎ½´Ê(·µ»ØboolÀàĞÍµÄº¯Êı¶ÔÏó)
-* @return  ·µ»ØÏàÁÚÔªËØµÄµÚÒ»¸öÎ»ÖÃµÄµü´úÆ÷
+* adjacent_findç®—æ³•  æŸ¥æ‰¾ç›¸é‚»é‡å¤å…ƒç´ 
+*
+* @param beg  å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @param end  å®¹å™¨ç»“æŸè¿­ä»£å™¨
+* @param  _callback  å›è°ƒå‡½æ•°æˆ–è€…è°“è¯(è¿”å›boolç±»å‹çš„å‡½æ•°å¯¹è±¡)
+* @return  è¿”å›ç›¸é‚»å…ƒç´ çš„ç¬¬ä¸€ä¸ªä½ç½®çš„è¿­ä»£å™¨
 */
 void test04()
 {
@@ -146,65 +146,65 @@ void test04()
 	vector<int>::iterator pos = adjacent_find(v.begin(), v.end());
 
 	if (pos!= v.end())
-		cout << "ÕÒµ½ÁËÏàÁÚÖØ¸´ÔªËØÎª£º " << *pos << endl;
+		cout << "æ‰¾åˆ°äº†ç›¸é‚»é‡å¤å…ƒç´ ä¸ºï¼š " << *pos << endl;
 	else
-		cout << "Î´ÕÒµ½" << endl;
+		cout << "æœªæ‰¾åˆ°" << endl;
 }
 /* Output:
-ÕÒµ½ÁËÏàÁÚÖØ¸´ÔªËØÎª£º 5
+æ‰¾åˆ°äº†ç›¸é‚»é‡å¤å…ƒç´ ä¸ºï¼š 5
 */
 
 
 /*
-* binary_searchËã·¨  ¶ş·Ö²éÕÒ·¨
-* ×¢Òâ: ÔÚÎŞĞòĞòÁĞÖĞ²»¿ÉÓÃ
-* 
-* @param beg  ÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @param end  ÈİÆ÷½áÊøµü´úÆ÷
-* @param value  ²éÕÒµÄÔªËØ
-* @return bool  ²éÕÒ·µ»Øtrue ·ñÔòfalse
+* binary_searchç®—æ³•  äºŒåˆ†æŸ¥æ‰¾æ³•
+* æ³¨æ„: åœ¨æ— åºåºåˆ—ä¸­ä¸å¯ç”¨
+*
+* @param beg  å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @param end  å®¹å™¨ç»“æŸè¿­ä»£å™¨
+* @param value  æŸ¥æ‰¾çš„å…ƒç´ 
+* @return bool  æŸ¥æ‰¾è¿”å›true å¦åˆ™false
 */
 void test05()
 {
 	vector<int> v;
 	for (int i = 0; i < 10;i++)
 		v.push_back(i);
-	
+
 	bool ret =  binary_search(v.begin(), v.end(), 4);
 	if (ret)
-		cout << "ÕÒµ½ÁË4" << endl;
+		cout << "æ‰¾åˆ°äº†4" << endl;
 	else
-		cout << "Î´ÕÒµ½" << endl;
+		cout << "æœªæ‰¾åˆ°" << endl;
 }
 /* Output:
-ÕÒµ½ÁË4
+æ‰¾åˆ°äº†4
 */
 
 
 
 /*
 /*
-* countËã·¨  Í³¼ÆÔªËØ³öÏÖ´ÎÊı
-* 
-* @param beg  ÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @param end  ÈİÆ÷½áÊøµü´úÆ÷
-* @param value  »Øµ÷º¯Êı»òÕßÎ½´Ê(·µ»ØboolÀàĞÍµÄº¯Êı¶ÔÏó)
-* @return int  ·µ»ØÔªËØ¸öÊı
+* countç®—æ³•  ç»Ÿè®¡å…ƒç´ å‡ºç°æ¬¡æ•°
+*
+* @param beg  å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @param end  å®¹å™¨ç»“æŸè¿­ä»£å™¨
+* @param value  å›è°ƒå‡½æ•°æˆ–è€…è°“è¯(è¿”å›boolç±»å‹çš„å‡½æ•°å¯¹è±¡)
+* @return int  è¿”å›å…ƒç´ ä¸ªæ•°
 */
 
 /*
-* count_ifËã·¨ Í³¼ÆÔªËØ³öÏÖ´ÎÊı
-* 
-* @param beg  ÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @param end  ÈİÆ÷½áÊøµü´úÆ÷
-* @param callback  »Øµ÷º¯Êı»òÕßÎ½´Ê(·µ»ØboolÀàĞÍµÄº¯Êı¶ÔÏó)
-* @return int  ·µ»ØÔªËØ¸öÊı
+* count_ifç®—æ³• ç»Ÿè®¡å…ƒç´ å‡ºç°æ¬¡æ•°
+*
+* @param beg  å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @param end  å®¹å™¨ç»“æŸè¿­ä»£å™¨
+* @param callback  å›è°ƒå‡½æ•°æˆ–è€…è°“è¯(è¿”å›boolç±»å‹çš„å‡½æ•°å¯¹è±¡)
+* @return int  è¿”å›å…ƒç´ ä¸ªæ•°
 */
 class GreaterThenFour
 {
 
 public:
-	//ÖØÔØ operator()
+	//é‡è½½ operator()
 	bool operator() (int v){
 		return v >= 4;
 	}
@@ -212,7 +212,7 @@ public:
 };
 void test06()
 {
-	
+
 	vector<int>v;
 	for (int i = 0; i < 10; i++)
 		v.push_back(i);
@@ -223,14 +223,14 @@ void test06()
 	v.push_back(4);
 
 	int num = count(v.begin(), v.end(), 4);
-	cout << "4µÄ¸öÊıÎª" << num << endl;
+	cout << "4çš„ä¸ªæ•°ä¸º" << num << endl;
 
 	num = count_if(v.begin(), v.end(), GreaterThenFour());
-	cout << "´óÓÚµÈÓÚ 4µÄ¸öÊıÎª" << num << endl;
+	cout << "å¤§äºç­‰äº 4çš„ä¸ªæ•°ä¸º" << num << endl;
 }
 /* Output:
-4µÄ¸öÊıÎª5
-´óÓÚµÈÓÚ 4µÄ¸öÊıÎª10
+4çš„ä¸ªæ•°ä¸º5
+å¤§äºç­‰äº 4çš„ä¸ªæ•°ä¸º10
 */
 
 int main(){

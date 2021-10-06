@@ -4,18 +4,18 @@
 #include<stdlib.h>
 
 /*
-* 1. Ö÷µ÷º¯Êı·ÖÅäÄÚ´æ£¬±»µ÷º¯ÊıÊ¹ÓÃÄÚ´æ  Ö¸ÕëµÄÊäÈëÌØĞÔ
+* 1. ä¸»è°ƒå‡½æ•°åˆ†é…å†…å­˜ï¼Œè¢«è°ƒå‡½æ•°ä½¿ç”¨å†…å­˜  æŒ‡é’ˆçš„è¾“å…¥ç‰¹æ€§
 */
 void printString(const char* str)
 {
-	//´ÓµÚ2¸ö×Ö·û¿ªÊ¼´òÓ¡
-	printf("´òÓ¡ÄÚÈİ:%s\n", str + 2); //¸øËüÒ»¸öµØÖ·£¬Ëü¾Í»áÒ»Ö±ÍùºóÕÒ£¬Ö±½Ó'\0'½áÊø¡£
+	//ä»ç¬¬2ä¸ªå­—ç¬¦å¼€å§‹æ‰“å°
+	printf("æ‰“å°å†…å®¹:%s\n", str + 2); //ç»™å®ƒä¸€ä¸ªåœ°å€ï¼Œå®ƒå°±ä¼šä¸€ç›´å¾€åæ‰¾ï¼Œç›´æ¥'\0'ç»“æŸã€‚
 	//strlen();
 }
 
 void printDoubleArray(double* arr, int len)
 {
-	//arr[0]ÊÇcharÀàĞÍµÄ
+	//arr[0]æ˜¯charç±»å‹çš„
 	for (int i = 0; i < len; ++i)
 	{
 		printf("%lf\n", arr[i]);
@@ -24,7 +24,7 @@ void printDoubleArray(double* arr, int len)
 
 void printStringArray(char** arr, int len)
 {
-	//arr[0]ÊÇchar*ÀàĞÍµÄ
+	//arr[0]æ˜¯char*ç±»å‹çš„
 	for (int i = 0; i < len; ++i)
 	{
 		printf("%s\n", arr[i]);
@@ -33,19 +33,19 @@ void printStringArray(char** arr, int len)
 
 void test01()
 {
-	//¶ÑÉÏ·ÖÅäÄÚ´æ
+	//å †ä¸Šåˆ†é…å†…å­˜
 	char* s = malloc(sizeof(char) * 100);
 	memset(s, 0, 100);
 	strcpy(s, "I am Polly!");
 	printString(s);
 
-	//Êı×éÃû×óº¯Êı²ÎÊı¾Í»áÍË»¯ÎªÖ¸ÏòÊı×éÊ×ÔªËØµÄÖ¸Õë
+	//æ•°ç»„åå·¦å‡½æ•°å‚æ•°å°±ä¼šé€€åŒ–ä¸ºæŒ‡å‘æ•°ç»„é¦–å…ƒç´ çš„æŒ‡é’ˆ
 	double arr[] = { 1.1, 2.2, 3.3, 4.4, 5.5 };
 	int arrlen = sizeof(arr) / sizeof(arr[0]);
 	printDoubleArray(arr, arrlen);
 
 
-	//Õ»ÉÏ·ÖÅä
+	//æ ˆä¸Šåˆ†é…
 	const char* strs[] = {
 		"aaaaa",
 		"bbbbb",
@@ -62,15 +62,15 @@ void test01()
 }
 
 /*
-* 2. Êä³öÌØĞÔ ±»µ÷º¯Êı·ÖÅäÄÚ´æ£¬Ö÷µ÷º¯ÊıÊ¹ÓÃÄÚ´æ
+* 2. è¾“å‡ºç‰¹æ€§ è¢«è°ƒå‡½æ•°åˆ†é…å†…å­˜ï¼Œä¸»è°ƒå‡½æ•°ä½¿ç”¨å†…å­˜
 */
-void allocateSpace(char** temp) //·ÖÅä¿Õ¼ä
+void allocateSpace(char** temp) //åˆ†é…ç©ºé—´
 {
 	char* p = malloc(100);
 	memset(p, 0, 100);
 	strcpy(p, "hello world!");
 
-	//Ö¸ÕëµÄ¼ä½Ó¸³Öµ
+	//æŒ‡é’ˆçš„é—´æ¥èµ‹å€¼
 	*temp = p;
 }
 
@@ -82,8 +82,8 @@ void test02()
 
 	if (p != NULL)
 	{
-		free(p);  //ÊÍ·ÅÄÚ´æ
-		p = NULL; //Ö¸Ïò¿Õ
+		free(p);  //é‡Šæ”¾å†…å­˜
+		p = NULL; //æŒ‡å‘ç©º
 	}
 }
 
@@ -97,7 +97,7 @@ int main() {
 	return EXIT_SUCCESS;
 }
 /* Output:
-´òÓ¡ÄÚÈİ:am Polly!
+æ‰“å°å†…å®¹:am Polly!
 1.100000
 2.200000
 3.300000
@@ -110,5 +110,5 @@ ddddd
 eeeee
 ----------------
 p = hello world!
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

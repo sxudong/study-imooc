@@ -1,7 +1,7 @@
 #include "ConfigFile.h"
 
 /*
-* »ñµÃÎÄ¼şÓĞĞ§ĞĞÊı
+* è·å¾—æ–‡ä»¶æœ‰æ•ˆè¡Œæ•°
 */
 int getLines_ConfigFile(FILE* file)
 {
@@ -9,7 +9,7 @@ int getLines_ConfigFile(FILE* file)
 	char buf[1024] = { 0 };
 	int lines = 0;
 	while (fgets(buf, 1024, file) != NULL) {
-		//¿ÕĞĞ·µ»Øfalse£¬Ìø¹ı±¾´Îwhile£¬Ö´ĞĞÏÂÒ»´Îwhile
+		//ç©ºè¡Œè¿”å›falseï¼Œè·³è¿‡æœ¬æ¬¡whileï¼Œæ‰§è¡Œä¸‹ä¸€æ¬¡while
 		if (!isValid_ConfigFile(buf))
 			continue;
 
@@ -18,14 +18,14 @@ int getLines_ConfigFile(FILE* file)
 		++lines;
 	}
 
-	//°ÑÎÄ¼şÖ¸ÕëÖØÖÃµ½ÎÄ¼şµÄ¿ªÍ·
+	//æŠŠæ–‡ä»¶æŒ‡é’ˆé‡ç½®åˆ°æ–‡ä»¶çš„å¼€å¤´
 	fseek(file, 0, SEEK_SET);
 
 	return lines;
 }
 
 /*
-* ¼ÓÔØÅäÖÃÎÄ¼ş
+* åŠ è½½é…ç½®æ–‡ä»¶
 */
 void loadFile_ConfigFile(const char* filePath, char*** fileData, int* line)
 {
@@ -36,7 +36,7 @@ void loadFile_ConfigFile(const char* filePath, char*** fileData, int* line)
 
 	int lines = getLines_ConfigFile(file);
 
-	//¸øÃ¿ĞĞÊı¾İ¿ª±ÙÄÚ´æ
+	//ç»™æ¯è¡Œæ•°æ®å¼€è¾Ÿå†…å­˜
 	char** temp = malloc(sizeof(char*) * lines);
 
 	char buf[1024] = { 0 };
@@ -44,18 +44,18 @@ void loadFile_ConfigFile(const char* filePath, char*** fileData, int* line)
 	int index = 0;
 
 	while (fgets(buf, 1024, file) != NULL) {
-		//¿ÕĞĞ·µ»Øfalse£¬Ìø¹ı±¾´Îwhile£¬Ö´ĞĞÏÂÒ»´Îwhile
+		//ç©ºè¡Œè¿”å›falseï¼Œè·³è¿‡æœ¬æ¬¡whileï¼Œæ‰§è¡Œä¸‹ä¸€æ¬¡while
 		if (!isValid_ConfigFile(buf))
 			continue;
 
 		temp[index] = malloc(strlen(buf) + 1);
 		strcpy(temp[index], buf);
 		++index;
-		//Çå¿Õbuf
+		//æ¸…ç©ºbuf
 		memset(buf, 0, 1024);
 	}
 
-	//¹Ø±ÕÎÄ¼ş
+	//å…³é—­æ–‡ä»¶
 	fclose(file);
 
 	*fileData = temp;
@@ -63,7 +63,7 @@ void loadFile_ConfigFile(const char* filePath, char*** fileData, int* line)
 }
 
 /*
-* ½âÎöÅäÖÃÎÄ¼ş
+* è§£æé…ç½®æ–‡ä»¶
 */
 void parseFile_ConfigFile(char** fileData, int lines, struct ConfigInfo** info)
 {
@@ -78,7 +78,7 @@ void parseFile_ConfigFile(char** fileData, int lines, struct ConfigInfo** info)
 
 		int flag = 0;
 		if (fileData[i][strlen(fileData[i]) - 1] == '\n') {
-			printf("×îºóÒ»¸öÊÇ»»ĞĞ!\n");
+			printf("æœ€åä¸€ä¸ªæ˜¯æ¢è¡Œ!\n");
 			flag = 1;
 		}
 
@@ -87,7 +87,7 @@ void parseFile_ConfigFile(char** fileData, int lines, struct ConfigInfo** info)
 		printf("key:%s val:%s\n", myinfo[i].key, myinfo[i].val);
 	}
 
-	//ÊÍ·ÅÎÄ¼şĞÅÏ¢
+	//é‡Šæ”¾æ–‡ä»¶ä¿¡æ¯
 	for (int i = 0; i < lines; ++i) {
 		if (fileData[i] != NULL) {
 			free(fileData[i]);
@@ -99,7 +99,7 @@ void parseFile_ConfigFile(char** fileData, int lines, struct ConfigInfo** info)
 }
 
 /*
-* »ñµÃÖ¸¶¨ÅäÖÃĞÅÏ¢
+* è·å¾—æŒ‡å®šé…ç½®ä¿¡æ¯
 */
 char* getInfo_ConfigFile(const char* key, struct ConfigInfo* info, int line)
 {
@@ -112,7 +112,7 @@ char* getInfo_ConfigFile(const char* key, struct ConfigInfo* info, int line)
 }
 
 /*
-* ÊÍ·ÅÅäÖÃÎÄ¼şĞÅÏ¢
+* é‡Šæ”¾é…ç½®æ–‡ä»¶ä¿¡æ¯
 */
 void destroInfo_ConfigFile(struct ConfigInfo* info)
 {
@@ -124,7 +124,7 @@ void destroInfo_ConfigFile(struct ConfigInfo* info)
 }
 
 /*
-* ÅĞ¶Ïµ±Ç°ĞĞÊÇ·ñÓĞĞ§
+* åˆ¤æ–­å½“å‰è¡Œæ˜¯å¦æœ‰æ•ˆ
 */
 int isValid_ConfigFile(const char* buf)
 {

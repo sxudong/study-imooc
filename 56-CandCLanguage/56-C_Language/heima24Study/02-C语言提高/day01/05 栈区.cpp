@@ -4,18 +4,18 @@
 #include<stdlib.h>
 
 /*
-* 1. Õ»ÇøµÄÄÚ´æ×Ô¶¯ÉêÇë×Ô¶¯ÊÍ·Å£¬²»ÐèÒª³ÌÐòÊÖ¶¯¹ÜÀí
+* 1. æ ˆåŒºçš„å†…å­˜è‡ªåŠ¨ç”³è¯·è‡ªåŠ¨é‡Šæ”¾ï¼Œä¸éœ€è¦ç¨‹åºæ‰‹åŠ¨ç®¡ç†
 */
 int* myFunc()
 {
-	//²»Òª·µ»Ø¾Ö²¿±äÁ¿µÄµØÖ·
-	int a = 10; //Õ»ÉÏ
-	return &a;  //±àÒëÆ÷±¨´í£¬²»ÄÜ·µ»Ø¾Ö²¿±äÁ¿µÄµØÖ·
+	//ä¸è¦è¿”å›žå±€éƒ¨å˜é‡çš„åœ°å€
+	int a = 10; //æ ˆä¸Š
+	return &a;  //ç¼–è¯‘å™¨æŠ¥é”™ï¼Œä¸èƒ½è¿”å›žå±€éƒ¨å˜é‡çš„åœ°å€
 }
 
 void test01()
 {
-	//ÎÒÃÇ²¢²»¹ØÐÄÖµÊÇ¶àÉÙ£¬ÒòÎª¾Ö²¿±äÁ¿aµÄÄÚ´æÒÑ¾­±»»ØÊÕ
+	//æˆ‘ä»¬å¹¶ä¸å…³å¿ƒå€¼æ˜¯å¤šå°‘ï¼Œå› ä¸ºå±€éƒ¨å˜é‡açš„å†…å­˜å·²ç»è¢«å›žæ”¶
 	int* p = myFunc();
 	printf("*p = %d\n", *p);
 }
@@ -24,10 +24,10 @@ void test01()
 
 char* getString()
 {
-	char str[] = "hello world!"; //Êý×éÒ²ÔÚÕ»ÉÏ£¬
+	char str[] = "hello world!"; //æ•°ç»„ä¹Ÿåœ¨æ ˆä¸Šï¼Œ
 
-    //Êý×éÃûÀï±£´æµÄÊÇ¡°Êý×éÊ×µØÖ·¡±
-	return str; //±àÒëÆ÷±¨´í¡£¾Ö²¿±äÁ¿·µ»ØÊ±»á±»»ØÊÕ£¬ÄÚ´æ±»ÊÍ·ÅµôÁË£¬ÀïÃæÊ²Ã´Öµ¶¼ÓÐ¿ÉÄÜ¡£
+    //æ•°ç»„åé‡Œä¿å­˜çš„æ˜¯â€œæ•°ç»„é¦–åœ°å€â€
+	return str; //ç¼–è¯‘å™¨æŠ¥é”™ã€‚å±€éƒ¨å˜é‡è¿”å›žæ—¶ä¼šè¢«å›žæ”¶ï¼Œå†…å­˜è¢«é‡Šæ”¾æŽ‰äº†ï¼Œé‡Œé¢ä»€ä¹ˆå€¼éƒ½æœ‰å¯èƒ½ã€‚
 }
 
 
@@ -37,13 +37,13 @@ void test02()
 
 	s = getString();
 
-	printf("s = %s\n", s); //s = ÌÌÌÌÌÌÌÌÌÌÌÌÌÌÌÌl÷ý
+	printf("s = %s\n", s); //s = çƒ«çƒ«çƒ«çƒ«çƒ«çƒ«çƒ«çƒ«lé¼¾
 }
 
 
 int main() {
 
-	//Á½¸ö·½·¨¶¼»áµ¼ÖÂ±àÒëÆ÷±¨´í£¬²»ÄÜÖ´ÐÐ
+	//ä¸¤ä¸ªæ–¹æ³•éƒ½ä¼šå¯¼è‡´ç¼–è¯‘å™¨æŠ¥é”™ï¼Œä¸èƒ½æ‰§è¡Œ
 	test01();
 	test02();
 

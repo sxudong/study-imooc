@@ -13,11 +13,11 @@ int main07()
 	//printf("%d\n", value);
 	if (!strncmp(arr1, arr2, 4))
 	{
-		printf("相同\n");
+		printf("鐩稿悓\n");
 	}
 	else
 	{
-		printf("不相同\n");
+		printf("涓嶇浉鍚孿n");
 
 	}
 

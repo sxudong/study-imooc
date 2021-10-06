@@ -4,17 +4,18 @@
 #
 #-------------------------------------------------
 
-QT       += core gui  #Qt°üº¬µÄ¡°Ä£¿é¡±
+QT       += core gui  #QtåŒ…å«çš„â€œæ¨¡å—â€
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets  #´óÓÚ4°æ±¾ °üº¬widgetÄ£¿é
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets  #å¤§äº4ç‰ˆæœ¬ åŒ…å«widgetæ¨¡å—
 
-TARGET = firstQt  #Ä¿±ê Éú³ÉµÄ.exe¿ÉÖ´ĞĞÎÄ¼şµÄÃû³Æ
-TEMPLATE = app    #Ä£°å Ó¦ÓÃ³ÌĞò
+TARGET = firstQt  #ç›®æ ‡ ç”Ÿæˆçš„.exeå¯æ‰§è¡Œæ–‡ä»¶çš„åç§°
+TEMPLATE = app    #æ¨¡æ¿ åº”ç”¨ç¨‹åº
 
 
-SOURCES += main.cpp\     #Ô´ÎÄ¼ş
+SOURCES += main.cpp\     #æºæ–‡ä»¶
         mywidget.cpp \
     mybutton.cpp
 
-HEADERS  += mywidget.h \ #Í·ÎÄ¼ş
+HEADERS  += mywidget.h \ #å¤´æ–‡ä»¶
     mybutton.h
+

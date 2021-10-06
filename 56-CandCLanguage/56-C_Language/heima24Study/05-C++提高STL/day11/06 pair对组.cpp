@@ -3,20 +3,20 @@
 #include <string>
 using namespace std;
 
-//´´½¨¶Ô×é
+//åˆ›å»ºå¯¹ç»„
 void test01()
 {
-	//µÚÒ»ÖÖ
+	//ç¬¬ä¸€ç§
 	pair<string, int> p(string("Tom"), 100);
 
-	//È¡Öµ
-	cout << "ĞÕÃû£º" << p.first << endl;   //Tom
-	cout << "ÄêÁä£º " << p.second << endl; //100
+	//å–å€¼
+	cout << "å§“åï¼š" << p.first << endl;   //Tom
+	cout << "å¹´é¾„ï¼š " << p.second << endl; //100
 
-	//µÚ¶şÖÖ´´½¨
+	//ç¬¬äºŒç§åˆ›å»º
 	pair<string, int> p2 = make_pair("Jerry", 200);
-	cout << "ĞÕÃû£º" << p2.first << endl;   //Jerry
-	cout << "ÄêÁä£º " << p2.second << endl; //200
+	cout << "å§“åï¼š" << p2.first << endl;   //Jerry
+	cout << "å¹´é¾„ï¼š " << p2.second << endl; //200
 }
 
 
@@ -26,9 +26,9 @@ int main(){
 	return EXIT_SUCCESS;
 }
 /* Output:
-ĞÕÃû£ºTom
-ÄêÁä£º 100
-ĞÕÃû£ºJerry
-ÄêÁä£º 200
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+å§“åï¼šTom
+å¹´é¾„ï¼š 100
+å§“åï¼šJerry
+å¹´é¾„ï¼š 200
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

@@ -1,5 +1,5 @@
 /*
-* 4.3 ³£ÓÃ±éÀúËã·¨
+* 4.3 å¸¸ç”¨éå†ç®—æ³•
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
@@ -10,21 +10,21 @@ using namespace std;
 
 
 /*
-* ±éÀúËã·¨ ±éÀúÈİÆ÷ÔªËØ
-* 
-* @param beg  ¿ªÊ¼µü´úÆ÷
-* @param end  ½áÊøµü´úÆ÷
-* @param _callback  º¯Êı»Øµ÷»òÕßº¯Êı¶ÔÏó
-* @return  º¯Êı¶ÔÏó
+* éå†ç®—æ³• éå†å®¹å™¨å…ƒç´ 
+*
+* @param beg  å¼€å§‹è¿­ä»£å™¨
+* @param end  ç»“æŸè¿­ä»£å™¨
+* @param _callback  å‡½æ•°å›è°ƒæˆ–è€…å‡½æ•°å¯¹è±¡
+* @return  å‡½æ•°å¯¹è±¡
 */
 
-void myPrint(int v){ //ÆÕÍ¨º¯Êı·½·¨
+void myPrint(int v){ //æ™®é€šå‡½æ•°æ–¹æ³•
 	cout << v << endl;
 }
 
-struct myPrint01 //Àà £¨structÓëclassÊÇÒ»ÑùµÄ£©
+struct myPrint01 //ç±» ï¼ˆstructä¸classæ˜¯ä¸€æ ·çš„ï¼‰
 {
-	//()ÖØÔØ
+	//()é‡è½½
 	void operator()(int v){
 		cout << v << endl;
 	}
@@ -57,7 +57,7 @@ struct myPrint02
 {
 	int m_Count;
 
-	//()ÖØÔØ
+	//()é‡è½½
 	void operator()(int v){
 		cout << v << endl;
 		m_Count++;
@@ -65,7 +65,7 @@ struct myPrint02
 };
 
 /*
-* 2 for_eachÓĞ·µ»ØÖµ
+* 2 for_eachæœ‰è¿”å›å€¼
 */
 void test02()
 {
@@ -92,11 +92,11 @@ void test02()
 
 
 /*
-* 3 for_each¿ÉÒÔ°ó¶¨²ÎÊı½øĞĞÊä³ö
+* 3 for_eachå¯ä»¥ç»‘å®šå‚æ•°è¿›è¡Œè¾“å‡º
 */
 struct myPrint03 : public binary_function<int,int,void>
 {
-	//ÖØĞ´ operator()
+	//é‡å†™ operator()
 	void operator()(int v ,int start) const{
 		cout << v  + start << endl;
 	}
@@ -124,19 +124,19 @@ void test03()
 */
 
 /*
-* transformËã·¨ ½«Ö¸¶¨ÈİÆ÷Çø¼äÔªËØ°áÔËµ½ÁíÒ»ÈİÆ÷ÖĞ
-* ×¢Òâ : transform ²»»á¸øÄ¿±êÈİÆ÷·ÖÅäÄÚ´æ£¬ËùÒÔĞèÒªÎÒÃÇÌáÇ°·ÖÅäºÃÄÚ´æ
-* 
-* @param beg1  Ô´ÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @param end1  Ô´ÈİÆ÷½áÊøµü´úÆ÷
-* @param beg2  Ä¿±êÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @param _cakkback  »Øµ÷º¯Êı»òÕßº¯Êı¶ÔÏó
-* @return  ·µ»ØÄ¿±êÈİÆ÷µü´úÆ÷
+* transformç®—æ³• å°†æŒ‡å®šå®¹å™¨åŒºé—´å…ƒç´ æ¬è¿åˆ°å¦ä¸€å®¹å™¨ä¸­
+* æ³¨æ„ : transform ä¸ä¼šç»™ç›®æ ‡å®¹å™¨åˆ†é…å†…å­˜ï¼Œæ‰€ä»¥éœ€è¦æˆ‘ä»¬æå‰åˆ†é…å¥½å†…å­˜
+*
+* @param beg1  æºå®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @param end1  æºå®¹å™¨ç»“æŸè¿­ä»£å™¨
+* @param beg2  ç›®æ ‡å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @param _cakkback  å›è°ƒå‡½æ•°æˆ–è€…å‡½æ•°å¯¹è±¡
+* @return  è¿”å›ç›®æ ‡å®¹å™¨è¿­ä»£å™¨
 */
 class TransForm
 {
 public:
-	//ÖØÔØ operator()
+	//é‡è½½ operator()
 	int operator()(int val){
 		return val + 10;
 	}
@@ -144,11 +144,11 @@ public:
 
 void test04()
 {
-	vector<int> vSource; //Ô­ÈİÆ÷
+	vector<int> vSource; //åŸå®¹å™¨
 	for (int i = 0; i < 10; i++)
 		vSource.push_back(i);
 
-	vector<int> vTarget; //Ä¿±êÈİÆ÷
+	vector<int> vTarget; //ç›®æ ‡å®¹å™¨
 	vTarget.resize(vSource.size());
 
 	transform(vSource.begin(), vSource.end(), vTarget.begin(), TransForm());
@@ -161,13 +161,13 @@ void test04()
 
 
 /*
-* transform µÚ¶şÖÖÓÃ·¨ 
-* ½«Á½¸öÈİÆ÷Êı¾İÏà¼Ó°áÔËµ½Ä¿±êÈİÆ÷
+* transform ç¬¬äºŒç§ç”¨æ³•
+* å°†ä¸¤ä¸ªå®¹å™¨æ•°æ®ç›¸åŠ æ¬è¿åˆ°ç›®æ ‡å®¹å™¨
 */
 class TransForm2
 {
 public:
-	//ÖØÔØ operator()
+	//é‡è½½ operator()
 	int operator()(int val ,int val2){
 		return val + val2;
 	}
@@ -182,7 +182,7 @@ void test05()
 		v2.push_back(200 + i);
 	}
 
-	vector<int> vTarget; //Ä¿±êÈİÆ÷
+	vector<int> vTarget; //ç›®æ ‡å®¹å™¨
 	vTarget.resize(v1.size());
 	transform(v1.begin(), v1.end(), v2.begin(), vTarget.begin(), TransForm2());
 
@@ -232,6 +232,6 @@ int main(){
 10009
 ---------------
 10 11 12 13 14 15 16 17 18 19 ---------------
-300 302 304 306 308 310 312 314 316 318 
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+300 302 304 306 308 310 312 314 316 318
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

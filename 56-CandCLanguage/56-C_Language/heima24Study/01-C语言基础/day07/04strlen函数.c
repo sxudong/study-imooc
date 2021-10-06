@@ -9,10 +9,10 @@ int main04()
     //char arr[] = "\0he\nsfds\0llo";
     //char arr[] = "hello";
 
-    //char arr[] = { 'h','e','l','l','o' }; //×Ö·û´®µÄÓĞĞ§³¤¶È£º6
+    //char arr[] = { 'h','e','l','l','o' }; //å­—ç¬¦ä¸²çš„æœ‰æ•ˆé•¿åº¦ï¼š6
     int len = strlen(arr);
-    printf("×Ö·û´®µÄÓĞĞ§³¤¶È£º%d\n", len);
-    //printf("×Ö·û´®µÄ³¤¶È£º%d", sizeof(arr));
+    printf("å­—ç¬¦ä¸²çš„æœ‰æ•ˆé•¿åº¦ï¼š%d\n", len);
+    //printf("å­—ç¬¦ä¸²çš„é•¿åº¦ï¼š%d", sizeof(arr));
     int index = 0;
     while (arr[index] != '\0')
     {
@@ -23,7 +23,7 @@ int main04()
     return EXIT_SUCCESS;
 }
 /* Output
-×Ö·û´®µÄÓĞĞ§³¤¶È£º5
+å­—ç¬¦ä¸²çš„æœ‰æ•ˆé•¿åº¦ï¼š5
 5
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

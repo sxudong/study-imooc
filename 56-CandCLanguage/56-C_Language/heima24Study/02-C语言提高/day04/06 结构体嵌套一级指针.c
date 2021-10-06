@@ -5,30 +5,30 @@
 
 struct Person
 {
-	char* name; //ÄÚÇ¶Ö¸Õë
+	char* name; //å†…åµŒæŒ‡é’ˆ
 	int age;
 };
 
-//·ÖÅäÄÚ´æ
+//åˆ†é…å†…å­˜
 struct Person** allocateSpace()
 {
-    //¿ª±Ù¡°½á¹¹ÌåÖ¸ÕëÊı×é¡±£¬¶ÑÇøÀïÊÇ3¸ö¡°Person*ĞÍ¡±µÄÖ¸Õë
+    //å¼€è¾Ÿâ€œç»“æ„ä½“æŒ‡é’ˆæ•°ç»„â€ï¼Œå †åŒºé‡Œæ˜¯3ä¸ªâ€œPerson*å‹â€çš„æŒ‡é’ˆ
 	struct Person** temp = malloc(sizeof(struct Person*) * 3);
 
 	for (int i = 0; i < 3; ++i){
-	    //´´½¨½á¹¹ÌåÄÚ´æ
-	    //¸øÀïÃæµÄÃ¿Ò»¸öÔªËØ¿ª±Ù¶Ñ¿Õ¼ä£¬´´½¨¶Ñ¿Õ¼ä´æ´¢µ½temp[i]Àï£¬temp[i]Àï±£´æµÄÊÇÖ¸Ïò¶Ñ¿Õ¼äµÄÖ¸Õë
+	    //åˆ›å»ºç»“æ„ä½“å†…å­˜
+	    //ç»™é‡Œé¢çš„æ¯ä¸€ä¸ªå…ƒç´ å¼€è¾Ÿå †ç©ºé—´ï¼Œåˆ›å»ºå †ç©ºé—´å­˜å‚¨åˆ°temp[i]é‡Œï¼Œtemp[i]é‡Œä¿å­˜çš„æ˜¯æŒ‡å‘å †ç©ºé—´çš„æŒ‡é’ˆ
 		temp[i] = malloc(sizeof(struct Person));
-        //¸ø¡°nameÖ¸Õë¡±·ÖÅäÄÚ´æ£¬½«½á¹¹ÌåĞÕÃû´´½¨ÔÚ¶ÑÇø¡£
+        //ç»™â€œnameæŒ‡é’ˆâ€åˆ†é…å†…å­˜ï¼Œå°†ç»“æ„ä½“å§“ååˆ›å»ºåœ¨å †åŒºã€‚
 		temp[i]->name = malloc(sizeof(char) * 64);
-		sprintf(temp[i]->name, "Name_%d", i + 1); //¸øĞÕÃû¸³Öµ
+		sprintf(temp[i]->name, "Name_%d", i + 1); //ç»™å§“åèµ‹å€¼
 		temp[i]->age = 100 + i;
 	}
 
 	return temp;
 }
 
-//´òÓ¡
+//æ‰“å°
 void printPerson(struct Person** person)
 {
 	if (NULL == person)
@@ -38,7 +38,7 @@ void printPerson(struct Person** person)
 		printf("Name:%s Age:%d\n", person[i]->name, person[i]->age);
 }
 
-//ÊÍ·ÅÄÚ´æ
+//é‡Šæ”¾å†…å­˜
 void freeSpace(struct Person** person)
 {
 	if (NULL == person)
@@ -47,13 +47,13 @@ void freeSpace(struct Person** person)
 	for (int i = 0; i < 3; ++i){
 		if (person[i] == NULL)
 			continue;
-        //1.ÏÈÊÍ·Å"nameÖ¸Õë"ÄÚ´æ
+        //1.å…ˆé‡Šæ”¾"nameæŒ‡é’ˆ"å†…å­˜
 		if (person[i]->name != NULL){
-			printf("Name:%sµÄÄÚ´æ±»ÊÍ·Å!\n", person[i]->name);
+			printf("Name:%sçš„å†…å­˜è¢«é‡Šæ”¾!\n", person[i]->name);
 			free(person[i]->name);
 			person[i]->name = NULL;
 		}
-        //2.ÔÙÊÍ·Å¡°½á¹¹ÌåÊı×é¡±ÄÚ´æ
+        //2.å†é‡Šæ”¾â€œç»“æ„ä½“æ•°ç»„â€å†…å­˜
 		free(person[i]);
 		person[i] = NULL;
 	}
@@ -81,8 +81,8 @@ int main() {
 Name:Name_1 Age:100
 Name:Name_2 Age:101
 Name:Name_3 Age:102
-Name:Name_1µÄÄÚ´æ±»ÊÍ·Å!
-Name:Name_2µÄÄÚ´æ±»ÊÍ·Å!
-Name:Name_3µÄÄÚ´æ±»ÊÍ·Å!
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+Name:Name_1çš„å†…å­˜è¢«é‡Šæ”¾!
+Name:Name_2çš„å†…å­˜è¢«é‡Šæ”¾!
+Name:Name_3çš„å†…å­˜è¢«é‡Šæ”¾!
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

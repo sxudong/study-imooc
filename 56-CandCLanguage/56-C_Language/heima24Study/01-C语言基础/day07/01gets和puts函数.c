@@ -7,10 +7,10 @@ int main01()
 
 	char ch[100];
 	//getchar();
-	//»ñÈ¡Ò»¸ö×Ö·û scanf()
+	//è·å–ä¸€ä¸ªå­—ç¬¦ scanf()
 	//char * p = gets(ch);
 	scanf("%[^\n]", ch);
-	//Êä³öÒ»¸ö×Ö·û´® ²¢»»ĞĞ
+	//è¾“å‡ºä¸€ä¸ªå­—ç¬¦ä¸² å¹¶æ¢è¡Œ
 	int value = puts(ch);
 	//printf("%s", ch);
 	//printf("%s", p);

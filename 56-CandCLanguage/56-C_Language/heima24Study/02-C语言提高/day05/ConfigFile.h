@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-//·ÀÖ¹Í·ÎÄ¼şÖØ¸´°üº¬
+//é˜²æ­¢å¤´æ–‡ä»¶é‡å¤åŒ…å«
 #pragma once
 
 #include<stdio.h>
@@ -15,26 +15,26 @@ struct ConfigInfo
 };
 
 
-//Ä¿µÄÎªÁËÔÚC++ÖĞÄÜ¹»µ÷ÓÃCĞ´µÄº¯Êı
+//ç›®çš„ä¸ºäº†åœ¨C++ä¸­èƒ½å¤Ÿè°ƒç”¨Cå†™çš„å‡½æ•°
 #ifdef __cplusplus
-	extern "C"{ //extern:Íâ²¿
+	extern "C"{ //extern:å¤–éƒ¨
 #endif
 
         /*
-        * ¶¨ÒåËùĞèÒªµÄº¯Êı·½·¨£¨ÔÚ ConfigFile.c ÖĞÊµÏÖÕâĞ©·½·¨£©
+        * å®šä¹‰æ‰€éœ€è¦çš„å‡½æ•°æ–¹æ³•ï¼ˆåœ¨ ConfigFile.c ä¸­å®ç°è¿™äº›æ–¹æ³•ï¼‰
         */
 
-		//»ñµÃÎÄ¼şÓĞĞ§ĞĞÊı
+		//è·å¾—æ–‡ä»¶æœ‰æ•ˆè¡Œæ•°
 		int getLines_ConfigFile(FILE *file);
-		//¼ÓÔØÅäÖÃÎÄ¼ş
+		//åŠ è½½é…ç½®æ–‡ä»¶
 		void loadFile_ConfigFile(const char *filePath,char ***fileData,int *lines);
-		//½âÎöÅäÖÃÎÄ¼ş
+		//è§£æé…ç½®æ–‡ä»¶
 		void parseFile_ConfigFile(char **fileData, int lines, struct ConfigInfo **info);
-		//»ñµÃÖ¸¶¨ÅäÖÃĞÅÏ¢
+		//è·å¾—æŒ‡å®šé…ç½®ä¿¡æ¯
 		char* getInfo_ConfigFile(const char *key, struct ConfigInfo *info,int line);
-		//ÊÍ·ÅÅäÖÃÎÄ¼şĞÅÏ¢
+		//é‡Šæ”¾é…ç½®æ–‡ä»¶ä¿¡æ¯
 		void destroInfo_ConfigFile(struct ConfigInfo *info);
-		//ÅĞ¶Ïµ±Ç°ĞĞÊÇ·ñÓĞĞ§
+		//åˆ¤æ–­å½“å‰è¡Œæ˜¯å¦æœ‰æ•ˆ
 		int isValid_ConfigFile(const char *buf);
 
 #ifdef __cplusplus

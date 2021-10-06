@@ -5,29 +5,29 @@
 
 struct Teacher
 {
-	char* name;       //Ç¶Ì×Ò»¼¶Ö¸Õë
-	char** students;  //Ç¶Ì×¶ş¼¶Ö¸Õë(Ñ§ÉúÊı×é)
+	char* name;       //åµŒå¥—ä¸€çº§æŒ‡é’ˆ
+	char** students;  //åµŒå¥—äºŒçº§æŒ‡é’ˆ(å­¦ç”Ÿæ•°ç»„)
 };
 
 int allocateSpace(struct Teacher*** temp)
 {
 	if (NULL == temp)
-		return -1; //´íÎóÂë ²»Í¬´íÎóÂë±íÊ¾²»Í¬´íÎó
+		return -1; //é”™è¯¯ç  ä¸åŒé”™è¯¯ç è¡¨ç¤ºä¸åŒé”™è¯¯
 
-	//¿ª±ÙÄÚ´æ
+	//å¼€è¾Ÿå†…å­˜
 	struct Teacher** ts = malloc(sizeof(struct Teacher*) * 3);
-	//¸øÃ¿¸öÀÏÊ¦·ÖÅäÄÚ´æ
+	//ç»™æ¯ä¸ªè€å¸ˆåˆ†é…å†…å­˜
 	for (int i = 0; i < 3; ++i) {
-		//¸øÀÏÊ¦½á¹¹ÌåÖ¸Õë·ÖÅä¿Õ¼ä
+		//ç»™è€å¸ˆç»“æ„ä½“æŒ‡é’ˆåˆ†é…ç©ºé—´
 		ts[i] = malloc(sizeof(struct Teacher));
 
-		//¸øÀÏÊ¦Ãû×Ö·ÖÅä¿Õ¼ä
+		//ç»™è€å¸ˆåå­—åˆ†é…ç©ºé—´
 		ts[i]->name = malloc(sizeof(char) * 64);
-		sprintf(ts[i]->name, "Teacher_%d", i + 1); //¸øÀÏÊ¦ÆğÃû³Æ
+		sprintf(ts[i]->name, "Teacher_%d", i + 1); //ç»™è€å¸ˆèµ·åç§°
 
-		//¸ø¡°Ñ§ÉúÊı×éÖ¸Õë¡±·ÖÅäÄÚ´æ
+		//ç»™â€œå­¦ç”Ÿæ•°ç»„æŒ‡é’ˆâ€åˆ†é…å†…å­˜
 		ts[i]->students = malloc(sizeof(char*) * 4);
-		//¸øÑ§ÉúµÄĞÕÃû¿ª±ÙÄÚ´æ ÒÔ¼°¸³Öµ
+		//ç»™å­¦ç”Ÿçš„å§“åå¼€è¾Ÿå†…å­˜ ä»¥åŠèµ‹å€¼
 		for (int j = 0; j < 4; ++j) {
 			ts[i]->students[j] = malloc(sizeof(char) * 64);
 			sprintf(ts[i]->students[j], "%s_Stu_%d", ts[i]->name, j + 1);
@@ -61,25 +61,25 @@ void freeSpace(struct Teacher** teachers)
 
 		if (teachers[i] == NULL)
 			continue;
-		//1.ÏÈÊÍ·ÅÀÏÊ¦ĞÕÃû
+		//1.å…ˆé‡Šæ”¾è€å¸ˆå§“å
 		if (teachers[i]->name != NULL) {
 			free(teachers[i]->name);
 			teachers[i]->name = NULL;
 		}
-		//2.ÊÍ·ÅÑ§ÉúĞÕÃû
+		//2.é‡Šæ”¾å­¦ç”Ÿå§“å
 		for (int j = 0; j < 4; ++j) {
 			if (teachers[i]->students[j] != NULL) {
 				free(teachers[i]->students[j]);
 				teachers[i]->students[j] = NULL;
 			}
 		}
-		//ÊÍ·ÅÑ§ÉúµÄÊı×é
+		//é‡Šæ”¾å­¦ç”Ÿçš„æ•°ç»„
 		if (teachers[i]->students != NULL) {
 			free(teachers[i]->students);
 			teachers[i]->students = NULL;
 		}
 
-		//ÊÍ·ÅÀÏÊ¦
+		//é‡Šæ”¾è€å¸ˆ
 		if (teachers[i] != NULL) {
 			free(teachers[i]);
 			teachers[i] = NULL;
@@ -97,14 +97,14 @@ void test()
 	int ret = 0;
 	ret = allocateSpace(&teachers);
 	if (ret < 0) {
-		printf("allocateSpace º¯Êıµ÷ÓÃ³ö´í!\n");
+		printf("allocateSpace å‡½æ•°è°ƒç”¨å‡ºé”™!\n");
 		return;
 	}
 
-	//´òÓ¡ÀÏÊ¦¼°ÆäÑ§ÉúĞÅÏ¢
+	//æ‰“å°è€å¸ˆåŠå…¶å­¦ç”Ÿä¿¡æ¯
 	printTeachers(teachers);
 
-	//ÊÍ·ÅÄÚ´æ
+	//é‡Šæ”¾å†…å­˜
 	freeSpace(teachers);
 	teachers = NULL;
 }
@@ -133,5 +133,5 @@ Teacher_3
    Teacher_3_Stu_2
    Teacher_3_Stu_3
    Teacher_3_Stu_4
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

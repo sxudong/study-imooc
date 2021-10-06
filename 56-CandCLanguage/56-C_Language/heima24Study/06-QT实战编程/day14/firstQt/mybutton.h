@@ -4,11 +4,11 @@
 #include <QWidget>
 #include <QPushButton>
 
-class MyButton : public QPushButton         //¼Ì³ĞQPushButton
+class MyButton : public QPushButton         //ç»§æ‰¿QPushButton
 {
     Q_OBJECT
 public:
-    explicit MyButton(QWidget *parent = 0); //explicit ·ÀÖ¹¹¹Ôìº¯ÊıÖĞµÄÒşÊ½ÀàĞÍ×ª»»
+    explicit MyButton(QWidget *parent = 0); //explicit é˜²æ­¢æ„é€ å‡½æ•°ä¸­çš„éšå¼ç±»å‹è½¬æ¢
     ~MyButton();
 signals:
 

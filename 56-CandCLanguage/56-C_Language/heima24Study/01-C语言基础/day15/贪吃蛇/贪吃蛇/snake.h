@@ -10,38 +10,38 @@
 #include <Windows.h>
 
 
-#define WIDE 60			// ¿í¶È
-#define HIGH 20			// ¸ß¶È
+#define WIDE 60			// å®½åº¦
+#define HIGH 20			// é«˜åº¦
 
-// Ò»¸öÉíÌåµÄ¶ÔÏó
+// ä¸€ä¸ªèº«ä½“çš„å¯¹è±¡
 struct BODY {
 	int X;
 	int Y;
 };
 
-// ¶¨ÒåÉß¶ÔÏó
+// å®šä¹‰è›‡å¯¹è±¡
 struct SNAKE {
 	struct BODY body[WIDE*HIGH];
 	int size;
-}snake;			// Ò»¸öÉß¶ÔÏó
+}snake;			// ä¸€ä¸ªè›‡å¯¹è±¡
 
-				// ¶¨ÒåÊ³Îï¶ÔÏó
+				// å®šä¹‰é£Ÿç‰©å¯¹è±¡
 struct FOOD {
 	int X;
 	int Y;
-}food;			// Ò»¸öÊ³Îï¶ÔÏó
+}food;			// ä¸€ä¸ªé£Ÿç‰©å¯¹è±¡
 
-int score = 0;	// ·ÖÊı
+int score = 0;	// åˆ†æ•°
 
-int kx = 0;			// ÓÃ»§°´ÏÂ asdw ÈÎÒâÒ»¸ö°´¼üËùµÃµ½µÄ ×ø±êÖµ¡£
+int kx = 0;			// ç”¨æˆ·æŒ‰ä¸‹ asdw ä»»æ„ä¸€ä¸ªæŒ‰é”®æ‰€å¾—åˆ°çš„ åæ ‡å€¼ã€‚
 int ky = 0;
 
-int lastX = 0;		// ÉßÎ²µÄ×ø±ê¡£
+int lastX = 0;		// è›‡å°¾çš„åæ ‡ã€‚
 int lastY = 0;
 
 int sleepSecond = 400;
 
-// ÉùÃ÷º¯Êı
+// å£°æ˜å‡½æ•°
 void initSnake(void);
 void initFood(void);
 void initUI(void);

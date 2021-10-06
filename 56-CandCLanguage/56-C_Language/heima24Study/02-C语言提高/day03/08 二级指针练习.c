@@ -4,10 +4,10 @@
 #include<stdlib.h>
 
 /*
-* ¶ÁÈ¡ÎÄ¼şÄÚÈİ´æ´¢µ½¶ÑÖĞ£¬²¢´òÓ¡
+* è¯»å–æ–‡ä»¶å†…å®¹å­˜å‚¨åˆ°å †ä¸­ï¼Œå¹¶æ‰“å°
 */
 
-//»ñµÃÎÄ¼şĞĞÊı
+//è·å¾—æ–‡ä»¶è¡Œæ•°
 int getFileLines(FILE* file)
 {
 	if (NULL == file)
@@ -20,14 +20,14 @@ int getFileLines(FILE* file)
 	while (fgets(buf, 1024, file) != NULL)
 		++lines;
 
-	//»Ö¸´ÎÄ¼şÖ¸ÕëÖ¸ÏòÎÄ¼şÆğÊ¼Î»ÖÃ£¨Ö¸ÕëÒÑ¾­µ½ÎÄ¼şÄ©Î²£¬·ñÔòreadFileData()¶ÁÈ¡²»µ½Êı¾İ£©
+	//æ¢å¤æ–‡ä»¶æŒ‡é’ˆæŒ‡å‘æ–‡ä»¶èµ·å§‹ä½ç½®ï¼ˆæŒ‡é’ˆå·²ç»åˆ°æ–‡ä»¶æœ«å°¾ï¼Œå¦åˆ™readFileData()è¯»å–ä¸åˆ°æ•°æ®ï¼‰
 	fseek(file, 0, SEEK_SET);
 
 	return lines;
 }
 
 
-//¶ÁÈ¡ÎÄ¼şÊı¾İ
+//è¯»å–æ–‡ä»¶æ•°æ®
 void readFileData(FILE* file, int lines, char** contents)
 {
 	if (NULL == file)
@@ -39,18 +39,18 @@ void readFileData(FILE* file, int lines, char** contents)
 	if (lines <= 0)
 		return;
 
-	//´´½¨»º³åÇø
+	//åˆ›å»ºç¼“å†²åŒº
 	char buf[1024] = { 0 };
 	int index = 0;
 	while (fgets(buf, 1024, file) != NULL){
 		//printf("buf:%s", buf);
 		int curLineLen = strlen(buf) + 1;
-		//¸øµ±Ç°ĞĞ·ÖÅäÄÚ´æ
+		//ç»™å½“å‰è¡Œåˆ†é…å†…å­˜
 		char* lineContent = malloc(sizeof(char) * curLineLen);
-		//½«ĞĞÊı¾İ¿½±´µ½¿Õ¼äÖĞ
+		//å°†è¡Œæ•°æ®æ‹·è´åˆ°ç©ºé—´ä¸­
 		strcpy(lineContent, buf);
 
-		contents[index++] = lineContent; //¸³Öµ¸ø2¼¶Ö¸ÕëÊı×é
+		contents[index++] = lineContent; //èµ‹å€¼ç»™2çº§æŒ‡é’ˆæ•°ç»„
 
 		memset(buf, 0, 1024);
 	}
@@ -60,11 +60,11 @@ void readFileData(FILE* file, int lines, char** contents)
 void showFileContents(char** contents, int lines)
 {
 	for (int i = 0; i < lines; ++i)
-		printf("%dĞĞ:%s", i + 1, contents[i]);
+		printf("%dè¡Œ:%s", i + 1, contents[i]);
 	printf("\n");
 }
 
-//ÊÍ·ÅÎÄ¼şÊı¾İÄÚ´æ
+//é‡Šæ”¾æ–‡ä»¶æ•°æ®å†…å­˜
 void freeFileSpace(char** contents, int lines)
 {
 	for (int i = 0; i < lines; ++i){
@@ -80,33 +80,33 @@ void freeFileSpace(char** contents, int lines)
 
 void test()
 {
-	//´ò¿ªÎÄ¼ş
+	//æ‰“å¼€æ–‡ä»¶
 	FILE* file = fopen("./text.txt", "r");
 	if (NULL == file){
-		printf("´ò¿ªÎÄ¼şÊ§°Ü!\n");
+		printf("æ‰“å¼€æ–‡ä»¶å¤±è´¥!\n");
 		return;
 	}
 
-	//Í³¼ÆÎÄ¼şĞĞÊı
+	//ç»Ÿè®¡æ–‡ä»¶è¡Œæ•°
 	int lines = 10;
 	lines = getFileLines(file);
 	printf("lines:%d\n", lines); //6
 
-	//char *ÊÇÒ»¼¶Ö¸Õë£¬ËùÒÔÒªÓÃ¶ş¼¶Ö¸Õë½ÓÊÕ
+	//char *æ˜¯ä¸€çº§æŒ‡é’ˆï¼Œæ‰€ä»¥è¦ç”¨äºŒçº§æŒ‡é’ˆæ¥æ”¶
 	char** pContents = malloc(sizeof(char*) * lines);
 	//printf("%d\n",sizeof(char*)); //4
 
-	//¶ÁÈ¡ÎÄ¼şÄÚÈİ
+	//è¯»å–æ–‡ä»¶å†…å®¹
 	readFileData(file, lines, pContents);
 
-	//¹Ø±ÕÎÄ¼ş
+	//å…³é—­æ–‡ä»¶
 	fclose(file);
 	file = NULL;
 
-	//´òÓ¡ÎÄ¼şÄÚÈİ
+	//æ‰“å°æ–‡ä»¶å†…å®¹
 	showFileContents(pContents, lines);
 
-	//ÊÍ·ÅÎÄ¼şÊı¾İ
+	//é‡Šæ”¾æ–‡ä»¶æ•°æ®
 	freeFileSpace(pContents, lines);
 }
 
@@ -120,12 +120,12 @@ int main() {
 }
 /* Output:
 lines:6
-1ĞĞ:aaaaaaaaaaaaaaaaaaa
-2ĞĞ:bbbbbbbbbbbbbbbbbbbbbbbbbbb
-3ĞĞ:cccccccccc
-4ĞĞ:ddddddddddddddddddddddddddddddd
-5ĞĞ:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-6ĞĞ:ffffffffffffff
+1è¡Œ:aaaaaaaaaaaaaaaaaaa
+2è¡Œ:bbbbbbbbbbbbbbbbbbbbbbbbbbb
+3è¡Œ:cccccccccc
+4è¡Œ:ddddddddddddddddddddddddddddddd
+5è¡Œ:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+6è¡Œ:ffffffffffffff
 
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

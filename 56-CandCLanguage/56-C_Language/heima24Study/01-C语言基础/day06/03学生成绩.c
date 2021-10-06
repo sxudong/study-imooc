@@ -2,38 +2,38 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
-#define LEN 5  //ñîºÏ¶È
+#define LEN 5  //è€¦åˆåº¦
 
 int main03()
 {
 
 	int scores[LEN];
 	int sum = 0;
-	//¿ÉÒÔÍ¨¹ıÊı¾İÀàĞÍÇó³ö´óĞ¡
+	//å¯ä»¥é€šè¿‡æ•°æ®ç±»å‹æ±‚å‡ºå¤§å°
 	//int len = sizeof(scores) / sizeof(int);
-	//¿ÉÒÔÍ¨¹ıÊı×éÔªËØÇó³ö´óĞ¡
+	//å¯ä»¥é€šè¿‡æ•°ç»„å…ƒç´ æ±‚å‡ºå¤§å°
 	int len = sizeof(scores) / sizeof(sizeof(scores[0]));
 
 	for (int i = 0; i < len; i++)
 	{
 		//scnaf("%d", &a);
-		//ÔÚÍ¨¹ı¼üÅÌÎªÊı×é¸³ÖµµÄÊ±ºò£¬ĞèÒªĞ©È¡µØÖ··ûºÅ¡¾&¡¿
+		//åœ¨é€šè¿‡é”®ç›˜ä¸ºæ•°ç»„èµ‹å€¼çš„æ—¶å€™ï¼Œéœ€è¦äº›å–åœ°å€ç¬¦å·ã€&ã€‘
 
 		scanf("%d", &scores[i]);
 		sum += scores[i];//sum = sum+scores[i] avg = sum /10
 	}
-	//´òÓ¡³É¼¨
+	//æ‰“å°æˆç»©
 	for (int i = 0; i < len; i++)
 	{
-		printf("µÚ%dÃûÑ§Éú£¬³É¼¨£º%d\n", i + 1, scores[i]);
+		printf("ç¬¬%dåå­¦ç”Ÿï¼Œæˆç»©ï¼š%d\n", i + 1, scores[i]);
 	}
 
-	//Çó³öÊı×éµÄÔªËØ¸öÊı
+	//æ±‚å‡ºæ•°ç»„çš„å…ƒç´ ä¸ªæ•°
 	//sizeof(int);//4
-	//sizeof(Êı×é)
-	//Çó³ö°à¼¶Æ½¾ù³É¼¨
+	//sizeof(æ•°ç»„)
+	//æ±‚å‡ºç­çº§å¹³å‡æˆç»©
 
-	printf("°à¼¶Æ½¾ù³É¼¨Îª:%d\n", sum / len);
+	printf("ç­çº§å¹³å‡æˆç»©ä¸º:%d\n", sum / len);
 	system("pause");
 	return EXIT_SUCCESS;
 }

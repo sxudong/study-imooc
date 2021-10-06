@@ -10,7 +10,7 @@ void test01()
 	vector<int> v;
 	for (int i = 0; i < 10; i++){
 		v.push_back(i);
-		cout << v.capacity() << endl;  // v.capacity()ÈİÆ÷µÄÈİÁ¿
+		cout << v.capacity() << endl;  // v.capacity()å®¹å™¨çš„å®¹é‡
 	}
 }
 /* Output:
@@ -29,36 +29,36 @@ void test01()
 
 
 /*
-* vector¹¹Ôìº¯Êı
-* 
-* vector<T> v;                //²ÉÓÃÄ£°åÊµÏÖÀàÊµÏÖ£¬Ä¬ÈÏ¹¹Ôìº¯Êı
-* vector(v.begin(), v.end()); //½«v[begin(), end())Çø¼äÖĞµÄÔªËØ¿½±´¸ø±¾Éí¡£
-* vector(n, elem);            //¹¹Ôìº¯Êı½«n¸öelem¿½±´¸ø±¾Éí¡£
-* vector(const vector &vec);  //¿½±´¹¹Ôìº¯Êı¡£
-* 
-* Àı×Ó£ºÊ¹ÓÃµÚ¶ş¸ö¹¹Ôìº¯Êı ÎÒÃÇ¿ÉÒÔ...
+* vectoræ„é€ å‡½æ•°
+*
+* vector<T> v;                //é‡‡ç”¨æ¨¡æ¿å®ç°ç±»å®ç°ï¼Œé»˜è®¤æ„é€ å‡½æ•°
+* vector(v.begin(), v.end()); //å°†v[begin(), end())åŒºé—´ä¸­çš„å…ƒç´ æ‹·è´ç»™æœ¬èº«ã€‚
+* vector(n, elem);            //æ„é€ å‡½æ•°å°†nä¸ªelemæ‹·è´ç»™æœ¬èº«ã€‚
+* vector(const vector &vec);  //æ‹·è´æ„é€ å‡½æ•°ã€‚
+*
+* ä¾‹å­ï¼šä½¿ç”¨ç¬¬äºŒä¸ªæ„é€ å‡½æ•° æˆ‘ä»¬å¯ä»¥...
 * int arr[] = {2,3,4,1,9};
 * vector<int> v1(arr, arr + sizeof(arr) / sizeof(int));
 */
 
 /*
-* 3.2.4.2 vector³£ÓÃ¸³Öµ²Ù×÷
-* 
-* assign(beg, end);                      //½«[beg, end)Çø¼äÖĞµÄÊı¾İ¿½±´¸³Öµ¸ø±¾Éí¡£
-* assign(n, elem);                       //½«n¸öelem¿½±´¸³Öµ¸ø±¾Éí¡£
-* vector& operator=(const vector  &vec); //ÖØÔØµÈºÅ²Ù×÷·û
-* swap(vec);                             //½«vecÓë±¾ÉíµÄÔªËØ»¥»»¡£
+* 3.2.4.2 vectorå¸¸ç”¨èµ‹å€¼æ“ä½œ
+*
+* assign(beg, end);                      //å°†[beg, end)åŒºé—´ä¸­çš„æ•°æ®æ‹·è´èµ‹å€¼ç»™æœ¬èº«ã€‚
+* assign(n, elem);                       //å°†nä¸ªelemæ‹·è´èµ‹å€¼ç»™æœ¬èº«ã€‚
+* vector& operator=(const vector  &vec); //é‡è½½ç­‰å·æ“ä½œç¬¦
+* swap(vec);                             //å°†vecä¸æœ¬èº«çš„å…ƒç´ äº’æ¢ã€‚
 */
 
 /*
-* 3.2.4.3 vector´óĞ¡²Ù×÷
-* 
-* size();                //·µ»ØÈİÆ÷ÖĞÔªËØµÄ¸öÊı
-* empty();               //ÅĞ¶ÏÈİÆ÷ÊÇ·ñÎª¿Õ
-* resize(int num);       //ÖØĞÂÖ¸¶¨ÈİÆ÷µÄ³¤¶ÈÎªnum£¬ÈôÈİÆ÷±ä³¤£¬ÔòÒÔÄ¬ÈÏÖµÌî³äĞÂÎ»ÖÃ¡£Èç¹ûÈİÆ÷±ä¶Ì£¬ÔòÄ©Î²³¬³öÈİÆ÷³¤¶ÈµÄÔªËØ±»É¾³ı¡£
-* resize(int num, elem); //ÖØĞÂÖ¸¶¨ÈİÆ÷µÄ³¤¶ÈÎªnum£¬ÈôÈİÆ÷±ä³¤£¬ÔòÒÔelemÖµÌî³äĞÂÎ»ÖÃ¡£Èç¹ûÈİÆ÷±ä¶Ì£¬ÔòÄ©Î²³¬³öÈİÆ÷³¤>¶ÈµÄÔªËØ±»É¾³ı¡£
-* capacity();            //ÈİÆ÷µÄÈİÁ¿
-* reserve(int len);      //ÈİÆ÷Ô¤Áôlen¸öÔªËØ³¤¶È£¬Ô¤ÁôÎ»ÖÃ²»³õÊ¼»¯£¬ÔªËØ²»¿É·ÃÎÊ¡£
+* 3.2.4.3 vectorå¤§å°æ“ä½œ
+*
+* size();                //è¿”å›å®¹å™¨ä¸­å…ƒç´ çš„ä¸ªæ•°
+* empty();               //åˆ¤æ–­å®¹å™¨æ˜¯å¦ä¸ºç©º
+* resize(int num);       //é‡æ–°æŒ‡å®šå®¹å™¨çš„é•¿åº¦ä¸ºnumï¼Œè‹¥å®¹å™¨å˜é•¿ï¼Œåˆ™ä»¥é»˜è®¤å€¼å¡«å……æ–°ä½ç½®ã€‚å¦‚æœå®¹å™¨å˜çŸ­ï¼Œåˆ™æœ«å°¾è¶…å‡ºå®¹å™¨é•¿åº¦çš„å…ƒç´ è¢«åˆ é™¤ã€‚
+* resize(int num, elem); //é‡æ–°æŒ‡å®šå®¹å™¨çš„é•¿åº¦ä¸ºnumï¼Œè‹¥å®¹å™¨å˜é•¿ï¼Œåˆ™ä»¥elemå€¼å¡«å……æ–°ä½ç½®ã€‚å¦‚æœå®¹å™¨å˜çŸ­ï¼Œåˆ™æœ«å°¾è¶…å‡ºå®¹å™¨é•¿>åº¦çš„å…ƒç´ è¢«åˆ é™¤ã€‚
+* capacity();            //å®¹å™¨çš„å®¹é‡
+* reserve(int len);      //å®¹å™¨é¢„ç•™lenä¸ªå…ƒç´ é•¿åº¦ï¼Œé¢„ç•™ä½ç½®ä¸åˆå§‹åŒ–ï¼Œå…ƒç´ ä¸å¯è®¿é—®ã€‚
 */
 
 void printVector( vector<int> & v){
@@ -74,14 +74,14 @@ void test02()
 	int arr[] = { 2, 3, 4, 1, 9 };
 	vector<int> v1(arr, arr + sizeof(arr) / sizeof(int));
 
-	//´´½¨Êı×é
+	//åˆ›å»ºæ•°ç»„
 	vector<int> v2(v1.begin(), v1.end());
 	printVector(v2); //2 3 4 1 9
 
 	vector<int> v3(10, 100);
 	printVector(v3); //100 100 100 100 100 100 100 100 100 100
 
-	//¸³ÖµÊ¹ÓÃ
+	//èµ‹å€¼ä½¿ç”¨
 	vector<int> v4;
 	v4.assign(v3.begin(), v3.end());
 	printVector(v4); //100 100 100 100 100 100 100 100 100 100
@@ -89,18 +89,18 @@ void test02()
 
 	v4.swap(v2);
 
-	cout << "½»»»ºóµÄv4 " << endl;
+	cout << "äº¤æ¢åçš„v4 " << endl;
 	printVector(v4); // 2 3 4 1 9
 
-	cout << "v4ÈİÆ÷µÄ´óĞ¡" << v4.size() << endl; //5
+	cout << "v4å®¹å™¨çš„å¤§å°" << v4.size() << endl; //5
 
 	if (v4.empty())
-		cout << "v4¿Õ" << endl;
+		cout << "v4ç©º" << endl;
 	else
-		cout << "v4²»¿Õ" << endl; //v4²»¿Õ
-	
+		cout << "v4ä¸ç©º" << endl; //v4ä¸ç©º
+
 	//v4 23419
-	v4.resize(10,-1); //µÚ¶ş¸ö²ÎÊıÊÇÄ¬ÈÏÖµ £¬Ä¬ÈÏ0 
+	v4.resize(10,-1); //ç¬¬äºŒä¸ªå‚æ•°æ˜¯é»˜è®¤å€¼ ï¼Œé»˜è®¤0
 	printVector(v4);  //2 3 4 1 9 -1 -1 -1 -1 -1
 
 	v4.resize(3);
@@ -111,7 +111,7 @@ void test02()
 
 
 /*
-* ÇÉÓÃswapÊÕËõ¿Õ¼ä
+* å·§ç”¨swapæ”¶ç¼©ç©ºé—´
 */
 void test03()
 {
@@ -119,66 +119,66 @@ void test03()
 	for (int i = 0; i < 100000; i++)
 		v.push_back(i);
 
-	cout << "vµÄÈİÁ¿" << v.capacity() << endl; //138255
-	cout << "vµÄ´óĞ¡" << v.size() << endl;     //100000
+	cout << "vçš„å®¹é‡" << v.capacity() << endl; //138255
+	cout << "vçš„å¤§å°" << v.size() << endl;     //100000
 
 	v.resize(3);
 
-	cout << "vµÄÈİÁ¿" << v.capacity() << endl; //138255
-	cout << "vµÄ´óĞ¡" << v.size() << endl;     //3
+	cout << "vçš„å®¹é‡" << v.capacity() << endl; //138255
+	cout << "vçš„å¤§å°" << v.size() << endl;     //3
 
-	//ÇÉÓÃswap
+	//å·§ç”¨swap
 	vector<int>(v).swap(v);
 
-	cout << "vµÄÈİÁ¿" << v.capacity() << endl; //3
-	cout << "vµÄ´óĞ¡" << v.size() << endl;     //3
+	cout << "vçš„å®¹é‡" << v.capacity() << endl; //3
+	cout << "vçš„å¤§å°" << v.size() << endl;     //3
 }
 
 
 
 
 /*
-* reserve(int len); ÈİÆ÷Ô¤Áôlen¸öÔªËØ³¤¶È£¬Ô¤ÁôÎ»ÖÃ²»³õÊ¼»¯£¬ÔªËØ²»¿É·ÃÎÊ¡£
+* reserve(int len); å®¹å™¨é¢„ç•™lenä¸ªå…ƒç´ é•¿åº¦ï¼Œé¢„ç•™ä½ç½®ä¸åˆå§‹åŒ–ï¼Œå…ƒç´ ä¸å¯è®¿é—®ã€‚
 */
 void test04()
 {
 	vector<int> v;
 
-	v.reserve(100000); //Ô¤Áô³ö¿Õ¼ä
+	v.reserve(100000); //é¢„ç•™å‡ºç©ºé—´
 
 	int * p = NULL;
 	int num = 0;
 	for (int i = 0; i < 100000; i++){
 		v.push_back(i);
 		if (p != &v[0]){
-			p = &v[0]; //µÈÓÚÊı×éÊ×Ö¸Õë
+			p = &v[0]; //ç­‰äºæ•°ç»„é¦–æŒ‡é’ˆ
 			num++;
 		}
 	}
 	cout << num << endl; //1
-	// ¿ª±Ù100000Êı¾İÓÃÁË¶àÉÙ´Î
+	// å¼€è¾Ÿ100000æ•°æ®ç”¨äº†å¤šå°‘æ¬¡
 }
 
 
 
 /*
-* vectorÊı¾İ´æÈ¡²Ù×÷
-* 
-* at(int idx); //·µ»ØË÷ÒıidxËùÖ¸µÄÊı¾İ£¬Èç¹ûidxÔ½½ç£¬Å×³öout_of_rangeÒì³£¡£
-* operator[];  //·µ»ØË÷ÒıidxËùÖ¸µÄÊı¾İ£¬Ô½½çÊ±£¬ÔËĞĞÖ±½Ó±¨´í
-* front();     //·µ»ØÈİÆ÷ÖĞµÚÒ»¸öÊı¾İÔªËØ
-* back();      //·µ»ØÈİÆ÷ÖĞ×îºóÒ»¸öÊı¾İÔªËØ
+* vectoræ•°æ®å­˜å–æ“ä½œ
+*
+* at(int idx); //è¿”å›ç´¢å¼•idxæ‰€æŒ‡çš„æ•°æ®ï¼Œå¦‚æœidxè¶Šç•Œï¼ŒæŠ›å‡ºout_of_rangeå¼‚å¸¸ã€‚
+* operator[];  //è¿”å›ç´¢å¼•idxæ‰€æŒ‡çš„æ•°æ®ï¼Œè¶Šç•Œæ—¶ï¼Œè¿è¡Œç›´æ¥æŠ¥é”™
+* front();     //è¿”å›å®¹å™¨ä¸­ç¬¬ä¸€ä¸ªæ•°æ®å…ƒç´ 
+* back();      //è¿”å›å®¹å™¨ä¸­æœ€åä¸€ä¸ªæ•°æ®å…ƒç´ 
 */
 
 /*
-* 3.2.4.5 vector²åÈëºÍÉ¾³ı²Ù×÷
-* 
-* insert(const_iterator pos, int count,ele);       //µü´úÆ÷Ö¸ÏòÎ»ÖÃpos²åÈëcount¸öÔªËØele.
-* push_back(ele);                                  //Î²²¿²åÈëÔªËØele
-* pop_back();                                      //É¾³ı×îºóÒ»¸öÔªËØ
-* erase(const_iterator start, const_iterator end); //É¾³ıµü´úÆ÷´Óstartµ½endÖ®¼äµÄÔªËØ
-* erase(const_iterator pos);                       //É¾³ıµü´úÆ÷Ö¸ÏòµÄÔªËØ
-* clear();                                         //É¾³ıÈİÆ÷ÖĞËùÓĞÔªËØ
+* 3.2.4.5 vectoræ’å…¥å’Œåˆ é™¤æ“ä½œ
+*
+* insert(const_iterator pos, int count,ele);       //è¿­ä»£å™¨æŒ‡å‘ä½ç½®posæ’å…¥countä¸ªå…ƒç´ ele.
+* push_back(ele);                                  //å°¾éƒ¨æ’å…¥å…ƒç´ ele
+* pop_back();                                      //åˆ é™¤æœ€åä¸€ä¸ªå…ƒç´ 
+* erase(const_iterator start, const_iterator end); //åˆ é™¤è¿­ä»£å™¨ä»startåˆ°endä¹‹é—´çš„å…ƒç´ 
+* erase(const_iterator pos);                       //åˆ é™¤è¿­ä»£å™¨æŒ‡å‘çš„å…ƒç´ 
+* clear();                                         //åˆ é™¤å®¹å™¨ä¸­æ‰€æœ‰å…ƒç´ 
 */
 void test05()
 {
@@ -188,61 +188,61 @@ void test05()
 	v.push_back(20);
 	v.push_back(50);
 
-	cout << "vµÄfront" << v.front() << endl; //10
-	cout << "vµÄback" << v.back() << endl;   //50
+	cout << "vçš„front" << v.front() << endl; //10
+	cout << "vçš„back" << v.back() << endl;   //50
 
-	//²ÎÊı1£ºµü´úÆ÷  ²ÎÊı2£ºN¸öÊı  ²ÎÊı3£º¾ßÌå²åÈëµÄÄÚÈİ
-	v.insert(v.begin(), 2 ,100); 
+	//å‚æ•°1ï¼šè¿­ä»£å™¨  å‚æ•°2ï¼šNä¸ªæ•°  å‚æ•°3ï¼šå…·ä½“æ’å…¥çš„å†…å®¹
+	v.insert(v.begin(), 2 ,100);
 	printVector(v); //100 100 10 30 20 50
 
-	v.pop_back();   //Î²É¾
+	v.pop_back();   //å°¾åˆ 
 	printVector(v); //100 100 10 30 20
 
-	v.erase(v.begin()); //É¾³ı 
+	v.erase(v.begin()); //åˆ é™¤
 	printVector(v);     //100 10 30 20
 
 	//v.erase(v.begin(), v.end());
-	v.clear(); //Çå¿ÕËùÓĞÊı¾İ
+	v.clear(); //æ¸…ç©ºæ‰€æœ‰æ•°æ®
 	if (v.empty() )
-		cout << "Îª¿Õ" << endl; //Îª¿Õ
+		cout << "ä¸ºç©º" << endl; //ä¸ºç©º
 }
 
 
 
 void test06()
 {
-	//ÄæĞò±éÀú
+	//é€†åºéå†
 	vector<int> v;
 	for ( int  i = 0; i < 10; i++)
 		v.push_back(i);
 	//printVector(v); //0 1 2 3 4 5 6 7 8 9
 
 	/*
-	* reverse_iterator ÄæĞòµü´úÆ÷
+	* reverse_iterator é€†åºè¿­ä»£å™¨
 	*/
 	for (vector<int>::reverse_iterator i = v.rbegin(); i != v.rend(); i++)
 		cout << *i << " ";  //9 8 7 6 5 4 3 2 1 0
 
-	cout << endl; 
+	cout << endl;
 
 	/*
-	* vectorµü´úÆ÷ ÊÇËæ»ú·ÃÎÊµÄµü´úÆ÷ Ö§³ÖÌøÔ¾Ê½·ÃÎÊ
+	* vectorè¿­ä»£å™¨ æ˜¯éšæœºè®¿é—®çš„è¿­ä»£å™¨ æ”¯æŒè·³è·ƒå¼è®¿é—®
 	*/
 	vector<int>::iterator itBegin = v.begin();
 	itBegin = itBegin + 3;
-	//Èç¹ûÉÏÊöĞ´·¨²»±¨´í£¬Õâ¸öµü´úÆ÷ÊÇËæ»ú·ÃÎÊµü´úÆ÷
-	cout << *itBegin << endl; //3   //v Êı×éÏÂ±êµÄµÚ4¸öÔªËØ
+	//å¦‚æœä¸Šè¿°å†™æ³•ä¸æŠ¥é”™ï¼Œè¿™ä¸ªè¿­ä»£å™¨æ˜¯éšæœºè®¿é—®è¿­ä»£å™¨
+	cout << *itBegin << endl; //3   //v æ•°ç»„ä¸‹æ ‡çš„ç¬¬4ä¸ªå…ƒç´ 
 
 
 	/*
-	* listµü´úÆ÷ ²»Ö§³ÖËæ»ú·ÃÎÊ
+	* listè¿­ä»£å™¨ ä¸æ”¯æŒéšæœºè®¿é—®
 	*/
 	list<int> l;
 	for (int i = 0; i < 10; i++)
 		l.push_back(i);
 
 	list<int>::iterator lIt = l.begin();
-	//lIt = lIt + 1; //²»Ö§³ÖËæ»ú·ÃÎÊ
+	//lIt = lIt + 1; //ä¸æ”¯æŒéšæœºè®¿é—®
 }
 
 

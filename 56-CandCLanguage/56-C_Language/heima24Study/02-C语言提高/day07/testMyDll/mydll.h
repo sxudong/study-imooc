@@ -5,7 +5,7 @@ extern "C"{
 #endif
 
 
-	//ÄÚ²¿º¯Êý £¬Íâ²¿º¯Êý(µ¼³öº¯Êý)
+	//å†…éƒ¨å‡½æ•° ï¼Œå¤–éƒ¨å‡½æ•°(å¯¼å‡ºå‡½æ•°)
 	__declspec(dllexport) int myAdd(int a, int b);
 
 
@@ -13,3 +13,4 @@ extern "C"{
 #ifdef __cplusplus
 }
 #endif
+

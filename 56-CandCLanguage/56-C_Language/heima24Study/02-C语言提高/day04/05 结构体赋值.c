@@ -14,8 +14,8 @@ void test01()
 	struct Person person1 = { "aaa", 20 };
 	struct Person person2 = { "bbb", 30 };
 
-	//¸³Öµ²Ù×÷
-	person1 = person2;  //person2¿½±´µ½person1
+	//èµ‹å€¼æ“ä½œ
+	person1 = person2;  //person2æ‹·è´åˆ°person1
 
 	printf("Name:%s Age:%d\n", person1.name, person1.age); //Name:bbb Age:30
 	printf("Name:%s Age:%d\n", person2.name, person2.age); //Name:bbb Age:30
@@ -31,13 +31,13 @@ struct Teacher
 void test02()
 {
 	struct Teacher teacher1;
-	teacher1.name = malloc(sizeof(char) * 64); //¿ª±Ù¶ÑÄÚ´æ
+	teacher1.name = malloc(sizeof(char) * 64); //å¼€è¾Ÿå †å†…å­˜
 	memset(teacher1.name, 0, 64);
 	strcpy(teacher1.name, "aaa");
 	teacher1.age = 20;
 
 	struct Teacher teacher2;
-	teacher2.name = malloc(sizeof(char) * 128); //¿ª±Ù¶ÑÄÚ´æ
+	teacher2.name = malloc(sizeof(char) * 128); //å¼€è¾Ÿå †å†…å­˜
 	memset(teacher2.name, 0, 128);
 	strcpy(teacher2.name, "bbbbbbbbbbbbb");
 	teacher2.age = 30;
@@ -45,20 +45,20 @@ void test02()
 	printf("Name:%s Age:%d\n", teacher1.name, teacher1.age); //Name:aaa Age:20
 	printf("Name:%s Age:%d\n", teacher2.name, teacher2.age); //Name:bbbbbbbbbbbbb Age:30
 
-    //Õ»ÉÏ¿Õ¼äÒ»Ñù´ó
+    //æ ˆä¸Šç©ºé—´ä¸€æ ·å¤§
 	printf("teacher1 size: %d\n", sizeof(teacher1)); //teacher1 size: 8
 	printf("teacher2 size: %d\n", sizeof(teacher2)); //teacher2 size: 8
 
 	/*
-	* ¸³Öµ²Ù×÷
-	* Èç¹û½á¹¹ÌåÄÚ²¿ÓĞÖ¸Õë£¬²¢ÇÒÖ¸Ïò¶Ñ¿Õ¼ä¡£ÄÇÃ´Èç¹û·¢Éú¸³ÖµĞĞÎª£¬¾Í»á²úÉúÁ½¸öÎÊÌâ£º
-	* 1.Í¬Ò»¿é¿Õ¼ä±»ÊÍ·Å2´Î¡£
-	* 2.ÄÚ´æĞ¹Â¶
-	*   Õâ¾ÍÊÇËùÎ½µÄ¡°Éî¿½±´¡±¡£
+	* èµ‹å€¼æ“ä½œ
+	* å¦‚æœç»“æ„ä½“å†…éƒ¨æœ‰æŒ‡é’ˆï¼Œå¹¶ä¸”æŒ‡å‘å †ç©ºé—´ã€‚é‚£ä¹ˆå¦‚æœå‘ç”Ÿèµ‹å€¼è¡Œä¸ºï¼Œå°±ä¼šäº§ç”Ÿä¸¤ä¸ªé—®é¢˜ï¼š
+	* 1.åŒä¸€å—ç©ºé—´è¢«é‡Šæ”¾2æ¬¡ã€‚
+	* 2.å†…å­˜æ³„éœ²
+	*   è¿™å°±æ˜¯æ‰€è°“çš„â€œæ·±æ‹·è´â€ã€‚
 	*/
-	//²»Ê¹ÓÃÄ¬ÈÏµÄ½á¹¹Ìå¸³ÖµĞĞÎª
-	//teacher1 = teacher2;  //¼ÓÉÏÕâ¾ä³ÌĞò»á±Àµô£¬Òòteacher1.nameÖ¸ÏòÍ¬Ò»¸öÄÚ´æµØÖ·£¬ºóÃæÊÍ·ÅÄÚ´æÊÍ·ÅÁË2´Î¡£teacher1.nameÔ­À´µÄ¶ÑÄÚ´æ¿Õ¼ä¾ÍµÃ²»µ½ÊÍ·Å£¬µ¼ÖÂÄÚ´æĞ¹Â¶¡£
-	//Èç¹û½á¹¹ÌåÄÚ²¿ÓĞ"Ö¸Õë"Ö¸Ïò¡°¶ÑÄÚ´æ¡±£¬ÄÇÃ´¾Í²»ÄÜÊ¹ÓÃ±àÒëÆ÷Ä¬ÈÏµÄ¸³ÖµĞĞÎª£¬Ó¦¸Ã¡°ÊÖ¶¯¿ØÖÆ¡±¸³Öµ¹ı³Ì¡£
+	//ä¸ä½¿ç”¨é»˜è®¤çš„ç»“æ„ä½“èµ‹å€¼è¡Œä¸º
+	//teacher1 = teacher2;  //åŠ ä¸Šè¿™å¥ç¨‹åºä¼šå´©æ‰ï¼Œå› teacher1.nameæŒ‡å‘åŒä¸€ä¸ªå†…å­˜åœ°å€ï¼Œåé¢é‡Šæ”¾å†…å­˜é‡Šæ”¾äº†2æ¬¡ã€‚teacher1.nameåŸæ¥çš„å †å†…å­˜ç©ºé—´å°±å¾—ä¸åˆ°é‡Šæ”¾ï¼Œå¯¼è‡´å†…å­˜æ³„éœ²ã€‚
+	//å¦‚æœç»“æ„ä½“å†…éƒ¨æœ‰"æŒ‡é’ˆ"æŒ‡å‘â€œå †å†…å­˜â€ï¼Œé‚£ä¹ˆå°±ä¸èƒ½ä½¿ç”¨ç¼–è¯‘å™¨é»˜è®¤çš„èµ‹å€¼è¡Œä¸ºï¼Œåº”è¯¥â€œæ‰‹åŠ¨æ§åˆ¶â€èµ‹å€¼è¿‡ç¨‹ã€‚
 
 	//----------------------------------------------
 
@@ -67,9 +67,9 @@ void test02()
 		teacher1.name = NULL;
 	}
 
-    //¡°ÊÖ¶¯¿ØÖÆ¡±¸³Öµ¹ı³Ì
-	teacher1.name = malloc(strlen(teacher2.name) + 1); //ÖØĞÂ¿ª±Ù¿Õ¼ä
-	strcpy(teacher1.name, teacher2.name); //¸´ÖÆÖµ
+    //â€œæ‰‹åŠ¨æ§åˆ¶â€èµ‹å€¼è¿‡ç¨‹
+	teacher1.name = malloc(strlen(teacher2.name) + 1); //é‡æ–°å¼€è¾Ÿç©ºé—´
+	strcpy(teacher1.name, teacher2.name); //å¤åˆ¶å€¼
 	teacher1.age = teacher2.age;
 
 	//----------------------------------------------
@@ -78,7 +78,7 @@ void test02()
 	printf("Name:%s Age:%d\n", teacher1.name, teacher1.age); //Name:bbbbbbbbbbbbb Age:30
 	printf("Name:%s Age:%d\n", teacher2.name, teacher2.age); //Name:bbbbbbbbbbbbb Age:30
 
-	//ÊÍ·Å¶ÑÄÚ´æ
+	//é‡Šæ”¾å †å†…å­˜
 	if (teacher1.name != NULL){
 		free(teacher1.name);
 		teacher1.name = NULL;
@@ -112,5 +112,5 @@ teacher2 size: 8
 ---------------
 Name:bbbbbbbbbbbbb Age:30
 Name:bbbbbbbbbbbbb Age:30
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

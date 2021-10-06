@@ -1,9 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include "22м╥нд╪Ч.h"
+#include "22Е╓╢Ф√┤Д╩╤.h"
 
 int main()
 {
-	//gcc -o ©иж╢ппЁлпР нд╪Ч1.c нд╪Ч2.c м╥нд╪Ч.h
+	//gcc -o Е▐╞Ф┴╖Х║▄Г╗▀Е╨▐ Ф√┤Д╩╤1.c Ф√┤Д╩╤2.c Е╓╢Ф√┤Д╩╤.h
 
 
 	int value = max0223(10, 20);

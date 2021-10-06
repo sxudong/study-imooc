@@ -1,9 +1,9 @@
 /*
 	create by zt  
 	2017 4 26
-	ÎÄ¼ş ¹¦ÄÜ¡£¡£¡£
+	æ–‡ä»¶ åŠŸèƒ½ã€‚ã€‚ã€‚
 
-	func()¡£¡£¡£¸ÉÂğµÄ  ²ÎÊı1 ¡£¡£¡£
+	func()ã€‚ã€‚ã€‚å¹²å—çš„  å‚æ•°1 ã€‚ã€‚ã€‚
 */
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -16,19 +16,19 @@ using namespace std;
 #include <ctime>
 
 /*
-* ÓĞ5ÃûÑ¡ÊÖ£ºÑ¡ÊÖABCDE£¬10¸öÆÀÎ¯·Ö±ğ¶ÔÃ¿Ò»ÃûÑ¡ÊÖ´ò·Ö£¬È¥³ı×î¸ß·Ö£¬È¥³ıÆÀÎ¯ÖĞ×îµÍ·Ö£¬È¡Æ½¾ù·Ö¡£
-*   1. ´´½¨ÎåÃûÑ¡ÊÖ£¬·Åµ½vectorÖĞ
-*   2. ±éÀúvectorÈİÆ÷£¬È¡³öÀ´Ã¿Ò»¸öÑ¡ÊÖ£¬Ö´ĞĞforÑ­»·£¬¿ÉÒÔ°Ñ10¸öÆÀ·Ö´ò·Ö´æµ½dequeÈİÆ÷ÖĞ
-*   3. sortËã·¨¶ÔdequeÈİÆ÷ÖĞ·ÖÊıÅÅĞò£¬pop_back pop_frontÈ¥³ı×î¸ßºÍ×îµÍ·Ö
-*   4. dequeÈİÆ÷±éÀúÒ»±é£¬ÀÛ¼Ó·ÖÊı£¬ÀÛ¼Ó·ÖÊı/d.size()
-*   5. person.score = Æ½¾ù·Ö
+* æœ‰5åé€‰æ‰‹ï¼šé€‰æ‰‹ABCDEï¼Œ10ä¸ªè¯„å§”åˆ†åˆ«å¯¹æ¯ä¸€åé€‰æ‰‹æ‰“åˆ†ï¼Œå»é™¤æœ€é«˜åˆ†ï¼Œå»é™¤è¯„å§”ä¸­æœ€ä½åˆ†ï¼Œå–å¹³å‡åˆ†ã€‚
+*   1. åˆ›å»ºäº”åé€‰æ‰‹ï¼Œæ”¾åˆ°vectorä¸­
+*   2. éå†vectorå®¹å™¨ï¼Œå–å‡ºæ¥æ¯ä¸€ä¸ªé€‰æ‰‹ï¼Œæ‰§è¡Œforå¾ªç¯ï¼Œå¯ä»¥æŠŠ10ä¸ªè¯„åˆ†æ‰“åˆ†å­˜åˆ°dequeå®¹å™¨ä¸­
+*   3. sortç®—æ³•å¯¹dequeå®¹å™¨ä¸­åˆ†æ•°æ’åºï¼Œpop_back pop_frontå»é™¤æœ€é«˜å’Œæœ€ä½åˆ†
+*   4. dequeå®¹å™¨éå†ä¸€éï¼Œç´¯åŠ åˆ†æ•°ï¼Œç´¯åŠ åˆ†æ•°/d.size()
+*   5. person.score = å¹³å‡åˆ†
 */
 
 class Person
 {
 public:
-	string m_Name; //ÈËÃû
-	int m_Socre; //·ÖÊı Æ½¾ù·Ö
+	string m_Name; //äººå
+	int m_Socre; //åˆ†æ•° å¹³å‡åˆ†
 
 	Person(string name, int score){
 		this->m_Name = name;
@@ -40,7 +40,7 @@ public:
 void createPerson(vector<Person> & v){
 	string nameSeed = "ABCDE";
 	for (int i = 0; i < 5;i++){
-		string name = "Ñ¡ÊÖ";
+		string name = "é€‰æ‰‹";
 		name += nameSeed[i];
 
 		int score = 0;
@@ -54,32 +54,32 @@ void createPerson(vector<Person> & v){
 void setScore(vector<Person> & v){
 	for (vector<Person>::iterator i = v.begin(); i != v.end(); i++){
 
-		//¶Ô5¸öÈË½øĞĞ´ò·Ö
+		//å¯¹5ä¸ªäººè¿›è¡Œæ‰“åˆ†
 		deque<int> d;
 		for (int i = 0; i < 10; i++){
 			int score = rand() % 41 + 60; //60 ~ 100
 			d.push_back(score);
 		}
 
-		//ÏÈ¿´ÏÂ´ò·Ö
+		//å…ˆçœ‹ä¸‹æ‰“åˆ†
 		//for (deque<int>::iterator dit = d.begin(); dit != d.end();dit++)
 		//{
 		//	cout << *dit << " ";
 		//}
 		//cout << endl;
 
-		//ÅÅĞò ´ÓĞ¡µ½´ó
+		//æ’åº ä»å°åˆ°å¤§
 		sort(d.begin(), d.end());
 
-		//È¥³ı ×î¸ß ºÍ ×îµÍ
-		d.pop_back();  //×î¸ß
+		//å»é™¤ æœ€é«˜ å’Œ æœ€ä½
+		d.pop_back();  //æœ€é«˜
 		d.pop_front();
 
-		int sum = 0;//×Ü·Ö
+		int sum = 0;//æ€»åˆ†
 		for (deque<int>::iterator dit = d.begin(); dit != d.end(); dit++)
 			sum += *dit;
 
-		//Æ½¾ù·Ö
+		//å¹³å‡åˆ†
 		int avg = sum / d.size();
 
 		i->m_Socre = avg;
@@ -89,41 +89,41 @@ void setScore(vector<Person> & v){
 void showSocre(vector<Person> & v)
 {
 	for (vector<Person>::iterator i = v.begin(); i != v.end(); i++)
-		cout << "ĞÕÃû£º" << i->m_Name << " ×îÖÕÆ½¾ù·ÖÎª£º " << i->m_Socre << endl;
+		cout << "å§“åï¼š" << i->m_Name << " æœ€ç»ˆå¹³å‡åˆ†ä¸ºï¼š " << i->m_Socre << endl;
 }
 
 
 int main(){
 
-	//ÉèÖÃËæ»úÊıÖÖ×Ó
+	//è®¾ç½®éšæœºæ•°ç§å­
 	srand((unsigned int)time(NULL));
 
-	//´´½¨ÈİÆ÷  ´æ·Å Ñ¡ÊÖ
+	//åˆ›å»ºå®¹å™¨  å­˜æ”¾ é€‰æ‰‹
 	vector<Person> v;
 
-	//´´½¨5ÃûÑ¡ÊÖ
+	//åˆ›å»º5åé€‰æ‰‹
 	createPerson(v);
-	
-	//´ò·Ö
+
+	//æ‰“åˆ†
 	setScore(v);
 
-	//Õ¹Ê¾Æ½¾ù·Ö
+	//å±•ç¤ºå¹³å‡åˆ†
 	showSocre(v);
 
-	//²âÊÔ
+	//æµ‹è¯•
 	//for (vector<Person>::iterator it = v.begin(); it != v.end();it++)
 	//{
-	//	cout << "ĞÕÃû£º" << (*it).m_Name << endl;
+	//	cout << "å§“åï¼š" << (*it).m_Name << endl;
 	//}
 
 	system("pause");
 	return EXIT_SUCCESS;
 }
 /* Output:
-ĞÕÃû£ºÑ¡ÊÖA ×îÖÕÆ½¾ù·ÖÎª£º 88
-ĞÕÃû£ºÑ¡ÊÖB ×îÖÕÆ½¾ù·ÖÎª£º 83
-ĞÕÃû£ºÑ¡ÊÖC ×îÖÕÆ½¾ù·ÖÎª£º 83
-ĞÕÃû£ºÑ¡ÊÖD ×îÖÕÆ½¾ù·ÖÎª£º 77
-ĞÕÃû£ºÑ¡ÊÖE ×îÖÕÆ½¾ù·ÖÎª£º 86
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+å§“åï¼šé€‰æ‰‹A æœ€ç»ˆå¹³å‡åˆ†ä¸ºï¼š 88
+å§“åï¼šé€‰æ‰‹B æœ€ç»ˆå¹³å‡åˆ†ä¸ºï¼š 83
+å§“åï¼šé€‰æ‰‹C æœ€ç»ˆå¹³å‡åˆ†ä¸ºï¼š 83
+å§“åï¼šé€‰æ‰‹D æœ€ç»ˆå¹³å‡åˆ†ä¸ºï¼š 77
+å§“åï¼šé€‰æ‰‹E æœ€ç»ˆå¹³å‡åˆ†ä¸ºï¼š 86
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

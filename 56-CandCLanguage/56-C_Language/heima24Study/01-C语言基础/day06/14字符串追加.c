@@ -12,9 +12,9 @@ int main14()
 	int index = 0;
 	while (arr1[index] != '\0')
 	{
-		//1¡¢½«·Ç\0µÄ×Ö·ûÌí¼Óµ½arrbuf
+		//1ã€å°†é\0çš„å­—ç¬¦æ·»åŠ åˆ°arrbuf
 		arrBuf[index] = arr1[index];
-		//2¡¢¼ÆÊıÆ÷Ôö³¤
+		//2ã€è®¡æ•°å™¨å¢é•¿
 		index++;
 	}
 	while (arr2[index - 5] != '\0')
@@ -23,8 +23,8 @@ int main14()
 		index++;
 	}
 
-	// Ìí¼Ó×Ö·û´®½áÊø±êÖ¾
-	arrBuf[index] = '\0';  // helloworldÇë°´ÈÎÒâ¼ü¼ÌĞø. . .
+	// æ·»åŠ å­—ç¬¦ä¸²ç»“æŸæ ‡å¿—
+	arrBuf[index] = '\0';  // helloworldè¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 	printf("%s", arrBuf);
 	system("pause");
 	return EXIT_SUCCESS;

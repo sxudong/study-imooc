@@ -5,17 +5,17 @@
 
 
 /*
-* 1. �ѵ��ڴ��Ա�ֶ����룬�ֶ��ͷš�
+* 1. 堆的内存成员手动申请，手动释放。
 */
 int* getSpace()
 {
-	//���ļ�����׺��ΪC����".c"�����Ա���ͨ����C���Ի����ǿת
+	//将文件名后缀改为C语言".c"，可以编译通过，C语言会帮助强转
 	//int* p = malloc(sizeof(int) * 5);
 
-	//�����C++����".cpp"��������ͬ����������Ҫǿ��ת���ģ�������ֱ�Ӹ�ֵ
-	int* p = (int*)malloc(sizeof(int) * 5); //�ֲ�������������ʱ�ᱻ�ͷŵ������ϵ��ڴ治�ᱻ�ͷŵ�����Ҫ�ֶ��ͷŵ���
+	//如果是C++编译".cpp"两个不相同的类型是需要强制转换的，不可以直接赋值
+	int* p = (int*)malloc(sizeof(int) * 5); //局部变量函数结束时会被释放掉，堆上的内存不会被释放掉，需要手动释放掉。
 
-	//�շ�ǰ�棬�����дһ���Ⱥţ��ᱨ������Ϊ���ǲ����Ա���ֵ��
+	//空放前面，如果少写一个等号，会报错，因为空是不可以被赋值的
 	if (NULL == p)
 	{
 		return NULL;
@@ -23,11 +23,11 @@ int* getSpace()
 
 	int  j = 0;
 
-	//����ʹ��ǰ��++
-	//ǰ��--����Ϊ�������Լ�����++ --���ظ�ֵ��
-	//����++ --�����һ���м�������ȸ�ֵ���أ��������Լ�����Ҫ���浱ǰ��״̬���أ�Ȼ��Ա�������++ --�������һ����ʱ����������������ͷš�
+	//优先使用前置++
+	//前置--，因为先自增自减后再++ --返回赋值。
+	//后置++ --，多出一个中间变量，先赋值返回，再自增自减。它要保存当前的状态返回，然后对变量本身++ --，多产生一个临时变量，有申请就有释放。
 
-	//ֻҪ���������ڴ�ռ䣬����ʹ���±�ķ�ʽ�����ڴ�
+	//只要是连续的内存空间，都能使用下标的方式访问内存
 	for (int i = 0; i < 5; ++i)
 	{
 		p[i] = 100 + i;
@@ -44,53 +44,53 @@ void test01()
 		printf("%d ", ret[i]); //100 101 102 103 104
 	}
 
-	//������ڴ棬һ��Ҫ�ͷ�
+	//用完堆内存，一定要释放
 	free(ret);
 	ret = NULL;
 }
 
 
 /*
-* 2.���������ʱ��һ��Ҫ��ʼ�����ܶ��Bug������������û�г�ʼ����ɵġ�
+* 2.定义变量的时候一定要初始化，很多的Bug产生都是由于没有初始化造成的。
 */
 void allocateSpace(char* memorystr)
 {
-	//����100���ֽڶѿռ�
+	//申请100个字节堆空间
 	memorystr = (char*) malloc(100);
-	memset(memorystr, 0, 100); //���㣬��ʼ��
-	strcpy(memorystr, "hello world!"); //���������,����p�������ͷţ������ڴ�û�б��ͷţ�����ɶ����
+	memset(memorystr, 0, 100); //清零，初始化
+	strcpy(memorystr, "hello world!"); //函数体结束,变量p被销毁释放，但堆内存没有被释放，会造成堆溢出
 }
 
 
 /*
-* ע���βθı��ǲ���Ӱ�쵽ʵ�ε�ֵ�������ٷ���allocateSpace(p)��ʵ����һ����ָ��p��
-* �β�Ϊmemorystr������ʱ����p����memorystr��Ȼ��ִ��memorystr = (char*)malloc(100)��
-* ��ʱ�� memorystr�����100��char�ռ䣬������Ϊ"�β�"�ı䲻��Ӱ�쵽"ʵ��"��ֵ��p��ֵ��û
-* �ı䣬����NULL���������濽�����ɹ���
+* 注意形参改变是不会影响到实参的值。我们再分析allocateSpace(p)，实参是一个空指针p，
+* 形参为memorystr，调用时，把p赋给memorystr，然后执行memorystr = (char*)malloc(100)，
+* 这时候 memorystr获得了100个char空间，但是因为"形参"改变不会影响到"实参"的值，p的值并没
+* 改变，还是NULL，所以上面拷贝不成功。
 */
 void test02()
 {
 	char* p = NULL;
 	printf("\np = %s\n", p); //p = (null)
-	allocateSpace(p);        //���ﴫ����p����������ָ���ַ�����Դ�ӡ���ǿ�
+	allocateSpace(p);        //这里传的是p变量，不是指针地址，所以打印仍是空
 	printf("p = %s\n", p);   //p = (null)
 }
-//ps: ����ƽ��ʹ��ָ��Ѳ����Ӻ����д��ݳ��������ݵ���ָ����ָ������ݣ�
-//    ����ָ�뱾�������ϵ�������ͼ�ı����ָ�뱾����
+//ps: 我们平常使用指针把参数从函数中传递出来，传递的是指针所指向的内容，
+//    而非指针本身，而上的例子企图改变的是指针本身。
 
 
 /*
-* ˫��ָ����÷�
+* 双重指针的用法
 * https://blog.csdn.net/gdjason/article/details/51123978
 */
-//���Կ���*(*p)ָ��ָ��ı���������ָ����洢����һ��ָ��*p
+//可以看成*(*p)指向指针的变量，二级指针里存储的是一级指针*p
 void allocateSpace02(char** p)
 {
-	printf("%p\n", *p); //ָ���ַ��00000000
+	printf("%p\n", *p); //指针地址：00000000
 
-	//ʹ��һ����ʱָ�����������
-	char* temp = (char*) malloc(100);  //�ı���ָ���ַ
-	memset(temp, 0, 100);              //���㣬��ʼ��
+	//使用一个临时指针变量来接收
+	char* temp = (char*) malloc(100);  //改变了指针地址
+	memset(temp, 0, 100);              //清零，初始化
 	strcpy(temp, "hello world!");
 
 	*p = temp;
@@ -99,11 +99,11 @@ void allocateSpace02(char** p)
 void test03()
 {
 	char* p = NULL;
-	printf("%p\n", p);     //ָ���ַ��00000000
+	printf("%p\n", p);     //指针地址：00000000
 
 	allocateSpace02(&p);
 
-	printf("%p\n", p);     //ָ���ַ�ı䣺009B59F0
+	printf("%p\n", p);     //指针地址改变：009B59F0
 	printf("p = %s\n", p); //p = hello world!
 }
 
@@ -119,7 +119,7 @@ int main() {
 	printf("%d\n", a);   //20
 	printf("%d\n", *b);  //20
 	printf("%p\n", a);   //00000014
-	printf("%p\n", *b);  //00000014   //**b��洢����*b��ָ���ַ
+	printf("%p\n", *b);  //00000014   //**b里存储的是*b的指针地址
 
 	system("pause");
 	return EXIT_SUCCESS;

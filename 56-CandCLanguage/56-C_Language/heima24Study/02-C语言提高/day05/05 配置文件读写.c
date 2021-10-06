@@ -10,15 +10,15 @@ void test()
 	char** fileData = NULL;
 	int lines = 0;
 	struct ConfigInfo* info = NULL;
-	//¼ÓÔØÅäÖÃÎÄ¼ş
+	//åŠ è½½é…ç½®æ–‡ä»¶
 	loadFile_ConfigFile("./config.ini", &fileData, &lines);
-	//½âÎöÅäÖÃÎÄ¼ş
+	//è§£æé…ç½®æ–‡ä»¶
 	parseFile_ConfigFile(fileData, lines, &info);
 	printf("IP:%s\n", getInfo_ConfigFile("ip", info, lines));
 	printf("ppp:%s\n", getInfo_ConfigFile("ppp", info, lines));
 	printf("TTT:%s\n", getInfo_ConfigFile("TTT", info, lines));
 
-	//ÊÍ·ÅÅäÖÃĞÅÏ¢ÄÚ´æ
+	//é‡Šæ”¾é…ç½®ä¿¡æ¯å†…å­˜
 	destroInfo_ConfigFile(info);
 
 }
@@ -31,16 +31,16 @@ int main() {
 	return EXIT_SUCCESS;
 }
 /* Output:
-×îºóÒ»¸öÊÇ»»ĞĞ!
+æœ€åä¸€ä¸ªæ˜¯æ¢è¡Œ!
 key:ip val:127.0.0.1
-×îºóÒ»¸öÊÇ»»ĞĞ!
+æœ€åä¸€ä¸ªæ˜¯æ¢è¡Œ!
 key:port val:8080
-×îºóÒ»¸öÊÇ»»ĞĞ!
+æœ€åä¸€ä¸ªæ˜¯æ¢è¡Œ!
 key:username val:root
-×îºóÒ»¸öÊÇ»»ĞĞ!
+æœ€åä¸€ä¸ªæ˜¯æ¢è¡Œ!
 key:password val:admin
 IP:127.0.0.1
 ppp:(null)
 TTT:(null)
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

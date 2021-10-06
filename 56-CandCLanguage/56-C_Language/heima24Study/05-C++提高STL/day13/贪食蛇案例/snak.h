@@ -5,49 +5,49 @@
 using namespace std;
 
 /*
-* Éß
+* è›‡
 */
 class Snake
 {
 public:
-	//½Úµã
+	//èŠ‚ç‚¹
 	struct Point
 	{
-		//Êı¾İÓò
+		//æ•°æ®åŸŸ
 		int x;
 		int y;
-		//Ö¸ÕëÓò
+		//æŒ‡é’ˆåŸŸ
 		Point* next;
 	};
 
 	Wall& wall;
 	Food& food;
-	bool isRool;  //ÅĞ¶ÏÑ­»·±êÊ¾
+	bool isRool;  //åˆ¤æ–­å¾ªç¯æ ‡ç¤º
 	Point* pHead;
 
 	Snake(Wall & tempWall, Food & food );
 
 	enum { UP = 'w', DOWN = 's', LEFT = 'a' , RIGHT = 'd'};
 
-	//³õÊ¼»¯Éß
+	//åˆå§‹åŒ–è›‡
 	void initSnake();
 
-	// Ïú»Ù½Úµã
+	// é”€æ¯èŠ‚ç‚¹
 	void destroyPoint();
 
-	// Ìí¼Ó½Úµã
+	// æ·»åŠ èŠ‚ç‚¹
 	void addPoint(int x,int y);
 
-	// É¾³ı½Úµã
+	// åˆ é™¤èŠ‚ç‚¹
 	void delPoint();
 
-	//ÒÆ¶¯Éß²Ù×÷
-	bool move(char key); //·µ»ØÖµ´ú±í ÒÆ¶¯ÊÇ·ñ³É¹¦
+	//ç§»åŠ¨è›‡æ“ä½œ
+	bool move(char key); //è¿”å›å€¼ä»£è¡¨ ç§»åŠ¨æ˜¯å¦æˆåŠŸ
 
-	//Éè¶¨ÄÑ¶È
-	int getSleepTime();  //»ñÈ¡Ë¢ÆÁÊ±¼ä
+	//è®¾å®šéš¾åº¦
+	int getSleepTime();  //è·å–åˆ·å±æ—¶é—´
 
-	int countList();     //»ñÈ¡ÉßÉí¶Î
+	int countList();     //è·å–è›‡èº«æ®µ
 
-	int getScore();      //»ñÈ¡·ÖÊı
+	int getScore();      //è·å–åˆ†æ•°
 };

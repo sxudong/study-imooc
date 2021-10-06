@@ -1,11 +1,11 @@
 #include"CSckImp1.h"
 
 /*
-* ¸ù¾İ½Ó¿Ú¿ª·¢ÊµÏÖ·½·¨£¨½Ó¿Ú¶¨ÒåÔÚCSckImp1.h£©
+* æ ¹æ®æ¥å£å¼€å‘å®ç°æ–¹æ³•ï¼ˆæ¥å£å®šä¹‰åœ¨CSckImp1.hï¼‰
 */
 
 
-//¡°·¢ËÍ/½ÓÊÕ¡°ÏûÏ¢µÄ½á¹¹Ìå
+//â€œå‘é€/æ¥æ”¶â€œæ¶ˆæ¯çš„ç»“æ„ä½“
 struct Info
 {
 	char data[1024];
@@ -14,7 +14,7 @@ struct Info
 
 
 /*
-* ³õÊ¼»¯
+* åˆå§‹åŒ–
 */
 void init_CSckImp1(void **handle)
 {
@@ -29,7 +29,7 @@ void init_CSckImp1(void **handle)
 
 
 /*
-* ·¢ËÍ½Ó¿Ú
+* å‘é€æ¥å£
 */
 void send_CSckImp1(void *handle, unsigned char* sendData, int sendLen)
 {
@@ -47,7 +47,7 @@ void send_CSckImp1(void *handle, unsigned char* sendData, int sendLen)
 
 
 /*
-* ½ÓÊÕ½Ó¿Ú
+* æ¥æ”¶æ¥å£
 */
 void recv_CSckImp1(void *handle, unsigned char* recvData, int* recvLen)
 {
@@ -61,20 +61,20 @@ void recv_CSckImp1(void *handle, unsigned char* recvData, int* recvLen)
 		return;
 
 	struct Info *info = (struct Info *)handle;
-	strncpy(recvData, info->data, info->len); //Êı¾İ¸´ÖÆµ½ -> recvData
-	*recvLen = info->len; //³¤¶È¸³Öµ¸ø -> recvLen
+	strncpy(recvData, info->data, info->len); //æ•°æ®å¤åˆ¶åˆ° -> recvData
+	*recvLen = info->len; //é•¿åº¦èµ‹å€¼ç»™ -> recvLen
 
 }
 
 
 /*
-* ¹Ø±Õ
+* å…³é—­
 */
 void close_CSckImp1(void *handle)
 {
 	if (NULL == handle)
 		return;
 
-	free(handle);  //ÊÍ·Å¶Ñ¿Õ¼ä
-	handle = NULL; //Ö¸Ïò¿ÕÖ¸Õë
+	free(handle);  //é‡Šæ”¾å †ç©ºé—´
+	handle = NULL; //æŒ‡å‘ç©ºæŒ‡é’ˆ
 }

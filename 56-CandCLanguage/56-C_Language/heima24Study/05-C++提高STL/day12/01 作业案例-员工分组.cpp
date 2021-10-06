@@ -7,11 +7,11 @@
 using namespace std;
 
 /*
-* ĞèÇó£º
-*   ¹«Ë¾½ñÌìÕĞÆ¸ÁË5¸öÔ±¹¤£¬5ÃûÔ±¹¤½øÈë¹«Ë¾Ö®ºó£¬ĞèÒªÖ¸ÅÉÔ±¹¤ÔÚÄÇ¸ö²¿ÃÅ¹¤×÷
-*   ÈËÔ±ĞÅÏ¢ÓĞ: ĞÕÃû ÄêÁä µç»° ¹¤×ÊµÈ×é³É
-*   Í¨¹ı Multimap ½øĞĞĞÅÏ¢µÄ²åÈë ±£´æ ÏÔÊ¾
-*   ·Ö²¿ÃÅÏÔÊ¾Ô±¹¤ĞÅÏ¢ ÏÔÊ¾È«²¿Ô±¹¤ĞÅÏ¢
+* éœ€æ±‚ï¼š
+*   å…¬å¸ä»Šå¤©æ‹›è˜äº†5ä¸ªå‘˜å·¥ï¼Œ5åå‘˜å·¥è¿›å…¥å…¬å¸ä¹‹åï¼Œéœ€è¦æŒ‡æ´¾å‘˜å·¥åœ¨é‚£ä¸ªéƒ¨é—¨å·¥ä½œ
+*   äººå‘˜ä¿¡æ¯æœ‰: å§“å å¹´é¾„ ç”µè¯ å·¥èµ„ç­‰ç»„æˆ
+*   é€šè¿‡ Multimap è¿›è¡Œä¿¡æ¯çš„æ’å…¥ ä¿å­˜ æ˜¾ç¤º
+*   åˆ†éƒ¨é—¨æ˜¾ç¤ºå‘˜å·¥ä¿¡æ¯ æ˜¾ç¤ºå…¨éƒ¨å‘˜å·¥ä¿¡æ¯
 */
 
 enum{ RENLI,YANFA,MEISHU };
@@ -27,7 +27,7 @@ public:
 void createWorker(vector<Worker>&v ){
 	string nameSeed = "ABCDE";
 	for (int i = 0; i < 5;i++){
-		string name = "Ô±¹¤";
+		string name = "å‘˜å·¥";
 		name += nameSeed[i];
 
 		int money = rand() % 10000 + 10000; // 10000~ 19999
@@ -42,41 +42,41 @@ void createWorker(vector<Worker>&v ){
 
 void setGroup( vector<Worker> & v, multimap<int,Worker> & m ){
 	for (vector<Worker>::iterator i = v.begin(); i != v.end(); i++){
-		//Ëæ»ú²úÉú²¿ÃÅ±àºÅ
-		int departmentId = rand() % 3; // 0 1 2 
-		//½«Ô±¹¤·Öµ½ multimapÈİÆ÷ÖĞ
+		//éšæœºäº§ç”Ÿéƒ¨é—¨ç¼–å·
+		int departmentId = rand() % 3; // 0 1 2
+		//å°†å‘˜å·¥åˆ†åˆ° multimapå®¹å™¨ä¸­
 		m.insert(make_pair(departmentId, *i));
 	}
 }
 
 void showGroup( multimap<int,Worker> & m )
 {
-	//ÈËÁ¦²¿ÃÅÏÔÊ¾
-	cout << "ÈËÁ¦²¿ÃÅÔ±¹¤ÈçÏÂ£º" << endl;
+	//äººåŠ›éƒ¨é—¨æ˜¾ç¤º
+	cout << "äººåŠ›éƒ¨é—¨å‘˜å·¥å¦‚ä¸‹ï¼š" << endl;
 
-	multimap<int,Worker>::iterator pos = m.find(RENLI); //Ã¶¾ÙÏÂ±ê 0
+	multimap<int,Worker>::iterator pos = m.find(RENLI); //æšä¸¾ä¸‹æ ‡ 0
 	int index = 0;
-	int num = m.count(RENLI); //Ã¶¾ÙÏÂ±ê 0 µÄ×ÜÊıÁ¿
+	int num = m.count(RENLI); //æšä¸¾ä¸‹æ ‡ 0 çš„æ€»æ•°é‡
 	for (; pos != m.end(), index < num; pos++, index++) // 0  A  B  1  C  2  D E
-		cout << "ĞÕÃû£º" << pos->second.m_Name << " ¹¤×Ê£º" << pos->second.m_Money << endl;
+		cout << "å§“åï¼š" << pos->second.m_Name << " å·¥èµ„ï¼š" << pos->second.m_Money << endl;
 
 	cout << "-------------------------" << endl;
 
-	cout << "ÑĞ·¢²¿ÃÅÔ±¹¤ÈçÏÂ£º" << endl;
-	pos = m.find(YANFA); //Ã¶¾ÙÏÂ±ê 1
+	cout << "ç ”å‘éƒ¨é—¨å‘˜å·¥å¦‚ä¸‹ï¼š" << endl;
+	pos = m.find(YANFA); //æšä¸¾ä¸‹æ ‡ 1
 	index = 0;
-	num = m.count(YANFA); //Ã¶¾ÙÏÂ±ê 1 µÄ×ÜÊıÁ¿
+	num = m.count(YANFA); //æšä¸¾ä¸‹æ ‡ 1 çš„æ€»æ•°é‡
 	for (; pos != m.end(), index < num; pos++, index++) // 0  A  B  1  C  2  D E
-		cout << "ĞÕÃû£º" << pos->second.m_Name << " ¹¤×Ê£º" << pos->second.m_Money << endl;
+		cout << "å§“åï¼š" << pos->second.m_Name << " å·¥èµ„ï¼š" << pos->second.m_Money << endl;
 
 	cout << "-------------------------" << endl;
 
-	cout << "ÃÀÊõ²¿ÃÅÔ±¹¤ÈçÏÂ£º" << endl;
-	pos = m.find(MEISHU); //Ã¶¾ÙÏÂ±ê 2
+	cout << "ç¾æœ¯éƒ¨é—¨å‘˜å·¥å¦‚ä¸‹ï¼š" << endl;
+	pos = m.find(MEISHU); //æšä¸¾ä¸‹æ ‡ 2
 	index = 0;
-	num = m.count(MEISHU); //Ã¶¾ÙÏÂ±ê 2 µÄ×ÜÊıÁ¿
+	num = m.count(MEISHU); //æšä¸¾ä¸‹æ ‡ 2 çš„æ€»æ•°é‡
 	for (; pos != m.end(), index < num; pos++, index++) // 0  A  B  1  C  2  D E
-		cout << "ĞÕÃû£º" << pos->second.m_Name << " ¹¤×Ê£º" << pos->second.m_Money << endl;
+		cout << "å§“åï¼š" << pos->second.m_Name << " å·¥èµ„ï¼š" << pos->second.m_Money << endl;
 
 }
 
@@ -84,45 +84,45 @@ int main(){
 
 	srand((unsigned int)time(NULL));
 
-	//ÉùÃ÷Ò»¸ö´æ·ÅÔ±¹¤µÄÈİÆ÷
+	//å£°æ˜ä¸€ä¸ªå­˜æ”¾å‘˜å·¥çš„å®¹å™¨
 	vector<Worker> v;
 
-	//´´½¨5ÃûÔ±¹¤
+	//åˆ›å»º5åå‘˜å·¥
 	createWorker(v);
-	
-	//ÉèÖÃ·Ö×é
-	//·Ö×éµÄmultimapÈİÆ÷
+
+	//è®¾ç½®åˆ†ç»„
+	//åˆ†ç»„çš„multimapå®¹å™¨
 	multimap<int, Worker> m;
 	setGroup(v,m);
 
-	//·Ö²¿ÃÅÏÔÊ¾Ô±¹¤
+	//åˆ†éƒ¨é—¨æ˜¾ç¤ºå‘˜å·¥
 	showGroup(m);
 
 	cout << "----------" << endl;
 
-	////Ô±¹¤´´½¨²âÊÔ
+	////å‘˜å·¥åˆ›å»ºæµ‹è¯•
 	for (vector<Worker>::iterator i = v.begin(); i != v.end(); i++)
-		cout << "ĞÕÃû£º " << i->m_Name << " ¹¤×Ê£º " << i->m_Money << endl;
+		cout << "å§“åï¼š " << i->m_Name << " å·¥èµ„ï¼š " << i->m_Money << endl;
 
 	system("pause");
 	return EXIT_SUCCESS;
 }
 /* Output:
-ÈËÁ¦²¿ÃÅÔ±¹¤ÈçÏÂ£º
-ĞÕÃû£ºÔ±¹¤E ¹¤×Ê£º13136
+äººåŠ›éƒ¨é—¨å‘˜å·¥å¦‚ä¸‹ï¼š
+å§“åï¼šå‘˜å·¥E å·¥èµ„ï¼š13136
 -------------------------
-ÑĞ·¢²¿ÃÅÔ±¹¤ÈçÏÂ£º
-ĞÕÃû£ºÔ±¹¤B ¹¤×Ê£º14911
-ĞÕÃû£ºÔ±¹¤C ¹¤×Ê£º10230
+ç ”å‘éƒ¨é—¨å‘˜å·¥å¦‚ä¸‹ï¼š
+å§“åï¼šå‘˜å·¥B å·¥èµ„ï¼š14911
+å§“åï¼šå‘˜å·¥C å·¥èµ„ï¼š10230
 -------------------------
-ÃÀÊõ²¿ÃÅÔ±¹¤ÈçÏÂ£º
-ĞÕÃû£ºÔ±¹¤A ¹¤×Ê£º10490
-ĞÕÃû£ºÔ±¹¤D ¹¤×Ê£º17100
+ç¾æœ¯éƒ¨é—¨å‘˜å·¥å¦‚ä¸‹ï¼š
+å§“åï¼šå‘˜å·¥A å·¥èµ„ï¼š10490
+å§“åï¼šå‘˜å·¥D å·¥èµ„ï¼š17100
 ----------
-ĞÕÃû£º Ô±¹¤A ¹¤×Ê£º 10490
-ĞÕÃû£º Ô±¹¤B ¹¤×Ê£º 14911
-ĞÕÃû£º Ô±¹¤C ¹¤×Ê£º 10230
-ĞÕÃû£º Ô±¹¤D ¹¤×Ê£º 17100
-ĞÕÃû£º Ô±¹¤E ¹¤×Ê£º 13136
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+å§“åï¼š å‘˜å·¥A å·¥èµ„ï¼š 10490
+å§“åï¼š å‘˜å·¥B å·¥èµ„ï¼š 14911
+å§“åï¼š å‘˜å·¥C å·¥èµ„ï¼š 10230
+å§“åï¼š å‘˜å·¥D å·¥èµ„ï¼š 17100
+å§“åï¼š å‘˜å·¥E å·¥èµ„ï¼š 13136
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

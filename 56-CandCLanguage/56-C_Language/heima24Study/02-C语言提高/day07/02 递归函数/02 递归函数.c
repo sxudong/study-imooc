@@ -7,22 +7,22 @@
 int number = 0;
 
 /*
-* 13.3 µÝ¹éº¯Êýµ÷ÓÃ
+* 13.3 é€’å½’å‡½æ•°è°ƒç”¨
 */
 
 
 /*
-* ×Ö·û´®·´×ª´òÓ¡
+* å­—ç¬¦ä¸²åè½¬æ‰“å°
 */
 void reversPrint(char *p)
 {
 	++number;
 
-	//1. Ê×ÏÈÒªÍË³öµÝ¹éÍË³öÌõ¼þ
+	//1. é¦–å…ˆè¦é€€å‡ºé€’å½’é€€å‡ºæ¡ä»¶
 	if (*p == '\0')
 		return;
 
-	reversPrint(p + 1); //µÝ¹éµ÷ÓÃ×ÔÉí
+	reversPrint(p + 1); //é€’å½’è°ƒç”¨è‡ªèº«
 	printf("%c",*p); //gfedcba
 }
 
@@ -47,20 +47,20 @@ void test01()
 }
 
 /*
-* Á´±íÄæÐò´òÓ¡
+* é“¾è¡¨é€†åºæ‰“å°
 */
 void test02()
 {
-	//³õÊ¼»¯Á´±í
+	//åˆå§‹åŒ–é“¾è¡¨
 	struct LinkNode *header = Init_LinkList();
 
-	//Á´±íÄæÐò´òÓ¡
+	//é“¾è¡¨é€†åºæ‰“å°
 	reversePrintList(header->next);
 	printf("\n");
 	Foreach_LinkList(header);
 
 	printf("\n");
-	//Ïú»ÙÁ´±í
+	//é”€æ¯é“¾è¡¨
 	Destroy_LinkList(header);
 }
 
@@ -75,25 +75,25 @@ int main(){
 /* Output:
 gfedcba
 number:8
-ÊäÈë²åÈëµÄÊý¾Ý:
+è¾“å…¥æ’å…¥çš„æ•°æ®:
 100
-ÊäÈë²åÈëµÄÊý¾Ý:
+è¾“å…¥æ’å…¥çš„æ•°æ®:
 200
-ÊäÈë²åÈëµÄÊý¾Ý:
+è¾“å…¥æ’å…¥çš„æ•°æ®:
 300
-ÊäÈë²åÈëµÄÊý¾Ý:
+è¾“å…¥æ’å…¥çš„æ•°æ®:
 400
-ÊäÈë²åÈëµÄÊý¾Ý:
+è¾“å…¥æ’å…¥çš„æ•°æ®:
 500
-ÊäÈë²åÈëµÄÊý¾Ý:
+è¾“å…¥æ’å…¥çš„æ•°æ®:
 -1
 500 400 300 200 100
 100 200 300 400 500
--1½Úµã±»Ïú»Ù!
-100½Úµã±»Ïú»Ù!
-200½Úµã±»Ïú»Ù!
-300½Úµã±»Ïú»Ù!
-400½Úµã±»Ïú»Ù!
-500½Úµã±»Ïú»Ù!
-Çë°´ÈÎÒâ¼ü¼ÌÐø. . .
+-1èŠ‚ç‚¹è¢«é”€æ¯!
+100èŠ‚ç‚¹è¢«é”€æ¯!
+200èŠ‚ç‚¹è¢«é”€æ¯!
+300èŠ‚ç‚¹è¢«é”€æ¯!
+400èŠ‚ç‚¹è¢«é”€æ¯!
+500èŠ‚ç‚¹è¢«é”€æ¯!
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

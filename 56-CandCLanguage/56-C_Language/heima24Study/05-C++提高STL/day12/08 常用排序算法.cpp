@@ -1,5 +1,5 @@
 /*
-* 4.5 ³£ÓÃÅÅĞòËã·¨
+* 4.5 å¸¸ç”¨æ’åºç®—æ³•
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
@@ -11,14 +11,14 @@ using namespace std;
 
 
 /*
-* mergeËã·¨
-*   ÈİÆ÷ÔªËØºÏ²¢£¬²¢´æ´¢µ½ÁíÒ»ÈİÆ÷ÖĞ£¬ÕâÁ½¸öÈİÆ÷±ØĞëÒ²ÊÇÓĞĞòµÄ¡£
-* 
-* @param beg1  ÈİÆ÷1¿ªÊ¼µü´úÆ÷
-* @param end1  ÈİÆ÷1½áÊøµü´úÆ÷
-* @param beg2  ÈİÆ÷2¿ªÊ¼µü´úÆ÷
-* @param end2  ÈİÆ÷2½áÊøµü´úÆ÷
-* @param dest  Ä¿±êÈİÆ÷¿ªÊ¼µü´úÆ÷
+* mergeç®—æ³•
+*   å®¹å™¨å…ƒç´ åˆå¹¶ï¼Œå¹¶å­˜å‚¨åˆ°å¦ä¸€å®¹å™¨ä¸­ï¼Œè¿™ä¸¤ä¸ªå®¹å™¨å¿…é¡»ä¹Ÿæ˜¯æœ‰åºçš„ã€‚
+*
+* @param beg1  å®¹å™¨1å¼€å§‹è¿­ä»£å™¨
+* @param end1  å®¹å™¨1ç»“æŸè¿­ä»£å™¨
+* @param beg2  å®¹å™¨2å¼€å§‹è¿­ä»£å™¨
+* @param end2  å®¹å™¨2ç»“æŸè¿­ä»£å™¨
+* @param dest  ç›®æ ‡å®¹å™¨å¼€å§‹è¿­ä»£å™¨
 */
 void test01()
 {
@@ -26,8 +26,8 @@ void test01()
 	vector<int> v2;
 
 	for (int i = 0; i < 10; i++){
-		v1.push_back(i);     //0 ¿ªÊ¼
-		v2.push_back(i + 1); //1 ¿ªÊ¼
+		v1.push_back(i);     //0 å¼€å§‹
+		v2.push_back(i + 1); //1 å¼€å§‹
 	}
 
 	vector<int> vTarget;
@@ -43,12 +43,12 @@ void test01()
 
 
 /*
-* sortËã·¨ ÈİÆ÷ÔªËØÅÅĞò
-* ×¢Òâ£ºÁ½¸öÈİÆ÷±ØĞëÊÇÓĞĞòµÄ
-* 
-* @param beg  ÈİÆ÷1¿ªÊ¼µü´úÆ÷
-* @param end  ÈİÆ÷1½áÊøµü´úÆ÷
-* @param _callback  »Øµ÷º¯Êı»òÕßÎ½´Ê(·µ»ØboolÀàĞÍµÄº¯Êı¶ÔÏó)
+* sortç®—æ³• å®¹å™¨å…ƒç´ æ’åº
+* æ³¨æ„ï¼šä¸¤ä¸ªå®¹å™¨å¿…é¡»æ˜¯æœ‰åºçš„
+*
+* @param beg  å®¹å™¨1å¼€å§‹è¿­ä»£å™¨
+* @param end  å®¹å™¨1ç»“æŸè¿­ä»£å™¨
+* @param _callback  å›è°ƒå‡½æ•°æˆ–è€…è°“è¯(è¿”å›boolç±»å‹çš„å‡½æ•°å¯¹è±¡)
 */
 void test02()
 {
@@ -75,7 +75,7 @@ void test02()
 
 
 /*
-* random_shuffle(iterator beg, iterator end) Ï´ÅÆ
+* random_shuffle(iterator beg, iterator end) æ´—ç‰Œ
 */
 void test03()
 {
@@ -111,7 +111,7 @@ void test04()
 
 
 int main(){
-	srand((unsigned int)time(NULL)); //Ëæ»úÖÖ×Ó
+	srand((unsigned int)time(NULL)); //éšæœºç§å­
 	test01();
 	cout << "---------------" << endl;
 	test02();
@@ -131,5 +131,5 @@ int main(){
 2 8 7 9 4 3 5 1 6 0
 ---------------
 9 8 7 6 5 4 3 2 1 0
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

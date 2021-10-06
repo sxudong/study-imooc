@@ -5,10 +5,10 @@
 
 
 /*
- 1. void²»ÄÜÖ±½Ó¶¨Òå±äÁ¿£¬ÒòÎª±àÒëÆ÷²»ÖªµÀ·ÖÅä¶àÉÙÄÚ´æ¸ø±äÁ¿
-    µ±¶¨ÒåÒ»¸ö±äÁ¿£¬±àÒëÆ÷±ØÐëÒªÖªµÀ·ÖÅä¶àÉÙÄÚ´æ¡£
+ 1. voidä¸èƒ½ç›´æŽ¥å®šä¹‰å˜é‡ï¼Œå› ä¸ºç¼–è¯‘å™¨ä¸çŸ¥é“åˆ†é…å¤šå°‘å†…å­˜ç»™å˜é‡
+    å½“å®šä¹‰ä¸€ä¸ªå˜é‡ï¼Œç¼–è¯‘å™¨å¿…é¡»è¦çŸ¥é“åˆ†é…å¤šå°‘å†…å­˜ã€‚
 */
-#if 0 //0Îª¼Ù£¬0Îª¼Ù²»±àÒë£¬Ð§¹ûÏàµ±ÓÚ×¢ÊÍ¡£
+#if 0 //0ä¸ºå‡ï¼Œ0ä¸ºå‡ä¸ç¼–è¯‘ï¼Œæ•ˆæžœç›¸å½“äºŽæ³¨é‡Šã€‚
 struct Person
 {
 	char name[64];
@@ -19,22 +19,22 @@ struct Person
 
 void test01()
 {
-	//void²»ÄÜÖ±½Ó¶¨Òå±äÁ¿£¬ÒòÎª±àÒëÆ÷²»ÖªµÀ·ÖÅä¶àÉÙÄÚ´æ¸ø±äÁ¿¡£±àÒëÆ÷»á±¨´í
-	//void a; 
-	 
-	//±àÒëÆ÷»á±¨´í£¬±àÒëÆ÷±ØÐëÒªÖªµÀ·ÖÅä¶àÉÙÄÚ´æ¡£ 
+	//voidä¸èƒ½ç›´æŽ¥å®šä¹‰å˜é‡ï¼Œå› ä¸ºç¼–è¯‘å™¨ä¸çŸ¥é“åˆ†é…å¤šå°‘å†…å­˜ç»™å˜é‡ã€‚ç¼–è¯‘å™¨ä¼šæŠ¥é”™
+	//void a;
+
+	//ç¼–è¯‘å™¨ä¼šæŠ¥é”™ï¼Œç¼–è¯‘å™¨å¿…é¡»è¦çŸ¥é“åˆ†é…å¤šå°‘å†…å­˜ã€‚
 	//struct Person p;
 }
 
 
 /*
- 2. ¶Ôº¯Êý·µ»ØµÄÏÞ¶¨£¬¶Ôº¯Êý²ÎÊýµÄÏÞ¶¨
+ 2. å¯¹å‡½æ•°è¿”å›žçš„é™å®šï¼Œå¯¹å‡½æ•°å‚æ•°çš„é™å®š
 */
 //fun()
 //{
 //	return 10;
 //}
-int fun(void) //C++ÀïÃæÓÐÀàÐÍ¼ì²é
+int fun(void) //C++é‡Œé¢æœ‰ç±»åž‹æ£€æŸ¥
 {
 	return 10;
 }
@@ -47,9 +47,9 @@ void test02()
 
 
 /*
-* 3. void*ÎÞÀàÐÍÖ¸Õë
-* ËùÓÐÀàÐÍÖ¸ÕëµÄ×æ×Ú
-* ÈÎºÎÀàÐÍµÄÖ¸Õë¶¼¿ÉÒÔ²»¾­¹ýÇ¿×ª ×ª»»³Évoid*ÀàÐÍ
+* 3. void*æ— ç±»åž‹æŒ‡é’ˆ
+* æ‰€æœ‰ç±»åž‹æŒ‡é’ˆçš„ç¥–å®—
+* ä»»ä½•ç±»åž‹çš„æŒ‡é’ˆéƒ½å¯ä»¥ä¸ç»è¿‡å¼ºè½¬ è½¬æ¢æˆvoid*ç±»åž‹
 */
 void test03()
 {
@@ -57,12 +57,12 @@ void test03()
 
 
 	int* pInt = NULL;
-	char* pChar = (char*)pInt; //ÐèÒªÇ¿×ª
+	char* pChar = (char*)pInt; //éœ€è¦å¼ºè½¬
 
-	void* pVoid = pInt; // ÈÎºÎÀàÐÍµÄÖ¸Õë¶¼¿ÉÒÔ²»¾­¹ýÇ¿×ª£¬×ª»»³Évoid*ÀàÐÍ
+	void* pVoid = pInt; // ä»»ä½•ç±»åž‹çš„æŒ‡é’ˆéƒ½å¯ä»¥ä¸ç»è¿‡å¼ºè½¬ï¼Œè½¬æ¢æˆvoid*ç±»åž‹
 }
 
-//void *Ö÷ÒªÓÃÓÚÊý¾Ý½á¹¹µÄ·â×°
+//void *ä¸»è¦ç”¨äºŽæ•°æ®ç»“æž„çš„å°è£…
 
 
 

@@ -4,16 +4,16 @@
 #include<stdlib.h>
 
 /*
-* ��������NULL�ͷǷ���ַ�����ڴ棺
+* 不允许向NULL和非法地址拷贝内存：
 */
 int main() {
 
     char *p = NULL;
-    //��pָ����ڴ����򿽱�����
+    //给p指向的内存区域拷贝内容
     strcpy(p, "1111"); //err
 
     char *q = 0x1122;
-    //��qָ����ڴ����򿽱�����
+    //给q指向的内存区域拷贝内容
     strcpy(q, "2222"); //err
 
 }

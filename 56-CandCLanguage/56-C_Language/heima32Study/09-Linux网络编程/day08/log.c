@@ -8,14 +8,14 @@ static FILE *msgfile = NULL, *wanfile = NULL;
 /* ************************************************************************************ */
 /* ************************************************************************************ */
 /* ************************************************************************************ */
-//ÈÕÖ¾ÎÄ¼þ³õÊ¼»¯,Ò²¿ÉÒÔÍ¨¹ýmsgLogOpen½øÐÐ³õÊ¼»¯
+//æ—¥å¿—æ–‡ä»¶åˆå§‹åŒ–,ä¹Ÿå¯ä»¥é€šè¿‡msgLogOpenè¿›è¡Œåˆå§‹åŒ–
 int msgInit(char *pName)
 {
     if (msgLogOpen(pName, LOG_MESSAGE_FILE, LOG_POSTFIX_MESS,LOG_WARNING_FILE, LOG_POSTFIX_WARN) == 0)
     {
         msgLogFormat(LOG_PROCNAME|LOG_PID, LOG_MESSAGE_DFMT, LOG_PROCNAME|LOG_PID, LOG_WARNING_DFMT);
     }
-    else                                                                                                
+    else
     {
         printf("can not create log!\n");
         return -1;
@@ -23,7 +23,7 @@ int msgInit(char *pName)
     return 0;
 }
 /* ************************************************************************************ */
-int msgLogOpen(char *ident, char *mpre, char *mdate, char *wpre, char *wdate) /* ´ò¿ªÈÕÖ¾ */
+int msgLogOpen(char *ident, char *mpre, char *mdate, char *wpre, char *wdate) /* æ‰“å¼€æ—¥å¿— */
 {
     time_t now_time;
     char openfilename[200], timestring[100];
@@ -39,7 +39,7 @@ int msgLogOpen(char *ident, char *mpre, char *mdate, char *wpre, char *wdate) /*
             strcat(openfilename, timestring);
         }
         if ((msgfile = fopen(openfilename, "a+b")) == NULL)
-        { /* Èç¹ûÃ»ÓÐÓ¦¸Ã°ÑÄ¿Â¼½¨ÉÏ */
+        { /* å¦‚æžœæ²¡æœ‰åº”è¯¥æŠŠç›®å½•å»ºä¸Š */
             printf("openfilename=%s\n", openfilename);
             return -1;
         }
@@ -68,10 +68,10 @@ int msgLogOpen(char *ident, char *mpre, char *mdate, char *wpre, char *wdate) /*
         } else {
             ident_name[0] = '\0';
         }
-        msgopt = LOG_PROCNAME|LOG_PID;          /* ÉèÖÃÄ¬ÈÏÐÅÏ¢Êä³öÐÅÏ¢Ñ¡Ïî              */
-        wanopt = LOG_PROCNAME|LOG_PID;          /* ÉèÖÃÄ¬ÈÏ¸æ¾¯Êä³öÐÅÏ¢Ñ¡Ïî              */
-        strcpy(msgdatefmt, "%m-%d %H:%M:%S");   /* Ä¬ÈÏÐÅÏ¢Êä³öÊ±¼ä¸ñÊ½ MM-DD HH24:MI:SS */
-        strcpy(wandatefmt, "%m-%d %H:%M:%S");   /* Ä¬ÈÏ¸æ¾¯Êä³öÊ±¼ä¸ñÊ½ MM-DD HH24:MI:SS */
+        msgopt = LOG_PROCNAME|LOG_PID;          /* è®¾ç½®é»˜è®¤ä¿¡æ¯è¾“å‡ºä¿¡æ¯é€‰é¡¹              */
+        wanopt = LOG_PROCNAME|LOG_PID;          /* è®¾ç½®é»˜è®¤å‘Šè­¦è¾“å‡ºä¿¡æ¯é€‰é¡¹              */
+        strcpy(msgdatefmt, "%m-%d %H:%M:%S");   /* é»˜è®¤ä¿¡æ¯è¾“å‡ºæ—¶é—´æ ¼å¼ MM-DD HH24:MI:SS */
+        strcpy(wandatefmt, "%m-%d %H:%M:%S");   /* é»˜è®¤å‘Šè­¦è¾“å‡ºæ—¶é—´æ ¼å¼ MM-DD HH24:MI:SS */
 
         msglog(MSG_INFO,"File is msgfile=[%d],wanfile=[%d].",fileno(msgfile),fileno(wanfile));
         return 0;
@@ -80,16 +80,16 @@ int msgLogOpen(char *ident, char *mpre, char *mdate, char *wpre, char *wdate) /*
     }
 }
 /* ************************************************************************************ */
-/* ×Ô¶¨ÒåÈÕÖ¾Êä³öº¯ÊýÏµÁÐ,¿ÉÒÔ°´ÆÕÍ¨ÐÅÏ¢¼°¸æ¾¯ÐÅÏ¢·ÖÀàÊä³ö³ÌÐòÈÕÖ¾                      */
+/* è‡ªå®šä¹‰æ—¥å¿—è¾“å‡ºå‡½æ•°ç³»åˆ—,å¯ä»¥æŒ‰æ™®é€šä¿¡æ¯åŠå‘Šè­¦ä¿¡æ¯åˆ†ç±»è¾“å‡ºç¨‹åºæ—¥å¿—                      */
 int msglog(int mtype, char *outfmt, ...)
 {
     time_t now_time;
-    va_list ap;//±ä²ÎµÄÁÐ±í
+    va_list ap;//å˜å‚çš„åˆ—è¡¨
     char logprefix[1024], tmpstring[1024];
 
     time(&now_time);
     if (mtype & MSG_INFO)
-    { /*strftime»á½«localtime(&now_time)°´ÕÕmsgdatefmt¸ñÊ½,Êä³öµ½logprefix.*/
+    { /*strftimeä¼šå°†localtime(&now_time)æŒ‰ç…§msgdatefmtæ ¼å¼,è¾“å‡ºåˆ°logprefix.*/
         strftime(logprefix, sizeof(logprefix), msgdatefmt, localtime(&now_time));
         strcat(logprefix, " ");
         /*static int  msgopt,wanopt;*/
@@ -113,7 +113,7 @@ int msglog(int mtype, char *outfmt, ...)
     {
         strftime(logprefix, sizeof(logprefix), wandatefmt, localtime(&now_time));
         strcat(logprefix, " ");
-        /*#define LOG_PROCNAME      0x00000001*/              /* msglog Êä³öÈÕÖ¾Ê±´òÓ¡³ÌÐòÃû        */
+        /*#define LOG_PROCNAME      0x00000001*/              /* msglog è¾“å‡ºæ—¥å¿—æ—¶æ‰“å°ç¨‹åºå        */
         if (wanopt & LOG_PROCNAME)
         {
             strcat(logprefix, ident_name);
@@ -142,7 +142,7 @@ int msglog(int mtype, char *outfmt, ...)
     return 0;
 }
 /* ************************************************************************************ */
-int msgLogFormat(int mopt, char *mdfmt, int wopt, char *wdfmt)   /* ÉèÖÃÈÕÖ¾¸ñÊ½¼°Ñ¡Ïî  */
+int msgLogFormat(int mopt, char *mdfmt, int wopt, char *wdfmt)   /* è®¾ç½®æ—¥å¿—æ ¼å¼åŠé€‰é¡¹  */
 {
     if (mopt >= 0)
     {
@@ -163,7 +163,7 @@ int msgLogFormat(int mopt, char *mdfmt, int wopt, char *wdfmt)   /* ÉèÖÃÈÕÖ¾¸ñÊ½
     return 0;
 }
 /* ************************************************************************************ */
-int msgLogClose(void)                                           /* ¹Ø±ÕÈÕÖ¾ÎÄ¼þ         */
+int msgLogClose(void)                                           /* å…³é—­æ—¥å¿—æ–‡ä»¶         */
 {
     if (msgfile) fclose(msgfile);
     if (wanfile) fclose(wanfile);
@@ -171,14 +171,14 @@ int msgLogClose(void)                                           /* ¹Ø±ÕÈÕÖ¾ÎÄ¼þ 
     return 0;
 }
 /* ************************************************************************************ */
-long begusec_process(void)                      /* ÉèÖÃ¿ªÊ¼Ê±¼ä 0=ok                    */
+long begusec_process(void)                      /* è®¾ç½®å¼€å§‹æ—¶é—´ 0=ok                    */
 {
     gettimeofday(&be_stime,NULL);
 
     return 0;
 }
 /* ************************************************************************************ */
-long getusec_process(void)                      /* ·µ»Øusecond ´Ó begusec_processÀúÊ±   */
+long getusec_process(void)                      /* è¿”å›žusecond ä»Ž begusec_processåŽ†æ—¶   */
 {
     struct timeval ed_stime;
 

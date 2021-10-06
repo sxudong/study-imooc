@@ -6,7 +6,7 @@
 
 void test01()
 {
-	char *p = NULL;//NULL¶ş½øÖÆ¾ÍÊÇ0
+	char *p = NULL;//NULLäºŒè¿›åˆ¶å°±æ˜¯0
 	printf("p=%p\n", p);
 	printf("p+1=%p\n", p + 1);
 	int *p2 = NULL;
@@ -16,7 +16,7 @@ void test01()
 
 	char buf[1024] = { 0 };
 	int a = 100;
-	memcpy(buf + 1, &a, sizeof(int)); //°ÑaµÄµØÖ·¿½±´µ½buf+1£¬¿½±´sizeof¸ö×Ö½Ú
+	memcpy(buf + 1, &a, sizeof(int)); //æŠŠaçš„åœ°å€æ‹·è´åˆ°buf+1ï¼Œæ‹·è´sizeofä¸ªå­—èŠ‚
 	char *p3 = buf;
 	printf("*p3=%d\n", *(int *)(p3 + 1));
 }
@@ -29,7 +29,7 @@ struct Person
 	char buf[64];
 	int d;
 };
- 
+
 
 void test02()
 {

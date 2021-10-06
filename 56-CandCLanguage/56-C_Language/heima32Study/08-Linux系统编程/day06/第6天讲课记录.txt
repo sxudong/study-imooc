@@ -1,87 +1,87 @@
-1���ӽ��̿��Թ����ļ�
+1父子进程可以共享文件
 
-�������
-      
-��������Ҫ��������ݽ���������ͨ���ںˣ�
-      һ�����̽�����д���ںˣ�Ȼ����һ�����̴��ں˶������ݡ�
+基本概念：
 
-      
-IPC�����̼�ͨ��(interprocess communication)
+两个进程要想完成数据交换，必须通过内核；
+      一个进程将数据写到内核，然后另一个进程从内核读走数据。
 
 
-�ܵ���
-      1 �ܵ��ı�����һ���ں˻��������ڲ���ʵ���ǻ��ζ���
+IPC：进程间通信(interprocess communication)
 
-      2 �ܵ��ж�д���ˣ���д�����������ļ�������
-      
-3 ���ݵ������Ǵӹܵ���д�������ܵ��Ķ���(���ݵ������ǵ����)
 
-      4 ���ݱ�����֮���ڹܵ��о���ʧ��
+管道：
+      1 管道的本质是一块内核缓冲区，内部的实现是环形队列
 
-      5 pipeֻ��������ѪԵ��ϵ�Ľ��̼�ͨ��
+      2 管道有读写两端，读写两端是两个文件描述符
 
-      6 �ܵ��Ķ�д������������
-7�ܵ��Ĵ�СĬ����4k�����ǻ����ʵ��������ʵ�����.��
+3 数据的流向是从管道的写端流到管道的读端(数据的流向是单向的)
 
-      int pipe(int fd[2]);  //����Ϊ2������
-      int pipe(int *fd);    //���д����������һ����
+      4 数据被读走之后，在管道中就消失了
+
+      5 pipe只能用于有血缘关系的进程间通信
+
+      6 管道的读写两端是阻塞的
+7管道的大小默认是4k，但是会根据实际情况做适当调整.。
+
+      int pipe(int fd[2]);  //长度为2的数组
+      int pipe(int *fd);    //这个写法跟上面是一样的
       sizeof(fd);
 
-pipe���ڸ��ӽ��̼�ͨ�ţ�
-      1 �����̴���pipe
+pipe用于父子进程间通信：
+      1 父进程创建pipe
 
-      2 �����̵���fork���������ӽ���
-      3 �����̹ر�һ��
-      
-4 �ӽ��̹ر�һ��
+      2 父进程调用fork函数创建子进程
+      3 父进程关闭一端
 
-      5 �����̺��ӽ��̷ֱ�ִ��read����write����
+4 子进程关闭一端
 
-fifo����������̼�ͨ�ŵ�˼·��
-����A��
+      5 父进程和子进程分别执行read或者write操作
 
-      1 ����һ��fifo�ļ�: mkfifo�� �����ʹ��mkfifo����
+fifo完成两个进程间通信的思路：
+进程A：
 
-      2 open fifo�ļ������һ���ļ�������fd
+      1 创建一个fifo文件: mkfifo命 令或者使用mkfifo函数
 
-      3 дfifo�ļ�----write(fd, "xxx"�� ...)
-      
-4 �ر�fifo�ļ�---close(fd);
+      2 open fifo文件，获得一个文件描述符fd
 
-����B��
-      1 ��fifo�ļ�������ļ�������fd
-      
-2 ��fifo�ļ�---read(fd,
+      3 写fifo文件----write(fd, "xxx"， ...)
+
+4 关闭fifo文件---close(fd);
+
+进程B：
+      1 打开fifo文件，获得文件描述符fd
+
+2 读fifo文件---read(fd,
 buf, sizeof(buf));
 
-      3 �ر�fifo�ļ�---close(fd);
+      3 关闭fifo文件---close(fd);
 
-����ӳ������
+共享映射区：
 
 void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
 
-������
+参数：
 
-       addr��һ�㴫NULL,��ʾ���ں�ȥָ��һ���ڴ���ʼ��ַ
-       
-length���ļ���С;
-lseek����stat����
+       addr：一般传NULL,表示让内核去指定一个内存起始地址
 
-       prot��PROT_ _READ PROT_ WRITE PROT_ READ| PROT_ WRITE
-       
-flags��
-              MAP_ SHARED����ӳ�������޸Ļᷴӳ���ļ���(���Զ��ļ������޸�)
-              
-MAP_ PRIVATE����ӳ�������޸Ĳ���ԡ��ļ�������Ӱ�졣
-       fd���򿪵��ļ�������
-             
+length：文件大小;
+lseek或者stat函数
+
+       prot：PROT_ _READ PROT_ WRITE PROT_ READ| PROT_ WRITE
+
+flags：
+              MAP_ SHARED：对映射区的修改会反映到文件中(可以对文件进行修改)
+
+MAP_ PRIVATE：对映射区的修改不会对“文件”产生影响。
+       fd：打开的文件描述符
+
 fd = open();
 
-       offset�����ļ����ĸ�λ�ÿ�ʼӳ�䣬һ�㴫0
+       offset：从文件的哪个位置开始映射，一般传0
 
-����ֵ��
-       ӳ�������׵�ַ
+返回值：
+       映射区的首地址
 
-����ӳ�䣺ֻ��������ѪԵ��ϵ�Ľ��̼�ͨ��
+匿名映射：只能用于有血缘关系的进程间通信
        mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-       MAP_ANONYMOUS������MAP_SHAREDһ��ʹ�ã�����fdָ��Ϊ-1
+       MAP_ANONYMOUS必须与MAP_SHARED一起使用，而且fd指定为-1

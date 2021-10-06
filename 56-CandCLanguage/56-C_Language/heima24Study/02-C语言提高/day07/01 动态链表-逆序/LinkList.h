@@ -6,13 +6,13 @@
 #include<stdbool.h>
 #include<stdio.h>
 
-//Ä¿µÄÎªÁËÔÚC++ÖĞÄÜ¹»µ÷ÓÃCĞ´µÄº¯Êı
+//ç›®çš„ä¸ºäº†åœ¨C++ä¸­èƒ½å¤Ÿè°ƒç”¨Cå†™çš„å‡½æ•°
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-	//¶¨Òå½ÚµãÊı¾İÀàĞÍ
+	//å®šä¹‰èŠ‚ç‚¹æ•°æ®ç±»å‹
 	struct LinkNode
 	{
 		int data;
@@ -20,22 +20,22 @@ extern "C" {
 	};
 
 	/*
-	* ¶¨ÒåËùĞèÒªµÄº¯Êı·½·¨£¨ÔÚ DynamicLinkList.c ÖĞÊµÏÖÕâĞ©·½·¨£©
+	* å®šä¹‰æ‰€éœ€è¦çš„å‡½æ•°æ–¹æ³•ï¼ˆåœ¨ DynamicLinkList.c ä¸­å®ç°è¿™äº›æ–¹æ³•ï¼‰
 	*/
 
-	//³õÊ¼»¯Á´±í
+	//åˆå§‹åŒ–é“¾è¡¨
 	struct LinkNode* Init_LinkList();
-	//ÔÚÖµÎªoldvalµÄÎ»ÖÃ²åÈëĞÂµÄÊı¾İnewval
+	//åœ¨å€¼ä¸ºoldvalçš„ä½ç½®æ’å…¥æ–°çš„æ•°æ®newval
 	void InsertByValue_LinkList(struct LinkNode* header, int oldval, int newval);
-	//É¾³ıÖµÎªvalµÄ½áµã
+	//åˆ é™¤å€¼ä¸ºvalçš„ç»“ç‚¹
 	void RemoveByValue_LinkList(struct LinkNode* header, int delValue);
-	//±éÀú
+	//éå†
 	void Foreach_LinkList(struct LinkNode* header);
-	//Ïú»Ù
+	//é”€æ¯
 	void Destroy_LinkList(struct LinkNode* header);
-	//Çå¿Õ
+	//æ¸…ç©º
 	void Clear_LinkList(struct LinkNode* header);
-	//Á´±íÄæĞò
+	//é“¾è¡¨é€†åº
 	void Reverse_LinkList(struct LinkNode* header);
 
 #ifdef __cplusplus

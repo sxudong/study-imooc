@@ -10,7 +10,7 @@ int main04()
 	//int len = sizeof(score);//40
 	//int len1 = sizeof(int);//4
 	//printf("%d\n", len);
-	printf("Êý×éÔªËØ¸öÊý£º%d\n", sizeof(score) / sizeof(int));
+	printf("æ•°ç»„å…ƒç´ ä¸ªæ•°ï¼š%d\n", sizeof(score) / sizeof(int));
 	system("pause");
 	return EXIT_SUCCESS;
 }

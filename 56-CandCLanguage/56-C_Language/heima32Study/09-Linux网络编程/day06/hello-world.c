@@ -40,17 +40,17 @@ static void signal_cb(evutil_socket_t, short, void *);
 int
 main(int argc, char **argv)
 {
-	struct event_base *base;         //µØ»ù ¶¨ÒåÁËÖ¸ÏòµØ»ù½ÚµãµÄÖ¸Õë
-	struct evconnlistener *listener; //Á´½Ó¼àÌıÆ÷ ¶¨ÒåÁËÁ´½Ó¼àÌıÆ÷µÄÖ¸Õë
-	struct event *signal_event;      //ĞÅºÅÊÂ¼ş ¶¨ÒåÁËĞÅºÅÊÂ¼şÖ¸Õë
+	struct event_base *base;         //åœ°åŸº å®šä¹‰äº†æŒ‡å‘åœ°åŸºèŠ‚ç‚¹çš„æŒ‡é’ˆ
+	struct evconnlistener *listener; //é“¾æ¥ç›‘å¬å™¨ å®šä¹‰äº†é“¾æ¥ç›‘å¬å™¨çš„æŒ‡é’ˆ
+	struct event *signal_event;      //ä¿¡å·äº‹ä»¶ å®šä¹‰äº†ä¿¡å·äº‹ä»¶æŒ‡é’ˆ
 
-	struct sockaddr_in sin; //IPµØÖ·
+	struct sockaddr_in sin; //IPåœ°å€
 #ifdef WIN32
 	WSADATA wsa_data;
 	WSAStartup(0x0201, &wsa_data);
 #endif
 
-	//´´½¨µØ»ù½Úµã---Ïàµ±ÓÚepollµÄÊ÷¸ù(epoll_create)
+	//åˆ›å»ºåœ°åŸºèŠ‚ç‚¹---ç›¸å½“äºepollçš„æ ‘æ ¹(epoll_create)
 	base = event_base_new();
 	if (!base) {
 		fprintf(stderr, "Could not initialize libevent!\n");
@@ -61,9 +61,9 @@ main(int argc, char **argv)
 	sin.sin_family = AF_INET; //IPv4
 	sin.sin_port = htons(PORT);
 
-	//´´½¨Á´½Ó¼àÌıÆ÷--socket bind  listen  accept
-	//listener_cb: »Øµ÷º¯Êı
-	//LEV_OPT_REUSEABLE|LEV_OPT_CLOSE_ON_FREE: ÉèÖÃ¶Ë¿Ú¸´ÓÃ, µ±Á´½Ó¼àÌıÆ÷ÊÍ·ÅµÄÊ±ºò¹Ø±ÕÌ×½Ó×Ö(¼àÌıÎÄ¼şÃèÊö·û)
+	//åˆ›å»ºé“¾æ¥ç›‘å¬å™¨--socket bind  listen  accept
+	//listener_cb: å›è°ƒå‡½æ•°
+	//LEV_OPT_REUSEABLE|LEV_OPT_CLOSE_ON_FREE: è®¾ç½®ç«¯å£å¤ç”¨, å½“é“¾æ¥ç›‘å¬å™¨é‡Šæ”¾çš„æ—¶å€™å…³é—­å¥—æ¥å­—(ç›‘å¬æ–‡ä»¶æè¿°ç¬¦)
 	listener = evconnlistener_new_bind(base, listener_cb, (void *)base,
 	    LEV_OPT_REUSEABLE|LEV_OPT_CLOSE_ON_FREE, -1,
 	    (struct sockaddr*)&sin,
@@ -74,7 +74,7 @@ main(int argc, char **argv)
 		return 1;
 	}
 
-	//ÉèÖÃSIGINTĞÅºÅµÄÊÂ¼ş»Øµ÷
+	//è®¾ç½®SIGINTä¿¡å·çš„äº‹ä»¶å›è°ƒ
 	signal_event = evsignal_new(base, SIGINT, signal_cb, (void *)base);
 
 	if (!signal_event || event_add(signal_event, NULL)<0) {
@@ -82,15 +82,15 @@ main(int argc, char **argv)
 		return 1;
 	}
 
-	//½øÈëµÈ´ıÊÂ¼şÑ­»·---Ïàµ±ÓÚwhile(1)
+	//è¿›å…¥ç­‰å¾…äº‹ä»¶å¾ªç¯---ç›¸å½“äºwhile(1)
 	event_base_dispatch(base);
 
-	//ÊÍ·Å×ÊÔ´
-	//ÊÍ·ÅÁ¬½Ó¼àÌıÆ÷
+	//é‡Šæ”¾èµ„æº
+	//é‡Šæ”¾è¿æ¥ç›‘å¬å™¨
 	evconnlistener_free(listener);
-	//ÊÍ·ÅĞÅºÅÊÂ¼ş½Úµã
+	//é‡Šæ”¾ä¿¡å·äº‹ä»¶èŠ‚ç‚¹
 	event_free(signal_event);
-	//ÊÍ·ÅµØ»ù½Úµã
+	//é‡Šæ”¾åœ°åŸºèŠ‚ç‚¹
 	event_base_free(base);
 
 	printf("done\n");
@@ -98,33 +98,33 @@ main(int argc, char **argv)
 }
 
 
-//listener: Á´½Ó¼àÌıÆ÷Ö¸Õë
-//fd: Í¨ĞÅÎÄ¼şÃèÊö·û
-//saºÍsocklen: ¿Í»§¶ËµØÖ·ĞÅÏ¢ºÍ³¤¶È
-//user_data: ²ÎÊı£¬¾ßÌåÊÇµØ»ù½ÚµãÖ¸Õë
+//listener: é“¾æ¥ç›‘å¬å™¨æŒ‡é’ˆ
+//fd: é€šä¿¡æ–‡ä»¶æè¿°ç¬¦
+//saå’Œsocklen: å®¢æˆ·ç«¯åœ°å€ä¿¡æ¯å’Œé•¿åº¦
+//user_data: å‚æ•°ï¼Œå…·ä½“æ˜¯åœ°åŸºèŠ‚ç‚¹æŒ‡é’ˆ
 static void
 listener_cb(struct evconnlistener *listener, evutil_socket_t fd,
     struct sockaddr *sa, int socklen, void *user_data)
 {
 	struct event_base *base = user_data;
-	struct bufferevent *bev; //Ö¸ÏòbuffereventµÄÖ¸Õë
+	struct bufferevent *bev; //æŒ‡å‘buffereventçš„æŒ‡é’ˆ
 
-	//´´½¨bufferevent»º³åÇø
-	//BEV_OPT_CLOSE_ON_FREE: buffereventÊÍ·ÅµÄÊ±ºò×Ô¶¯¹Ø±ÕÍ¨ĞÅÎÄ¼şÃèÊö·û£¬µ±ÊÍ·ÅbuffereventµÄÊ±ºò¹Ø±ÕÁ¬½Ó
+	//åˆ›å»ºbuffereventç¼“å†²åŒº
+	//BEV_OPT_CLOSE_ON_FREE: buffereventé‡Šæ”¾çš„æ—¶å€™è‡ªåŠ¨å…³é—­é€šä¿¡æ–‡ä»¶æè¿°ç¬¦ï¼Œå½“é‡Šæ”¾buffereventçš„æ—¶å€™å…³é—­è¿æ¥
 	bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE);
 	if (!bev) {
 		fprintf(stderr, "Error constructing bufferevent!");
-		event_base_loopbreak(base); //ÍË³öÑ­»·,³ÌĞò½áÊø
+		event_base_loopbreak(base); //é€€å‡ºå¾ªç¯,ç¨‹åºç»“æŸ
 		return;
 	}
-	//ÉèÖÃ»Øµ÷º¯Êı: ¶Á»Øµ÷, Ğ´ÊÂ¼şºÍÒì³£ÊÂ¼ş»Øµ÷º¯Êı
+	//è®¾ç½®å›è°ƒå‡½æ•°: è¯»å›è°ƒ, å†™äº‹ä»¶å’Œå¼‚å¸¸äº‹ä»¶å›è°ƒå‡½æ•°
 	bufferevent_setcb(bev, conn_readcb, conn_writecb, conn_eventcb, NULL);
-	//Ê¹buffereventÉèÖÃÉúĞ§ Ê¹Ğ´ÊÂ¼ş»Øµ÷ÉúĞ§
+	//ä½¿buffereventè®¾ç½®ç”Ÿæ•ˆ ä½¿å†™äº‹ä»¶å›è°ƒç”Ÿæ•ˆ
 	bufferevent_enable(bev, EV_WRITE);
-	//Ê¹¶ÁÊÂ¼ş»Øµ÷Ê§Ğ§
+	//ä½¿è¯»äº‹ä»¶å›è°ƒå¤±æ•ˆ
 	bufferevent_enable(bev, EV_READ);
-	
-	//Ê¹buffereventÉèÖÃÎŞĞ§
+
+	//ä½¿buffereventè®¾ç½®æ— æ•ˆ
 	//bufferevent_disable(bev, EV_READ);
 
 	//bufferevent_write(bev, MESSAGE, strlen(MESSAGE));
@@ -136,31 +136,31 @@ conn_readcb(struct bufferevent *bev, void *user_data)
 	//size_t bufferevent_read(struct bufferevent *bufev, void *data, size_t size);
 	char buf[1024];
 	memset(buf, 0x00, sizeof(buf));
-	//´Óbufferevent¶ÁÊı¾İ
+	//ä»buffereventè¯»æ•°æ®
 	int n = bufferevent_read(bev, buf, sizeof(buf));
 	printf("n=[%d],buf==[%s]\n", n, buf);
-	
+
 	int i=0;
 	for(i=0; i<n; i++)
 	{
 		buf[i] = toupper(buf[i]);
 	}
-	//ÍùbuffereventµÄĞ´»º³åÇøĞ´Êı¾İ
+	//å¾€buffereventçš„å†™ç¼“å†²åŒºå†™æ•°æ®
 	//int bufferevent_write(struct bufferevent *bufev, const void *data, size_t size);
-	bufferevent_write(bev, buf, n); //Ğ´bufferevent»º³åÇø»á´¥·¢Ğ´ÊÂ¼ş»Øµ÷
+	bufferevent_write(bev, buf, n); //å†™buffereventç¼“å†²åŒºä¼šè§¦å‘å†™äº‹ä»¶å›è°ƒ
 }
 
 static void
 conn_writecb(struct bufferevent *bev, void *user_data)
 {
 	printf("--call--%s--\n", __FUNCTION__);
-	
-	//»ñÈ¡buffereventµÄĞ´»º³åÇøµÄÖ¸Õë
+
+	//è·å–buffereventçš„å†™ç¼“å†²åŒºçš„æŒ‡é’ˆ
 	struct evbuffer *output = bufferevent_get_output(bev);
-	//²é¿´»º³åÇø»¹ÓĞÃ»ÓĞÊı¾İ
+	//æŸ¥çœ‹ç¼“å†²åŒºè¿˜æœ‰æ²¡æœ‰æ•°æ®
 	if (evbuffer_get_length(output) == 0) {
 		printf("flushed answer\n");
-		//ÊÍ·Åbufferevent,¹Ø±ÕÍ¨ĞÅÎÄ¼ş ÃèÊö·û
+		//é‡Šæ”¾bufferevent,å…³é—­é€šä¿¡æ–‡ä»¶ æè¿°ç¬¦
 		//bufferevent_free(bev);
 	}
 }
@@ -187,13 +187,13 @@ signal_cb(evutil_socket_t sig, short events, void *user_data)
 
 	printf("Caught an interrupt signal; exiting cleanly in two seconds.\n");
 
-	//ÊÂ¼ş»Øµ÷º¯ÊıÖ´ĞĞÍêºó, ÔÙ¹ı2Ãë, Ìø³öÑ­»·, ³ÌĞò½áÊø
+	//äº‹ä»¶å›è°ƒå‡½æ•°æ‰§è¡Œå®Œå, å†è¿‡2ç§’, è·³å‡ºå¾ªç¯, ç¨‹åºç»“æŸ
 	event_base_loopexit(base, &delay);
 }
 /*
-#±àÒë²¢Æô¶¯·şÎñ¶Ë
+#ç¼–è¯‘å¹¶å¯åŠ¨æœåŠ¡ç«¯
 aaron@aaron-virtual-machine:~$ gcc -o hello-world hello-world.c -levent
-aaron@aaron-virtual-machine:~$ ./hello-world 
+aaron@aaron-virtual-machine:~$ ./hello-world
 --call--conn_writecb--
 flushed answer
 n=[6],buf==[hello
@@ -212,28 +212,28 @@ n=[8],buf==[welcome
 ]
 --call--conn_writecb--
 flushed answer
-Connection closed.      //ÍË³öÁ¬½Ó
+Connection closed.      //é€€å‡ºè¿æ¥
 
-#´ò¿ªÒ»¸öÁ¬½Ó
+#æ‰“å¼€ä¸€ä¸ªè¿æ¥
 aaron@aaron-virtual-machine:~$ nc 127.1 9995
 hello
 HELLO
 
-#´ò¿ªÒ»¸öÁ¬½Ó
+#æ‰“å¼€ä¸€ä¸ªè¿æ¥
 aaron@aaron-virtual-machine:~$ nc 127.1 9995
 nice
 NICE
 
-#´ò¿ªÒ»¸öÁ¬½Ó
+#æ‰“å¼€ä¸€ä¸ªè¿æ¥
 aaron@aaron-virtual-machine:~$ nc 127.1 9995
 welcome
 WELCOME
 ^C
 
 aaron@aaron-virtual-machine:~$ netstat -anp | grep 9995
-£¨²¢·ÇËùÓĞ½ø³Ì¶¼ÄÜ±»¼ì²âµ½£¬ËùÓĞ·Ç±¾ÓÃ»§µÄ½ø³ÌĞÅÏ¢½«²»»áÏÔÊ¾£¬Èç¹ûÏë¿´µ½ËùÓĞĞÅÏ¢£¬Ôò±ØĞëÇĞ»»µ½ root ÓÃ»§£©
-tcp        0      0 0.0.0.0:9995            0.0.0.0:*               LISTEN      27507/./hello-world 
-tcp        0      0 127.0.0.1:57354         127.0.0.1:9995          TIME_WAIT   -                   //Ö÷¶¯¹Ø±Õ·½´¦ÀíTIME_WAIT×´Ì¬              
+ï¼ˆå¹¶éæ‰€æœ‰è¿›ç¨‹éƒ½èƒ½è¢«æ£€æµ‹åˆ°ï¼Œæ‰€æœ‰éæœ¬ç”¨æˆ·çš„è¿›ç¨‹ä¿¡æ¯å°†ä¸ä¼šæ˜¾ç¤ºï¼Œå¦‚æœæƒ³çœ‹åˆ°æ‰€æœ‰ä¿¡æ¯ï¼Œåˆ™å¿…é¡»åˆ‡æ¢åˆ° root ç”¨æˆ·ï¼‰
+tcp        0      0 0.0.0.0:9995            0.0.0.0:*               LISTEN      27507/./hello-world
+tcp        0      0 127.0.0.1:57354         127.0.0.1:9995          TIME_WAIT   -                   //ä¸»åŠ¨å…³é—­æ–¹å¤„ç†TIME_WAITçŠ¶æ€
 tcp        0      0 127.0.0.1:57344         127.0.0.1:9995          ESTABLISHED 27517/nc            
 tcp        0      0 127.0.0.1:9995          127.0.0.1:57344         ESTABLISHED 27507/./hello-world 
 tcp        0      0 127.0.0.1:9995          127.0.0.1:57348         ESTABLISHED 27507/./hello-world 

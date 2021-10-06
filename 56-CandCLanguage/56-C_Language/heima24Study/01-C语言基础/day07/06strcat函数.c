@@ -10,7 +10,7 @@ int main06()
 	char arr2[] = "world";
 	//strcat(arr1, " nihao ");//hello nihao 
 	//strcat(arr1, arr2);//hello nihao world
-	strncat(arr1, arr2, 3);//hellowor  注意：有限追加也会将\0追加
+	strncat(arr1, arr2, 3);//hellowor  娉ㄦ剰锛氭湁闄愯拷鍔犱篃浼氬皢\0杩藉姞
 	printf("%s\n", arr1);
 	printf("%s\n", arr2);
 

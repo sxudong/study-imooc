@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <strings.h>
+
 //绑定错误显示和退出
 void perr_exit(const char *s)
 {

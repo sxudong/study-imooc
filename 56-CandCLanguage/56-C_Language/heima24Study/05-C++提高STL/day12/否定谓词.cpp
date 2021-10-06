@@ -1,15 +1,15 @@
 #include <algorithm>
 #include <numeric>
 #include <iterator>
-#include <functional> //Í·ÎÄ¼ş
+#include <functional> //å¤´æ–‡ä»¶
 #include <iostream>
 #include <vector>
 
 /*
-* STL ·ñ¶¨Î½´Ê not1() not2()
-* not1 ÊÇ¹¹ÔìÒ»¸öÓëÎ½´Ê½á¹û¡°Ïà·´¡±µÄÒ»Ôªº¯Êı¶ÔÏó¡£
-* not2 ÊÇ¹¹ÔìÒ»¸öÓëÎ½´Ê½á¹û¡°Ïà·´¡±µÄ¶şÔªº¯Êı¶ÔÏó¡£
-* Ê¾Àı£ºhttps://www.jianshu.com/p/c7f3a04f88b7
+* STL å¦å®šè°“è¯ not1() not2()
+* not1 æ˜¯æ„é€ ä¸€ä¸ªä¸è°“è¯ç»“æœâ€œç›¸åâ€çš„ä¸€å…ƒå‡½æ•°å¯¹è±¡ã€‚
+* not2 æ˜¯æ„é€ ä¸€ä¸ªä¸è°“è¯ç»“æœâ€œç›¸åâ€çš„äºŒå…ƒå‡½æ•°å¯¹è±¡ã€‚
+* ç¤ºä¾‹ï¼šhttps://www.jianshu.com/p/c7f3a04f88b7
 */
 
 
@@ -21,11 +21,11 @@ struct LessThan7 : std::unary_function<int, bool>
 
 
 /*
-* not1 ÊÇ¹¹ÔìÒ»¸öÓëÎ½´Ê½á¹û¡°Ïà·´¡±µÄÒ»Ôªº¯Êı¶ÔÏó¡£
+* not1 æ˜¯æ„é€ ä¸€ä¸ªä¸è°“è¯ç»“æœâ€œç›¸åâ€çš„ä¸€å…ƒå‡½æ•°å¯¹è±¡ã€‚
 */
 void test01() {
     std::vector<int> v(10);
-    std::iota(begin(v), end(v), 0); //std::iota :ÓÃË³ĞòµİÔöµÄÖµ¸³ÖµÖ¸¶¨·¶Î§ÄÚµÄÔªËØ ¡£
+    std::iota(begin(v), end(v), 0); //std::iota :ç”¨é¡ºåºé€’å¢çš„å€¼èµ‹å€¼æŒ‡å®šèŒƒå›´å†…çš„å…ƒç´  ã€‚
     for (size_t i =0; i < v.size(); i ++) {
         int d = v[i];
         std::cout << d;
@@ -33,13 +33,13 @@ void test01() {
     std::cout << std::endl;
     std::cout << "v.size: " << v.size() << std::endl;
 
-    //not1 Ğ¡ÓÚ7 µÄÈ¡·´£¬¾ÍÊÇ >=7 µÄ,Ö»ÓĞ7¡¢8¡¢9£¬3¸öÊı×Ö¡£
+    //not1 å°äº7 çš„å–åï¼Œå°±æ˜¯ >=7 çš„,åªæœ‰7ã€8ã€9ï¼Œ3ä¸ªæ•°å­—ã€‚
     std::cout << std::count_if(begin(v), end(v), std::not1(LessThan7())) << "\n"; //3
 
-    //Í¬ÉÏ£¬µ«Ê¹ÓÃ `std::function`
+    //åŒä¸Šï¼Œä½†ä½¿ç”¨ `std::function`
     std::function<bool(int)> less_than_9 = [](int x){ return x < 9; };
-    //count_if ·µ»ØÂú×ãÌõ¼ş·¶Î§ÄÚµÄÔªËØ¸öÊı
-    //not1 Ğ¡ÓÚ7 µÄÈ¡·´£¬¾ÍÊÇ >=9 µÄ,Ö»ÓĞ9£¬1¸öÊı×Ö¡£
+    //count_if è¿”å›æ»¡è¶³æ¡ä»¶èŒƒå›´å†…çš„å…ƒç´ ä¸ªæ•°
+    //not1 å°äº7 çš„å–åï¼Œå°±æ˜¯ >=9 çš„,åªæœ‰9ï¼Œ1ä¸ªæ•°å­—ã€‚
     std::cout << std::count_if(begin(v), end(v), std::not1(less_than_9)) << "\n"; //1
 }
 /* Output:
@@ -50,14 +50,14 @@ v.size: 10
 */
 
 /*
-* not2 ÊÇ¹¹ÔìÒ»¸öÓëÎ½´Ê½á¹û¡°Ïà·´¡±µÄ¶şÔªº¯Êı¶ÔÏó¡£
+* not2 æ˜¯æ„é€ ä¸€ä¸ªä¸è°“è¯ç»“æœâ€œç›¸åâ€çš„äºŒå…ƒå‡½æ•°å¯¹è±¡ã€‚
 */
 void test02(){
     std::vector<int> nums = {5, 3, 4, 9, 1, 7, 6, 2, 8};
 
     std::function<bool(int, int)> ascendingOrder = [](int a, int b) { return a < b; };
 
-    // °´½µĞò¶ÔÊı×Ö½øĞĞÅÅĞò£º²»ÊÇÉıĞò
+    // æŒ‰é™åºå¯¹æ•°å­—è¿›è¡Œæ’åºï¼šä¸æ˜¯å‡åº
     std::sort(nums.begin(), nums.end(), std::not2(ascendingOrder));
 
     for(int i:nums) {

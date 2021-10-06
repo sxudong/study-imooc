@@ -7,7 +7,7 @@
 void test01()
 {
 	char str1[] = { 'h', 'e', 'l', 'l', 'o' };
-	printf("%s\n", str1); // helloÌÌÌÌÌÌÌdËÖí`?
+	printf("%s\n", str1); // helloçƒ«çƒ«çƒ«è˜¢é…¥éŸ…?
 
 	char* str2[] = { 'h', 'e', 'l', 'l', 'o' };
 	printf("%s\n", str2); // h
@@ -17,7 +17,7 @@ void test01()
 }
 
 /*
-* ×Ö·û´®¿½±´¹¦ÄÜÊµÏÖÒ»
+* å­—ç¬¦ä¸²æ‹·è´åŠŸèƒ½å®ç°ä¸€
 */
 void copyString01(char* dst, const char* source)
 {
@@ -32,13 +32,13 @@ void copyString01(char* dst, const char* source)
 }
 
 /*
-* ×Ö·û´®¿½±´¹¦ÄÜÊµÏÖ¶ş
+* å­—ç¬¦ä¸²æ‹·è´åŠŸèƒ½å®ç°äºŒ
 */
 void copyString02(char* dst, const char* source)
 {
 	while (*source != '\0')
 	{
-		*dst = *source; //Ö¸ÕëÖµ¸³Öµ
+		*dst = *source; //æŒ‡é’ˆå€¼èµ‹å€¼
 		++dst;
 		++source;
 	}
@@ -47,7 +47,7 @@ void copyString02(char* dst, const char* source)
 }
 
 /*
-* ×Ö·û´®¿½±´¹¦ÄÜÊµÏÖÈı
+* å­—ç¬¦ä¸²æ‹·è´åŠŸèƒ½å®ç°ä¸‰
 */
 void copyString03(char* dst, const char* source)
 {
@@ -61,11 +61,11 @@ void copyString03(char* dst, const char* source)
 		return;
 	}
 
-	while (*dst++ = *source++); //¸úµÚ¶şÖÖ²î²»¶à£¬ÏÈ¸³Öµ¼Ó++
+	while (*dst++ = *source++); //è·Ÿç¬¬äºŒç§å·®ä¸å¤šï¼Œå…ˆèµ‹å€¼åŠ ++
 }
 
 /*
-* 1. ×Ö·û´®¿½±´
+* 1. å­—ç¬¦ä¸²æ‹·è´
 */
 void test02()
 {
@@ -87,7 +87,7 @@ void reverseString(char* str)
 
 	int len = strlen(str);
 
-//µÚ1¸ö×Ö·ûÓë×îºóÒ»¸ö×Ö·û½»»»Î»ÖÃ
+//ç¬¬1ä¸ªå­—ç¬¦ä¸æœ€åä¸€ä¸ªå­—ç¬¦äº¤æ¢ä½ç½®
 #if 0
 	int start = 0;
 	int end = len - 1;
@@ -120,7 +120,7 @@ void reverseString(char* str)
 }
 
 /*
-* 2. ×Ö·û´®·´×ª
+* 2. å­—ç¬¦ä¸²åè½¬
 */
 void test03()
 {
@@ -139,8 +139,8 @@ void test04()
 
 	printf("temp = %s\n", temp); //temp = hello world!
 
-	free(temp);  //ÊÍ·Å¶Ñ¿Õ¼ä
-	temp = NULL; //Ö¸Ïò¿Õ
+	free(temp);  //é‡Šæ”¾å †ç©ºé—´
+	temp = NULL; //æŒ‡å‘ç©º
 }
 
 
@@ -157,7 +157,7 @@ int main() {
 	return EXIT_SUCCESS;
 }
 /* Output:
-helloÌÌÌÌÌÌÌM ? Õ`úü
+helloçƒ«çƒ«çƒ«è˜‰ ? èª¤î‹
 h
 hello
 ----------------
@@ -166,5 +166,5 @@ hello world!
 p = cba
 ----------------
 temp = hello world!
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

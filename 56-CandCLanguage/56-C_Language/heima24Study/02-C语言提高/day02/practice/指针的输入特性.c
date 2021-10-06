@@ -14,7 +14,7 @@ void printStringArray(char **arr, int len)
 void allocateSpace(char **p)
 {
 	char *temp = malloc(sizeof(char) * 100);
-	memset(temp, 0, 100);//¶¯Ì¬·ÖÅäÄÚ´æÊ±£¬Òª³õÊ¼»¯
+	memset(temp, 0, 100);//åŠ¨æ€åˆ†é…å†…å­˜æ—¶ï¼Œè¦åˆå§‹åŒ–
 	strcpy(temp, "hello world");//
 	*p = temp;
 }

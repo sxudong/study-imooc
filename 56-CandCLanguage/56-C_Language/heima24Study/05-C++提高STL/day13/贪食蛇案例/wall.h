@@ -1,4 +1,4 @@
-#ifndef _WALL_HEAD //11.3.2 Ìõ¼þ±àÒë ·ÀÖ¹Í·ÎÄ¼þ±»ÖØ¸´°üº¬ÒýÓÃ¡£_WALL_HEADÎª×Ô¶¨ÒåµÄ±êÊ¶·û
+#ifndef _WALL_HEAD //11.3.2 æ¡ä»¶ç¼–è¯‘ é˜²æ­¢å¤´æ–‡ä»¶è¢«é‡å¤åŒ…å«å¼•ç”¨ã€‚_WALL_HEADä¸ºè‡ªå®šä¹‰çš„æ ‡è¯†ç¬¦
 #define _WALL_HEAD
 //#pragma  once
 
@@ -9,20 +9,20 @@ class Wall
 {
 public:
 	enum {
-		ROW = 26, //³¤26ÐÐ
-		COL = 26  //¿í26ÁÐ
+		ROW = 26, //é•¿26è¡Œ
+		COL = 26  //å®½26åˆ—
 	};
 
-	//³õÊ¼»¯Ç½±Ú
+	//åˆå§‹åŒ–å¢™å£
 	void initWall();
 
-	//»­³öÇ½±Ú
+	//ç”»å‡ºå¢™å£
 	void drawWall();
 
-	//¸ù¾ÝË÷ÒýÉèÖÃ ¶þÎ¬Êý×éÀïµÄÄÚÈÝ
+	//æ ¹æ®ç´¢å¼•è®¾ç½® äºŒç»´æ•°ç»„é‡Œçš„å†…å®¹
 	void setWall(int x, int y, char c);
 
-	//¸ù¾ÝË÷Òý»ñÈ¡µ±Ç°Î»ÖÃµÄ·ûºÅ
+	//æ ¹æ®ç´¢å¼•èŽ·å–å½“å‰ä½ç½®çš„ç¬¦å·
 	char getWall(int x, int y);
 
 private:

@@ -5,10 +5,10 @@
 
 int main11()
 {
-	//¶¨Òå¶şÎ¬Êı×é
+	//å®šä¹‰äºŒç»´æ•°ç»„
 	int scores[5][3];
 	//int stuSum[5] = 0;
-	//Â¼ÈëÑ§Éú³É¼¨
+	//å½•å…¥å­¦ç”Ÿæˆç»©
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 3; j++)
@@ -16,22 +16,22 @@ int main11()
 			switch (j)
 			{
 			case 0:
-				printf("ÇëÊäÈëÓïÎÄ³É¼¨£º\n");
+				printf("è¯·è¾“å…¥è¯­æ–‡æˆç»©ï¼š\n");
 				scanf("%d", &scores[i][j]);
 				break;
 			case 1:
-				printf("ÇëÊäÈëÊıÑ§³É¼¨£º\n");
+				printf("è¯·è¾“å…¥æ•°å­¦æˆç»©ï¼š\n");
 				scanf("%d", &scores[i][j]);
 				break;
 			case 2:
-				printf("ÇëÊäÈëÍâÓï³É¼¨£º\n");
+				printf("è¯·è¾“å…¥å¤–è¯­æˆç»©ï¼š\n");
 				scanf("%d", &scores[i][j]);
 				break;
 				//stuSum[i] += scores[i][j];
 			}
 		}
 	}
-	//Çó³öÑ§ÉúµÄÆ½¾ù³É¼¨
+	//æ±‚å‡ºå­¦ç”Ÿçš„å¹³å‡æˆç»©
 	int stuSum = 0;
 	///int stuAvg = 0;
 	for (int i = 0; i < 5; i++)
@@ -43,10 +43,10 @@ int main11()
 			stuSum += scores[i][j];
 			//stuAvg = stuSum / 3;
 		}
-		printf("µÚ%dÃûÑ§ÉúµÄÆ½¾ù³É¼¨Îª£º%d\n", i + 1, stuSum / 3);
+		printf("ç¬¬%dåå­¦ç”Ÿçš„å¹³å‡æˆç»©ä¸ºï¼š%d\n", i + 1, stuSum / 3);
 	}
 
-	//Ñ§¿ÆÆ½¾ù³É¼¨
+	//å­¦ç§‘å¹³å‡æˆç»©
 	int cSum = 0, mSum = 0, eSum = 0;
 	for (int i = 0; i < 5; i++)
 	{
@@ -68,9 +68,9 @@ int main11()
 		}
 	}
 
-	printf("°à¼¶µÄÓïÎÄÆ½¾ù³É¼¨Îª£º%d\n", cSum / 5);
-	printf("°à¼¶µÄÊıÑ§Æ½¾ù³É¼¨Îª£º%d\n", mSum / 5);
-	printf("°à¼¶µÄÓ¢ÓïÆ½¾ù³É¼¨Îª£º%d\n", eSum / 5);
+	printf("ç­çº§çš„è¯­æ–‡å¹³å‡æˆç»©ä¸ºï¼š%d\n", cSum / 5);
+	printf("ç­çº§çš„æ•°å­¦å¹³å‡æˆç»©ä¸ºï¼š%d\n", mSum / 5);
+	printf("ç­çº§çš„è‹±è¯­å¹³å‡æˆç»©ä¸ºï¼š%d\n", eSum / 5);
 
 	system("pause");
 	return EXIT_SUCCESS;

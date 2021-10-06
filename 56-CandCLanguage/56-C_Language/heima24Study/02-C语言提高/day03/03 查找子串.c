@@ -4,14 +4,14 @@
 #include<stdlib.h>
 
 /*
-* �����Ӵ���һ�γ��ֵ�λ��
+* 查找子串第一次出现的位置
 *
-* ˼·��abcdefgdfpoiq  ����df
-*       ���ȱ����ҵ�d
-*       �ҵ�d֮���ٱ���d֮����Ӵ����Ƚϵ�2���ַ��Ƿ���ȣ�
-*       �������Ƚ����˴�whileѭ���������whileѭ���м���
-*       Ѱ��d,�ҵ�d֮���ٱ���d֮����Ӵ����Ƚϵ�һ�θ�ѭ��
-*       ֱ���ҵ�Ϊֹ��
+* 思路：abcdefgdfpoiq  查找df
+*       首先遍历找到d
+*       找到d之后，再遍历d之后的子串，比较第2个字符是否相等，
+*       如果不相等结束此次while循环，到外层while循环中继续
+*       寻找d,找到d之后，再遍历d之后的子串，比较第一次个循环
+*       直到找到为止。
 */
 char* myStrStr(const char* str, const char* substr)
 {
@@ -23,33 +23,33 @@ char* myStrStr(const char* str, const char* substr)
 
 	while (*mystr != '\0')
 	{
-		//�Ƚ��׵�ֵַ�Ƿ���ȣ�d = d��
+		//比较首地址值是否相等（d = d）
 		if (*mystr != *mysub)
 		{
 			++mystr;
-			continue; //��������ѭ����������һ��whileѭ��
+			continue; //跳出本次循环，进入下一次while循环
 		}
 
 
-		//��ʱָ�����
+		//临时指针变量
 		const char* temp_mystr = mystr;
 		const char* temp_mysub = mysub;
 
-		while (*temp_mysub != '\0') //���Ҫ�ҵ��ַ�����û����β
+		while (*temp_mysub != '\0') //如果要找的字符串还没到结尾
 		{
-			//�Ƚ��׵�ֵַ�Ƿ���ȣ�d = d������������++���Ƚϵ�2���ַ�
+			//比较首地址值是否相等（d = d），相等则各自++，比较第2个字符
 			if (*temp_mystr != *temp_mysub)
 			{
-				++mystr; //����ȣ����ҵ�Դ�ӷ���++,�����һ���ַ�
-				break;   //����whileѭ�����������whileѭ����������mystr��Ѱ������ĸƥ����ַ���
+				++mystr; //不相等，查找的源子符串++,向后移一个字符
+				break;   //结束while循环，进入外层while循环继续遍历mystr，寻找首字母匹配的字符串
 			}
 
 			++temp_mysub;
 			++temp_mystr;
 		}
 
-		//˵��ƥ��ɹ�
-		if (*temp_mysub == '\0') //'\0'˵���Ѿ��ҵ����ַ�������β
+		//说明匹配成功
+		if (*temp_mysub == '\0') //'\0'说明已经找到的字符串最后结尾
 		{
 			return (char*)mystr;
 		}

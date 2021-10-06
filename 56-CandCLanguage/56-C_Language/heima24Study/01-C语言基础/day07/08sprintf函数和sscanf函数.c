@@ -11,7 +11,7 @@ int main08()
 	int b, c;
 	//char dest[100] = "hello 123";
 	char dest[100]= "1+2=";//1+2=3
-	//将数据格式化后放入在字符串中
+	//灏嗘暟鎹牸寮忓寲鍚庢斁鍏ュ湪瀛楃涓蹭腑
 	//sprintf(dest, "%s %d", arr, a);
 	//sscanf(dest, "%s %d", arr, &a);
 	sscanf(dest, "%d+%d=", &b, &c);

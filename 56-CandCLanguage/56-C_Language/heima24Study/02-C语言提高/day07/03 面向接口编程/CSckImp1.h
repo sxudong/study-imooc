@@ -6,14 +6,14 @@
 #include<stdio.h>
 
 /*
-* ½Ó¿Ú£¨½Ó¿ÚÊµÏÖÔÚCSckImp1.c£©
+* æ¥å£ï¼ˆæ¥å£å®ç°åœ¨CSckImp1.cï¼‰
 */
 
-//³õÊ¼»¯
+//åˆå§‹åŒ–
 void init_CSckImp1(void **handle);
-//·¢ËÍ½Ó¿Ú
+//å‘é€æ¥å£
 void send_CSckImp1(void *handle, unsigned char* sendData, int sendLen);
-//½ÓÊÕ½Ó¿Ú
+//æ¥æ”¶æ¥å£
 void recv_CSckImp1(void *handle, unsigned char* recvData, int* recvLen);
-//¹Ø±Õ
+//å…³é—­
 void close_CSckImp1(void *handle);

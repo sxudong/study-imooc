@@ -4,34 +4,34 @@
 using namespace std;
 
 /*
-* map¹¹Ôìº¯Êı
-*   map<T1, T2> mapTT;             //mapÄ¬ÈÏ¹¹Ôìº¯Êı:
-*   map(const map &mp);            //¿½±´¹¹Ôìº¯Êı
-* 
-* 3.8.2.2 map¸³Öµ²Ù×÷
-*   map& operator=(const map &mp); //ÖØÔØµÈºÅ²Ù×÷·û
-*   swap(mp);                      //½»»»Á½¸ö¼¯ºÏÈİÆ÷
-* 
-* 3.8.2.3 map´óĞ¡²Ù×÷
-*   size();                        //·µ»ØÈİÆ÷ÖĞÔªËØµÄÊıÄ¿
-*   empty();                       //ÅĞ¶ÏÈİÆ÷ÊÇ·ñÎª¿Õ
-* 
-* 3.8.2.4 map²åÈëÊı¾İÔªËØ²Ù×÷
-*   map.insert(...);              //ÍùÈİÆ÷²åÈëÔªËØ£¬·µ»Øpair<iterator,bool>
+* mapæ„é€ å‡½æ•°
+*   map<T1, T2> mapTT;             //mapé»˜è®¤æ„é€ å‡½æ•°:
+*   map(const map &mp);            //æ‹·è´æ„é€ å‡½æ•°
+*
+* 3.8.2.2 mapèµ‹å€¼æ“ä½œ
+*   map& operator=(const map &mp); //é‡è½½ç­‰å·æ“ä½œç¬¦
+*   swap(mp);                      //äº¤æ¢ä¸¤ä¸ªé›†åˆå®¹å™¨
+*
+* 3.8.2.3 mapå¤§å°æ“ä½œ
+*   size();                        //è¿”å›å®¹å™¨ä¸­å…ƒç´ çš„æ•°ç›®
+*   empty();                       //åˆ¤æ–­å®¹å™¨æ˜¯å¦ä¸ºç©º
+*
+* 3.8.2.4 mapæ’å…¥æ•°æ®å…ƒç´ æ“ä½œ
+*   map.insert(...);              //å¾€å®¹å™¨æ’å…¥å…ƒç´ ï¼Œè¿”å›pair<iterator,bool>
 *   map<int, string> mapStu;
-* 
-*    // µÚÒ»ÖÖ Í¨¹ıpairµÄ·½Ê½²åÈë¶ÔÏó
-*    mapStu.insert(pair<int, string>(3, "Ğ¡ÕÅ"));
-* 
-*    // µÚ¶şÖÖ Í¨¹ıpairµÄ·½Ê½²åÈë¶ÔÏó
-*    mapStu.inset(make_pair(-1, "Ğ£³¤"));
-* 
-*    // µÚÈıÖÖ Í¨¹ıvalue_typeµÄ·½Ê½²åÈë¶ÔÏó
-*    mapStu.insert(map<int, string>::value_type(1, "Ğ¡Àî"));
-* 
-*    // µÚËÄÖÖ Í¨¹ıÊı×éµÄ·½Ê½²åÈëÖµ
-*    mapStu[3] = "Ğ¡Áõ";
-*    mapStu[5] = "Ğ¡Íõ";
+*
+*    // ç¬¬ä¸€ç§ é€šè¿‡pairçš„æ–¹å¼æ’å…¥å¯¹è±¡
+*    mapStu.insert(pair<int, string>(3, "å°å¼ "));
+*
+*    // ç¬¬äºŒç§ é€šè¿‡pairçš„æ–¹å¼æ’å…¥å¯¹è±¡
+*    mapStu.inset(make_pair(-1, "æ ¡é•¿"));
+*
+*    // ç¬¬ä¸‰ç§ é€šè¿‡value_typeçš„æ–¹å¼æ’å…¥å¯¹è±¡
+*    mapStu.insert(map<int, string>::value_type(1, "å°æ"));
+*
+*    // ç¬¬å››ç§ é€šè¿‡æ•°ç»„çš„æ–¹å¼æ’å…¥å€¼
+*    mapStu[3] = "å°åˆ˜";
+*    mapStu[5] = "å°ç‹";
 */
 
 void test01()
@@ -39,15 +39,15 @@ void test01()
 	map<int, int> m;
 
 	/*
-	* ²åÈëÖµ 4ÖÖ·½Ê½
+	* æ’å…¥å€¼ 4ç§æ–¹å¼
 	*/
-	//µÚÒ»ÖÖ
+	//ç¬¬ä¸€ç§
 	m.insert(pair<int, int>(1, 10));
-	//µÚ¶şÖÖ ÍÆ¼ö
+	//ç¬¬äºŒç§ æ¨è
 	m.insert(make_pair(2, 20));
-	//µÚÈıÖÖ ²»ÍÆ¼ö
+	//ç¬¬ä¸‰ç§ ä¸æ¨è
 	m.insert(map<int, int>::value_type(3, 30));
-	//µÚËÄÖÖ Èç¹û±£Ö¤key´æÔÚ £¬ÄÇÃ´¿ÉÒÔÍ¨¹ı[]·ÃÎÊ
+	//ç¬¬å››ç§ å¦‚æœä¿è¯keyå­˜åœ¨ ï¼Œé‚£ä¹ˆå¯ä»¥é€šè¿‡[]è®¿é—®
 	m[4] = 40;
 
 	for (map<int, int>::iterator it = m.begin(); it != m.end();it++)
@@ -61,7 +61,7 @@ void test01()
 	cout << m[4] << endl;
 
 	if ( m.empty())
-		cout << "¿Õ" << endl;
+		cout << "ç©º" << endl;
 	else
 		cout << "size = " << m.size() << endl;
 }
@@ -75,7 +75,7 @@ key = 1 value = 10
 key = 2 value = 20
 key = 3 value = 30
 key = 4 value = 40
-key = 5 value = 0    //¶à³öÒ»¸ökey = 5
+key = 5 value = 0    //å¤šå‡ºä¸€ä¸ªkey = 5
 40
 size = 5
 */
@@ -83,18 +83,18 @@ size = 5
 
 
 /*
-* mapÉ¾³ı²Ù×÷
-*   clear();              //É¾³ıËùÓĞÔªËØ
-*   erase(pos);           //É¾³ıposµü´úÆ÷ËùÖ¸µÄÔªËØ£¬·µ»ØÏÂÒ»¸öÔªËØµÄµü´úÆ÷¡£
-*   erase(beg,end);       //É¾³ıÇø¼ä[beg,end)µÄËùÓĞÔªËØ £¬·µ»ØÏÂÒ»¸öÔªËØµÄµü´úÆ÷¡£
-*   erase(keyElem);       //É¾³ıÈİÆ÷ÖĞkeyÎªkeyElemµÄ¶Ô×é¡£
-* 
-* 3.8.2.6 map²éÕÒ²Ù×÷
-*   find(key);            //²éÕÒ¼ükeyÊÇ·ñ´æÔÚ,Èô´æÔÚ£¬·µ»Ø¸Ã¼üµÄÔªËØµÄµü´úÆ÷£»/Èô²»´æÔÚ£¬·µ»Ømap.end();
-*   count(keyElem);       //·µ»ØÈİÆ÷ÖĞkeyÎªkeyElemµÄ¶Ô×é¸öÊı¡£¶ÔmapÀ´Ëµ£¬ÒªÃ´ÊÇ0£¬ÒªÃ´ÊÇ1¡£¶ÔmultimapÀ´Ëµ£¬Öµ¿ÉÄÜ´óÓÚ1¡£
-*   lower_bound(keyElem); //·µ»ØµÚÒ»¸ö key >= keyElem ÔªËØµÄµü´úÆ÷¡£
-*   upper_bound(keyElem); //·µ»ØµÚÒ»¸ö key > keyElem ÔªËØµÄµü´úÆ÷¡£
-*   equal_range(keyElem); //·µ»ØÈİÆ÷ÖĞkeyÓëkeyElemÏàµÈµÄ¡°ÉÏÏÂÏŞ¡±µÄÁ½¸öµü´úÆ÷¡£
+* mapåˆ é™¤æ“ä½œ
+*   clear();              //åˆ é™¤æ‰€æœ‰å…ƒç´ 
+*   erase(pos);           //åˆ é™¤posè¿­ä»£å™¨æ‰€æŒ‡çš„å…ƒç´ ï¼Œè¿”å›ä¸‹ä¸€ä¸ªå…ƒç´ çš„è¿­ä»£å™¨ã€‚
+*   erase(beg,end);       //åˆ é™¤åŒºé—´[beg,end)çš„æ‰€æœ‰å…ƒç´  ï¼Œè¿”å›ä¸‹ä¸€ä¸ªå…ƒç´ çš„è¿­ä»£å™¨ã€‚
+*   erase(keyElem);       //åˆ é™¤å®¹å™¨ä¸­keyä¸ºkeyElemçš„å¯¹ç»„ã€‚
+*
+* 3.8.2.6 mapæŸ¥æ‰¾æ“ä½œ
+*   find(key);            //æŸ¥æ‰¾é”®keyæ˜¯å¦å­˜åœ¨,è‹¥å­˜åœ¨ï¼Œè¿”å›è¯¥é”®çš„å…ƒç´ çš„è¿­ä»£å™¨ï¼›/è‹¥ä¸å­˜åœ¨ï¼Œè¿”å›map.end();
+*   count(keyElem);       //è¿”å›å®¹å™¨ä¸­keyä¸ºkeyElemçš„å¯¹ç»„ä¸ªæ•°ã€‚å¯¹mapæ¥è¯´ï¼Œè¦ä¹ˆæ˜¯0ï¼Œè¦ä¹ˆæ˜¯1ã€‚å¯¹multimapæ¥è¯´ï¼Œå€¼å¯èƒ½å¤§äº1ã€‚
+*   lower_bound(keyElem); //è¿”å›ç¬¬ä¸€ä¸ª key >= keyElem å…ƒç´ çš„è¿­ä»£å™¨ã€‚
+*   upper_bound(keyElem); //è¿”å›ç¬¬ä¸€ä¸ª key > keyElem å…ƒç´ çš„è¿­ä»£å™¨ã€‚
+*   equal_range(keyElem); //è¿”å›å®¹å™¨ä¸­keyä¸keyElemç›¸ç­‰çš„â€œä¸Šä¸‹é™â€çš„ä¸¤ä¸ªè¿­ä»£å™¨ã€‚
 */
 void test02()
 {
@@ -104,71 +104,71 @@ void test02()
 	m.insert(map<int, int>::value_type(3, 30));
 	m[4] = 40;
 
-	m.erase(1); //É¾³ı key = 1 µÄÔªËØ
+	m.erase(1); //åˆ é™¤ key = 1 çš„å…ƒç´ 
 	for (map<int, int>::iterator it = m.begin(); it != m.end(); it++)
 		cout << "key = " << it->first << " value" << it->second << endl;
 
-	map<int,int>::iterator pos = m.find(2); //²é¿´key = 2 µÄÔªËØ
+	map<int,int>::iterator pos = m.find(2); //æŸ¥çœ‹key = 2 çš„å…ƒç´ 
 	if (pos != m.end())
-		cout << "ÕÒµ½ key:" << pos->first << " value:" << pos->second << endl; //ÕÒµ½ key:2 value:20
+		cout << "æ‰¾åˆ° key:" << pos->first << " value:" << pos->second << endl; //æ‰¾åˆ° key:2 value:20
 	else
-		cout << "Î´ÕÒµ½" << endl; 
+		cout << "æœªæ‰¾åˆ°" << endl;
 
 
-	int num  = m.count(3); //mapµÄcount ÒªÃ´0 ÒªÃ´1 
+	int num  = m.count(3); //mapçš„count è¦ä¹ˆ0 è¦ä¹ˆ1
 	cout << "num = " << num << endl;
 
 	/*
-	* lower_bound(keyElem); ·µ»ØµÚÒ»¸ö key >= keyElem ÔªËØµÄµü´úÆ÷¡£
+	* lower_bound(keyElem); è¿”å›ç¬¬ä¸€ä¸ª key >= keyElem å…ƒç´ çš„è¿­ä»£å™¨ã€‚
 	*/
 	map<int,int>::iterator ret = m.lower_bound(3);
 	if (ret != m.end())
-		cout << "lower_bound ÖĞkey" << ret->first << " value: " << ret->second << endl; //30  "20 30 40" key >= 3, 30
+		cout << "lower_bound ä¸­key" << ret->first << " value: " << ret->second << endl; //30  "20 30 40" key >= 3, 30
 	else
-		cout << "Î´ÕÒµ½" << endl;
+		cout << "æœªæ‰¾åˆ°" << endl;
 
 
 	/*
-	* pper_bound(keyElem); ·µ»ØµÚÒ»¸ö key > keyElem ÔªËØµÄµü´úÆ÷¡£
+	* pper_bound(keyElem); è¿”å›ç¬¬ä¸€ä¸ª key > keyElem å…ƒç´ çš„è¿­ä»£å™¨ã€‚
 	*/
 	ret = m.upper_bound(3);
 	if (ret != m.end())
-		cout << "upper_bound ÖĞkey" << ret->first << " value: " << ret->second << endl; //40  "20 30 40" key > 3, 40
+		cout << "upper_bound ä¸­key" << ret->first << " value: " << ret->second << endl; //40  "20 30 40" key > 3, 40
 	else
-		cout << "Î´ÕÒµ½" << endl;
+		cout << "æœªæ‰¾åˆ°" << endl;
 
 
 	/*
-	* equal_range(keyElem); ·µ»ØÈİÆ÷ÖĞkeyÓëkeyElemÏàµÈµÄ¡°ÉÏÏÂÏŞ¡±µÄÁ½¸öµü´úÆ÷¡£
+	* equal_range(keyElem); è¿”å›å®¹å™¨ä¸­keyä¸keyElemç›¸ç­‰çš„â€œä¸Šä¸‹é™â€çš„ä¸¤ä¸ªè¿­ä»£å™¨ã€‚
 	*/
 	pair<map<int, int>::iterator, map<int, int>::iterator> ret2 = m.equal_range(3);
 
 	if (ret2.first != m.end())
-		cout << "ÕÒµ½ÁËequal_range ÖĞµÄlower_bound µÄkey " << ret2.first->first << " value: " << ret2.first->second << endl;  //30  "20 30 40" key >= 3, 30
+		cout << "æ‰¾åˆ°äº†equal_range ä¸­çš„lower_bound çš„key " << ret2.first->first << " value: " << ret2.first->second << endl;  //30  "20 30 40" key >= 3, 30
 	else
-		cout << "Î´ÕÒµ½" << endl;
+		cout << "æœªæ‰¾åˆ°" << endl;
 
 
 	if (ret2.second != m.end())
-		cout << "ÕÒµ½ÁËequal_range ÖĞµÄupper_bound µÄkey " << ret2.second->first << " value: " << ret2.second->second << endl; //40  "20 30 40" key > 3, 40
+		cout << "æ‰¾åˆ°äº†equal_range ä¸­çš„upper_bound çš„key " << ret2.second->first << " value: " << ret2.second->second << endl; //40  "20 30 40" key > 3, 40
 	else
-		cout << "Î´ÕÒµ½" << endl;
+		cout << "æœªæ‰¾åˆ°" << endl;
 }
 /* Output:
 key = 2 value20
 key = 3 value30
 key = 4 value40
-ÕÒµ½£ºkey2 value:20
+æ‰¾åˆ°ï¼škey2 value:20
 num = 1
-lower_bound ÖĞkey3 value: 30
-upper_bound ÖĞkey4 value: 40
-ÕÒµ½ÁËequal_range ÖĞµÄlower_bound µÄkey 3 value: 30
-ÕÒµ½ÁËequal_range ÖĞµÄupper_bound µÄkey 4 value: 40
+lower_bound ä¸­key3 value: 30
+upper_bound ä¸­key4 value: 40
+æ‰¾åˆ°äº†equal_range ä¸­çš„lower_bound çš„key 3 value: 30
+æ‰¾åˆ°äº†equal_range ä¸­çš„upper_bound çš„key 4 value: 40
 */
 
 
 
-//Ö¸¶¨ÅÅĞò¹æÔò
+//æŒ‡å®šæ’åºè§„åˆ™
 class myCompare
 {
 public:
@@ -186,7 +186,7 @@ void printVector( vector<int> & v){
 
 void test03()
 {
-	//´Ó´óµ½Ğ¡ÅÅĞò
+	//ä»å¤§åˆ°å°æ’åº
 	map<int, int, myCompare> m;
 	m.insert(pair<int, int>(1, 10));
 	m.insert(make_pair(2, 20));

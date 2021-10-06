@@ -11,26 +11,26 @@ extern "C"{
 #endif
 
 
-	//¶¨Òå½ÚµãÊı¾İÀàĞÍ
+	//å®šä¹‰èŠ‚ç‚¹æ•°æ®ç±»å‹
 	struct LinkNode
 	{
 		int data;
 		struct LinkNode *next;
 	};
 
-	//³õÊ¼»¯Á´±í
+	//åˆå§‹åŒ–é“¾è¡¨
 	struct LinkNode *Init_LinkList();
-	//ÔÚÖµÎªoldvalµÄÎ»ÖÃ²åÈëĞÂµÄÊı¾İnewval
+	//åœ¨å€¼ä¸ºoldvalçš„ä½ç½®æ’å…¥æ–°çš„æ•°æ®newval
 	void InsertByValue_LinkList(struct LinkNode *header,int oldval,int newval);
-	//É¾³ıÖµÎªvalµÄ½áµã
+	//åˆ é™¤å€¼ä¸ºvalçš„ç»“ç‚¹
 	void RemoveByValue_LinkList(struct LinkNode *header,int delValue);
-	//±éÀú
+	//éå†
 	void Foreach_LinkList(struct LinkNode *header);
-	//Ïú»Ù
+	//é”€æ¯
 	void Destroy_LinkList(struct LinkNode *header);
-	//Çå¿Õ
+	//æ¸…ç©º
 	void Clear_LinkList(struct LinkNode *header);
-	//Á´±íÄæĞò
+	//é“¾è¡¨é€†åº
 	void Reverse_LinkList(struct LinkNode *header);
 
 

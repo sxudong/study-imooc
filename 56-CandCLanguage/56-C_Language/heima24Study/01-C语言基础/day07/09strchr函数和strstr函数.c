@@ -7,21 +7,21 @@ int main09()
 {
 //    char arr[] = "hello";
 //    char ch = 'l';
-//    char *p = strchr(arr, 'l'); //Õâ¸öp½ÓÊÕµÄÊÇÒ»¸öµØÖ·£¬·µ»Ø'l'ÒÔºóµÄ×Ö·û´®
+//    char *p = strchr(arr, 'l'); //è¿™ä¸ªpæ¥æ”¶çš„æ˜¯ä¸€ä¸ªåœ°å€ï¼Œè¿”å›'l'ä»¥åçš„å­—ç¬¦ä¸²
 //    printf("%s", p);
 
 
-    char arr[] = "hee¹şeello world";
+    char arr[] = "heeå“ˆeello world";
     char ch = 'l';
-    char ha[] = "¹ş¹ş¹ş¹ş"; //¼ÓÄ©Î²0£¬¹²9¸ö×Ö·û
-    char * p = strchr(arr, '¹ş');//"¹ş" == ¹ş\0
+    char ha[] = "å“ˆå“ˆå“ˆå“ˆ"; //åŠ æœ«å°¾0ï¼Œå…±9ä¸ªå­—ç¬¦
+    char * p = strchr(arr, 'å“ˆ');//"å“ˆ" == å“ˆ\0
     if (strchr(arr, 104) != NULL)
     {
-        printf("ÕÒµ½ÁË£¡");
+        printf("æ‰¾åˆ°äº†ï¼");
     }
 
 
-    char *p1 = strstr(arr, "¹ş"); 
+    char *p1 = strstr(arr, "å“ˆ");
     printf("%s", p1);
 
     system("pause");

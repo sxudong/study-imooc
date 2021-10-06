@@ -3,7 +3,7 @@
 #include<string.h>
 #include<stdlib.h>
 
-//Á´±í½áµãÀàĞÍ¶¨Òå
+//é“¾è¡¨ç»“ç‚¹ç±»å‹å®šä¹‰
 struct LinkNode
 {
 	int data;
@@ -13,14 +13,14 @@ struct LinkNode
 
 void test()
 {
-	//´´½¨6¸ö½Úµã
+	//åˆ›å»º6ä¸ªèŠ‚ç‚¹
 	struct LinkNode node1 = { 10, NULL };
 	struct LinkNode node2 = { 20, NULL };
 	struct LinkNode node3 = { 30, NULL };
 	struct LinkNode node4 = { 40, NULL };
 	struct LinkNode node5 = { 50, NULL };
 	struct LinkNode node6 = { 60, NULL };
-	//°ÑËüÃÇ´®Á¬ÆğÀ´
+	//æŠŠå®ƒä»¬ä¸²è¿èµ·æ¥
 	node1.next = &node2;
 	node2.next = &node3;
 	node3.next = &node4;
@@ -28,14 +28,14 @@ void test()
 	node5.next = &node6;
 
 	/*
-	* ÈçºÎ±éÀúÁ´±í£¿
+	* å¦‚ä½•éå†é“¾è¡¨ï¼Ÿ
 	*/
-	//ÏÈ¶¨ÒåÒ»¸ö¡°¸¨Öú¡±Ö¸Õë±äÁ¿
-	struct LinkNode* pCurrent = &node1; //Ê×½Úµã
+	//å…ˆå®šä¹‰ä¸€ä¸ªâ€œè¾…åŠ©â€æŒ‡é’ˆå˜é‡
+	struct LinkNode* pCurrent = &node1; //é¦–èŠ‚ç‚¹
 	while (pCurrent != NULL) {
-		printf("%d ", pCurrent->data);  //´òÓ¡ÏÂÒ»¸ö½Úµã
+		printf("%d ", pCurrent->data);  //æ‰“å°ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
 
-		//Ö¸Õë¡°ÒÆ¶¯¡±µ½ÏÂÒ»¸öÔªËØµÄÊ×µØÖ·
+		//æŒ‡é’ˆâ€œç§»åŠ¨â€åˆ°ä¸‹ä¸€ä¸ªå…ƒç´ çš„é¦–åœ°å€
 		pCurrent = pCurrent->next;
 	}
 	printf("\n");
@@ -50,5 +50,5 @@ int main() {
 }
 /* Output:
 10 20 30 40 50 60
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

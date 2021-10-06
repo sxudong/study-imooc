@@ -3,45 +3,55 @@
 #include<string.h>
 #include<stdlib.h>
 
+//函数的定义中的参数列表的中的数据成为函数的形式参数   形参  形参接收实参 在函数内部进行运算
+void Bubble(int arr[], int len)
+{
+	for (int i = 0; i < len-1; i++)
+	{
+		for (int j = 0; j < len - 1 - i; j++)
+		{
+			if (arr[j] < arr[j + 1])
+			{
+				int temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+			}
+		}
+	}
+	return;
+}
+
 int main12()
 {
 
-	int arr[2][3][4] = { 
-		{
-			{1,2,3,4},
-			{2,3,4,5},
-			{3,4,5,6}
-		},
-		{
-			{4,5,6,7},
-			{5,6,7,8},
-			{6,7,8,9}
-		}
-	};
-	
-	for (int i = 0; i < 2; i++)
+	int arr[] = { 3,5,2,7,9,1,8,10,4,6 };
+	//数组作为函数参数，可以退化为函数名  可以退化为指针
+	//形参 实参  实际参数
+	//函数调用
+	Bubble(arr, 10);
+	//strcmp()
+
+	for (int i = 0; i < 10; i++)
 	{
-		for (int j = 0; j < 3; j++)
-		{
-			for (int k = 0; k < 4; k++)
-			{
-				printf("%d\t", arr[i][j][k]);
-			}
-			printf("\n");
-		}
-		printf("=============================================\n");
-		
+		printf("%d\n", arr[i]);
 	}
 
-	printf("%d\n", sizeof(arr));
-	printf("%d\n", sizeof(arr[0]));
-	printf("%d\n", sizeof(arr[0][0]));
-	printf("%d\n", sizeof(arr[0][0][0]));
+	//int arr1[] = { 31,52,21,17,94,10,86 };
+	//for (int i = 0; i < 7; i++)
+	//{
+	//	for (int j = 0; j < 7 - i; j++)
+	//	{
+	//		if (arr1[j] < arr1[j + 1])
+	//		{
+	//			int temp = arr1[j];
+	//			arr1[j] = arr1[j + 1];
+	//			arr1[j + 1] = temp;
+	//		}
+	//	}
+	//}
 
-	printf("%p\n", arr);
-	printf("%p\n", arr[0]);
-	printf("%p\n", arr[0][0]);
-	printf("%p\n", &arr[0][0][0]);
+
+
 	system("pause");
 	return EXIT_SUCCESS;
 }

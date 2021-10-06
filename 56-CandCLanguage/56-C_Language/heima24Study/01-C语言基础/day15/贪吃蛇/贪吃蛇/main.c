@@ -1,26 +1,26 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#include "snake.h"		// ÒıÈë×Ô¶¨ÒåÍ·ÎÄ¼ş
+#include "snake.h"		// å¼•å…¥è‡ªå®šä¹‰å¤´æ–‡ä»¶
 
 int main(void)
 {
-	// È¥³ı¹â±ê¡£
+	// å»é™¤å…‰æ ‡ã€‚
 	CONSOLE_CURSOR_INFO cci;
 	cci.dwSize = sizeof(cci);
 	cci.bVisible = FALSE;  // TRUE :
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cci);
 
-	srand(time(NULL));  // ²¥ÖÖËæ»úÊıÖÖ×Ó¡£
+	srand(time(NULL));  // æ’­ç§éšæœºæ•°ç§å­ã€‚
 
-	initSnake();	// ³õÊ¼»¯Éß
-	initFood();		// ³õÊ¼»¯Ê³Îï
+	initSnake();	// åˆå§‹åŒ–è›‡
+	initFood();		// åˆå§‹åŒ–é£Ÿç‰©
 
-	initWall();		// »­Ç½
-	initUI();		// »­ÉßºÍÊ³Îï
+	initWall();		// ç”»å¢™
+	initUI();		// ç”»è›‡å’Œé£Ÿç‰©
 
-	playGame();		// Æô¶¯ÓÎÏ·
+	playGame();		// å¯åŠ¨æ¸¸æˆ
 
-	showScore();	// ´òÓ¡·ÖÊı
+	showScore();	// æ‰“å°åˆ†æ•°
 
 	system("pause");
 	return EXIT_SUCCESS;
@@ -28,7 +28,7 @@ int main(void)
 
 void showScore(void)
 {
-	// ½«¹â±êÄ¬ÈÏÎ»ÖÃÒÆ¶¯ÖÁ ²»¸ÉÈÅÓÎÏ·µÄÈÎÒâÎ»ÖÃ¡£
+	// å°†å…‰æ ‡é»˜è®¤ä½ç½®ç§»åŠ¨è‡³ ä¸å¹²æ‰°æ¸¸æˆçš„ä»»æ„ä½ç½®ã€‚
 	COORD coord;
 
 	coord.X = 0;
@@ -36,14 +36,14 @@ void showScore(void)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 
 	printf("Game Over!!!\n");
-	printf("³É¼¨Îª£º%d\n\n\n", score);
+	printf("æˆç»©ä¸ºï¼š%d\n\n\n", score);
 }
 
 void initWall(void)
 {
-	for (size_t i = 0; i <= HIGH; i++)	// ¶àĞĞ
+	for (size_t i = 0; i <= HIGH; i++)	// å¤šè¡Œ
 	{
-		for (size_t j = 0; j <= WIDE; j++)			// Ò»ĞĞÖĞµÄ¶àÁĞ
+		for (size_t j = 0; j <= WIDE; j++)			// ä¸€è¡Œä¸­çš„å¤šåˆ—
 		{
 			if (j == WIDE)
 			{
@@ -66,15 +66,15 @@ void playGame(void)
 {
 	char key = 'd';
 
-	// ÅĞ¶ÏÉß×²Ç½
+	// åˆ¤æ–­è›‡æ’å¢™
 	while (snake.body[0].X >= 0 && snake.body[0].X < WIDE
 		&& snake.body[0].Y >= 0 && snake.body[0].Y < HIGH)
 	{
-		// ¸üĞÂÉß
+		// æ›´æ–°è›‡
 		initUI();
 
-		// ½ÓÊÕÓÃ»§°´¼üÊäÈë  asdw 
-		if (_kbhit()) {				// ÎªÕæÊ±£¬ËµÃ÷ÓÃ»§°´ÏÂ°´¼ü¡£
+		// æ¥æ”¶ç”¨æˆ·æŒ‰é”®è¾“å…¥  asdw
+		if (_kbhit()) {				// ä¸ºçœŸæ—¶ï¼Œè¯´æ˜ç”¨æˆ·æŒ‰ä¸‹æŒ‰é”®ã€‚
 			key = _getch();
 		}
 		switch (key)
@@ -87,67 +87,67 @@ void playGame(void)
 			break;
 		}
 
-		// ÉßÍ·×²ÉíÌå£º ÉßÍ· == ÈÎÒâÒ»½ÚÉíÌå
+		// è›‡å¤´æ’èº«ä½“ï¼š è›‡å¤´ == ä»»æ„ä¸€èŠ‚èº«ä½“
 		for (size_t i = 1; i < snake.size; i++)
 		{
 			if (snake.body[0].X == snake.body[i].X
 				&& snake.body[0].Y == snake.body[i].Y)
 			{
-				return;		// ÓÎÏ·½áÊø¡£
+				return;		// æ¸¸æˆç»“æŸã€‚
 			}
 		}
 
-		// ÉßÍ·×²Ê³Îï
+		// è›‡å¤´æ’é£Ÿç‰©
 		if (snake.body[0].X == food.X && snake.body[0].Y == food.Y)
 		{
-			initFood();		// Ê³ÎïÏûÊ§
-			snake.size++;	// ÉíÌåÔö³¤
-			score += 10;	// ¼Ó·Ö
+			initFood();		// é£Ÿç‰©æ¶ˆå¤±
+			snake.size++;	// èº«ä½“å¢é•¿
+			score += 10;	// åŠ åˆ†
 
-			sleepSecond -= 100;	// ¼ÓËÙ
+			sleepSecond -= 100;	// åŠ é€Ÿ
 		}
 
-		// ´æ´¢ÉßÎ²×ø±ê
+		// å­˜å‚¨è›‡å°¾åæ ‡
 		lastX = snake.body[snake.size - 1].X;
 		lastY = snake.body[snake.size - 1].Y;
 
-		// ÉßÒÆ¶¯£¬Ç°Ò»½ÚÉíÌå¸øºóÒ»½ÚÉíÌå¸³Öµ¡£
+		// è›‡ç§»åŠ¨ï¼Œå‰ä¸€èŠ‚èº«ä½“ç»™åä¸€èŠ‚èº«ä½“èµ‹å€¼ã€‚
 		for (size_t i = snake.size - 1; i > 0; i--)
 		{
 			snake.body[i].X = snake.body[i - 1].X;
 			snake.body[i].Y = snake.body[i - 1].Y;
 		}
-		snake.body[0].X += kx;		// ÉßÍ·×ø±ê¸ù¾İÓÃ»§°´¼ü£¬ĞŞ¸Ä¡£
+		snake.body[0].X += kx;		// è›‡å¤´åæ ‡æ ¹æ®ç”¨æˆ·æŒ‰é”®ï¼Œä¿®æ”¹ã€‚
 		snake.body[0].Y += ky;
 
 		Sleep(sleepSecond);
-		// ÇåÆÁ
-		//system("cls");	
+		// æ¸…å±
+		//system("cls");
 	}
 
 	return;
 }
 
-// ¶¨Òå³õÊ¼»¯Éßº¯Êı
+// å®šä¹‰åˆå§‹åŒ–è›‡å‡½æ•°
 void initSnake(void)
 {
 	snake.size = 2;
 
-	snake.body[0].X = WIDE / 2;		//ÉßÍ·³õÊ¼»¯
+	snake.body[0].X = WIDE / 2;		//è›‡å¤´åˆå§‹åŒ–
 	snake.body[0].Y = HIGH / 2;
 
-	snake.body[1].X = WIDE / 2 - 1;	// ÉßÒ»½ÚÉíÌå³õÊ¼»¯
+	snake.body[1].X = WIDE / 2 - 1;	// è›‡ä¸€èŠ‚èº«ä½“åˆå§‹åŒ–
 	snake.body[1].Y = HIGH / 2;
 
 	return;
 }
 
-// ³õÊ¼»¯½çÃæ¿Ø¼ş
+// åˆå§‹åŒ–ç•Œé¢æ§ä»¶
 void initUI(void)
 {
-	COORD coord = {0};					// ¹â±êÒÆ¶¯µÄÎ»ÖÃ¡£
+	COORD coord = {0};					// å…‰æ ‡ç§»åŠ¨çš„ä½ç½®ã€‚
 
-	// »­Éß
+	// ç”»è›‡
 	for (size_t i = 0; i < snake.size; i++)
 	{
 		coord.X = snake.body[i].X;
@@ -159,13 +159,13 @@ void initUI(void)
 		else
 			putchar('*');
 	}
-	// È¥³ıÉßÎ²
+	// å»é™¤è›‡å°¾
 	coord.X = lastX;
 	coord.Y = lastY;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 	putchar(' ');
 
-	// »­Ê³Îï
+	// ç”»é£Ÿç‰©
 	coord.X = food.X;
 	coord.Y = food.Y;
 
@@ -173,7 +173,7 @@ void initUI(void)
 	putchar('#');
 }
 
-// Ê³ÎïµÄ³õÊ¼»¯º¯Êı
+// é£Ÿç‰©çš„åˆå§‹åŒ–å‡½æ•°
 void initFood(void)
 {
 	food.X = rand() % WIDE;  // 0-59

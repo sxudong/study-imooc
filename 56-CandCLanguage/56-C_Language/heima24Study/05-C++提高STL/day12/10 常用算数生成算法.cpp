@@ -1,22 +1,22 @@
 /*
-* 4.7 ³£ÓÃËãÊıÉú³ÉËã·¨
+* 4.7 å¸¸ç”¨ç®—æ•°ç”Ÿæˆç®—æ³•
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
 #include <vector>
 using namespace std;
-#include <algorithm> //²»ºÃÊ¹
-#include <numeric>   //ºÃÊ¹
+#include <algorithm> //ä¸å¥½ä½¿
+#include <numeric>   //å¥½ä½¿
 #include <iterator>
 
 
 /*
-* accumulateËã·¨ 
-*   ¼ÆËãÈİÆ÷ÔªËØÀÛ¼Æ×ÜºÍ
-* 
-* @param beg  ÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @param end  ÈİÆ÷½áÊøµü´úÆ÷
-* @param value  ÀÛ¼ÓÖµ
+* accumulateç®—æ³•
+*   è®¡ç®—å®¹å™¨å…ƒç´ ç´¯è®¡æ€»å’Œ
+*
+* @param beg  å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @param end  å®¹å™¨ç»“æŸè¿­ä»£å™¨
+* @param value  ç´¯åŠ å€¼
 */
 void test01()
 {
@@ -24,27 +24,27 @@ void test01()
 	for (int i = 0; i <= 100;i++)
 		v.push_back(i);
 
-	//0~100ÀÛ»ıºÍ  5050
-	//µÚÈı¸ö²ÎÊı  ÆğÊ¼ÀÛ¼ÓÖµ
+	//0~100ç´¯ç§¯å’Œ  5050
+	//ç¬¬ä¸‰ä¸ªå‚æ•°  èµ·å§‹ç´¯åŠ å€¼
 	int sum = accumulate(v.begin(), v.end(), 0);
-	cout << "×ÜºÍÎª£º" << sum << endl; //5050
+	cout << "æ€»å’Œä¸ºï¼š" << sum << endl; //5050
 }
 
 
 /*
-* fillËã·¨ 
-*   ÏòÈİÆ÷ÖĞÌí¼ÓÔªËØ
-* 
-* @param beg  ÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @param end  ÈİÆ÷½áÊøµü´úÆ÷
-* @param value  Ìî³äÔªËØ
+* fillç®—æ³•
+*   å‘å®¹å™¨ä¸­æ·»åŠ å…ƒç´ 
+*
+* @param beg  å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @param end  å®¹å™¨ç»“æŸè¿­ä»£å™¨
+* @param value  å¡«å……å…ƒç´ 
 */
 void test02()
 {
 	vector<int> v;
 	v.resize(10);
 
-	//Ìî³ä
+	//å¡«å……
 	fill(v.begin(), v.end(), 1000);
 
 	copy(v.begin(), v.end(), ostream_iterator<int>(cout, " "));
@@ -59,8 +59,8 @@ int main(){
 	return EXIT_SUCCESS;
 }
 /* Output:
-×ÜºÍÎª£º5050
+æ€»å’Œä¸ºï¼š5050
 ---------------
 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

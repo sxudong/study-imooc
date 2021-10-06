@@ -19,7 +19,7 @@ struct Person
 {
 	char name[64];
 	int age;
-}person = { "John", 100 }; //½á¹¹Ìå³õÊ¼»¯·½Ê½Ö®Ò»£¬ÕâÀï¸³ÖµÁË£¬ÏÂÃæµÄ´úÂë¾Í²»ĞèÒª¸³ÖµÁË
+}person = { "John", 100 }; //ç»“æ„ä½“åˆå§‹åŒ–æ–¹å¼ä¹‹ä¸€ï¼Œè¿™é‡Œèµ‹å€¼äº†ï¼Œä¸‹é¢çš„ä»£ç å°±ä¸éœ€è¦èµ‹å€¼äº†
 
 
 struct {
@@ -29,19 +29,19 @@ struct {
 
 void test01()
 {
-	//½á¹¹Ìå³õÊ¼»¯·½Ê½Ö®Ò»
+	//ç»“æ„ä½“åˆå§‹åŒ–æ–¹å¼ä¹‹ä¸€
 	//strcpy(person.name, "Lily");
 	//person.age = 100;
 
 	printf("Name:%s Age:%d\n", person.name, person.age); //Name:John Age:100
 
-	//ÔÚ¡°Õ»¡±ÉÏ·ÖÅä¿Õ¼ä
+	//åœ¨â€œæ ˆâ€ä¸Šåˆ†é…ç©ºé—´
 	struct Person p1 = { "John" , 30 };
 	struct Person p2 = { "Obama", 33 };
 	printf("Name:%s Age:%d\n", p1.name, p1.age); //Name:John Age:30
 	printf("Name:%s Age:%d\n", p2.name, p2.age); //Name:Obama Age:33
 
-	//½«p2µÄÖµ¸³Öµ¸øp1
+	//å°†p2çš„å€¼èµ‹å€¼ç»™p1
 	p1 = p2;
 	printf("Name:%s Age:%d\n", p1.name, p1.age); //Name:Obama Age:33
 	printf("Name:%s Age:%d\n", p2.name, p2.age); //Name:Obama Age:33
@@ -51,15 +51,15 @@ void test01()
 
 
 /*
-* µ¥¸ö½á¹¹Ìå±äÁ¿
+* å•ä¸ªç»“æ„ä½“å˜é‡
 */
 void test02()
 {
-	//ÔÚÕ»ÉÏ·ÖÅä½á¹¹Ìå±äÁ¿¿Õ¼ä
+	//åœ¨æ ˆä¸Šåˆ†é…ç»“æ„ä½“å˜é‡ç©ºé—´
 	//struct Person person = { "Hanmeimei", 30 };
 	//printf("Name:%s Age:%d\n",person.name,person.age);
 
-	//ÔÚ¡°¶Ñ¡±ÉÏ·ÖÅä½á¹¹Ìå±äÁ¿¿Õ¼ä
+	//åœ¨â€œå †â€ä¸Šåˆ†é…ç»“æ„ä½“å˜é‡ç©ºé—´
 	struct Person* person = malloc(sizeof(struct Person));
 	strcpy(person->name, "Lilei");
 	person->age = 30;
@@ -76,11 +76,11 @@ void printPersons(struct Person* persons, int len)
 }
 
 /*
-* ¶à¸ö½á¹¹Ìå±äÁ¿
+* å¤šä¸ªç»“æ„ä½“å˜é‡
 */
 void test03()
 {
-	//ÔÚ¡°Õ»¡±ÉÏ·ÖÅä½á¹¹ÌåÊı×é¿Õ¼ä
+	//åœ¨â€œæ ˆâ€ä¸Šåˆ†é…ç»“æ„ä½“æ•°ç»„ç©ºé—´
 	struct Person persons[] = {
 		{ "aaa", 20 },
 		{ "bbb", 30 },
@@ -91,16 +91,16 @@ void test03()
 	};
 
 	int len = sizeof(persons) / sizeof(struct Person);
-	printPersons(persons, len); //´òÓ¡
+	printPersons(persons, len); //æ‰“å°
 
-	//ÔÚ"¶Ñ"ÉÏ·ÖÅä½á¹¹ÌåÊı×é¿Õ¼ä
+	//åœ¨"å †"ä¸Šåˆ†é…ç»“æ„ä½“æ•°ç»„ç©ºé—´
 	struct Person* ps = malloc(sizeof(struct Person) * 6);
 	for (int i = 0; i < 6; ++i) {
 		sprintf(ps[i].name, "Name_%d", i + 1);
 		ps[i].age = 100 + i;
 	}
 
-	printPersons(ps, 6); //´òÓ¡
+	printPersons(ps, 6); //æ‰“å°
 
 }
 int main() {
@@ -135,5 +135,5 @@ Name:Name_3 Age:102
 Name:Name_4 Age:103
 Name:Name_5 Age:104
 Name:Name_6 Age:105
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

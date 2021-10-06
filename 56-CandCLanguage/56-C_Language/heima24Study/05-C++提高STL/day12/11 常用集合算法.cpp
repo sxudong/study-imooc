@@ -1,5 +1,5 @@
 /*
-* 4.8 ³£ÓÃ¼¯ºÏËã·¨
+* 4.8 å¸¸ç”¨é›†åˆç®—æ³•
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
@@ -9,16 +9,16 @@
 using namespace std;
 
 /*
-* set_intersectionËã·¨ 
-*   ÇóÁ½¸öset¼¯ºÏµÄ½»¼¯
-*   ×¢Òâ:Á½¸ö¼¯ºÏ±ØĞëÊÇÓĞĞòĞòÁĞ
-* 
-* @param beg1  ÈİÆ÷1¿ªÊ¼µü´úÆ÷
-* @param end1  ÈİÆ÷1½áÊøµü´úÆ÷
-* @param beg2  ÈİÆ÷2¿ªÊ¼µü´úÆ÷
-* @param end2  ÈİÆ÷2½áÊøµü´úÆ÷
-* @param dest  Ä¿±êÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @return  Ä¿±êÈİÆ÷µÄ×îºóÒ»¸öÔªËØµÄµü´úÆ÷µØÖ·
+* set_intersectionç®—æ³•
+*   æ±‚ä¸¤ä¸ªseté›†åˆçš„äº¤é›†
+*   æ³¨æ„:ä¸¤ä¸ªé›†åˆå¿…é¡»æ˜¯æœ‰åºåºåˆ—
+*
+* @param beg1  å®¹å™¨1å¼€å§‹è¿­ä»£å™¨
+* @param end1  å®¹å™¨1ç»“æŸè¿­ä»£å™¨
+* @param beg2  å®¹å™¨2å¼€å§‹è¿­ä»£å™¨
+* @param end2  å®¹å™¨2ç»“æŸè¿­ä»£å™¨
+* @param dest  ç›®æ ‡å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @return  ç›®æ ‡å®¹å™¨çš„æœ€åä¸€ä¸ªå…ƒç´ çš„è¿­ä»£å™¨åœ°å€
 */
 void test01()
 {
@@ -33,10 +33,10 @@ void test01()
 	vector<int> vTarget;
 	vTarget.resize( min(v1.size(),v2.size()));
 
-	//set_intersectionËã·¨ ÇóÁ½¸öset¼¯ºÏµÄ½»¼¯
+	//set_intersectionç®—æ³• æ±‚ä¸¤ä¸ªseté›†åˆçš„äº¤é›†
 	vector<int>::iterator itEnd= set_intersection(v1.begin(), v1.end(), v2.begin(), v2.end(), vTarget.begin());
 
-	copy(vTarget.begin(), itEnd, ostream_iterator<int>(cout, " ")); 
+	copy(vTarget.begin(), itEnd, ostream_iterator<int>(cout, " "));
 	cout << endl;
 }
 /* Output:
@@ -45,16 +45,16 @@ void test01()
 
 
 /*
-* set_unionËã·¨ 
-*   ÇóÁ½¸öset¼¯ºÏµÄ²¢¼¯
-*   ×¢Òâ:Á½¸ö¼¯ºÏ±ØĞëÊÇÓĞĞòĞòÁĞ
-* 
-* @param beg1  ÈİÆ÷1¿ªÊ¼µü´úÆ÷
-* @param end1  ÈİÆ÷1½áÊøµü´úÆ÷
-* @param beg2  ÈİÆ÷2¿ªÊ¼µü´úÆ÷
-* @param end2  ÈİÆ÷2½áÊøµü´úÆ÷
-* @param dest  Ä¿±êÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @return  Ä¿±êÈİÆ÷µÄ×îºóÒ»¸öÔªËØµÄµü´úÆ÷µØÖ·
+* set_unionç®—æ³•
+*   æ±‚ä¸¤ä¸ªseté›†åˆçš„å¹¶é›†
+*   æ³¨æ„:ä¸¤ä¸ªé›†åˆå¿…é¡»æ˜¯æœ‰åºåºåˆ—
+*
+* @param beg1  å®¹å™¨1å¼€å§‹è¿­ä»£å™¨
+* @param end1  å®¹å™¨1ç»“æŸè¿­ä»£å™¨
+* @param beg2  å®¹å™¨2å¼€å§‹è¿­ä»£å™¨
+* @param end2  å®¹å™¨2ç»“æŸè¿­ä»£å™¨
+* @param dest  ç›®æ ‡å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @return  ç›®æ ‡å®¹å™¨çš„æœ€åä¸€ä¸ªå…ƒç´ çš„è¿­ä»£å™¨åœ°å€
 */
 void test02()
 {
@@ -69,7 +69,7 @@ void test02()
 	vector<int> vTarget;
 	vTarget.resize(v1.size()+v2.size());
 
-	//set_unionËã·¨ ÇóÁ½¸öset¼¯ºÏµÄ²¢¼¯
+	//set_unionç®—æ³• æ±‚ä¸¤ä¸ªseté›†åˆçš„å¹¶é›†
 	vector<int>::iterator itEnd = set_union(v1.begin(), v1.end(), v2.begin(), v2.end(), vTarget.begin());
 
 	copy(vTarget.begin(), itEnd, ostream_iterator<int>(cout, " "));
@@ -81,16 +81,16 @@ void test02()
 
 
 /*
-* set_differenceËã·¨ 
-*   ÇóÁ½¸öset¼¯ºÏµÄ²î¼¯
-*   ×¢Òâ:Á½¸ö¼¯ºÏ±ØĞëÊÇÓĞĞòĞòÁĞ
-* 
-* @param beg1  ÈİÆ÷1¿ªÊ¼µü´úÆ÷
-* @param end1  ÈİÆ÷1½áÊøµü´úÆ÷
-* @param beg2  ÈİÆ÷2¿ªÊ¼µü´úÆ÷
-* @param end2  ÈİÆ÷2½áÊøµü´úÆ÷
-* @param dest  Ä¿±êÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @return  Ä¿±êÈİÆ÷µÄ×îºóÒ»¸öÔªËØµÄµü´úÆ÷µØÖ·
+* set_differenceç®—æ³•
+*   æ±‚ä¸¤ä¸ªseté›†åˆçš„å·®é›†
+*   æ³¨æ„:ä¸¤ä¸ªé›†åˆå¿…é¡»æ˜¯æœ‰åºåºåˆ—
+*
+* @param beg1  å®¹å™¨1å¼€å§‹è¿­ä»£å™¨
+* @param end1  å®¹å™¨1ç»“æŸè¿­ä»£å™¨
+* @param beg2  å®¹å™¨2å¼€å§‹è¿­ä»£å™¨
+* @param end2  å®¹å™¨2ç»“æŸè¿­ä»£å™¨
+* @param dest  ç›®æ ‡å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @return  ç›®æ ‡å®¹å™¨çš„æœ€åä¸€ä¸ªå…ƒç´ çš„è¿­ä»£å™¨åœ°å€
 */
 void test03()
 {
@@ -105,13 +105,13 @@ void test03()
 	vector<int> vTarget;
 	vTarget.resize( max(v1.size(),v2.size() ));
 
-	//v1 ²î v2 ÇóÁ½¸öset¼¯ºÏµÄ²î¼¯
+	//v1 å·® v2 æ±‚ä¸¤ä¸ªseté›†åˆçš„å·®é›†
 	vector<int>::iterator itEnd = set_difference(v1.begin(), v1.end(), v2.begin(), v2.end(), vTarget.begin());
 
 	copy(vTarget.begin(), itEnd, ostream_iterator<int>(cout, " "));
 	cout << endl;
 
-	//v2 ²î v1 ÇóÁ½¸öset¼¯ºÏµÄ²î¼¯
+	//v2 å·® v1 æ±‚ä¸¤ä¸ªseté›†åˆçš„å·®é›†
 	itEnd = set_difference(v2.begin(), v2.end(), v1.begin(), v1.end(), vTarget.begin());
 	copy(vTarget.begin(), itEnd, ostream_iterator<int>(cout, " "));
 	cout << endl;
@@ -137,5 +137,5 @@ int main(){
 ---------------
 0 1 2 3 4
 10 11 12 13 14
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

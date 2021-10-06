@@ -1,5 +1,5 @@
-// epoll»ùÓÚ·Ç×èÈûI/OÊÂ¼şÇı¶¯
-// epoll·´Ó¦¶Ñ-epoll_loop_2.c´úÂëÁ÷³Ì·ÖÎöÍ¼.png
+// epollåŸºäºéé˜»å¡I/Oäº‹ä»¶é©±åŠ¨
+// epollååº”å †-epoll_loop_2.cä»£ç æµç¨‹åˆ†æå›¾.png
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,30 +14,30 @@
 #include <ctype.h>
 #include "wrap.h"
 
-#define MAX_EVENTS  1024                                    //¼àÌıÉÏÏŞÊı
+#define MAX_EVENTS  1024                                    //ç›‘å¬ä¸Šé™æ•°
 #define BUFLEN      4096
 
 void recvdata(int fd, int events, void *arg);
 void senddata(int fd, int events, void *arg);
 
-/* ÃèÊö¾ÍĞ÷ÎÄ¼şÃèÊö·ûÏà¹ØĞÅÏ¢ */
+/* æè¿°å°±ç»ªæ–‡ä»¶æè¿°ç¬¦ç›¸å…³ä¿¡æ¯ */
 struct myevent_s {
-    int fd;                                                 //Òª¼àÌıµÄÎÄ¼şÃèÊö·û
-    int events;                                             //¶ÔÓ¦µÄ¼àÌıÊÂ¼ş
-    void *arg;                                              //·ºĞÍ²ÎÊı
-    void (*call_back)(int fd, int events, void *arg);       //»Øµ÷º¯Êı
-    int status;                                             //ÊÇ·ñÔÚ¼àÌı:1->ÔÚºìºÚÊ÷ÉÏ(¼àÌı), 0->²»ÔÚ(²»¼àÌı)
+    int fd;                                                 //è¦ç›‘å¬çš„æ–‡ä»¶æè¿°ç¬¦
+    int events;                                             //å¯¹åº”çš„ç›‘å¬äº‹ä»¶
+    void *arg;                                              //æ³›å‹å‚æ•°
+    void (*call_back)(int fd, int events, void *arg);       //å›è°ƒå‡½æ•°
+    int status;                                             //æ˜¯å¦åœ¨ç›‘å¬:1->åœ¨çº¢é»‘æ ‘ä¸Š(ç›‘å¬), 0->ä¸åœ¨(ä¸ç›‘å¬)
     char buf[BUFLEN];
     int len;
-    long last_active;                                       //¼ÇÂ¼Ã¿´Î¼ÓÈëºìºÚÊ÷ g_efd µÄÊ±¼äÖµ
+    long last_active;                                       //è®°å½•æ¯æ¬¡åŠ å…¥çº¢é»‘æ ‘ g_efd çš„æ—¶é—´å€¼
 };
 
-int g_efd;                                                  //È«¾Ö±äÁ¿, ±£´æepoll_create·µ»ØµÄÎÄ¼şÃèÊö·û
-int g_lfd;													//È«¾Ö±äÁ¿, ±£´æ¼àÌıµÄÎÄ¼şÃèÊö·û
-struct myevent_s g_events[MAX_EVENTS+1];                    //×Ô¶¨Òå½á¹¹ÌåÀàĞÍÊı×é. +1-->listen fd
+int g_efd;                                                  //å…¨å±€å˜é‡, ä¿å­˜epoll_createè¿”å›çš„æ–‡ä»¶æè¿°ç¬¦
+int g_lfd;													//å…¨å±€å˜é‡, ä¿å­˜ç›‘å¬çš„æ–‡ä»¶æè¿°ç¬¦
+struct myevent_s g_events[MAX_EVENTS+1];                    //è‡ªå®šä¹‰ç»“æ„ä½“ç±»å‹æ•°ç»„. +1-->listen fd
 
 
-/*½«½á¹¹Ìå myevent_s ³ÉÔ±±äÁ¿ ³õÊ¼»¯*/
+/*å°†ç»“æ„ä½“ myevent_s æˆå‘˜å˜é‡ åˆå§‹åŒ–*/
 void eventset(struct myevent_s *ev, int fd, void (*call_back)(int, int, void *), void *arg)
 {
     ev->fd = fd;
@@ -47,30 +47,30 @@ void eventset(struct myevent_s *ev, int fd, void (*call_back)(int, int, void *),
     ev->status = 0;
     //memset(ev->buf, 0, sizeof(ev->buf));
     //ev->len = 0;
-    ev->last_active = time(NULL);    //µ÷ÓÃeventsetº¯ÊıµÄÊ±¼ä unixÊ±¼ä´Á
+    ev->last_active = time(NULL);    //è°ƒç”¨eventsetå‡½æ•°çš„æ—¶é—´ unixæ—¶é—´æˆ³
 
     return;
 }
 
-/* Ïò epoll¼àÌıµÄºìºÚÊ÷ Ìí¼ÓÒ»¸ö ÎÄ¼şÃèÊö·û */
+/* å‘ epollç›‘å¬çš„çº¢é»‘æ ‘ æ·»åŠ ä¸€ä¸ª æ–‡ä»¶æè¿°ç¬¦ */
 void eventadd(int efd, int events, struct myevent_s *ev)
 {
     struct epoll_event epv = {0, {0}};
     int op;
     epv.data.ptr = ev;
-    epv.events = ev->events = events;       //EPOLLIN »ò EPOLLOUT
+    epv.events = ev->events = events;       //EPOLLIN æˆ– EPOLLOUT
 
-    if(ev->status == 1) 
-	{                                          //ÒÑ¾­ÔÚºìºÚÊ÷ g_efd Àï
-        op = EPOLL_CTL_MOD;                    //ĞŞ¸ÄÆäÊôĞÔ
-    } 
-	else 
-	{                                //²»ÔÚºìºÚÊ÷Àï
-        op = EPOLL_CTL_ADD;          //½«Æä¼ÓÈëºìºÚÊ÷ g_efd, ²¢½«statusÖÃ1
+    if(ev->status == 1)
+	{                                          //å·²ç»åœ¨çº¢é»‘æ ‘ g_efd é‡Œ
+        op = EPOLL_CTL_MOD;                    //ä¿®æ”¹å…¶å±æ€§
+    }
+	else
+	{                                //ä¸åœ¨çº¢é»‘æ ‘é‡Œ
+        op = EPOLL_CTL_ADD;          //å°†å…¶åŠ å…¥çº¢é»‘æ ‘ g_efd, å¹¶å°†statusç½®1
         ev->status = 1;
     }
 
-    if (epoll_ctl(efd, op, ev->fd, &epv) < 0)                       //Êµ¼ÊÌí¼Ó/ĞŞ¸Ä
+    if (epoll_ctl(efd, op, ev->fd, &epv) < 0)                       //å®é™…æ·»åŠ /ä¿®æ”¹
 	{
         printf("event add failed [fd=%d], events[%d]\n", ev->fd, events);
 	}
@@ -82,23 +82,23 @@ void eventadd(int efd, int events, struct myevent_s *ev)
     return ;
 }
 
-/* ´Óepoll ¼àÌıµÄ ºìºÚÊ÷ÖĞÉ¾³ıÒ»¸ö ÎÄ¼şÃèÊö·û*/
+/* ä»epoll ç›‘å¬çš„ çº¢é»‘æ ‘ä¸­åˆ é™¤ä¸€ä¸ª æ–‡ä»¶æè¿°ç¬¦*/
 void eventdel(int efd, struct myevent_s *ev)
 {
     struct epoll_event epv = {0, {0}};
 
-    if (ev->status != 1)                                        //²»ÔÚºìºÚÊ÷ÉÏ
+    if (ev->status != 1)                                        //ä¸åœ¨çº¢é»‘æ ‘ä¸Š
         return ;
 
     epv.data.ptr = ev;
-    ev->status = 0;                                             //ĞŞ¸Ä×´Ì¬
-    epoll_ctl(efd, EPOLL_CTL_DEL, ev->fd, &epv);                //´ÓºìºÚÊ÷ efd ÉÏ½« ev->fd Õª³ı
+    ev->status = 0;                                             //ä¿®æ”¹çŠ¶æ€
+    epoll_ctl(efd, EPOLL_CTL_DEL, ev->fd, &epv);                //ä»çº¢é»‘æ ‘ efd ä¸Šå°† ev->fd æ‘˜é™¤
 
     return ;
 }
 
-/*  µ±ÓĞÎÄ¼şÃèÊö·û¾ÍĞ÷, epoll·µ»Ø, µ÷ÓÃ¸Ãº¯Êı Óë¿Í»§¶Ë½¨Á¢Á´½Ó */
-// »Øµ÷º¯Êı - ¼àÌıµÄÎÄ¼şÃèÊö·û·¢ËÍ¶ÁÊÂ¼şÊ±±»µ÷ÓÃ
+/*  å½“æœ‰æ–‡ä»¶æè¿°ç¬¦å°±ç»ª, epollè¿”å›, è°ƒç”¨è¯¥å‡½æ•° ä¸å®¢æˆ·ç«¯å»ºç«‹é“¾æ¥ */
+// å›è°ƒå‡½æ•° - ç›‘å¬çš„æ–‡ä»¶æè¿°ç¬¦å‘é€è¯»äº‹ä»¶æ—¶è¢«è°ƒç”¨
 void acceptconn(int lfd, int events, void *arg)
 {
     struct sockaddr_in cin;
@@ -107,74 +107,74 @@ void acceptconn(int lfd, int events, void *arg)
 
     cfd = Accept(lfd, (struct sockaddr *)&cin, &len);
 
-	//Ê¹ÓÃdo while(0)µÄÄ¿µÄÊÇÎªÁË±ÜÃâÊ¹ÓÃgotoÓï¾ä
-    do 
+	//ä½¿ç”¨do while(0)çš„ç›®çš„æ˜¯ä¸ºäº†é¿å…ä½¿ç”¨gotoè¯­å¥
+    do
 	{
-        for (i = 0; i < MAX_EVENTS; i++)                                //´ÓÈ«¾ÖÊı×ég_eventsÖĞÕÒÒ»¸ö¿ÕÏĞÔªËØ
+        for (i = 0; i < MAX_EVENTS; i++)                                //ä»å…¨å±€æ•°ç»„g_eventsä¸­æ‰¾ä¸€ä¸ªç©ºé—²å…ƒç´ 
 		{
-            if (g_events[i].status == 0)                                //ÀàËÆÓÚselectÖĞÕÒÖµÎª-1µÄÔªËØ
+            if (g_events[i].status == 0)                                //ç±»ä¼¼äºselectä¸­æ‰¾å€¼ä¸º-1çš„å…ƒç´ 
 			{
-                break;  //ÕÒµ½µÚÒ»¸öÄÜÓÃµÄ                                                //Ìø³ö for
+                break;  //æ‰¾åˆ°ç¬¬ä¸€ä¸ªèƒ½ç”¨çš„                                                //è·³å‡º for
 			}
 		}
 
-        if (i == MAX_EVENTS) 
+        if (i == MAX_EVENTS)
 		{
             printf("%s: max connect limit[%d]\n", __func__, MAX_EVENTS);
-            break;   //±ÜÃâgoto, Ìø³ödo while(0) ²»Ö´ĞĞºóĞø´úÂë
+            break;   //é¿å…goto, è·³å‡ºdo while(0) ä¸æ‰§è¡Œåç»­ä»£ç 
         }
 
-		//½«cfdÉèÖÃÎª·Ç×èÈû
+		//å°†cfdè®¾ç½®ä¸ºéé˜»å¡
         int flags = 0;
 		flags = fcntl(cfd, F_GETFL, 0);
 		flags |= O_NONBLOCK;
-        if ((flags = fcntl(cfd, F_SETFL, flags)) < 0) 
+        if ((flags = fcntl(cfd, F_SETFL, flags)) < 0)
 		{
             printf("%s: fcntl nonblocking failed, %s\n", __func__, strerror(errno));
-            break;//±ÜÃâgoto
+            break;//é¿å…goto
         }
 
-        /* ¸øcfdÉèÖÃÒ»¸ö myevent_s ½á¹¹Ìå, »Øµ÷º¯Êı ÉèÖÃÎª recvdata */
-        eventset(&g_events[i], cfd, recvdata, &g_events[i]);   
+        /* ç»™cfdè®¾ç½®ä¸€ä¸ª myevent_s ç»“æ„ä½“, å›è°ƒå‡½æ•° è®¾ç½®ä¸º recvdata */
+        eventset(&g_events[i], cfd, recvdata, &g_events[i]);
 
-		//½«cfdÌí¼Óµ½ºìºÚÊ÷g_efdÖĞ,¼àÌı¶ÁÊÂ¼ş
-        eventadd(g_efd, EPOLLIN, &g_events[i]); 
+		//å°†cfdæ·»åŠ åˆ°çº¢é»‘æ ‘g_efdä¸­,ç›‘å¬è¯»äº‹ä»¶
+        eventadd(g_efd, EPOLLIN, &g_events[i]);
 
     }while(0);
 
-    printf("new connect [%s:%d][time:%ld], pos[%d]\n", 
+    printf("new connect [%s:%d][time:%ld], pos[%d]\n",
             inet_ntoa(cin.sin_addr), ntohs(cin.sin_port), g_events[i].last_active, i);
     return ;
 }
 
-// »Øµ÷º¯Êı - Í¨ĞÅµÄÎÄ¼şÃèÊö·û·¢Éú¶ÁÊÂ¼şÊ±ºò±»µ÷ÓÃ
+// å›è°ƒå‡½æ•° - é€šä¿¡çš„æ–‡ä»¶æè¿°ç¬¦å‘ç”Ÿè¯»äº‹ä»¶æ—¶å€™è¢«è°ƒç”¨
 void recvdata(int fd, int events, void *arg)
 {
     int len;
     struct myevent_s *ev = (struct myevent_s *)arg;
 
-	//¶ÁÈ¡¿Í»§¶Ë·¢À´µÄÊı¾İ
+	//è¯»å–å®¢æˆ·ç«¯å‘æ¥çš„æ•°æ®
 	memset(ev->buf, 0x00, sizeof(ev->buf));
-    len = Read(fd, ev->buf, sizeof(ev->buf));//¶ÁÎÄ¼şÃèÊö·û, Êı¾İ´æÈëmyevent_s³ÉÔ±bufÖĞ
+    len = Read(fd, ev->buf, sizeof(ev->buf));//è¯»æ–‡ä»¶æè¿°ç¬¦, æ•°æ®å­˜å…¥myevent_sæˆå‘˜bufä¸­
 
-    eventdel(g_efd, ev); //½«¸Ã½Úµã´ÓºìºÚÊ÷ÉÏÕª³ı
+    eventdel(g_efd, ev); //å°†è¯¥èŠ‚ç‚¹ä»çº¢é»‘æ ‘ä¸Šæ‘˜é™¤
 
-    if (len > 0) 	
+    if (len > 0)
 	{
         ev->len = len;
-        ev->buf[len] = '\0';                                //ÊÖ¶¯Ìí¼Ó×Ö·û´®½áÊø±ê¼Ç
+        ev->buf[len] = '\0';                                //æ‰‹åŠ¨æ·»åŠ å­—ç¬¦ä¸²ç»“æŸæ ‡è®°
         printf("C[%d]:%s\n", fd, ev->buf);
 
-        eventset(ev, fd, senddata, ev);                     //ÉèÖÃ¸Ã fd ¶ÔÓ¦µÄ»Øµ÷º¯ÊıÎª senddata
-        eventadd(g_efd, EPOLLOUT, ev);                      //½«fd¼ÓÈëºìºÚÊ÷g_efdÖĞ,¼àÌıÆäĞ´ÊÂ¼ş
-    } 
-	else if (len == 0) 
+        eventset(ev, fd, senddata, ev);                     //è®¾ç½®è¯¥ fd å¯¹åº”çš„å›è°ƒå‡½æ•°ä¸º senddata
+        eventadd(g_efd, EPOLLOUT, ev);                      //å°†fdåŠ å…¥çº¢é»‘æ ‘g_efdä¸­,ç›‘å¬å…¶å†™äº‹ä»¶
+    }
+	else if (len == 0)
 	{
         Close(ev->fd);
-        /* ev-g_events µØÖ·Ïà¼õµÃµ½Æ«ÒÆÔªËØÎ»ÖÃ */
+        /* ev-g_events åœ°å€ç›¸å‡å¾—åˆ°åç§»å…ƒç´ ä½ç½® */
         printf("[fd=%d] pos[%ld], closed\n", fd, ev-g_events);
-    } 
-	else 
+    }
+	else
 	{
         Close(ev->fd);
         printf("read [fd=%d] error[%d]:%s\n", fd, errno, strerror(errno));
@@ -183,52 +183,52 @@ void recvdata(int fd, int events, void *arg)
     return;
 }
 
-// »Øµ÷º¯Êı - Í¨ĞÅµÄÎÄ¼şÃèÊö·û·¢ÉúĞ´ÊÂ¼şÊ±ºò±»µ÷ÓÃ
+// å›è°ƒå‡½æ•° - é€šä¿¡çš„æ–‡ä»¶æè¿°ç¬¦å‘ç”Ÿå†™äº‹ä»¶æ—¶å€™è¢«è°ƒç”¨
 void senddata(int fd, int events, void *arg)
 {
     int len;
     struct myevent_s *ev = (struct myevent_s *)arg;
 
-	//½«Ğ¡Ğ´×ª»»Îª´óĞ´·¢ËÍ¸ø¿Í»§¶Ë
+	//å°†å°å†™è½¬æ¢ä¸ºå¤§å†™å‘é€ç»™å®¢æˆ·ç«¯
 	int i=0;
 	for(i=0; i<ev->len; i++)
 	{
 		ev->buf[i] = toupper(ev->buf[i]);
 	}
 
-	//·¢ËÍÊı¾İ¸ø¿Í»§¶Ë
+	//å‘é€æ•°æ®ç»™å®¢æˆ·ç«¯
     len = Write(fd, ev->buf, ev->len);
-    if (len > 0) 
+    if (len > 0)
 	{
         printf("send[fd=%d]-->[%d]:[%s]\n", fd, len, ev->buf);
-        eventdel(g_efd, ev);                                //´ÓºìºÚÊ÷g_efdÖĞÒÆ³ı
-        eventset(ev, fd, recvdata, ev);                     //½«¸ÃfdµÄ »Øµ÷º¯Êı¸ÄÎª recvdata
-        eventadd(g_efd, EPOLLIN, ev);                       //´ÓĞÂÌí¼Óµ½ºìºÚÊ÷ÉÏ£¬ ÉèÎª¼àÌı¶ÁÊÂ¼ş
-    } 
-	else 
+        eventdel(g_efd, ev);                                //ä»çº¢é»‘æ ‘g_efdä¸­ç§»é™¤
+        eventset(ev, fd, recvdata, ev);                     //å°†è¯¥fdçš„ å›è°ƒå‡½æ•°æ”¹ä¸º recvdata
+        eventadd(g_efd, EPOLLIN, ev);                       //ä»æ–°æ·»åŠ åˆ°çº¢é»‘æ ‘ä¸Šï¼Œ è®¾ä¸ºç›‘å¬è¯»äº‹ä»¶
+    }
+	else
 	{
-        Close(ev->fd);                                      //¹Ø±ÕÁ´½Ó
-        eventdel(g_efd, ev);                                //´ÓºìºÚÊ÷g_efdÖĞÒÆ³ı
+        Close(ev->fd);                                      //å…³é—­é“¾æ¥
+        eventdel(g_efd, ev);                                //ä»çº¢é»‘æ ‘g_efdä¸­ç§»é™¤
         printf("send[fd=%d] error %s\n", fd, strerror(errno));
     }
 
     return;
 }
 
-/*´´½¨ socket, ³õÊ¼»¯lfd */
+/*åˆ›å»º socket, åˆå§‹åŒ–lfd */
 void initlistensocket()
 {
-	//´´½¨socket
+	//åˆ›å»ºsocket
     g_lfd = Socket(AF_INET, SOCK_STREAM, 0);
 
-	//¶ÔÊÂ¼ş½á¹¹Ìå¸³Öµ
+	//å¯¹äº‹ä»¶ç»“æ„ä½“èµ‹å€¼
     /* void eventset(struct myevent_s *ev, int fd, void (*call_back)(int, int, void *), void *arg);  */
-    eventset(&g_events[MAX_EVENTS], g_lfd, acceptconn, &g_events[MAX_EVENTS]);//½ö½öÊÇ¶Ôg_events[MAX_EVENTS]½øĞĞÉèÖÃ
+    eventset(&g_events[MAX_EVENTS], g_lfd, acceptconn, &g_events[MAX_EVENTS]);//ä»…ä»…æ˜¯å¯¹g_events[MAX_EVENTS]è¿›è¡Œè®¾ç½®
 
-	//½«¼àÌıÎÄ¼şÃèÊö·ûÉÏÊ÷
+	//å°†ç›‘å¬æ–‡ä»¶æè¿°ç¬¦ä¸Šæ ‘
     eventadd(g_efd, EPOLLIN, &g_events[MAX_EVENTS]);
 
-	//°ó¶¨
+	//ç»‘å®š
     struct sockaddr_in servaddr;
 	memset(&servaddr, 0, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
@@ -243,66 +243,66 @@ void initlistensocket()
 
 int main(int argc, char *argv[])
 {
-    g_efd = epoll_create(MAX_EVENTS+1);                 //´´½¨ºìºÚÊ÷,·µ»Ø¸øÈ«¾Ö g_efd 
+    g_efd = epoll_create(MAX_EVENTS+1);                 //åˆ›å»ºçº¢é»‘æ ‘,è¿”å›ç»™å…¨å±€ g_efd
 	if(g_efd<0)
 	{
 		perror("create epoll error");
 		return -1;
 	}
 
-	//socket-bind-listen-½«¼àÌıÎÄ¼şÃèÊö·ûÉÏÊ÷
+	//socket-bind-listen-å°†ç›‘å¬æ–‡ä»¶æè¿°ç¬¦ä¸Šæ ‘
     initlistensocket();
 
-    struct epoll_event events[MAX_EVENTS+1];            //±£´æÒÑ¾­Âú×ã¾ÍĞ÷ÊÂ¼şµÄÎÄ¼şÃèÊö·ûÊı×é 
+    struct epoll_event events[MAX_EVENTS+1];            //ä¿å­˜å·²ç»æ»¡è¶³å°±ç»ªäº‹ä»¶çš„æ–‡ä»¶æè¿°ç¬¦æ•°ç»„
 
     int checkpos = 0, i;
-    while (1) //¼ì²éÁ´½ÓÓĞÃ»ÓĞ³¬Ê±£¬Èç¹û³¬Ê±closeµô
+    while (1) //æ£€æŸ¥é“¾æ¥æœ‰æ²¡æœ‰è¶…æ—¶ï¼Œå¦‚æœè¶…æ—¶closeæ‰
 	{
-        /* ³¬Ê±ÑéÖ¤£¬Ã¿´Î²âÊÔ100¸öÁ´½Ó£¬²»²âÊÔlistenfd µ±¿Í»§¶Ë60ÃëÄÚÃ»ÓĞºÍ·şÎñÆ÷Í¨ĞÅ£¬Ôò¹Ø±Õ´Ë¿Í»§¶ËÁ´½Ó */
-        long now = time(NULL);                          //µ±Ç°Ê±¼ä
-		//Ò»´ÎÑ­»·¼ì²â100¸ö¡£ Ê¹ÓÃcheckpos¿ØÖÆ¼ì²â¶ÔÏó
-        for (i = 0; i < 100; i++, checkpos++) 
+        /* è¶…æ—¶éªŒè¯ï¼Œæ¯æ¬¡æµ‹è¯•100ä¸ªé“¾æ¥ï¼Œä¸æµ‹è¯•listenfd å½“å®¢æˆ·ç«¯60ç§’å†…æ²¡æœ‰å’ŒæœåŠ¡å™¨é€šä¿¡ï¼Œåˆ™å…³é—­æ­¤å®¢æˆ·ç«¯é“¾æ¥ */
+        long now = time(NULL);                          //å½“å‰æ—¶é—´
+		//ä¸€æ¬¡å¾ªç¯æ£€æµ‹100ä¸ªã€‚ ä½¿ç”¨checkposæ§åˆ¶æ£€æµ‹å¯¹è±¡
+        for (i = 0; i < 100; i++, checkpos++)
 		{
             if (checkpos == MAX_EVENTS)
 			{
                 checkpos = 0;
 			}
 
-            if (g_events[checkpos].status != 1)         //²»ÔÚºìºÚÊ÷ g_efd ÉÏ
+            if (g_events[checkpos].status != 1)         //ä¸åœ¨çº¢é»‘æ ‘ g_efd ä¸Š
 			{
                 continue;
 			}
 
-            long duration = now - g_events[checkpos].last_active;       //¿Í»§¶Ë²»»îÔ¾µÄÊÀ¼ä
+            long duration = now - g_events[checkpos].last_active;       //å®¢æˆ·ç«¯ä¸æ´»è·ƒçš„ä¸–é—´
 
-            if (duration >= 60) 
+            if (duration >= 60)
 			{
-                Close(g_events[checkpos].fd);                           //¹Ø±ÕÓë¸Ã¿Í»§¶ËÁ´½Ó
+                Close(g_events[checkpos].fd);                           //å…³é—­ä¸è¯¥å®¢æˆ·ç«¯é“¾æ¥
                 printf("[fd=%d] timeout\n", g_events[checkpos].fd);
-                eventdel(g_efd, &g_events[checkpos]);                   //½«¸Ã¿Í»§¶Ë ´ÓºìºÚÊ÷ g_efdÒÆ³ı
+                eventdel(g_efd, &g_events[checkpos]);                   //å°†è¯¥å®¢æˆ·ç«¯ ä»çº¢é»‘æ ‘ g_efdç§»é™¤
             }
         }
 
-        /*¼àÌıºìºÚÊ÷g_efd, ½«Âú×ãµÄÊÂ¼şµÄÎÄ¼şÃèÊö·û¼ÓÖÁeventsÊı×éÖĞ, 1ÃëÃ»ÓĞÊÂ¼şÂú×ã, ·µ»Ø 0*/
+        /*ç›‘å¬çº¢é»‘æ ‘g_efd, å°†æ»¡è¶³çš„äº‹ä»¶çš„æ–‡ä»¶æè¿°ç¬¦åŠ è‡³eventsæ•°ç»„ä¸­, 1ç§’æ²¡æœ‰äº‹ä»¶æ»¡è¶³, è¿”å› 0*/
         int nfd = epoll_wait(g_efd, events, MAX_EVENTS+1, 1000);
-        if (nfd < 0) 
+        if (nfd < 0)
 		{
             printf("epoll_wait error, exit\n");
             break;
         }
 
-        for (i = 0; i < nfd; i++) 
+        for (i = 0; i < nfd; i++)
 		{
-            /*Ê¹ÓÃ×Ô¶¨Òå½á¹¹Ìåmyevent_sÀàĞÍÖ¸Õë,½ÓÊÕÁªºÏÌådataµÄvoid *ptr³ÉÔ±*/
-            struct myevent_s *ev = (struct myevent_s *)events[i].data.ptr;  
+            /*ä½¿ç”¨è‡ªå®šä¹‰ç»“æ„ä½“myevent_sç±»å‹æŒ‡é’ˆ,æ¥æ”¶è”åˆä½“dataçš„void *ptræˆå‘˜*/
+            struct myevent_s *ev = (struct myevent_s *)events[i].data.ptr;
 
-			//¶Á¾ÍĞ÷ÊÂ¼ş
-            if ((events[i].events & EPOLLIN) && (ev->events & EPOLLIN)) 
+			//è¯»å°±ç»ªäº‹ä»¶
+            if ((events[i].events & EPOLLIN) && (ev->events & EPOLLIN))
 			{
                 //ev->call_back(ev->fd, events[i].events, ev->arg);
                 ev->call_back(ev->fd, events[i].events, ev);
             }
-			//Ğ´¾ÍĞ÷ÊÂ¼ş
+			//å†™å°±ç»ªäº‹ä»¶
             if ((events[i].events & EPOLLOUT) && (ev->events & EPOLLOUT))
 			{
                 //ev->call_back(ev->fd, events[i].events, ev->arg);
@@ -311,7 +311,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    /*¹Ø±ÕÎÄ¼şÃèÊö·û */
+    /*å…³é—­æ–‡ä»¶æè¿°ç¬¦ */
 	Close(g_efd);
 	Close(g_lfd);
 

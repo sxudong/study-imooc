@@ -3,7 +3,7 @@
 using namespace std;
 
 /*
-* ÄÚ½¨º¯Êı¶ÔÏóÍ·ÎÄ¼ş
+* å†…å»ºå‡½æ•°å¯¹è±¡å¤´æ–‡ä»¶
 */
 #include <functional>
 #include <vector>
@@ -11,41 +11,41 @@ using namespace std;
 
 
 /*
-* 6¸öËãÊıÀàº¯Êı¶ÔÏó,³ıÁËnegateÊÇÒ»ÔªÔËËã£¬ÆäËû¶¼ÊÇ¶şÔªÔËËã¡£
-*   template<class T> T plus<T>       //¼Ó·¨·Âº¯Êı
-*   template<class T> T minus<T>      //¼õ·¨·Âº¯Êı
-*   template<class T> T multiplies<T> //³Ë·¨·Âº¯Êı
-*   template<class T> T divides<T>    //³ı·¨·Âº¯Êı
-*   template<class T> T modulus<T>    //È¡Ä£·Âº¯Êı
-*   template<class T> T negate<T>     //È¡·´·Âº¯Êı
+* 6ä¸ªç®—æ•°ç±»å‡½æ•°å¯¹è±¡,é™¤äº†negateæ˜¯ä¸€å…ƒè¿ç®—ï¼Œå…¶ä»–éƒ½æ˜¯äºŒå…ƒè¿ç®—ã€‚
+*   template<class T> T plus<T>       //åŠ æ³•ä»¿å‡½æ•°
+*   template<class T> T minus<T>      //å‡æ³•ä»¿å‡½æ•°
+*   template<class T> T multiplies<T> //ä¹˜æ³•ä»¿å‡½æ•°
+*   template<class T> T divides<T>    //é™¤æ³•ä»¿å‡½æ•°
+*   template<class T> T modulus<T>    //å–æ¨¡ä»¿å‡½æ•°
+*   template<class T> T negate<T>     //å–åä»¿å‡½æ•°
 */
 
 /*
-* 6¸ö¹ØÏµÔËËãÀàº¯Êı¶ÔÏó,Ã¿Ò»ÖÖ¶¼ÊÇ¶şÔªÔËËã¡£
-*   template<class T> bool equal_to<T>      //µÈÓÚ
-*   template<class T> bool not_equal_to<T>  //²»µÈÓÚ
-*   template<class T> bool greater<T>       //´óÓÚ
-*   template<class T> bool greater_equal<T> //´óÓÚµÈÓÚ
-*   template<class T> bool less<T>          //Ğ¡ÓÚ
-*   template<class T> bool less_equal<T>    //Ğ¡ÓÚµÈÓÚ
+* 6ä¸ªå…³ç³»è¿ç®—ç±»å‡½æ•°å¯¹è±¡,æ¯ä¸€ç§éƒ½æ˜¯äºŒå…ƒè¿ç®—ã€‚
+*   template<class T> bool equal_to<T>      //ç­‰äº
+*   template<class T> bool not_equal_to<T>  //ä¸ç­‰äº
+*   template<class T> bool greater<T>       //å¤§äº
+*   template<class T> bool greater_equal<T> //å¤§äºç­‰äº
+*   template<class T> bool less<T>          //å°äº
+*   template<class T> bool less_equal<T>    //å°äºç­‰äº
 */
 
 /*
-* Âß¼­ÔËËãÀàÔËËãº¯Êı,notÎªÒ»ÔªÔËËã£¬ÆäÓàÎª¶şÔªÔËËã¡£
-*   template<class T> bool logical_and<T> //Âß¼­Óë
-*   template<class T> bool logical_or<T>  //Âß¼­»ò
-*   template<class T> bool logical_not<T> //Âß¼­·Ç
+* é€»è¾‘è¿ç®—ç±»è¿ç®—å‡½æ•°,notä¸ºä¸€å…ƒè¿ç®—ï¼Œå…¶ä½™ä¸ºäºŒå…ƒè¿ç®—ã€‚
+*   template<class T> bool logical_and<T> //é€»è¾‘ä¸
+*   template<class T> bool logical_or<T>  //é€»è¾‘æˆ–
+*   template<class T> bool logical_not<T> //é€»è¾‘é
 */
 void test01()
 {
 	/*
-	* template<class T> T negate<T> //È¡·´·Âº¯Êı
+	* template<class T> T negate<T> //å–åä»¿å‡½æ•°
 	*/
 	negate<int> n;
 	cout << n(10) << endl;   //-10
 
 	/*
-	* ¼Ó·¨  template<class T> T plus<T>//¼Ó·¨·Âº¯Êı
+	* åŠ æ³•  template<class T> T plus<T>//åŠ æ³•ä»¿å‡½æ•°
 	*/
 	plus<int> p;
 	cout << p(1, 1) << endl; //2
@@ -53,7 +53,7 @@ void test01()
 
 
 /*
-* template<class T> bool greater<T> //´óÓÚ
+* template<class T> bool greater<T> //å¤§äº
 */
 void test02()
 {

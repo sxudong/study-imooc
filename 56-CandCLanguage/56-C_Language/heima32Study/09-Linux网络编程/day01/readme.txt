@@ -1,6 +1,6 @@
-´úÂëÔËÐÐÐèÒªÔÚlinuxÏµÍ³ÏÂ²ÅÄÜÔËÐÐ
+ä»£ç è¿è¡Œéœ€è¦åœ¨linuxç³»ç»Ÿä¸‹æ‰èƒ½è¿è¡Œ
 
-ÐèÒª°²×°¡°nc¡±¹¤¾ß£º
+éœ€è¦å®‰è£…â€œncâ€å·¥å…·ï¼š
 [root@ ~]# yum -y install nc
 
 [root@]# ./server

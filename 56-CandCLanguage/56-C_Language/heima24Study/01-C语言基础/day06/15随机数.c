@@ -5,9 +5,9 @@
 #include <time.h>
 
 /*
-1、添加头文件 time.h  stdlib.h
-2、添加随机数种子 srand((unsigend int )time(NULL));
-3、生成随机数 rand()  %  
+1銆佹坊鍔犲ご鏂囦欢 time.h  stdlib.h
+2銆佹坊鍔犻殢鏈烘暟绉嶅瓙 srand((unsigend int )time(NULL));
+3銆佺敓鎴愰殢鏈烘暟 rand()  %
 */
 int main15()
 {

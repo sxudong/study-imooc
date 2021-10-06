@@ -21,34 +21,34 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#define LOG_PROCNAME      0x00000001              /* msglog Êä³öÈÕÖ¾Ê±´òÓ¡³ÌĞòÃû        */
-#define LOG_PID           0x00000010              /* msglog Êä³öÈÕÖ¾Ê±´òÓ¡½ø³Ì PID      */
-#define LOG_PERROR        0x00000100              /* msglog ÊÇ·ñ°Ñ¸æ¾¯ÄÚÈİÊä³öµ½stderr  */
-#define NLO_PROCNAME      0x11111110              /* msglog ²»Êä³ö³ÌĞòÃû                */
-#define NLO_PID           0x11111101              /* msglog ²»Êä³ö½ø³Ì PID              */
-#define NLO_PERROR        0x11111011              /* msglog ²»Êä³ö¸æ¾¯µ½stderr          */
+#define LOG_PROCNAME      0x00000001              /* msglog è¾“å‡ºæ—¥å¿—æ—¶æ‰“å°ç¨‹åºå        */
+#define LOG_PID           0x00000010              /* msglog è¾“å‡ºæ—¥å¿—æ—¶æ‰“å°è¿›ç¨‹ PID      */
+#define LOG_PERROR        0x00000100              /* msglog æ˜¯å¦æŠŠå‘Šè­¦å†…å®¹è¾“å‡ºåˆ°stderr  */
+#define NLO_PROCNAME      0x11111110              /* msglog ä¸è¾“å‡ºç¨‹åºå                */
+#define NLO_PID           0x11111101              /* msglog ä¸è¾“å‡ºè¿›ç¨‹ PID              */
+#define NLO_PERROR        0x11111011              /* msglog ä¸è¾“å‡ºå‘Šè­¦åˆ°stderr          */
 
-#define MSG_INFO          0x00000001              /* msglog Êä³öµ½¸æ¾¯ÈÕÖ¾ÎÄ¼şÖĞ        */
-#define MSG_WARN          0x00000010              /* msglog Êä³öµ½ÆÕÍ¨ÈÕÖ¾ÎÄ¼şÖĞ        */
-#define MSG_BOTH          MSG_INFO|MSG_WARN       /* msglog Êä³öµ½ÆÕÍ¨ºÍ¸æ¾¯ÈÕÖ¾ÎÄ¼şÖĞ  */
+#define MSG_INFO          0x00000001              /* msglog è¾“å‡ºåˆ°å‘Šè­¦æ—¥å¿—æ–‡ä»¶ä¸­        */
+#define MSG_WARN          0x00000010              /* msglog è¾“å‡ºåˆ°æ™®é€šæ—¥å¿—æ–‡ä»¶ä¸­        */
+#define MSG_BOTH          MSG_INFO|MSG_WARN       /* msglog è¾“å‡ºåˆ°æ™®é€šå’Œå‘Šè­¦æ—¥å¿—æ–‡ä»¶ä¸­  */
 
-//#define LOG_MESSAGE_FILE  "/home/itheima/log/tcpsvr"           /* ÏµÍ³³ÌĞòÔËĞĞÈÕÖ¾ĞÅÏ¢ÎÄ¼ş           */
-#define LOG_MESSAGE_FILE  "/home/aaron/log/tcpsvr"           /* ÏµÍ³³ÌĞòÔËĞĞÈÕÖ¾ĞÅÏ¢ÎÄ¼ş           */
-#define LOG_MESSAGE_DFMT  "%m-%d %H:%M:%S"        /* ÈÕÖ¾ĞÅÏ¢Ê±¼ä¸ñÊ½×Ö´®               */
-#define LOG_POSTFIX_MESS  "%y%m"                  /* ³ÌĞòÔËĞĞÈÕÖ¾ĞÅÏ¢ÎÄ¼şºó×º           */
-//#define LOG_WARNING_FILE  "/home/itheima/log/log.sys_warn"   /* ÏµÍ³³ÌĞòÔËĞĞ¸æ¾¯ÈÕÖ¾ÎÄ¼ş           */
-#define LOG_WARNING_FILE  "/home/aaron/log/log.sys_warn"   /* ÏµÍ³³ÌĞòÔËĞĞ¸æ¾¯ÈÕÖ¾ÎÄ¼ş           */
-#define LOG_WARNING_DFMT  "%m-%d %H:%M:%S"        /* ¸æ¾¯ĞÅÏ¢Ê±¼ä¸ñÊ½×Ö´®               */
-#define LOG_POSTFIX_WARN  ""                      /* ³ÌĞòÔËĞĞ¸æ¾¯ÈÕÖ¾ÎÄ¼şºó×º           */
+//#define LOG_MESSAGE_FILE  "/home/itheima/log/tcpsvr"           /* ç³»ç»Ÿç¨‹åºè¿è¡Œæ—¥å¿—ä¿¡æ¯æ–‡ä»¶           */
+#define LOG_MESSAGE_FILE  "/home/aaron/log/tcpsvr"           /* ç³»ç»Ÿç¨‹åºè¿è¡Œæ—¥å¿—ä¿¡æ¯æ–‡ä»¶           */
+#define LOG_MESSAGE_DFMT  "%m-%d %H:%M:%S"        /* æ—¥å¿—ä¿¡æ¯æ—¶é—´æ ¼å¼å­—ä¸²               */
+#define LOG_POSTFIX_MESS  "%y%m"                  /* ç¨‹åºè¿è¡Œæ—¥å¿—ä¿¡æ¯æ–‡ä»¶åç¼€           */
+//#define LOG_WARNING_FILE  "/home/itheima/log/log.sys_warn"   /* ç³»ç»Ÿç¨‹åºè¿è¡Œå‘Šè­¦æ—¥å¿—æ–‡ä»¶           */
+#define LOG_WARNING_FILE  "/home/aaron/log/log.sys_warn"   /* ç³»ç»Ÿç¨‹åºè¿è¡Œå‘Šè­¦æ—¥å¿—æ–‡ä»¶           */
+#define LOG_WARNING_DFMT  "%m-%d %H:%M:%S"        /* å‘Šè­¦ä¿¡æ¯æ—¶é—´æ ¼å¼å­—ä¸²               */
+#define LOG_POSTFIX_WARN  ""                      /* ç¨‹åºè¿è¡Œå‘Šè­¦æ—¥å¿—æ–‡ä»¶åç¼€           */
 
 /* ************************************************************************************ */
-int msglog(int mtype, char *outfmt, ...);//Ğ´ÈÕÖ¾º¯Êı
-int msgLogFormat(int mopt, char *mdfmt, int wopt, char *wdfmt);//¶ÔÈÕÖ¾¸ñÊ½»¯ 
-int msgLogOpen(char *ident, char *mpre, char *mdate, char *wpre, char *wdate);//´ò¿ªÈÕÖ¾ÎÄ¼ş
-int msgLogClose(void);//¹Ø±ÕÈÕÖ¾ÎÄ¼ş
+int msglog(int mtype, char *outfmt, ...);//å†™æ—¥å¿—å‡½æ•°
+int msgLogFormat(int mopt, char *mdfmt, int wopt, char *wdfmt);//å¯¹æ—¥å¿—æ ¼å¼åŒ–
+int msgLogOpen(char *ident, char *mpre, char *mdate, char *wpre, char *wdate);//æ‰“å¼€æ—¥å¿—æ–‡ä»¶
+int msgLogClose(void);//å…³é—­æ—¥å¿—æ–‡ä»¶
 
-long begusec_process(void);                      /* ÉèÖÃ¿ªÊ¼Ê±¼ä 0=ok                   */
-long getusec_process(void);                      /* ·µ»Øusecond ´Ó begusec_processÀúÊ±  */
+long begusec_process(void);                      /* è®¾ç½®å¼€å§‹æ—¶é—´ 0=ok                   */
+long getusec_process(void);                      /* è¿”å›usecond ä» begusec_processå†æ—¶  */
 
 int msgInit(char *pName);
 #endif

@@ -1,5 +1,5 @@
-//#pragma once //¼´Ê¹ÖØ°üº¬£¬Ö»°üº¬Ò»´Î£¬ÏÂÒ»´Î²»ÔÙ°üº¬
-//Èç¹û°æ±¾µ×Ð´ÏÂÃæÕâÁ½¾ä£¬Ëü¸ú¡°#pragma once¡±¹¦ÄÜÒ»Ñù
+//#pragma once //å³ä½¿é‡åŒ…å«ï¼ŒåªåŒ…å«ä¸€æ¬¡ï¼Œä¸‹ä¸€æ¬¡ä¸å†åŒ…å«
+//å¦‚æžœç‰ˆæœ¬åº•å†™ä¸‹é¢è¿™ä¸¤å¥ï¼Œå®ƒè·Ÿâ€œ#pragma onceâ€åŠŸèƒ½ä¸€æ ·
 #ifndef __HEAD_FILE_H__
 #define __HEAD_FILE_H__
 
@@ -10,9 +10,9 @@
 #include<string.h>
 #include<stdlib.h>
 //extern int aaa;
-//Í·ÎÄ¼þ×÷ÓÃ
-//1¡¢º¯Êý¡¢±äÁ¿µÄÉùÃ÷
-//2¡¢ÏµÍ³¿âµÄµ÷ÓÃ
+//å¤´æ–‡ä»¶ä½œç”¨
+//1ã€å‡½æ•°ã€å˜é‡çš„å£°æ˜Ž
+//2ã€ç³»ç»Ÿåº“çš„è°ƒç”¨
 extern int max0223(int a, int b);
 
 

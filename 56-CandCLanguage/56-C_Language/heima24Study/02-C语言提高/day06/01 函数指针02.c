@@ -31,7 +31,7 @@ int con5(int a, int b)
 }
 
 /*
-* 1. ¡°º¯Êý¡±¿ÉÒÔ×öÁíÍâÒ»¸öº¯ÊýµÄ¡°²ÎÊý¡±
+* 1. â€œå‡½æ•°â€å¯ä»¥åšå¦å¤–ä¸€ä¸ªå‡½æ•°çš„â€œå‚æ•°â€
 */
 void doLogic(int(*pFunc) (int, int))
 {
@@ -43,7 +43,7 @@ void doLogic(int(*pFunc) (int, int))
 
 
 /*
-* 2. º¯ÊýÖ¸ÕëÊý×é
+* 2. å‡½æ•°æŒ‡é’ˆæ•°ç»„
 */
 void func1()
 {
@@ -63,11 +63,11 @@ void func3()
 void test03()
 {
 	/*
-	* ¶¨Òå¡°º¯ÊýÖ¸ÕëÊý×é¡±
-	*     void£º·µ»ØÖµÀàÐÍ
-	*     func_array£ºº¯Êý±äÁ¿Ãû
-	*     ()£º²ÎÊýÁÐ±í
-	*     [3]£ºÊý×éÈÝÁ¿
+	* å®šä¹‰â€œå‡½æ•°æŒ‡é’ˆæ•°ç»„â€
+	*     voidï¼šè¿”å›žå€¼ç±»åž‹
+	*     func_arrayï¼šå‡½æ•°å˜é‡å
+	*     ()ï¼šå‚æ•°åˆ—è¡¨
+	*     [3]ï¼šæ•°ç»„å®¹é‡
 	*/
 	void(*func_array[3])();
 	func_array[0] = func1;
@@ -85,25 +85,25 @@ void test02()
 	//int ret = pFunc(10, 20);
 	//printf("ret = %d\n", ret); //ret = 30
 
-	doLogic(con5); //´«º¯ÊýÃû£¬Ö»ÓÐº¯ÊýÃû·¢ÉúµÄ±ä»¯£¬ÀïÃæµÄÆäËü´úÂëÃ»±ä¡£´úÂëÖØÓÃ¡£
+	doLogic(con5); //ä¼ å‡½æ•°åï¼Œåªæœ‰å‡½æ•°åå‘ç”Ÿçš„å˜åŒ–ï¼Œé‡Œé¢çš„å…¶å®ƒä»£ç æ²¡å˜ã€‚ä»£ç é‡ç”¨ã€‚
 }
 
 
 /*
-* ¡°º¯ÊýÖ¸Õë¡±×öº¯Êý²ÎÊý ¡ª¡ª »Øµ÷º¯Êý
+* â€œå‡½æ•°æŒ‡é’ˆâ€åšå‡½æ•°å‚æ•° â€”â€” å›žè°ƒå‡½æ•°
 *
-*  arr£ºÊý×éÊ×µØÖ·
-*  eleSize£ºÃ¿Ò»¸öÔªËØ´óÐ¡£¨Ã¿¸öÔªËØÕ¼¶àÉÙ×Ö½Ú£©
-*  len£ºÔªËØ¸öÊý
-*  void(*print)(void*)£ºÓÃ»§×Ô¶¨Òåº¯ÊýÃûµÄÖ¸Õë
+*  arrï¼šæ•°ç»„é¦–åœ°å€
+*  eleSizeï¼šæ¯ä¸€ä¸ªå…ƒç´ å¤§å°ï¼ˆæ¯ä¸ªå…ƒç´ å å¤šå°‘å­—èŠ‚ï¼‰
+*  lenï¼šå…ƒç´ ä¸ªæ•°
+*  void(*print)(void*)ï¼šç”¨æˆ·è‡ªå®šä¹‰å‡½æ•°åçš„æŒ‡é’ˆ
 */
-void printAllArray(void* arr, int eleSize, int len, void(*print)(void*)) //void:ÎÞ·µ»ØÖµ£¬print£º×Ô¶¨ÒåµÄº¯Êý±äÁ¿£¬£¨void*£©:²ÎÊýÎÞÀàÐÍ
+void printAllArray(void* arr, int eleSize, int len, void(*print)(void*)) //void:æ— è¿”å›žå€¼ï¼Œprintï¼šè‡ªå®šä¹‰çš„å‡½æ•°å˜é‡ï¼Œï¼ˆvoid*ï¼‰:å‚æ•°æ— ç±»åž‹
 {
-	//ÒòÎªeleSizeÊÇ×Ö½Ú´óÐ¡£¬ËùÒÔÕâÀïÒªÇ¿×ªÎªchar*ÀàÐÍÀ´¼ÆËã×Ö½ÚÆ«ÒÆÁ¿
+	//å› ä¸ºeleSizeæ˜¯å­—èŠ‚å¤§å°ï¼Œæ‰€ä»¥è¿™é‡Œè¦å¼ºè½¬ä¸ºchar*ç±»åž‹æ¥è®¡ç®—å­—èŠ‚åç§»é‡
 	char* start = (char*)arr;
 
 	for (int i = 0; i < len; ++i) {
-		//printf("%d\n", start + (i * eleSize)); //Ã¿¸öÔªËØÊ×µØÖ·
+		//printf("%d\n", start + (i * eleSize)); //æ¯ä¸ªå…ƒç´ é¦–åœ°å€
 		char* eleAddr = start + (i * eleSize);
 		//int* p = (int *)eleAddr;
 		//printf("%d ", *p); //1 2 3 4 5
@@ -112,11 +112,11 @@ void printAllArray(void* arr, int eleSize, int len, void(*print)(void*)) //void:
 	printf("\n");
 }
 
-//CÓïÑÔ²»Ö§³Öº¯ÊýÖØÔØ£¬CÓïÑÔÖÐµÄº¯ÊýÃû²»ÄÜ¹»ÏàÍ¬
+//Cè¯­è¨€ä¸æ”¯æŒå‡½æ•°é‡è½½ï¼ŒCè¯­è¨€ä¸­çš„å‡½æ•°åä¸èƒ½å¤Ÿç›¸åŒ
 void MyPrint(void* data)
 {
 	int* p = (int*) data;
-	printf("%d ", *p); //´òÓ¡ÄÚ´æÀïµÄÖµ
+	printf("%d ", *p); //æ‰“å°å†…å­˜é‡Œçš„å€¼
 }
 
 
@@ -139,7 +139,7 @@ void test04()
 	int arr[] = { 1, 2, 3, 4, 5 };
 	printAllArray(arr, sizeof(int), 5, MyPrint);
 
-	struct Person persons[] = { //¶¨Òå½á¹¹ÌåÊý×é
+	struct Person persons[] = { //å®šä¹‰ç»“æž„ä½“æ•°ç»„
 		{ "aaa", 10 },
 		{ "bbb", 20 },
 		{ "ccc", 30 },
@@ -176,5 +176,5 @@ Name:ccc Age:30
 Name:ddd Age:40
 Name:eee Age:50
 
-Çë°´ÈÎÒâ¼ü¼ÌÐø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

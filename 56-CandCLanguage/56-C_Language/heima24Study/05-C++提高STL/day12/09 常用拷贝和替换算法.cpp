@@ -1,5 +1,5 @@
 /*
-* 4.6 ³£ÓÃ¿½±´ºÍÌæ»»Ëã·¨
+* 4.6 å¸¸ç”¨æ‹·è´å’Œæ›¿æ¢ç®—æ³•
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
@@ -9,12 +9,12 @@
 using namespace std;
 
 /*
-* copyËã·¨ 
-*   ½«ÈİÆ÷ÄÚÖ¸¶¨·¶Î§µÄÔªËØ¿½±´µ½ÁíÒ»ÈİÆ÷ÖĞ
-* 
-* @param beg  ÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @param end  ÈİÆ÷½áÊøµü´úÆ÷
-* @param dest Ä¿±êÆğÊ¼µü´úÆ÷
+* copyç®—æ³•
+*   å°†å®¹å™¨å†…æŒ‡å®šèŒƒå›´çš„å…ƒç´ æ‹·è´åˆ°å¦ä¸€å®¹å™¨ä¸­
+*
+* @param beg  å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @param end  å®¹å™¨ç»“æŸè¿­ä»£å™¨
+* @param dest ç›®æ ‡èµ·å§‹è¿­ä»£å™¨
 */
 void test01()
 {
@@ -27,7 +27,7 @@ void test01()
 
 	copy(v.begin(), v.end(), vTarget.begin());
 
-	//for_each(vTarget.begin(), vTarget.end(), [](int val){ cout << val << " "; }); 
+	//for_each(vTarget.begin(), vTarget.end(), [](int val){ cout << val << " "; });
 	copy(vTarget.begin(), vTarget.end(), ostream_iterator<int>(cout, " "));
 	cout << endl;
 }
@@ -37,23 +37,23 @@ void test01()
 
 
 /*
-* replaceËã·¨ 
-*   ½«ÈİÆ÷ÄÚÖ¸¶¨·¶Î§µÄ¾ÉÔªËØĞŞ¸ÄÎªĞÂÔªËØ
-* 
-* @param beg  ÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @param end  ÈİÆ÷½áÊøµü´úÆ÷
-* @param oldvalue  ¾ÉÔªËØ
-* @param oldvalue  ĞÂÔªËØ
+* replaceç®—æ³•
+*   å°†å®¹å™¨å†…æŒ‡å®šèŒƒå›´çš„æ—§å…ƒç´ ä¿®æ”¹ä¸ºæ–°å…ƒç´ 
+*
+* @param beg  å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @param end  å®¹å™¨ç»“æŸè¿­ä»£å™¨
+* @param oldvalue  æ—§å…ƒç´ 
+* @param oldvalue  æ–°å…ƒç´ 
 */
 
 /*
-* replace_ifËã·¨ 
-*   ½«ÈİÆ÷ÄÚÖ¸¶¨·¶Î§Âú×ãÌõ¼şµÄÔªËØÌæ»»ÎªĞÂÔªËØ
-* 
-* @param beg  ÈİÆ÷¿ªÊ¼µü´úÆ÷
-* @param end  ÈİÆ÷½áÊøµü´úÆ÷
-* @param callback  º¯Êı»Øµ÷»òÕßÎ½´Ê(·µ»ØBoolÀàĞÍµÄº¯Êı¶ÔÏó)
-* @param oldvalue  ĞÂÔªËØ
+* replace_ifç®—æ³•
+*   å°†å®¹å™¨å†…æŒ‡å®šèŒƒå›´æ»¡è¶³æ¡ä»¶çš„å…ƒç´ æ›¿æ¢ä¸ºæ–°å…ƒç´ 
+*
+* @param beg  å®¹å™¨å¼€å§‹è¿­ä»£å™¨
+* @param end  å®¹å™¨ç»“æŸè¿­ä»£å™¨
+* @param callback  å‡½æ•°å›è°ƒæˆ–è€…è°“è¯(è¿”å›Boolç±»å‹çš„å‡½æ•°å¯¹è±¡)
+* @param oldvalue  æ–°å…ƒç´ 
 */
 class MyCompare
 {
@@ -70,9 +70,9 @@ void test02()
 		v.push_back(i);
 
 	/*
-	* replaceËã·¨ 
-	* 
-	* ĞèÇó£º°ÑÈİÆ÷ÖĞµÄ3  Ìæ»»³É300
+	* replaceç®—æ³•
+	*
+	* éœ€æ±‚ï¼šæŠŠå®¹å™¨ä¸­çš„3  æ›¿æ¢æˆ300
 	*/
 	replace(v.begin(), v.end(), 3, 300);
 
@@ -80,9 +80,9 @@ void test02()
 	cout << endl;
 
 	/*
-	* replace_ifËã·¨ 
-	* 
-	* ĞèÇó£º°ÑÈİÆ÷ÖĞËùÓĞ´óÓÚ3µÄÊı×Ö ¶¼Ìæ»»³É 30000
+	* replace_ifç®—æ³•
+	*
+	* éœ€æ±‚ï¼šæŠŠå®¹å™¨ä¸­æ‰€æœ‰å¤§äº3çš„æ•°å­— éƒ½æ›¿æ¢æˆ 30000
 	*/
 	replace_if(v.begin(), v.end(), MyCompare(), 30000);
 
@@ -96,11 +96,11 @@ void test02()
 
 
 /*
-* swapËã·¨ 
-*   »¥»»Á½¸öÈİÆ÷µÄÔªËØ
-* 
-* @param  c1ÈİÆ÷1
-* @param  c2ÈİÆ÷2
+* swapç®—æ³•
+*   äº’æ¢ä¸¤ä¸ªå®¹å™¨çš„å…ƒç´ 
+*
+* @param  c1å®¹å™¨1
+* @param  c2å®¹å™¨2
 */
 void test03()
 {
@@ -114,14 +114,14 @@ void test03()
 	v2.push_back(20);
 	v2.push_back(40);
 
-	cout << "½»»»Ç°Êı¾İ£º" << endl;
+	cout << "äº¤æ¢å‰æ•°æ®ï¼š" << endl;
 
 	copy(v1.begin(), v1.end(), ostream_iterator<int>(cout, " "));
 	cout << endl;
 	copy(v2.begin(), v2.end(), ostream_iterator<int>(cout, " "));
 	cout << endl;
 
-	cout << "½»»»ºóµÄÊı¾İ:" << endl;
+	cout << "äº¤æ¢åçš„æ•°æ®:" << endl;
 
 	swap(v1, v2);
 
@@ -132,10 +132,10 @@ void test03()
 
 }
 /* Output:
-½»»»Ç°Êı¾İ£º
+äº¤æ¢å‰æ•°æ®ï¼š
 0 1 2 3 4 5 6 7 8 9
 10 30 20 40
-½»»»ºóµÄÊı¾İ:
+äº¤æ¢åçš„æ•°æ®:
 10 30 20 40
 0 1 2 3 4 5 6 7 8 9
 */
@@ -155,11 +155,11 @@ int main(){
 0 1 2 300 4 5 6 7 8 9
 0 1 2 30000 30000 30000 30000 30000 30000 30000
 ---------------
-½»»»Ç°Êı¾İ£º
+äº¤æ¢å‰æ•°æ®ï¼š
 0 1 2 3 4 5 6 7 8 9
 10 30 20 40
-½»»»ºóµÄÊı¾İ:
+äº¤æ¢åçš„æ•°æ®:
 10 30 20 40
 0 1 2 3 4 5 6 7 8 9
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

@@ -3,11 +3,11 @@
 void gotoxy1(HANDLE hOut1, int x, int y)
 {
 	COORD pos;
-	pos.X = x;            //ºá×ø±ê
-	pos.Y = y;            //×İ×ø±ê
+	pos.X = x;            //æ¨ªåæ ‡
+	pos.Y = y;            //çºµåæ ‡
 	SetConsoleCursorPosition(hOut1, pos);
 }
-HANDLE hOut1 = GetStdHandle(STD_OUTPUT_HANDLE);//¶¨ÒåÏÔÊ¾Æ÷¾ä±ú±äÁ¿
+HANDLE hOut1 = GetStdHandle(STD_OUTPUT_HANDLE);//å®šä¹‰æ˜¾ç¤ºå™¨å¥æŸ„å˜é‡
 
 
 Snake::Snake(Wall & tempWall, Food & tmpFood) : wall(tempWall), food(tmpFood){
@@ -24,7 +24,7 @@ void Snake::initSnake(){
 	addPoint(5, 5);
 }
 
-//Ïú»ÙËùÓĞ½Úµã
+//é”€æ¯æ‰€æœ‰èŠ‚ç‚¹
 void Snake::destroyPoint(){
 
 	Point * pCur = pHead;
@@ -39,13 +39,13 @@ void Snake::destroyPoint(){
 
 void Snake::addPoint(int x, int y)
 {
-	//´´½¨ĞÂ½Úµã
+	//åˆ›å»ºæ–°èŠ‚ç‚¹
 	Point * newPoint = new Point;
 	newPoint->x = x;
 	newPoint->y = y;
 	newPoint->next = NULL;
 
-	//Èç¹ûÔ­À´Í·²»Îª¿Õ ¸ÄÎª Éí×Ó
+	//å¦‚æœåŸæ¥å¤´ä¸ä¸ºç©º æ”¹ä¸º èº«å­
 
 	if (pHead != NULL){
 		wall.setWall(pHead->x, pHead->y, '=');
@@ -56,18 +56,18 @@ void Snake::addPoint(int x, int y)
 
 	newPoint->next = pHead;
 
-	pHead = newPoint; //¸üĞÂÍ·²¿
+	pHead = newPoint; //æ›´æ–°å¤´éƒ¨
 
 	wall.setWall(pHead->x, pHead->y, '@');
 	gotoxy1(hOut1, pHead->y * 2, pHead->x);
 	cout << "@";
 }
 
-//É¾³ı½Úµã
+//åˆ é™¤èŠ‚ç‚¹
 void Snake::delPoint()
 {
-	
-	//Á½¸ö½ÚµãÒÔÉÏ ²ÅÈ¥×öÉ¾³ı²Ù×÷
+
+	//ä¸¤ä¸ªèŠ‚ç‚¹ä»¥ä¸Š æ‰å»åšåˆ é™¤æ“ä½œ
 	if (pHead == NULL || pHead->next == NULL)
 		return;
 
@@ -78,7 +78,7 @@ void Snake::delPoint()
 		pPre = pPre->next;
 		pCur = pCur->next;
 	}
-	//É¾³ıÎ²½Úµã
+	//åˆ é™¤å°¾èŠ‚ç‚¹
 
 	wall.setWall(pCur->x, pCur->y, ' ');
 	gotoxy1(hOut1, pCur->y * 2, pCur->x);
@@ -92,7 +92,7 @@ void Snake::delPoint()
 bool Snake::move(char key)
 {
 	int x = pHead->x;
-	int y = pHead->y; 
+	int y = pHead->y;
 
 	switch (key)
 	{
@@ -112,7 +112,7 @@ bool Snake::move(char key)
 		break;
 	}
 
-	//ÅĞ¶Ï Èç¹ûÊÇÏÂÒ»²½Åöµ½µÄÊÇÎ²°Í£¬²»Ó¦¸ÃËÀÍö
+	//åˆ¤æ–­ å¦‚æœæ˜¯ä¸‹ä¸€æ­¥ç¢°åˆ°çš„æ˜¯å°¾å·´ï¼Œä¸åº”è¯¥æ­»äº¡
 	Point * pCur = pHead->next;
 	Point * pPre = pHead;
 
@@ -122,26 +122,26 @@ bool Snake::move(char key)
 	}
 
 	if (pCur->x == x && pCur->y == y)
-		//Åöµ½Î²°Í Ñ­»·
+		//ç¢°åˆ°å°¾å·´ å¾ªç¯
 		isRool = true;
 	else{
-		//ÅĞ¶ÏÓÃ»§µ½´ïÎ»ÖÃÊÇ·ñ³É¹¦
+		//åˆ¤æ–­ç”¨æˆ·åˆ°è¾¾ä½ç½®æ˜¯å¦æˆåŠŸ
 		if (wall.getWall(x, y) == '*' || wall.getWall(x, y) == '='){
 			addPoint(x, y);
 			delPoint();
 			system("cls");
 			wall.drawWall();
-			cout << "µÃ·Ö£º" << getScore() << "·Ö" << endl;
+			cout << "å¾—åˆ†ï¼š" << getScore() << "åˆ†" << endl;
 			cout << "GAME OVER!!!" << endl;
 			return false;
 		}
 	}
 
-	//ÒÆ¶¯³É¹¦ ·ÖÁ½ÖÖ  
-	//³Ôµ½Ê³Îï  Î´³Ôµ½Ê³Îï
+	//ç§»åŠ¨æˆåŠŸ åˆ†ä¸¤ç§
+	//åƒåˆ°é£Ÿç‰©  æœªåƒåˆ°é£Ÿç‰©
 	if (wall.getWall(x,y) == '#'){
 		addPoint(x, y);
-		//ÖØĞÂÉèÖÃÊ³Îï
+		//é‡æ–°è®¾ç½®é£Ÿç‰©
 		food.setFood();
 	}
 	else{

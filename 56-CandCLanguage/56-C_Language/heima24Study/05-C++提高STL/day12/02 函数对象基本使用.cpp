@@ -8,9 +8,9 @@ class MyPrint
 public:
 	int count = 0;
 
-	//()ÖØÔØ
+	//()é‡è½½
 	void operator()( int num){
-		cout << "Àànum " << num << endl;
+		cout << "ç±»num " << num << endl;
 		count++;
 	}
 };
@@ -21,22 +21,22 @@ void MyPrint2(int num ){
 
 void test01()
 {
-	//MyPrintÊÇÒ»¸öÀà £¬¶ø²»ÊÇº¯Êı
+	//MyPrintæ˜¯ä¸€ä¸ªç±» ï¼Œè€Œä¸æ˜¯å‡½æ•°
 	MyPrint myPrint;
-	myPrint(111); 
+	myPrint(111);
 
-	MyPrint2(111);   //º¯Êı
+	MyPrint2(111);   //å‡½æ•°
 
-	MyPrint()(1000); //Àà
+	MyPrint()(1000); //ç±»
 }
 /* Output:
-Àànum 111
+ç±»num 111
 num 111
-Àànum 1000
+ç±»num 1000
 */
 
 
-//º¯Êı¶ÔÏó³¬³öÆÕÍ¨º¯Êı¸ÅÄî£¬ÄÚ²¿¿ÉÒÔ±£´æ×´Ì¬
+//å‡½æ•°å¯¹è±¡è¶…å‡ºæ™®é€šå‡½æ•°æ¦‚å¿µï¼Œå†…éƒ¨å¯ä»¥ä¿å­˜çŠ¶æ€
 void test02()
 {
 	MyPrint myPrint;
@@ -45,18 +45,18 @@ void test02()
 	myPrint(111);
 	myPrint(111);
 
-	cout << "myPrintÊ¹ÓÃ´ÎÊı£º" << myPrint.count << endl;
+	cout << "myPrintä½¿ç”¨æ¬¡æ•°ï¼š" << myPrint.count << endl;
 }
 /* Output:
-Àànum 111
-Àànum 111
-Àànum 111
-Àànum 111
-myPrintÊ¹ÓÃ´ÎÊı£º4
+ç±»num 111
+ç±»num 111
+ç±»num 111
+ç±»num 111
+myPrintä½¿ç”¨æ¬¡æ•°ï¼š4
 */
 
 
-//º¯Êı¶ÔÏó×÷Îª²ÎÊı
+//å‡½æ•°å¯¹è±¡ä½œä¸ºå‚æ•°
 void doPrint(MyPrint print, int num){
 	print(num);
 }
@@ -66,7 +66,7 @@ void test03()
 	doPrint(MyPrint(), 20);
 }
 /* Output:
-Àànum 20
+ç±»num 20
 */
 
 

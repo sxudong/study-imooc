@@ -1,38 +1,38 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
 using namespace std;
-//set  multisetÍ·ÎÄ¼ş
+//set  multisetå¤´æ–‡ä»¶
 #include <set>
 #include <string>
 
 /*
-* Set µÄÌØĞÔÊÇ¡£ËùÓĞÔªËØ¶¼»á¸ù¾İÔªËØµÄ¼üÖµ×Ô¶¯±»ÅÅĞò¡£SetµÄÔªËØ²»Ïñ map ÄÇÑù¿ÉÒÔÍ¬Ê±ÓµÓĞ¡°ÊµÖµ¡±ºÍ¡°¼üÖµ¡±£¬
-* set µÄÔªËØ¼´ÊÇ¼üÖµÓÖÊÇÊµÖµ¡£Set²»ÔÊĞíÁ½¸öÔªËØÓĞÏàÍ¬µÄ¼üÖµ¡£
-* 
-* multiset ÌØĞÔ¼°ÓÃ·¨ºÍ set ÍêÈ«ÏàÍ¬£¬Î¨Ò»µÄ²î±ğÔÚÓÚËüÔÊĞí¼üÖµÖØ¸´¡£
+* Set çš„ç‰¹æ€§æ˜¯ã€‚æ‰€æœ‰å…ƒç´ éƒ½ä¼šæ ¹æ®å…ƒç´ çš„é”®å€¼è‡ªåŠ¨è¢«æ’åºã€‚Setçš„å…ƒç´ ä¸åƒ map é‚£æ ·å¯ä»¥åŒæ—¶æ‹¥æœ‰â€œå®å€¼â€å’Œâ€œé”®å€¼â€ï¼Œ
+* set çš„å…ƒç´ å³æ˜¯é”®å€¼åˆæ˜¯å®å€¼ã€‚Setä¸å…è®¸ä¸¤ä¸ªå…ƒç´ æœ‰ç›¸åŒçš„é”®å€¼ã€‚
+*
+* multiset ç‰¹æ€§åŠç”¨æ³•å’Œ set å®Œå…¨ç›¸åŒï¼Œå”¯ä¸€çš„å·®åˆ«åœ¨äºå®ƒå…è®¸é”®å€¼é‡å¤ã€‚
 */
 
 
 /*
-* set¹¹Ôìº¯Êı
-*   set<T> st;           //setÄ¬ÈÏ¹¹Ôìº¯Êı£º
-*   mulitset<T> mst;     //multisetÄ¬ÈÏ¹¹Ôìº¯Êı:
-*   set(const set &st);  //¿½±´¹¹Ôìº¯Êı
-* 
-* 3.7.2.2 set¸³Öµ²Ù×÷
-*   set& operator=(const set &st); //ÖØÔØµÈºÅ²Ù×÷·û
-*   swap(st);                      //½»»»Á½¸ö¼¯ºÏÈİÆ÷
-* 
-* 3.7.2.3 set´óĞ¡²Ù×÷
-*   size();   //·µ»ØÈİÆ÷ÖĞÔªËØµÄÊıÄ¿
-*   empty();  //ÅĞ¶ÏÈİÆ÷ÊÇ·ñÎª¿Õ
-* 
-* 3.7.2.4 set²åÈëºÍÉ¾³ı²Ù×÷
-*   insert(elem);     //ÔÚÈİÆ÷ÖĞ²åÈëÔªËØ¡£
-*   clear();          //Çå³ıËùÓĞÔªËØ
-*   erase(pos);       //É¾³ıposµü´úÆ÷ËùÖ¸µÄÔªËØ£¬·µ»ØÏÂÒ»¸öÔªËØµÄµü´úÆ÷¡£
-*   erase(beg, end);  //É¾³ıÇø¼ä[beg,end)µÄËùÓĞÔªËØ £¬·µ»ØÏÂÒ»¸öÔªËØµÄµü´úÆ÷¡£
-*   erase(elem);      //É¾³ıÈİÆ÷ÖĞÖµÎªelemµÄÔªËØ¡£
+* setæ„é€ å‡½æ•°
+*   set<T> st;           //seté»˜è®¤æ„é€ å‡½æ•°ï¼š
+*   mulitset<T> mst;     //multiseté»˜è®¤æ„é€ å‡½æ•°:
+*   set(const set &st);  //æ‹·è´æ„é€ å‡½æ•°
+*
+* 3.7.2.2 setèµ‹å€¼æ“ä½œ
+*   set& operator=(const set &st); //é‡è½½ç­‰å·æ“ä½œç¬¦
+*   swap(st);                      //äº¤æ¢ä¸¤ä¸ªé›†åˆå®¹å™¨
+*
+* 3.7.2.3 setå¤§å°æ“ä½œ
+*   size();   //è¿”å›å®¹å™¨ä¸­å…ƒç´ çš„æ•°ç›®
+*   empty();  //åˆ¤æ–­å®¹å™¨æ˜¯å¦ä¸ºç©º
+*
+* 3.7.2.4 setæ’å…¥å’Œåˆ é™¤æ“ä½œ
+*   insert(elem);     //åœ¨å®¹å™¨ä¸­æ’å…¥å…ƒç´ ã€‚
+*   clear();          //æ¸…é™¤æ‰€æœ‰å…ƒç´ 
+*   erase(pos);       //åˆ é™¤posè¿­ä»£å™¨æ‰€æŒ‡çš„å…ƒç´ ï¼Œè¿”å›ä¸‹ä¸€ä¸ªå…ƒç´ çš„è¿­ä»£å™¨ã€‚
+*   erase(beg, end);  //åˆ é™¤åŒºé—´[beg,end)çš„æ‰€æœ‰å…ƒç´  ï¼Œè¿”å›ä¸‹ä¸€ä¸ªå…ƒç´ çš„è¿­ä»£å™¨ã€‚
+*   erase(elem);      //åˆ é™¤å®¹å™¨ä¸­å€¼ä¸ºelemçš„å…ƒç´ ã€‚
 */
 
 void printSet( set<int>& s){
@@ -45,7 +45,7 @@ void printSet( set<int>& s){
 void test01()
 {
 	set<int> s1;
-	//¹ØÁªÊ½ÈİÆ÷ key½øĞĞÅÅĞò£¬´ÓĞ¡µ½´ó
+	//å…³è”å¼å®¹å™¨ keyè¿›è¡Œæ’åºï¼Œä»å°åˆ°å¤§
 	s1.insert(5);
 	s1.insert(1);
 	s1.insert(9);
@@ -54,25 +54,25 @@ void test01()
 	printSet(s1); //1 3 5 7 9
 
 	if (s1.empty()){
-		cout << "¿Õ" << endl;
+		cout << "ç©º" << endl;
 	}
 	else{
 		cout << "size = " << s1.size() << endl; //size = 5
 	}
 
-	s1.erase(s1.begin()); 
+	s1.erase(s1.begin());
 	printSet(s1);  //3 5 7 9
-	s1.erase(3);          
-	printSet(s1);  //5 7 9      
+	s1.erase(3);
+	printSet(s1);  //5 7 9
 }
 
 /*
-* set²éÕÒ²Ù×÷
-*   find(key);             //²éÕÒ¼ükeyÊÇ·ñ´æÔÚ,Èô´æÔÚ£¬·µ»Ø¸Ã¼üµÄÔªËØµÄµü´úÆ÷£»Èô²»´æÔÚ£¬·µ»Øset.end();
-*   count(key);            //²éÕÒ¼ükeyµÄÔªËØ¸öÊı
-*   lower_bound(keyElem);  //·µ»ØµÚÒ»¸ökey>=keyElemÔªËØµÄµü´úÆ÷¡£
-*   upper_bound(keyElem);  //·µ»ØµÚÒ»¸ökey>keyElemÔªËØµÄµü´úÆ÷¡£
-*   equal_range(keyElem);  //·µ»ØÈİÆ÷ÖĞkeyÓëkeyElemÏàµÈµÄÉÏÏÂÏŞµÄÁ½¸öµü´úÆ÷¡£
+* setæŸ¥æ‰¾æ“ä½œ
+*   find(key);             //æŸ¥æ‰¾é”®keyæ˜¯å¦å­˜åœ¨,è‹¥å­˜åœ¨ï¼Œè¿”å›è¯¥é”®çš„å…ƒç´ çš„è¿­ä»£å™¨ï¼›è‹¥ä¸å­˜åœ¨ï¼Œè¿”å›set.end();
+*   count(key);            //æŸ¥æ‰¾é”®keyçš„å…ƒç´ ä¸ªæ•°
+*   lower_bound(keyElem);  //è¿”å›ç¬¬ä¸€ä¸ªkey>=keyElemå…ƒç´ çš„è¿­ä»£å™¨ã€‚
+*   upper_bound(keyElem);  //è¿”å›ç¬¬ä¸€ä¸ªkey>keyElemå…ƒç´ çš„è¿­ä»£å™¨ã€‚
+*   equal_range(keyElem);  //è¿”å›å®¹å™¨ä¸­keyä¸keyElemç›¸ç­‰çš„ä¸Šä¸‹é™çš„ä¸¤ä¸ªè¿­ä»£å™¨ã€‚
 */
 void test02()
 {
@@ -82,59 +82,59 @@ void test02()
 	s1.insert(9);
 	s1.insert(3);
 	s1.insert(7);
-	//¶ÔÓÚset Ã»ÓĞvalue  key¾ÍÊÇvalue
+	//å¯¹äºset æ²¡æœ‰value  keyå°±æ˜¯value
 
 	set<int>::iterator pos = s1.find(2);
-	//ÅĞ¶ÏÊÇ·ñÕÒµ½
+	//åˆ¤æ–­æ˜¯å¦æ‰¾åˆ°
 	if (pos != s1.end())
-		cout << "ÕÒµ½ÁË£ºÖµÎª£º" << *pos << endl;
+		cout << "æ‰¾åˆ°äº†ï¼šå€¼ä¸ºï¼š" << *pos << endl;
 	else
-		cout << "Î´ÕÒµ½" << endl; //Î´ÕÒµ½
+		cout << "æœªæ‰¾åˆ°" << endl; //æœªæ‰¾åˆ°
 
 
-	//count(key); ²éÕÒ¼ükeyµÄÔªËØ¸öÊı set¶øÑÔ ½á¹û 0»òÕß1 
+	//count(key); æŸ¥æ‰¾é”®keyçš„å…ƒç´ ä¸ªæ•° setè€Œè¨€ ç»“æœ 0æˆ–è€…1
 	int num = s1.count(2);
-	cout <<  "2µÄ¸öÊıÎª£º " << num << endl; //0
+	cout <<  "2çš„ä¸ªæ•°ä¸ºï¼š " << num << endl; //0
 
 
-	//lower_bound(keyElem); ·µ»ØµÚÒ»¸ö key >= keyElem ÔªËØµÄµü´úÆ÷¡£
-	set<int>::iterator it =  s1.lower_bound(3); // 10¾ÍÊÇÎ´ÕÒµ½
+	//lower_bound(keyElem); è¿”å›ç¬¬ä¸€ä¸ª key >= keyElem å…ƒç´ çš„è¿­ä»£å™¨ã€‚
+	set<int>::iterator it =  s1.lower_bound(3); // 10å°±æ˜¯æœªæ‰¾åˆ°
 	if (it!= s1.end())
-		cout << "ÕÒµ½ÁË lower_bound (3)µÄÖµÎª£º" << *it << endl; //3  ¡°1 3 5 7 9¡± ´óÓÚµÈÓÚ3£¬3µÄÎ»ÖÃ
+		cout << "æ‰¾åˆ°äº† lower_bound (3)çš„å€¼ä¸ºï¼š" << *it << endl; //3  â€œ1 3 5 7 9â€ å¤§äºç­‰äº3ï¼Œ3çš„ä½ç½®
 	else
-		cout << "Î´ÕÒµ½" << endl;
+		cout << "æœªæ‰¾åˆ°" << endl;
 
 
-	// upper_bound(keyElem); ·µ»ØµÚÒ»¸ö key > keyElem ÔªËØµÄµü´úÆ÷¡£
+	// upper_bound(keyElem); è¿”å›ç¬¬ä¸€ä¸ª key > keyElem å…ƒç´ çš„è¿­ä»£å™¨ã€‚
 	set<int>::iterator it2 = s1.upper_bound(3);
 	if (it2 != s1.end())
-		cout << "ÕÒµ½ÁË upper_bound (3)µÄÖµÎª£º" << *it2 << endl; //5  ¡°1 3 5 7 9¡± ´óÓÚ3£¬5µÄÎ»ÖÃ
+		cout << "æ‰¾åˆ°äº† upper_bound (3)çš„å€¼ä¸ºï¼š" << *it2 << endl; //5  â€œ1 3 5 7 9â€ å¤§äº3ï¼Œ5çš„ä½ç½®
 	else
-		cout << "Î´ÕÒµ½" << endl;
+		cout << "æœªæ‰¾åˆ°" << endl;
 
 
-	//equal_range(keyElem); ·µ»ØÈİÆ÷ÖĞkeyÓëkeyElemÏàµÈµÄÉÏÏÂÏŞµÄÁ½¸öµü´úÆ÷¡£
-	//ÉÏÏÂÏŞ ¾ÍÊÇupper_bound lower_bound   
+	//equal_range(keyElem); è¿”å›å®¹å™¨ä¸­keyä¸keyElemç›¸ç­‰çš„ä¸Šä¸‹é™çš„ä¸¤ä¸ªè¿­ä»£å™¨ã€‚
+	//ä¸Šä¸‹é™ å°±æ˜¯upper_bound lower_bound
 	pair<set<int>::iterator, set<int>::iterator> ret = s1.equal_range(3);
 
-	//»ñÈ¡µÚÒ»¸öÖµ
+	//è·å–ç¬¬ä¸€ä¸ªå€¼
 	if (ret.first != s1.end())
-		cout << "ÕÒµ½equal_rangeÖĞ lower_bound µÄÖµ £º" << *(ret.first) << endl; //3  ¡°1 3 5 7 9¡± ´óÓÚµÈÓÚ3£¬3µÄÎ»ÖÃ
+		cout << "æ‰¾åˆ°equal_rangeä¸­ lower_bound çš„å€¼ ï¼š" << *(ret.first) << endl; //3  â€œ1 3 5 7 9â€ å¤§äºç­‰äº3ï¼Œ3çš„ä½ç½®
 	else
-		cout << "Î´ÕÒµ½" << endl;
+		cout << "æœªæ‰¾åˆ°" << endl;
 
 
-	//»ñÈ¡µÚ¶ş¸öÖµ
+	//è·å–ç¬¬äºŒä¸ªå€¼
 	if (ret.second != s1.end())
-		cout << "ÕÒµ½equal_rangeÖĞ upper_bound µÄÖµ £º" << *(ret.second) << endl; //5  ¡°1 3 5 7 9¡± ´óÓÚ3£¬5µÄÎ»ÖÃ
+		cout << "æ‰¾åˆ°equal_rangeä¸­ upper_bound çš„å€¼ ï¼š" << *(ret.second) << endl; //5  â€œ1 3 5 7 9â€ å¤§äº3ï¼Œ5çš„ä½ç½®
 	else
-		cout << "Î´ÕÒµ½" << endl;
-	
+		cout << "æœªæ‰¾åˆ°" << endl;
+
 }
 
 
 /*
-* setÈİÆ÷ ²»ÔÊĞí²åÈëÖØ¸´µÄ¼üÖµ
+* setå®¹å™¨ ä¸å…è®¸æ’å…¥é‡å¤çš„é”®å€¼
 */
 void test03()
 {
@@ -142,24 +142,24 @@ void test03()
 	pair<set<int>::iterator,bool> ret = s1.insert(10);
 
 	if (ret.second){
-		cout << "²åÈë³É¹¦" << endl; //²åÈë³É¹¦
+		cout << "æ’å…¥æˆåŠŸ" << endl; //æ’å…¥æˆåŠŸ
 	}
 	else{
-		cout << "²åÈëÊ§°Ü" << endl;
+		cout << "æ’å…¥å¤±è´¥" << endl;
 	}
 
 	ret = s1.insert(10);
 	if (ret.second){
-		cout << "µÚ¶ş´Î²åÈë³É¹¦" << endl;
+		cout << "ç¬¬äºŒæ¬¡æ’å…¥æˆåŠŸ" << endl;
 	}
 	else{
-		cout << "µÚ¶ş´Î²åÈëÊ§°Ü" << endl; //µÚ¶ş´Î²åÈëÊ§°Ü
+		cout << "ç¬¬äºŒæ¬¡æ’å…¥å¤±è´¥" << endl; //ç¬¬äºŒæ¬¡æ’å…¥å¤±è´¥
 	}
 
 	printSet(s1); //10
-	
+
 	/*
-	* multisetÔÊĞí²åÈëÖØ¸´Öµ
+	* multisetå…è®¸æ’å…¥é‡å¤å€¼
 	*/
 	multiset<int> mul;
 	mul.insert(10);
@@ -169,25 +169,25 @@ void test03()
 
 
 /*
-* Ö¸¶¨setÅÅĞò¹æÔò ´Ó´óµ½Ğ¡
-* ·Âº¯Êı
+* æŒ‡å®šsetæ’åºè§„åˆ™ ä»å¤§åˆ°å°
+* ä»¿å‡½æ•°
 */
 class myCompare
 {
 public:
-	//ÖØÔØ ()
+	//é‡è½½ ()
 	bool operator()( int v1 ,int v2){
 		return v1 > v2;
 	}
 };
 
 /*
-* setÈİÆ÷ÅÅĞò
+* setå®¹å™¨æ’åº
 */
 void test04()
 {
 	set<int,myCompare> s1;
-	
+
 	s1.insert(5);
 	s1.insert(1);
 	s1.insert(9);
@@ -197,16 +197,16 @@ void test04()
 	//printSet(s1);
 
 	/*
-	* ´Ó´óµ½Ğ¡ÅÅĞò
-	* ÔÚ²åÈëÖ®Ç°¾ÍÖ¸¶¨ÅÅĞò¹æÔò
-	*/ 
+	* ä»å¤§åˆ°å°æ’åº
+	* åœ¨æ’å…¥ä¹‹å‰å°±æŒ‡å®šæ’åºè§„åˆ™
+	*/
 	for (set<int, myCompare>::iterator it = s1.begin(); it != s1.end();it++)
 		cout << *it << " ";  //9 7 5 3 1
 
 	cout << endl;
 }
 
-//×Ô¶¨ÒåÊı¾İÀàĞÍ
+//è‡ªå®šä¹‰æ•°æ®ç±»å‹
 class Person
 {
 public:
@@ -223,7 +223,7 @@ class myComparePerson
 {
 public:
 	bool operator()( const Person & p1, const Person & p2){
-		if (p1.m_Age > p2.m_Age) //½µĞò
+		if (p1.m_Age > p2.m_Age) //é™åº
 			return true;
 
 		return false;
@@ -234,10 +234,10 @@ void test05()
 {
 	set<Person, myComparePerson> s1;
 
-	Person p1("´óÍŞ", 100);
-	Person p2("¶şÍŞ", 90);
-	Person p3("ÁùÍŞ", 10);
-	Person p4("Ò¯Ò¯", 1000);
+	Person p1("å¤§å¨ƒ", 100);
+	Person p2("äºŒå¨ƒ", 90);
+	Person p3("å…­å¨ƒ", 10);
+	Person p4("çˆ·çˆ·", 1000);
 
 	s1.insert(p1);
 	s1.insert(p2);
@@ -245,11 +245,11 @@ void test05()
 	s1.insert(p4);
 
 	/*
-	* ²åÈë×Ô¶¨ÒåÊı¾İÀàĞÍ£¬ÉÏÀ´¾ÍÖ¸¶¨ºÃÅÅĞò¹æÔò
+	* æ’å…¥è‡ªå®šä¹‰æ•°æ®ç±»å‹ï¼Œä¸Šæ¥å°±æŒ‡å®šå¥½æ’åºè§„åˆ™
 	*/
-	//ÏÔÊ¾
+	//æ˜¾ç¤º
 	for (set<Person, myComparePerson>::iterator it = s1.begin(); it != s1.end();it++)
-		cout << "ĞÕÃû£º" << (*it).m_Name << " ÄêÁä£º " << it->m_Age << endl;
+		cout << "å§“åï¼š" << (*it).m_Name << " å¹´é¾„ï¼š " << it->m_Age << endl;
 
 }
 

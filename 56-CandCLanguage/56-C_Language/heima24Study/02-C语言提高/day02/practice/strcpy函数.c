@@ -44,16 +44,16 @@ void arrstring(char *p1, char *p2)
 
 void test02()
 {
-	char prr[] = { 'h','e','l', 'l', 'o' };//×Ö·ûÊı×é²»»áÌí¼Ó\0
+	char prr[] = { 'h','e','l', 'l', 'o' };//å­—ç¬¦æ•°ç»„ä¸ä¼šæ·»åŠ \0
 
-	char prr2[] = "hello";//×Ö·û´®£¬¿ÉÒÔµ±×ö×Ö·ûÊı×é´¦Àí
+	char prr2[] = "hello";//å­—ç¬¦ä¸²ï¼Œå¯ä»¥å½“åšå­—ç¬¦æ•°ç»„å¤„ç†
 	char prr1[1024] = {0};
 	arrstring(prr1, prr2);
 	printf("%s\n", prr1);
 }
 
 
-//×Ö·û´®·´×ªÊµÏÖ
+//å­—ç¬¦ä¸²åè½¬å®ç°
 void  rev(char *pp)
 {
 	int i = strlen(pp);
@@ -69,7 +69,7 @@ void  rev(char *pp)
 		--p2;
 	}
 }
-//×Ö·û´®·´×ªÖ¸ÕëÊµÏÖ
+//å­—ç¬¦ä¸²åè½¬æŒ‡é’ˆå®ç°
 void verString(char *pstr)
 {
 	

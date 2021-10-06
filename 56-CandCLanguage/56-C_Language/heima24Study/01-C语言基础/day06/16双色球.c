@@ -7,16 +7,16 @@
 int main()
 {
 	srand((unsigned int)time(NULL));
-	//Ë«É«Çò  Á½ÖÖÔ­É« ºìÇò + À¶Çò £¨6+1£©  ºìÇò 1-33   À¶Çò 1-16  ´òÓ¡Ë«É«ÇòÖÐ½±ÐÅÏ¢
-	//ºìÉ«Çò²»ÄÜÖØ¸´  À¶ÇòºÍºìÇò¿ÉÒÔÖØ¸´
+	//åŒè‰²çƒ  ä¸¤ç§åŽŸè‰² çº¢çƒ + è“çƒ ï¼ˆ6+1ï¼‰  çº¢çƒ 1-33   è“çƒ 1-16  æ‰“å°åŒè‰²çƒä¸­å¥–ä¿¡æ¯
+	//çº¢è‰²çƒä¸èƒ½é‡å¤  è“çƒå’Œçº¢çƒå¯ä»¥é‡å¤
 	int ball[6];
 
-	//ºìÉ«
+	//çº¢è‰²
 	for (int i = 0; i < 6; i++)
 	{
 		// qiu = rand()%33 + 1;
 		ball[i] = rand() % 33 + 1;
-		//È¥ÖØ
+		//åŽ»é‡
 		for (int j = 0; j < i; j++)
 		{
 			if (ball[i] == ball[j])
@@ -27,7 +27,7 @@ int main()
 		}
 	}
 
-	//ÅÅÐò
+	//æŽ’åº
 	for (int i = 0; i < 6; i++)
 	{
 		printf("%d   ", ball[i]);
@@ -38,5 +38,5 @@ int main()
 }
 /* Output:
 22   3   11   23   13   25   +   12
-Çë°´ÈÎÒâ¼ü¼ÌÐø. . .
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

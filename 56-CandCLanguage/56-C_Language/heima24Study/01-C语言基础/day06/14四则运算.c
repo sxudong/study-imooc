@@ -9,15 +9,15 @@ extern int mlt(int a, int b);
 extern int dive(int a, int b);
 
 
-//1¡¢º¯ÊıµÄ·µ»ØÖµ
-//2¡¢º¯ÊıµÄ²ÎÊıÁĞ±í
-//3¡¢return ºÍexit(0)
+//1ã€å‡½æ•°çš„è¿”å›å€¼
+//2ã€å‡½æ•°çš„å‚æ•°åˆ—è¡¨
+//3ã€return å’Œexit(0)
 int main14()
 {
-	//1+2  3 3*4 12 3/0  0 ²»ÄÜ×÷Îª±»³ıÊı 4/5 =0
+	//1+2  3 3*4 12 3/0  0 ä¸èƒ½ä½œä¸ºè¢«é™¤æ•° 4/5 =0
 
 	int a, b;
-	char c; 
+	char c;
 	int value=0;
 	while (1)
 	{
@@ -42,7 +42,7 @@ int main14()
 		case '/':
 			if (!b)
 			{
-				printf("0²»ÄÜ×÷Îª³ıÊı\n");
+				printf("0ä¸èƒ½ä½œä¸ºé™¤æ•°\n");
 				continue;
 			}
 			//printf("%d+%d=%d\n")
@@ -57,7 +57,7 @@ int main14()
 	return EXIT_SUCCESS;
 }
 
-//º¯ÊıµÄ¶¨Òå
+//å‡½æ•°çš„å®šä¹‰
 int add(int a, int b)
 {
 	return a + b;
@@ -75,7 +75,7 @@ int dive(int a, int b)
 	if (a)
 	{
 		//return a;
-		//´ú±í³ÌĞò½áÊø
+		//ä»£è¡¨ç¨‹åºç»“æŸ
 		exit(0);
 	}
 	return a / b;

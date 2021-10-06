@@ -5,26 +5,26 @@
 #include"CSckImp1.h"
 
 /*
-* 14 ÃæÏò½Ó¿Ú±à³Ì
+* 14 é¢å‘æ¥å£ç¼–ç¨‹
 */
 
 
 /*
-* 1.¶¨Òå½Ó¿Ú(¶¨ÒåÖ¸Õëº¯Êı)
-*   ÎÒÃÇĞ´ÒµÎñĞèÒªÓÃµ½ÕâĞ©½Ó¿Ú£¬µ«ÊÇ¾ßÌåÊµÏÖÎÒÃÇ²»¹Ü¡£ÓÃÎÒÃÇÖ¸ÕëÖ¸Ïò³§ÉÌËùĞ´µÄº¯Êı¡£
+* 1.å®šä¹‰æ¥å£(å®šä¹‰æŒ‡é’ˆå‡½æ•°)
+*   æˆ‘ä»¬å†™ä¸šåŠ¡éœ€è¦ç”¨åˆ°è¿™äº›æ¥å£ï¼Œä½†æ˜¯å…·ä½“å®ç°æˆ‘ä»¬ä¸ç®¡ã€‚ç”¨æˆ‘ä»¬æŒ‡é’ˆæŒ‡å‘å‚å•†æ‰€å†™çš„å‡½æ•°ã€‚
 */
-//³õÊ¼»¯
+//åˆå§‹åŒ–
 typedef void(*init_CSocketProtocol)(void **handle);
-//·¢ËÍ½Ó¿Ú
+//å‘é€æ¥å£
 typedef void(*send_CSocketProtocol)(void *handle, unsigned char* sendData, int sendLen);
-//½ÓÊÕ½Ó¿Ú
+//æ¥æ”¶æ¥å£
 typedef void(*recv_CSocketProtocol)(void *handle, unsigned char* recvData, int* recvLen);
-//¹Ø±Õ
+//å…³é—­
 typedef void(*close_CSocketProtocol)(void *handle);
 
 
 /*
-* 2.ÒµÎñ´úÂë
+* 2.ä¸šåŠ¡ä»£ç 
 */
 void FrameWork(
 	init_CSocketProtocol init,
@@ -33,23 +33,23 @@ void FrameWork(
 	close_CSocketProtocol close)
 {
 
-	//³õÊ¼»¯Á¬½Ó
+	//åˆå§‹åŒ–è¿æ¥
 	void *handle = NULL;
 	init(&handle);
 
-	//·¢ËÍÊı¾İ
+	//å‘é€æ•°æ®
 	char buf[] = "hello world!";
 	int len = strlen(buf);
 	send(handle, buf, len);
 
-	//½ÓÊÕÊı¾İ
+	//æ¥æ”¶æ•°æ®
 	char recvBuf[1024] = { 0 };
 	int recvLen = 0;
 	recv(handle, recvBuf, &recvLen);
-	printf("½ÓÊÕµ½µÄÊı¾İ:%s\n",recvBuf);
-	printf("½ÓÊÕµ½µÄÊı¾İ³¤¶È:%d\n",recvLen);
+	printf("æ¥æ”¶åˆ°çš„æ•°æ®:%s\n",recvBuf);
+	printf("æ¥æ”¶åˆ°çš„æ•°æ®é•¿åº¦:%d\n",recvLen);
 
-	//¹Ø±ÕÁ¬½Ó
+	//å…³é—­è¿æ¥
 	close(handle);
 	handle = NULL;
 
@@ -57,7 +57,7 @@ void FrameWork(
 
 void test()
 {
-    //²âÊÔµ÷ÓÃµÚÈı·½ÊµÏÖµÄº¯Êı
+    //æµ‹è¯•è°ƒç”¨ç¬¬ä¸‰æ–¹å®ç°çš„å‡½æ•°
 	FrameWork(init_CSckImp1,send_CSckImp1,recv_CSckImp1,close_CSckImp1);
 }
 
@@ -70,7 +70,7 @@ int main(){
 	return EXIT_SUCCESS;
 }
 /* Output:
-½ÓÊÕµ½µÄÊı¾İ:hello world!
-½ÓÊÕµ½µÄÊı¾İ³¤¶È:12
-Çë°´ÈÎÒâ¼ü¼ÌĞø. . .
+æ¥æ”¶åˆ°çš„æ•°æ®:hello world!
+æ¥æ”¶åˆ°çš„æ•°æ®é•¿åº¦:12
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

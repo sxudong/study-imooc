@@ -7,7 +7,6 @@ Udp1::Udp1(QWidget *parent) :
 {
     ui->setupUi(this);
 
-
     //初始化属性
     ui->myPort->setText("8888");
     ui->toPort->setText("9999");

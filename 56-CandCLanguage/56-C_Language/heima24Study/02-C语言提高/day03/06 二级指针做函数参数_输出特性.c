@@ -10,8 +10,8 @@ void allocateSpace(int** temp)
 	for (int i = 0; i < 10; ++i)
 		arr[i] = i + 1;
 
-	//Ö¸Õë¼ä½Ó¸³Öµ£¨Ö¸ÕëÀï±£´æÁíÒ»¸öµØÖ·£©
-	*temp = arr; //ÄÃµ½µ½arrµÄÊ×µØÖ·
+	//æŒ‡é’ˆé—´æŽ¥èµ‹å€¼ï¼ˆæŒ‡é’ˆé‡Œä¿å­˜å¦ä¸€ä¸ªåœ°å€ï¼‰
+	*temp = arr; //æ‹¿åˆ°åˆ°arrçš„é¦–åœ°å€
 }
 
 void printArray(int* arr, int len)
@@ -22,32 +22,32 @@ void printArray(int* arr, int len)
 }
 
 /*
-* ÊÍ·Å¶Ñ¿Õ¼ä
-* freeSpace(void* arr)º¯ÊýÄÚµÄ arr µØÖ· == freeSpace(int** arr)º¯ÊýÄÚµÄ *arr µØÖ·
+* é‡Šæ”¾å †ç©ºé—´
+* freeSpace(void* arr)å‡½æ•°å†…çš„ arr åœ°å€ == freeSpace(int** arr)å‡½æ•°å†…çš„ *arr åœ°å€
 */
 #if 0
-    void freeSpace(void* arr) //²»ÐèÒª¹ØÐÄÀàÐÍ£¬Ö±½ÓÊÍ·Å¾ÍÐÐ
+    void freeSpace(void* arr) //ä¸éœ€è¦å…³å¿ƒç±»åž‹ï¼Œç›´æŽ¥é‡Šæ”¾å°±è¡Œ
     {
         if (arr == NULL)
             return;
 
-        //printf("arrµÄÖµ = %d\n", arr); //7088120
+        //printf("arrçš„å€¼ = %d\n", arr); //7088120
 
         free(arr);
-        arr = NULL; //ÖÃ¿Õ
+        arr = NULL; //ç½®ç©º
     }
 #else
-    void freeSpace(int** arr) //**arr½ÓÊÕµÄÊÇ&pArrayµÄµØÖ·£¬*arrÊÇËüµÄÖµ
+    void freeSpace(int** arr) //**arræŽ¥æ”¶çš„æ˜¯&pArrayçš„åœ°å€ï¼Œ*arræ˜¯å®ƒçš„å€¼
     {
         if (arr == NULL)
             return;
 
-        //printf("*arrµÄÖµ = %d\n", *arr); //7088120
+        //printf("*arrçš„å€¼ = %d\n", *arr); //7088120
 
         if (*arr != NULL){
-            free(*arr);  //*arrÈ¡µÄÊÇ&pArrayµÄÖµ£¬Ö¸ÕëµÄÖµ±£´æµÄÊÇarrÊý×éµÄµØÖ·
-            *arr = NULL; //Õâ¸ö¾ÍÊÇpArrayµÄÖµÖ¸Ïò¿ÕÁË
-            arr = NULL;  //½ÓÊÕµÄÁÙÊ±±äÁ¿µÈÓÚ¿Õ£¬Õâ¸öµØ·½¿ÉÒÔ²»Ð´£¬ÁÙÊ±±äÁ¿ÔÚº¯ÊýÌå½áÊøºó»áÏú»Ù
+            free(*arr);  //*arrå–çš„æ˜¯&pArrayçš„å€¼ï¼ŒæŒ‡é’ˆçš„å€¼ä¿å­˜çš„æ˜¯arræ•°ç»„çš„åœ°å€
+            *arr = NULL; //è¿™ä¸ªå°±æ˜¯pArrayçš„å€¼æŒ‡å‘ç©ºäº†
+            arr = NULL;  //æŽ¥æ”¶çš„ä¸´æ—¶å˜é‡ç­‰äºŽç©ºï¼Œè¿™ä¸ªåœ°æ–¹å¯ä»¥ä¸å†™ï¼Œä¸´æ—¶å˜é‡åœ¨å‡½æ•°ä½“ç»“æŸåŽä¼šé”€æ¯
         }
     }
 #endif
@@ -59,12 +59,12 @@ void test01()
 	allocateSpace(&pArray);
 	printArray(pArray, 10);
 #if 0
-	freeSpace(pArray);  //´«µÄÊÇpArrayÀï±£´æµÄµØÖ·
-	pArray = NULL;      //Ö¸Ïò¿Õ£¬Èç¹û²»ÕâÑù£¬¾Í»á³ÉÎªÒ°Ö¸Õë
+	freeSpace(pArray);  //ä¼ çš„æ˜¯pArrayé‡Œä¿å­˜çš„åœ°å€
+	pArray = NULL;      //æŒ‡å‘ç©ºï¼Œå¦‚æžœä¸è¿™æ ·ï¼Œå°±ä¼šæˆä¸ºé‡ŽæŒ‡é’ˆ
 #endif
-	freeSpace(&pArray); //´«µÄÊÇpArrayÖ¸Õë×ÔÉíµÄµØÖ·
+	freeSpace(&pArray); //ä¼ çš„æ˜¯pArrayæŒ‡é’ˆè‡ªèº«çš„åœ°å€
 	if (pArray == NULL){
-		printf("pArray±»ÖÃ¿Õ!\n");
+		printf("pArrayè¢«ç½®ç©º!\n");
 	}
 }
 
@@ -77,6 +77,6 @@ int main() {
 }
 /* Output:
 1 2 3 4 5 6 7 8 9 10
-pArray±»ÖÃ¿Õ!
-Çë°´ÈÎÒâ¼ü¼ÌÐø. . .
+pArrayè¢«ç½®ç©º!
+è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .
 */

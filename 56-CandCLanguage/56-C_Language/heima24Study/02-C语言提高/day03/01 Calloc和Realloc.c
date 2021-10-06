@@ -8,18 +8,18 @@
 
  #include <stdlib.h>
  void *calloc(size_t nmemb, size_t size);
- -���ܣ�
-	 ���ڴ涯̬�洢���з���nmemb�鳤��Ϊsize�ֽڵ���������calloc�Զ���������ڴ���0��
- -������
-	nmemb�������ڴ浥Ԫ����
-	size��ÿ���ڴ浥Ԫ�Ĵ�С����λ���ֽڣ�
- -����ֵ��
-	�ɹ�������ռ����ʼ��ַ
-	ʧ�ܣ�NULL
+ -功能：
+	 在内存动态存储区中分配nmemb块长度为size字节的连续区域。calloc自动将分配的内存置0。
+ -参数：
+	nmemb：所需内存单元数量
+	size：每个内存单元的大小（单位：字节）
+ -返回值：
+	成功：分配空间的起始地址
+	失败：NULL
 */
 void test01()
 {
-	//����10��int����40���ֽڵĶѿռ�
+	//开辟10个int类型40个字节的堆空间
 	int* p = calloc(10, sizeof(int));
 	for (int i = 0; i < 10; ++i)
 		p[i] = i + 1;
@@ -29,8 +29,8 @@ void test01()
 
 
 	if (p != NULL){
-		free(p);  //�ͷŶѿռ�
-		p = NULL; //ָ���ָ��
+		free(p);  //释放堆空间
+		p = NULL; //指向空指针
 	}
 
 	printf("\n");
@@ -41,19 +41,19 @@ void test01()
  2.realloc()
  #include <stdlib.h>
  void *realloc(void *ptr, size_t size);
- -���ܣ�
-	 ���·�����malloc����calloc�����ڶ��з����ڴ�ռ�Ĵ�С��
-	 realloc�����Զ��������ӵ��ڴ棬��Ҫ�ֶ����������ָ���ĵ�ַ�����������Ŀռ䣬
-	 ��ô�ͻ������е�ַ�����������ڴ棬���ָ���ĵ�ַ����û�пռ䣬��ôrealloc��
-	 ���·����µ������ڴ棬�Ѿ��ڴ��ֵ���������ڴ棬ͬʱ�ͷž��ڴ档
+ -功能：
+	 重新分配用malloc或者calloc函数在堆中分配内存空间的大小。
+	 realloc不会自动清理增加的内存，需要手动清理，如果指定的地址后面有连续的空间，
+	 那么就会在已有地址基础上增加内存，如果指定的地址后面没有空间，那么realloc会
+	 重新分配新的连续内存，把旧内存的值拷贝到新内存，同时释放旧内存。
 
- -������
-	ptr��Ϊ֮ǰ��malloc����calloc������ڴ��ַ������˲�������NULL����ô��realloc��malloc����һ�¡�
-	size��Ϊ���·����ڴ�Ĵ�С, ��λ���ֽڡ�
+ -参数：
+	ptr：为之前用malloc或者calloc分配的内存地址，如果此参数等于NULL，那么和realloc与malloc功能一致。
+	size：为重新分配内存的大小, 单位：字节。
 
- -����ֵ��
-	�ɹ����·���Ķ��ڴ��ַ
-	ʧ�ܣ�NULL
+ -返回值：
+	成功：新分配的堆内存地址
+	失败：NULL
 
 */
 void test02()
@@ -62,16 +62,16 @@ void test02()
 	for (int i = 0; i < 10; ++i)
 		p[i] = i + 1;
 
-	//��ӡ
+	//打印
 	for (int i = 0; i < 10; ++i)
 		printf("%d ", p[i]); //1 2 3 4 5 6 7 8 9 10
 
-	printf("%d\n", p);                 //12737336  #����ǰ���ڴ��ַ
+	printf("%d\n", p);                 //12737336  #申请前的内存地址
 	//p = realloc(p, sizeof(int) * 20);
-	p = realloc(p, sizeof(int) * 200); //���·���200��int����800���ַ��ռ�
-	printf("%d\n", p);                 //12758752  #�������ڴ��ַ
+	p = realloc(p, sizeof(int) * 200); //重新分配200个int类型800个字符空间
+	printf("%d\n", p);                 //12758752  #申请后的内存地址
 
-	//ԭ����10�����ݶ�����������
+	//原来的10个数据都拷贝过来了
 	for (int i = 0; i < 15; ++i)
 		printf("%d ", p[i]); //1 2 3 4 5 6 7 8 9 10 -33686019 265257588 2082438784 16729 10312144
 
@@ -94,5 +94,5 @@ int main() {
 1 2 3 4 5 6 7 8 9 10 16407056
 16440816
 1 2 3 4 5 6 7 8 9 10 -842150451 -842150451 -842150451 -842150451 -842150451
-�밴���������. . .
+请按任意键继续. . .
 */
