@@ -7,27 +7,27 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * ÉèÖÃÊÖ¶¯Ìá½»£¬ÓÐÒ»Ìõ´íÎó£¬Ö´ÐÐÁËÊÂÎï»Ø¹ö
+ * è®¾ç½®æ‰‹åŠ¨æäº¤ï¼Œæœ‰ä¸€æ¡é”™è¯¯ï¼Œæ‰§è¡Œäº†äº‹ç‰©å›žæ»š
  */
 public class Demo_RoolBack2 {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         String url = "jdbc:mysql://localhost:3306/orcl?serverTimezone=UTC";
         String user = "root";
         String password = "root";
-        String driver = "com.mysql.cj.jdbc.Driver"; //¾É°æÇý¶¯ com.mysql.jdbc.Driver
+        String driver = "com.mysql.cj.jdbc.Driver"; //æ—§ç‰ˆé©±åŠ¨ com.mysql.jdbc.Driver
 
-        //4.´´½¨sqlÃüÁî(Ð¡Íõ¸øÐ¡Ã÷×ª1000Ôª)
-        String sql1 = "update emp set sal=sal-1000 where empno=7788"; //SCOTT¼õÉÙ1000Ôª
-        String sql2 = "update emp set sal=sal+1000 where empno=8888"; //KINGÔö¼Ó1000Ôª  Ã»ÓÐ±àºÅ8888
+        //4.åˆ›å»ºsqlå‘½ä»¤(å°çŽ‹ç»™å°æ˜Žè½¬1000å…ƒ)
+        String sql1 = "update emp set sal=sal-1000 where empno=7788"; //SCOTTå‡å°‘1000å…ƒ
+        String sql2 = "update emp set sal=sal+1000 where empno=8888"; //KINGå¢žåŠ 1000å…ƒ  æ²¡æœ‰ç¼–å·8888
 
-        //1.¼ÓÔØÇý¶¯°ü
+        //1.åŠ è½½é©±åŠ¨åŒ…
         Class.forName(driver);
-        //2.»ñÈ¡Êý¾Ý¿âÁ¬½Ó¶ÔÏó
+        //2.èŽ·å–æ•°æ®åº“è¿žæŽ¥å¯¹è±¡
         Connection conn = DriverManager.getConnection(url, user, password);
-        conn.setAutoCommit(false); //ÉèÖÃÊÖ¶¯Ìá½»
-        //3.Á¬½ÓsqlÃüÁî¶ÔÏó
+        conn.setAutoCommit(false); //è®¾ç½®æ‰‹åŠ¨æäº¤
+        //3.è¿žæŽ¥sqlå‘½ä»¤å¯¹è±¡
         Statement state = conn.createStatement();
-        //5.Ö´ÐÐsqlÃüÁî
+        //5.æ‰§è¡Œsqlå‘½ä»¤
         int i = state.executeUpdate(sql1);
         int j = state.executeUpdate(sql2);
         System.out.println(i + "------" + j);
@@ -39,54 +39,54 @@ public class Demo_RoolBack2 {
         }
 
         /**
-         * 5ÖÖÊÂÎï¸ôÀë¼¶±ð£º
-         *   1£©TRANSACTION_NONE ËµÃ÷²»Ö§³ÖÊÂÎñ¡£
+         * 5ç§äº‹ç‰©éš”ç¦»çº§åˆ«ï¼š
+         *   1ï¼‰TRANSACTION_NONE è¯´æ˜Žä¸æ”¯æŒäº‹åŠ¡ã€‚
          *
-         *   2£©TRANSACTION_READ_UNCOMMITTED Î´Ìá½»¶Á
-         *     ËµÃ÷ÔÚÌá½»Ç°Ò»¸öÊÂÎñ¿ÉÒÔ¿´µ½ÁíÒ»¸öÊÂÎñµÄ±ä»¯¡£ÕâÑù¡°Ôà¶Á¡±¡¢²»¿ÉÖØ¸´µÄ¶ÁºÍÐé¶Á¶¼ÊÇÔÊÐíµÄ¡£
+         *   2ï¼‰TRANSACTION_READ_UNCOMMITTED æœªæäº¤è¯»
+         *     è¯´æ˜Žåœ¨æäº¤å‰ä¸€ä¸ªäº‹åŠ¡å¯ä»¥çœ‹åˆ°å¦ä¸€ä¸ªäº‹åŠ¡çš„å˜åŒ–ã€‚è¿™æ ·â€œè„è¯»â€ã€ä¸å¯é‡å¤çš„è¯»å’Œè™šè¯»éƒ½æ˜¯å…è®¸çš„ã€‚
          *
-         *   3£©TRANSACTION_READ_COMMITTED ¿ÉÖØ¸´¶Á
-         *     ËµÃ÷¶ÁÈ¡Î´Ìá½»µÄÊý¾ÝÊÇ²»ÔÊÐíµÄ¡£Õâ¸ö¼¶±ðÈÔÈ»ÔÊÐí²»¿ÉÖØ¸´µÄ¶ÁºÍÐé¶Á²úÉú¡£
+         *   3ï¼‰TRANSACTION_READ_COMMITTED å¯é‡å¤è¯»
+         *     è¯´æ˜Žè¯»å–æœªæäº¤çš„æ•°æ®æ˜¯ä¸å…è®¸çš„ã€‚è¿™ä¸ªçº§åˆ«ä»ç„¶å…è®¸ä¸å¯é‡å¤çš„è¯»å’Œè™šè¯»äº§ç”Ÿã€‚
          *
-         *   4£©TRANSACTION_REPEATABLE_READ ¿ÉÖØ¸´¶Á (MySQLÄ¬ÈÏ)
-         *     ËµÃ÷ÊÂÎñ±£Ö¤ÄÜ¹»ÔÙ´Î¶ÁÈ¡ÏàÍ¬µÄÊý¾Ý¶ø²»»áÊ§°Ü£¬µ«Ðé¶ÁÈÔÈ»»á³öÏÖ¡£
+         *   4ï¼‰TRANSACTION_REPEATABLE_READ å¯é‡å¤è¯» (MySQLé»˜è®¤)
+         *     è¯´æ˜Žäº‹åŠ¡ä¿è¯èƒ½å¤Ÿå†æ¬¡è¯»å–ç›¸åŒçš„æ•°æ®è€Œä¸ä¼šå¤±è´¥ï¼Œä½†è™šè¯»ä»ç„¶ä¼šå‡ºçŽ°ã€‚
          *
-         *   5£©TRANSACTION_SERIALIZABLE ¿ÉÐòÁÐ»¯
-         *     ÊÇ×î¸ßµÄÊÂÎñ¼¶±ð£¬Ëü·ÀÖ¹Ôà¶Á¡¢²»¿ÉÖØ¸´µÄ¶ÁºÍÐé¶Á¡£
+         *   5ï¼‰TRANSACTION_SERIALIZABLE å¯åºåˆ—åŒ–
+         *     æ˜¯æœ€é«˜çš„äº‹åŠ¡çº§åˆ«ï¼Œå®ƒé˜²æ­¢è„è¯»ã€ä¸å¯é‡å¤çš„è¯»å’Œè™šè¯»ã€‚
          *
-         * ±¸×¢:
-         *    1¡¢¶Á¡°Ôà¡±Êý¾Ý¡£Ò»¸öÊÂÎñ¶ÁÈ¡ÁËÁí-¸öÊÂÎñÉÐÎ´Ìá½»µÄÊý¾Ý£¬ÀýÈç£¬µ±ÊÂÎñAÓëÊÂÎñB²¢·¢Ö´ÐÐÊ±£¬µ±ÊÂÎñA¸üÐÂºó£¬
-         *    ÊÂÎñB²éÑ¯¶ÁÈ¡µ½AÉÐÎ´Ìá½»µÄÊý¾Ý£¬´ËÊ±ÊÂÎñA»Ø¹ö£¬ÔòÊÂÎñB¶Áµ½µÄÊý¾ÝÊÇÎÞÐ§µÄ¡°Ôà¡±Êý¾Ý¡£
+         * å¤‡æ³¨:
+         *    1ã€è¯»â€œè„â€æ•°æ®ã€‚ä¸€ä¸ªäº‹åŠ¡è¯»å–äº†å¦-ä¸ªäº‹åŠ¡å°šæœªæäº¤çš„æ•°æ®ï¼Œä¾‹å¦‚ï¼Œå½“äº‹åŠ¡Aä¸Žäº‹åŠ¡Bå¹¶å‘æ‰§è¡Œæ—¶ï¼Œå½“äº‹åŠ¡Aæ›´æ–°åŽï¼Œ
+         *    äº‹åŠ¡BæŸ¥è¯¢è¯»å–åˆ°Aå°šæœªæäº¤çš„æ•°æ®ï¼Œæ­¤æ—¶äº‹åŠ¡Aå›žæ»šï¼Œåˆ™äº‹åŠ¡Bè¯»åˆ°çš„æ•°æ®æ˜¯æ— æ•ˆçš„â€œè„â€æ•°æ®ã€‚
          *
-         *    2¡¢²»¿ÉÖØ¸´¶Á¡£Ò»¸öÊÂÎñµÄ²Ù×÷µ¼ÖÂÁíÒ»¸öÊÂÎñÇ°ºóÁ½´Î¶ÁÈ¡µ½²»Í¬µÄÊý¾Ý£¬ÀýÈç£¬µ±ÊÂÎñAÓëÊÂÎñB²¢·¢Ö´ÐÐÊ±£¬
-         *    µ±ÊÂÎñB²éÑ¯¶ÁÈ¡Êý¾Ýºó£¬ÊÂÎñA¸üÐÂ²Ù×÷¸ü¸ÄÊÂÎñB²éÑ¯µ½µÄÊý¾Ý£¬´ËÊ±ÊÂÎñBÔÙ´Î¶ÁÈ¥¸ÃÊý¾Ý£¬·¢ÏÖÇ°ºóÁ½´ÎµÄÊý
-         *    ¾Ý²»Ò»Ñù¡£
+         *    2ã€ä¸å¯é‡å¤è¯»ã€‚ä¸€ä¸ªäº‹åŠ¡çš„æ“ä½œå¯¼è‡´å¦ä¸€ä¸ªäº‹åŠ¡å‰åŽä¸¤æ¬¡è¯»å–åˆ°ä¸åŒçš„æ•°æ®ï¼Œä¾‹å¦‚ï¼Œå½“äº‹åŠ¡Aä¸Žäº‹åŠ¡Bå¹¶å‘æ‰§è¡Œæ—¶ï¼Œ
+         *    å½“äº‹åŠ¡BæŸ¥è¯¢è¯»å–æ•°æ®åŽï¼Œäº‹åŠ¡Aæ›´æ–°æ“ä½œæ›´æ”¹äº‹åŠ¡BæŸ¥è¯¢åˆ°çš„æ•°æ®ï¼Œæ­¤æ—¶äº‹åŠ¡Bå†æ¬¡è¯»åŽ»è¯¥æ•°æ®ï¼Œå‘çŽ°å‰åŽä¸¤æ¬¡çš„æ•°
+         *    æ®ä¸ä¸€æ ·ã€‚
          *
-         *    3¡¢Ðé¶Á¡£Ò»¸öÊÂÎñµÄ²Ù×÷µ¼ÖÂÁíÒ»¸öÊÂÎñÇ°ºóÁ½´Î²éÑ¯µÄ½á¹ûÊý¾ÝÁ¿²»Í¬£¬ÀýÈç£¬µ±ÊÂÎñAÓëÊÂÎñB²¢·¢Ö´ÐÐÊ±£¬µ±
-         *    ÊÂÎñB²éÑ¯¶ÁÈ¡Êý¾Ýºó£¬ÊÂÎñAÐÂÔö»òÉ¾³ýÁËÒ»ÌõÂú×ãÊÂÎñA µÄ²éÑ¯Ìõ¼þµÄ¼ÇÂ¼£¬´ËÊ±£¬ÊÂÎñBÔÙ´Î²éÑ¯£¬·¢ÏÖ²éÑ¯µ½
-         *    Ç°´Î²»´æÔÚµÄ¼ÇÂ¼,»òÕßÇ°´ÎµÄÄ³¸ö¼ÇÂ¼²»¼ûÁË¡£)
+         *    3ã€è™šè¯»ã€‚ä¸€ä¸ªäº‹åŠ¡çš„æ“ä½œå¯¼è‡´å¦ä¸€ä¸ªäº‹åŠ¡å‰åŽä¸¤æ¬¡æŸ¥è¯¢çš„ç»“æžœæ•°æ®é‡ä¸åŒï¼Œä¾‹å¦‚ï¼Œå½“äº‹åŠ¡Aä¸Žäº‹åŠ¡Bå¹¶å‘æ‰§è¡Œæ—¶ï¼Œå½“
+         *    äº‹åŠ¡BæŸ¥è¯¢è¯»å–æ•°æ®åŽï¼Œäº‹åŠ¡Aæ–°å¢žæˆ–åˆ é™¤äº†ä¸€æ¡æ»¡è¶³äº‹åŠ¡A çš„æŸ¥è¯¢æ¡ä»¶çš„è®°å½•ï¼Œæ­¤æ—¶ï¼Œäº‹åŠ¡Bå†æ¬¡æŸ¥è¯¢ï¼Œå‘çŽ°æŸ¥è¯¢åˆ°
+         *    å‰æ¬¡ä¸å­˜åœ¨çš„è®°å½•,æˆ–è€…å‰æ¬¡çš„æŸä¸ªè®°å½•ä¸è§äº†ã€‚)
          *
-         * ÊÂÎñ¸ôÀë¼¶±ðÔ½¸ß£¬Îª±ÜÃâ³åÍ»Ëù»¨µÄ¾«Á¦Ò²¾ÍÔ½¶à¡£¿ÉÒÔÍ¨¹ý Connection ¶ÔÏóµÄ conn. setTransactionLevel()
-         * ·½·¨À´ÉèÖÃ¸ôÀë¼¶±ð£¬Í¨¹ý conn. getTransactionIsolation() ·½·¨À´È·¶¨µ±Ç°ÊÂÎñµÄ¼¶±ð¡£
+         * äº‹åŠ¡éš”ç¦»çº§åˆ«è¶Šé«˜ï¼Œä¸ºé¿å…å†²çªæ‰€èŠ±çš„ç²¾åŠ›ä¹Ÿå°±è¶Šå¤šã€‚å¯ä»¥é€šè¿‡ Connection å¯¹è±¡çš„ conn. setTransactionLevel()
+         * æ–¹æ³•æ¥è®¾ç½®éš”ç¦»çº§åˆ«ï¼Œé€šè¿‡ conn. getTransactionIsolation() æ–¹æ³•æ¥ç¡®å®šå½“å‰äº‹åŠ¡çš„çº§åˆ«ã€‚
          */
 
-        // ÉèÖÃÏëÒªµÄÊÂÎñ¼¶±ð
+        // è®¾ç½®æƒ³è¦çš„äº‹åŠ¡çº§åˆ«
         conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE); ;
 
-        // ¿ÉÒÔÍ¨¹ýÏÂÃæµÄ·½·¨È·¶¨µ±Ç°ÊÂÎñµÄ¼¶±ð£º
+        // å¯ä»¥é€šè¿‡ä¸‹é¢çš„æ–¹æ³•ç¡®å®šå½“å‰äº‹åŠ¡çš„çº§åˆ«ï¼š
         int level = conn.getTransactionIsolation();
-        if(level == Connection.TRANSACTION_NONE)                  // ²»Ö§³ÖÊÂÎñ
+        if(level == Connection.TRANSACTION_NONE)                  // ä¸æ”¯æŒäº‹åŠ¡
             System.out.println("TRANSACTION_NONE");
-        else if(level == Connection.TRANSACTION_READ_UNCOMMITTED) //Î´Ìá½»¶Á
+        else if(level == Connection.TRANSACTION_READ_UNCOMMITTED) //æœªæäº¤è¯»
             System.out.println("TRANSACTION_READ_UNCOMMITTED");
-        else if(level == Connection.TRANSACTION_READ_COMMITTED)   //¿ÉÖØ¸´¶Á
+        else if(level == Connection.TRANSACTION_READ_COMMITTED)   //å¯é‡å¤è¯»
             System.out.println("TRANSACTION_READ_COMMITTED");
-        else if(level == Connection.TRANSACTION_REPEATABLE_READ)  //¿ÉÖØ¸´¶Á (MySQLÄ¬ÈÏ)
+        else if(level == Connection.TRANSACTION_REPEATABLE_READ)  //å¯é‡å¤è¯» (MySQLé»˜è®¤)
             System.out.println("TRANSACTION_REPEATABLE_READ");
-        else if(level == Connection.TRANSACTION_SERIALIZABLE)     //¿ÉÐòÁÐ»¯
+        else if(level == Connection.TRANSACTION_SERIALIZABLE)     //å¯åºåˆ—åŒ–
             System.out.println("TRANSACTION_SERIALIZABLE");
 
-        //6.¹Ø±ÕÏà¹Ø×ÊÔ´
+        //6.å…³é—­ç›¸å…³èµ„æº
         state.close();
         conn.close();
     }
@@ -95,7 +95,7 @@ public class Demo_RoolBack2 {
 1------0
 TRANSACTION_SERIALIZABLE
 
-# Ö´ÐÐºó SCOTT µÄ sal=3000.00 Ã»ÓÐ±ä£¬ÓÐÒ»Ìõ´íÎó£¬ÊÂÎñ»Ø¹öÁË¡£
+# æ‰§è¡ŒåŽ SCOTT çš„ sal=3000.00 æ²¡æœ‰å˜ï¼Œæœ‰ä¸€æ¡é”™è¯¯ï¼Œäº‹åŠ¡å›žæ»šäº†ã€‚
 mysql> SELECT * FROM emp WHERE empno='7788';
 +-------+-------+---------+------+---------------------+---------+------+--------+
 | empno | ename | job     | mgr  | hiredate            | sal     | comm | deptno |

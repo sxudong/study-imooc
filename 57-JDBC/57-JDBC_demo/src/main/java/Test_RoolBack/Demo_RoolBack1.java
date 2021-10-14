@@ -4,34 +4,34 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
- 
+
 /**
- * JDBCµÄÊÂÎñ¹ÜÀí:
- * 		×ªÕËÒµÎñ
- * Ê¾Àý:
- * 		Ð¡Íõ¸øÐ¡Ã÷×ªÕË1000Ôª.
+ * JDBCçš„äº‹åŠ¡ç®¡ç†:
+ * 		è½¬è´¦ä¸šåŠ¡
+ * ç¤ºä¾‹:
+ * 		å°çŽ‹ç»™å°æ˜Žè½¬è´¦1000å…ƒ.
  *
- * ²Î¿¼²©¿Í£ºhttps://blog.csdn.net/qq_40301026/article/details/89504895
+ * å‚è€ƒåšå®¢ï¼šhttps://blog.csdn.net/qq_40301026/article/details/89504895
  */
 public class Demo_RoolBack1 {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		String url="jdbc:mysql://localhost:3306/orcl?serverTimezone=UTC";
 		String user="root";
 		String password="root";
-		String driver="com.mysql.cj.jdbc.Driver"; //¾É°æÇý¶¯ com.mysql.jdbc.Driver
+		String driver="com.mysql.cj.jdbc.Driver"; //æ—§ç‰ˆé©±åŠ¨ com.mysql.jdbc.Driver
 
-		//4.´´½¨sqlÃüÁî(SCOTT¸øKING×ª1000Ôª)
-		String sql1 = "update emp set sal=sal-1000 where empno=7788"; //SCOTT¼õÉÙ1000Ôª
-		String sql2 = "update emp set sal=sal+1000 where empno=8888"; //KINGÔö¼Ó1000Ôª  Ã»ÓÐ±àºÅ8888
-		
-		//1.¼ÓÔØÇý¶¯°ü
+		//4.åˆ›å»ºsqlå‘½ä»¤(SCOTTç»™KINGè½¬1000å…ƒ)
+		String sql1 = "update emp set sal=sal-1000 where empno=7788"; //SCOTTå‡å°‘1000å…ƒ
+		String sql2 = "update emp set sal=sal+1000 where empno=8888"; //KINGå¢žåŠ 1000å…ƒ  æ²¡æœ‰ç¼–å·8888
+
+		//1.åŠ è½½é©±åŠ¨åŒ…
 		Class.forName(driver);
-		//2.»ñÈ¡Êý¾Ý¿âÁ¬½Ó¶ÔÏó
+		//2.èŽ·å–æ•°æ®åº“è¿žæŽ¥å¯¹è±¡
 		Connection conn = DriverManager.getConnection(url,user ,password);
-		//conn.setAutoCommit(false);//ÉèÖÃÊÖ¶¯Ìá½»
-		//3.Á¬½ÓsqlÃüÁî¶ÔÏó
+		//conn.setAutoCommit(false);//è®¾ç½®æ‰‹åŠ¨æäº¤
+		//3.è¿žæŽ¥sqlå‘½ä»¤å¯¹è±¡
 		Statement state = conn.createStatement();
-		//5.Ö´ÐÐsqlÃüÁî
+		//5.æ‰§è¡Œsqlå‘½ä»¤
 		int i = state.executeUpdate(sql1);
 		int j = state.executeUpdate(sql2);
 		System.out.println(i+"------"+j);
@@ -44,14 +44,14 @@ public class Demo_RoolBack1 {
 		}
 		*/
 
-		//6.¹Ø±ÕÏà¹Ø×ÊÔ´
+		//6.å…³é—­ç›¸å…³èµ„æº
 		state.close();
 		conn.close();
 	}
 }
-/* ½á¹û£ºÏÔÈ»¿ÉÒÔ¿´µ½sqlÓï¾äÒ»ÌõÊÇÕýÈ·µÄ£¬Ò»Ìõ´íÎóµÄ£¬Èç¹ûÃ»ÓÐ»Ø¹öµÄÊÂÎñ¹ÜÀíµÄ»°£¬Ó¦¸ÃÒ»ÌõÖ´ÐÐ£¬Ò»Ìõ³ö´í¡£ */
+/* ç»“æžœï¼šæ˜¾ç„¶å¯ä»¥çœ‹åˆ°sqlè¯­å¥ä¸€æ¡æ˜¯æ­£ç¡®çš„ï¼Œä¸€æ¡é”™è¯¯çš„ï¼Œå¦‚æžœæ²¡æœ‰å›žæ»šçš„äº‹åŠ¡ç®¡ç†çš„è¯ï¼Œåº”è¯¥ä¸€æ¡æ‰§è¡Œï¼Œä¸€æ¡å‡ºé”™ã€‚ */
 /*
-# Ö´ÐÐÇ° SCOTT µÄ sal=3000.00
+# æ‰§è¡Œå‰ SCOTT çš„ sal=3000.00
 mysql> SELECT * FROM emp WHERE empno='7788';
 +-------+-------+---------+------+---------------------+---------+------+--------+
 | empno | ename | job     | mgr  | hiredate            | sal     | comm | deptno |
@@ -60,7 +60,7 @@ mysql> SELECT * FROM emp WHERE empno='7788';
 +-------+-------+---------+------+---------------------+---------+------+--------+
 1 row in set (0.00 sec)
 
-# Ö´ÐÐºó SCOTT µÄ sal=2000.00
+# æ‰§è¡ŒåŽ SCOTT çš„ sal=2000.00
 mysql> SELECT * FROM emp WHERE empno='7788';
 +-------+-------+---------+------+---------------------+---------+------+--------+
 | empno | ename | job     | mgr  | hiredate            | sal     | comm | deptno |

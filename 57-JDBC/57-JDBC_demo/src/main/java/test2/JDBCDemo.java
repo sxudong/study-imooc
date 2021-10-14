@@ -7,8 +7,7 @@ import java.sql.ResultSet;
 
 /**
  * 测试使用JDBC连接Oracle数据库
- * @author 
- *
+ * 《达内培训 06-JDBC》oneNote笔记
  */
 public class JDBCDemo {
 	public static void main(String[] args) {

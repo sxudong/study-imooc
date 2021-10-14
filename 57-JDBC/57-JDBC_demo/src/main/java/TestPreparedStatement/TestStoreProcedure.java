@@ -3,49 +3,49 @@ package TestPreparedStatement;
 import java.sql.*;
 
 /**
- * Java³ÌĞòÔ±ÃæÊÔ±ÊÊÔ¡· 4.11.4 Statement¡¢ PreparedStatement ºÍ CallableStatement ÓĞÊ²Ã´Çø±ğ
+ * Javaç¨‹åºå‘˜é¢è¯•ç¬”è¯•ã€‹ 4.11.4 Statementã€ PreparedStatement å’Œ CallableStatement æœ‰ä»€ä¹ˆåŒºåˆ«
  *
- * PreparedStatement ±íÊ¾Ô¤±àÒëµÄ SQL Óï¾äµÄ¶ÔÏó£¬ÓÃÓÚÖ´ĞĞ´ø²ÎÊıµÄÔ¤±àÒë SQL Óï¾ä¡£
+ * PreparedStatement è¡¨ç¤ºé¢„ç¼–è¯‘çš„ SQL è¯­å¥çš„å¯¹è±¡ï¼Œç”¨äºæ‰§è¡Œå¸¦å‚æ•°çš„é¢„ç¼–è¯‘ SQL è¯­å¥ã€‚
  *
- * °²È«ĞÔ¸üºÃ¡£Ê¹ÓÃ PreparedStatement ÄÜ¹»Ô¤·À SQL ×¢Èë¹¥»÷¡£ËùÎ½ SQL ×¢Èë£¬
- * Ö¸µÄÊÇÍ¨¹ı°Ñ SQL ÃüÁî²åÈëµ½ Web ±íµ¥µİ½»»òÊäÈëÓòÃû»òÒ³ÃæÇëÇóµÄ²éÑ¯×Ö·û´®£¬×î
- * ÖÕ´ïµ½ÆÛÆ­·şÎñÆ÷£¬´ïµ½Ö´ĞĞ¶ñÒâ SQL ÃüÁîµÄÄ¿µÄ¡£×¢ÈëÖ»¶Ô SQL Óï¾äµÄ±àÒë¹ı³ÌÓĞ
- * ÆÆ»µ×÷ÓÃ£¬¶øÖ´ĞĞ½×¶ÎÖ»ÊÇ°ÑÊäÈË´®×÷ÎªÊı¾İ´¦Àí£¬²»ÔÙĞèÒª¶Ô SQL Óï¾ä½øĞĞ½âÎö£¬Òò
- * ´ËÒ²¾Í±ÜÃâÁËÀàËÆ
+ * å®‰å…¨æ€§æ›´å¥½ã€‚ä½¿ç”¨ PreparedStatement èƒ½å¤Ÿé¢„é˜² SQL æ³¨å…¥æ”»å‡»ã€‚æ‰€è°“ SQL æ³¨å…¥ï¼Œ
+ * æŒ‡çš„æ˜¯é€šè¿‡æŠŠ SQL å‘½ä»¤æ’å…¥åˆ° Web è¡¨å•é€’äº¤æˆ–è¾“å…¥åŸŸåæˆ–é¡µé¢è¯·æ±‚çš„æŸ¥è¯¢å­—ç¬¦ä¸²ï¼Œæœ€
+ * ç»ˆè¾¾åˆ°æ¬ºéª—æœåŠ¡å™¨ï¼Œè¾¾åˆ°æ‰§è¡Œæ¶æ„ SQL å‘½ä»¤çš„ç›®çš„ã€‚æ³¨å…¥åªå¯¹ SQL è¯­å¥çš„ç¼–è¯‘è¿‡ç¨‹æœ‰
+ * ç ´åä½œç”¨ï¼Œè€Œæ‰§è¡Œé˜¶æ®µåªæ˜¯æŠŠè¾“äººä¸²ä½œä¸ºæ•°æ®å¤„ç†ï¼Œä¸å†éœ€è¦å¯¹ SQL è¯­å¥è¿›è¡Œè§£æï¼Œå› 
+ * æ­¤ä¹Ÿå°±é¿å…äº†ç±»ä¼¼
  *     select * from user where name = 'aa'and password = 'bb' or 1=1
- * µÄ SQL ×¢ÈëÎÊÌâµÄ·¢Éú¡£
+ * çš„ SQL æ³¨å…¥é—®é¢˜çš„å‘ç”Ÿã€‚
  *
  */
 public class TestStoreProcedure {
-    // Êı¾İ¿âÇı¶¯
+    // æ•°æ®åº“é©±åŠ¨
     public static final String DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
 
-    // Êı¾İ¿âÁ¬½ÓµØÖ·
+    // æ•°æ®åº“è¿æ¥åœ°å€
     public static final String DB_URL = "jdbc:mysql://localhost:3306/orcl?serverTimezone=UTC";
 
-    // Êı¾İ¿âÓÃ»§Ãû³Æ
+    // æ•°æ®åº“ç”¨æˆ·åç§°
     public static final String DB_USER = "root";
 
-    // Êı¾İ¿âÓÃ»§ÃÜÂë
+    // æ•°æ®åº“ç”¨æˆ·å¯†ç 
     public static final String DB_PASSWORD = "root";
 
 
     /**
-     * »ñÈ¡Êı¾İ¿âÁ¬½Ó
+     * è·å–æ•°æ®åº“è¿æ¥
      *
-     * @return Êı¾İ¿âÁ¬½Ó¶ÔÏó
+     * @return æ•°æ®åº“è¿æ¥å¯¹è±¡
      */
     public static Connection getConnection() {
         Connection conn = null;
 
         try {
-            // ¼ÓÔØÊı¾İ¿âÇı¶¯Àà
+            // åŠ è½½æ•°æ®åº“é©±åŠ¨ç±»
             Class.forName(DRIVER_CLASS);
-            System.out.println("Êı¾İ¿âÇı¶¯¼ÓÔØ³É¹¦");
+            System.out.println("æ•°æ®åº“é©±åŠ¨åŠ è½½æˆåŠŸ");
 
-            // »ñÈ¡Êı¾İ¿âÁ¬½Ó¶ÔÏó
+            // è·å–æ•°æ®åº“è¿æ¥å¯¹è±¡
             conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-            System.out.println("Êı¾İ¿âÁ¬½Ó³É¹¦");
+            System.out.println("æ•°æ®åº“è¿æ¥æˆåŠŸ");
 
         } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
@@ -59,27 +59,27 @@ public class TestStoreProcedure {
     }
 
     /**
-     * ¹Ø±ÕÊı¾İ¿â²Ù×÷¶ÔÏó
+     * å…³é—­æ•°æ®åº“æ“ä½œå¯¹è±¡
      *
-     * @param res  ResultSet¶ÔÏó
-     * @param stmt Statement¶ÔÏó
-     * @param conn Connection¶ÔÏó
+     * @param res  ResultSetå¯¹è±¡
+     * @param stmt Statementå¯¹è±¡
+     * @param conn Connectionå¯¹è±¡
      */
     public static void closeOperate(ResultSet res, Statement stmt, Connection conn) {
         try {
-            // ¹Ø±Õ ResultSet ¶ÔÏó
+            // å…³é—­ ResultSet å¯¹è±¡
             if (res != null)
                 res.close();
 
-            // ¹Ø±ÕStatement¶ÔÏó
+            // å…³é—­Statementå¯¹è±¡
             if (stmt != null)
                 stmt.close();
 
-            // ¹Ø±ÕConnection¶ÔÏó
+            // å…³é—­Connectionå¯¹è±¡
             if (conn != null)
                 conn.close();
 
-            System.out.println("¹Ø±ÕÊı¾İ¿â²Ù×÷¶ÔÏóÍê³É");
+            System.out.println("å…³é—­æ•°æ®åº“æ“ä½œå¯¹è±¡å®Œæˆ");
 
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -87,38 +87,38 @@ public class TestStoreProcedure {
     }
 
     /**
-     * Ê¹ÓÃ PreparedStatement ²éÑ¯SQL
+     * ä½¿ç”¨ PreparedStatement æŸ¥è¯¢SQL
      */
     public static void execPreparedStatement() {
-        Connection conn = null; // Êı¾İ¿âÁ¬½Ó¶ÔÏó
-        PreparedStatement stmt = null; // CallableStatement¶ÔÏó
-        ResultSet res = null; // ½á¹û¼¯¶ÔÏó
+        Connection conn = null; // æ•°æ®åº“è¿æ¥å¯¹è±¡
+        PreparedStatement stmt = null; // CallableStatementå¯¹è±¡
+        ResultSet res = null; // ç»“æœé›†å¯¹è±¡
         try {
-            // »ñÈ¡Êı¾İ¿âÁ¬½Ó
+            // è·å–æ•°æ®åº“è¿æ¥
             conn = getConnection();
 
-            // ´´½¨ PreparedStatement ¶ÔÏó
+            // åˆ›å»º PreparedStatement å¯¹è±¡
             stmt = conn.prepareStatement("SELECT * FROM emp WHERE empno=?");
-            stmt.setInt(1,7788); //´«µİ²ÎÊı£¨µÚÒ»¸öÎÊÌâ£¬´«µİµÄÖµ£©
+            stmt.setInt(1,7788); //ä¼ é€’å‚æ•°ï¼ˆç¬¬ä¸€ä¸ªé—®é¢˜ï¼Œä¼ é€’çš„å€¼ï¼‰
 
-            // Ö´ĞĞÔ¤±àÒë¹ı³Ì£¬²¢»ñÈ¡½á¹û¼¯
+            // æ‰§è¡Œé¢„ç¼–è¯‘è¿‡ç¨‹ï¼Œå¹¶è·å–ç»“æœé›†
             res = stmt.executeQuery();
 
-            // Ñ­»·±éÀú½á¹û¼¯
+            // å¾ªç¯éå†ç»“æœé›†
             while (res.next()) {
-                // »ñÈ¡ÁĞÖµ
+                // è·å–åˆ—å€¼
                 int id = res.getInt("empno");
                 String name = res.getString("ename");
                 Timestamp hiredate = res.getTimestamp("hiredate");
 
-                // Êä³öÁĞÖµ
-                System.out.println("±àºÅ£º" + id + "  ĞÕÃû£º" + name + "  ÉúÈÕÊ±¼ä£º" + hiredate);
+                // è¾“å‡ºåˆ—å€¼
+                System.out.println("ç¼–å·ï¼š" + id + "  å§“åï¼š" + name + "  ç”Ÿæ—¥æ—¶é—´ï¼š" + hiredate);
             }
 
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         } finally {
-            // ¹Ø±ÕÊı¾İ¿â²Ù×÷¶ÔÏó
+            // å…³é—­æ•°æ®åº“æ“ä½œå¯¹è±¡
             closeOperate(res, stmt, conn);
         }
     }
@@ -128,8 +128,8 @@ public class TestStoreProcedure {
     }
 }
 /* Output:
-Êı¾İ¿âÇı¶¯¼ÓÔØ³É¹¦
-Êı¾İ¿âÁ¬½Ó³É¹¦
-±àºÅ£º7788  ĞÕÃû£ºSCOTT  ÉúÈÕÊ±¼ä£º1982-12-09 08:00:00.0
-¹Ø±ÕÊı¾İ¿â²Ù×÷¶ÔÏóÍê³É
+æ•°æ®åº“é©±åŠ¨åŠ è½½æˆåŠŸ
+æ•°æ®åº“è¿æ¥æˆåŠŸ
+ç¼–å·ï¼š7788  å§“åï¼šSCOTT  ç”Ÿæ—¥æ—¶é—´ï¼š1982-12-09 08:00:00.0
+å…³é—­æ•°æ®åº“æ“ä½œå¯¹è±¡å®Œæˆ
  */

@@ -5,10 +5,10 @@ import java.util.Properties;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-/*
+/**
  * 使用配置文件来配置JDBC连接数据库
  * 该类用来管理数据库的连接
- * @author Administrator
+ * 《达内培训 06-JDBC》oneNote笔记
  */
 
 public class DBUtil {

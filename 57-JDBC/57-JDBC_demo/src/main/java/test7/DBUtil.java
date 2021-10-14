@@ -11,8 +11,8 @@ import org.apache.commons.dbcp.BasicDataSource;
 
 /**
  * 使用 Apache DBCP 连接池技术管理数据库存连接
- * @author Administrator
- *
+ * 《达内培训 06-JDBC》oneNote笔记
+ *  笔记里的 DBUtil2 在 JDBC 原理 Day01案例中
  */
 public class DBUtil {
 	//数据库连接池

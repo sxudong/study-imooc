@@ -4,8 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-/*
+/**
  * 测试使用 Apache DBCP 连接池技术获取连接，并执行sql
+ * 《达内培训 06-JDBC》oneNote笔记
  */
 public class JDBCDemo {
 	public static void main(String[] args) {

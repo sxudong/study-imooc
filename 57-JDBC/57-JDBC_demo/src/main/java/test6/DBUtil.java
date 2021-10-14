@@ -5,8 +5,9 @@ import java.util.Properties;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-/*
+/**
  * 使用 ThreadLocal 管理不同线程所获取的连接
+ * 《达内培训 06-JDBC》oneNote笔记
  */
 public class DBUtil {
 	//连接数据的路径、用户名、密码

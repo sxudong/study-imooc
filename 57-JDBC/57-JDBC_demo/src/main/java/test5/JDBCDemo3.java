@@ -4,11 +4,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-/*
+/**
  * 测试打印执行的主线程名字
  * 通过 DBUtil 获取连接，并执行sql
+ * 《达内培训 06-JDBC》oneNote笔记
  */
-
 public class JDBCDemo3 {
 	public static void main(String[] args) {
 		try{

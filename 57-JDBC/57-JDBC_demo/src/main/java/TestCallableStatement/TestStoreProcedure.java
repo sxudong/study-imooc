@@ -1,42 +1,42 @@
 package TestCallableStatement;
-import java.sql.*; //µ¼Èëjava.sql°ü
+import java.sql.*; //å¯¼å…¥java.sqlåŒ…
 
 /**
- * µ÷ÓÃ´æ´¢¹ı³Ì
- * Ê¾Àı£ºÍ¨¹ıµ÷ÓÃ´æ´¢¹ı³Ì£¬»ñÈ¡ÓÃ»§·ÖÒ³ÁĞ±í£¬Êı¾İ×ÜÊıºÍ×ÜÒ³Êı¡£
+ * è°ƒç”¨å­˜å‚¨è¿‡ç¨‹
+ * ç¤ºä¾‹ï¼šé€šè¿‡è°ƒç”¨å­˜å‚¨è¿‡ç¨‹ï¼Œè·å–ç”¨æˆ·åˆ†é¡µåˆ—è¡¨ï¼Œæ•°æ®æ€»æ•°å’Œæ€»é¡µæ•°ã€‚
  *
  * https://blog.csdn.net/pan_junbiao/article/details/86654993
  */
 public class TestStoreProcedure {
-    // Êı¾İ¿âÇı¶¯
+    // æ•°æ®åº“é©±åŠ¨
     public static final String DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
 
-    // Êı¾İ¿âÁ¬½ÓµØÖ·
+    // æ•°æ®åº“è¿æ¥åœ°å€
     public static final String DB_URL = "jdbc:mysql://localhost:3306/orcl?serverTimezone=UTC";
 
-    // Êı¾İ¿âÓÃ»§Ãû³Æ
+    // æ•°æ®åº“ç”¨æˆ·åç§°
     public static final String DB_USER = "root";
 
-    // Êı¾İ¿âÓÃ»§ÃÜÂë
+    // æ•°æ®åº“ç”¨æˆ·å¯†ç 
     public static final String DB_PASSWORD = "root";
 
 
     /**
-     * »ñÈ¡Êı¾İ¿âÁ¬½Ó
+     * è·å–æ•°æ®åº“è¿æ¥
      *
-     * @return Êı¾İ¿âÁ¬½Ó¶ÔÏó
+     * @return æ•°æ®åº“è¿æ¥å¯¹è±¡
      */
     public static Connection getConnection() {
         Connection conn = null;
 
         try {
-            // ¼ÓÔØÊı¾İ¿âÇı¶¯Àà
+            // åŠ è½½æ•°æ®åº“é©±åŠ¨ç±»
             Class.forName(DRIVER_CLASS);
-            System.out.println("Êı¾İ¿âÇı¶¯¼ÓÔØ³É¹¦");
+            System.out.println("æ•°æ®åº“é©±åŠ¨åŠ è½½æˆåŠŸ");
 
-            // »ñÈ¡Êı¾İ¿âÁ¬½Ó¶ÔÏó
+            // è·å–æ•°æ®åº“è¿æ¥å¯¹è±¡
             conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-            System.out.println("Êı¾İ¿âÁ¬½Ó³É¹¦");
+            System.out.println("æ•°æ®åº“è¿æ¥æˆåŠŸ");
 
         } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
@@ -50,27 +50,27 @@ public class TestStoreProcedure {
     }
 
     /**
-     * ¹Ø±ÕÊı¾İ¿â²Ù×÷¶ÔÏó
+     * å…³é—­æ•°æ®åº“æ“ä½œå¯¹è±¡
      *
-     * @param res  ResultSet¶ÔÏó
-     * @param stmt Statement¶ÔÏó
-     * @param conn Connection¶ÔÏó
+     * @param res  ResultSetå¯¹è±¡
+     * @param stmt Statementå¯¹è±¡
+     * @param conn Connectionå¯¹è±¡
      */
     public static void closeOperate(ResultSet res, Statement stmt, Connection conn) {
         try {
-            // ¹Ø±Õ ResultSet ¶ÔÏó
+            // å…³é—­ ResultSet å¯¹è±¡
             if (res != null)
                 res.close();
 
-            // ¹Ø±ÕStatement¶ÔÏó
+            // å…³é—­Statementå¯¹è±¡
             if (stmt != null)
                 stmt.close();
 
-            // ¹Ø±ÕConnection¶ÔÏó
+            // å…³é—­Connectionå¯¹è±¡
             if (conn != null)
                 conn.close();
 
-            System.out.println("¹Ø±ÕÊı¾İ¿â²Ù×÷¶ÔÏóÍê³É");
+            System.out.println("å…³é—­æ•°æ®åº“æ“ä½œå¯¹è±¡å®Œæˆ");
 
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -78,50 +78,50 @@ public class TestStoreProcedure {
     }
 
     /**
-     * µ÷ÓÃ´æ´¢¹ı³Ì
+     * è°ƒç”¨å­˜å‚¨è¿‡ç¨‹
      */
     public static void execProcedure() {
-        Connection conn = null; // Êı¾İ¿âÁ¬½Ó¶ÔÏó
-        CallableStatement clbStmt = null; // CallableStatement¶ÔÏó
-        ResultSet res = null; // ½á¹û¼¯¶ÔÏó
+        Connection conn = null; // æ•°æ®åº“è¿æ¥å¯¹è±¡
+        CallableStatement clbStmt = null; // CallableStatementå¯¹è±¡
+        ResultSet res = null; // ç»“æœé›†å¯¹è±¡
         try {
-            // »ñÈ¡Êı¾İ¿âÁ¬½Ó
+            // è·å–æ•°æ®åº“è¿æ¥
             conn = getConnection();
 
-            // ´´½¨ CallableStatement ¶ÔÏó
+            // åˆ›å»º CallableStatement å¯¹è±¡
             clbStmt = conn.prepareCall("{CALL proc_search_user(?,?,?,?)}");
 
-            // ÉèÖÃÊäÈë²ÎÊı
-            clbStmt.setInt(1, 3); // ²éÑ¯µÚ3Ò³Êı¾İ
-            clbStmt.setInt(2, 3); // Ã¿Ò³10ÌõÊı¾İ
+            // è®¾ç½®è¾“å…¥å‚æ•°
+            clbStmt.setInt(1, 3); // æŸ¥è¯¢ç¬¬3é¡µæ•°æ®
+            clbStmt.setInt(2, 3); // æ¯é¡µ10æ¡æ•°æ®
 
-            // ×¢²áÊä³ö²ÎÊı
+            // æ³¨å†Œè¾“å‡ºå‚æ•°
             clbStmt.registerOutParameter(3, Types.INTEGER);
             clbStmt.registerOutParameter(4, Types.INTEGER);
 
-            // Ö´ĞĞµ÷ÓÃ´æ´¢¹ı³Ì£¬²¢»ñÈ¡½á¹û¼¯
+            // æ‰§è¡Œè°ƒç”¨å­˜å‚¨è¿‡ç¨‹ï¼Œå¹¶è·å–ç»“æœé›†
             res = clbStmt.executeQuery();
 
-            // Ñ­»·±éÀú½á¹û¼¯
+            // å¾ªç¯éå†ç»“æœé›†
             while (res.next()) {
-                // »ñÈ¡ÁĞÖµ
+                // è·å–åˆ—å€¼
                 int id = res.getInt("empno");
                 String name = res.getString("ename");
                 Timestamp createTime = res.getTimestamp("hiredate");
 
-                // Êä³öÁĞÖµ
-                System.out.println("±àºÅ£º" + id + "  ĞÕÃû£º" + name + "  ÉúÈÕÊ±¼ä£º" + createTime);
+                // è¾“å‡ºåˆ—å€¼
+                System.out.println("ç¼–å·ï¼š" + id + "  å§“åï¼š" + name + "  ç”Ÿæ—¥æ—¶é—´ï¼š" + createTime);
             }
 
-            // »ñÈ¡Êä³ö²ÎÊıÖµ
+            // è·å–è¾“å‡ºå‚æ•°å€¼
             int totalCount = clbStmt.getInt(3);
             int totalPage = clbStmt.getInt(4);
-            System.out.println("Êı¾İ×ÜÊı£º" + totalCount + " ×ÜÒ³Êı£º" + totalPage);
+            System.out.println("æ•°æ®æ€»æ•°ï¼š" + totalCount + " æ€»é¡µæ•°ï¼š" + totalPage);
 
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         } finally {
-            // ¹Ø±ÕÊı¾İ¿â²Ù×÷¶ÔÏó
+            // å…³é—­æ•°æ®åº“æ“ä½œå¯¹è±¡
             closeOperate(res, clbStmt, conn);
         }
     }
@@ -131,11 +131,11 @@ public class TestStoreProcedure {
     }
 }
 /* Output:
-Êı¾İ¿âÇı¶¯¼ÓÔØ³É¹¦
-Êı¾İ¿âÁ¬½Ó³É¹¦
-±àºÅ£º7782  ĞÕÃû£ºCLARK  ÉúÈÕÊ±¼ä£º1981-06-09 08:00:00.0
-±àºÅ£º7788  ĞÕÃû£ºSCOTT  ÉúÈÕÊ±¼ä£º1982-12-09 08:00:00.0
-±àºÅ£º7839  ĞÕÃû£ºKING  ÉúÈÕÊ±¼ä£º1981-11-17 08:00:00.0
-Êı¾İ×ÜÊı£º14 ×ÜÒ³Êı£º5
-¹Ø±ÕÊı¾İ¿â²Ù×÷¶ÔÏóÍê³É
+æ•°æ®åº“é©±åŠ¨åŠ è½½æˆåŠŸ
+æ•°æ®åº“è¿æ¥æˆåŠŸ
+ç¼–å·ï¼š7782  å§“åï¼šCLARK  ç”Ÿæ—¥æ—¶é—´ï¼š1981-06-09 08:00:00.0
+ç¼–å·ï¼š7788  å§“åï¼šSCOTT  ç”Ÿæ—¥æ—¶é—´ï¼š1982-12-09 08:00:00.0
+ç¼–å·ï¼š7839  å§“åï¼šKING  ç”Ÿæ—¥æ—¶é—´ï¼š1981-11-17 08:00:00.0
+æ•°æ®æ€»æ•°ï¼š14 æ€»é¡µæ•°ï¼š5
+å…³é—­æ•°æ®åº“æ“ä½œå¯¹è±¡å®Œæˆ
  */

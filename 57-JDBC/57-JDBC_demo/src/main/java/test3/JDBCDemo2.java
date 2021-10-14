@@ -5,6 +5,7 @@ import java.util.Properties;
 
 /**
  * 测试配制文件的读取
+ * 《达内培训 06-JDBC》oneNote笔记
  */
 public class JDBCDemo2 {
 
@@ -23,8 +24,7 @@ public class JDBCDemo2 {
 			/*
 			 * 使用Properties去读取配置文件
 			 */
-			FileInputStream fis = new FileInputStream(
-					"./src/main/java/config.properties");
+			FileInputStream fis = new FileInputStream("./src/main/java/config.properties");
 			/*
 			 * 当通过Properties读取文件后，那么这个
 			 * 流依然保持打开状态，我们应当自行关闭。
