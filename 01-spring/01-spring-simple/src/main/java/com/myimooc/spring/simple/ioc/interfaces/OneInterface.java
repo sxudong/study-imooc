@@ -2,8 +2,6 @@ package com.myimooc.spring.simple.ioc.interfaces;
 
 /**
  * 面向接口编程；一个接口
- *
- * @author zc 2017-01-18
  */
 public interface OneInterface {
 

@@ -1,6 +1,6 @@
 package com.myimooc.spring.simple.beanannotation;
 
-import com.myimooc.spring.simple.AbstractTestSupport;
+import com.myimooc.spring.simple.base.UnitTestBase;
 import com.myimooc.spring.simple.beanannotation.multiple.BeanInvoker;
 
 import org.junit.Test;
@@ -13,7 +13,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
  * @author zc 2017-01-18
  */
 @RunWith(BlockJUnit4ClassRunner.class)
-public class MultipleTest extends AbstractTestSupport {
+public class MultipleTest extends UnitTestBase {
 
     public MultipleTest() {
         super("spring-beanannotation.xml");

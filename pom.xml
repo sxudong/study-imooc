@@ -93,7 +93,7 @@
         <module>58-JSP</module>
         <module>59-Servlet</module>
 		<module>60-JavaWeb</module>
-		
+		<module>61-SpringAnnotation</module>
     </modules>
 
     <properties>

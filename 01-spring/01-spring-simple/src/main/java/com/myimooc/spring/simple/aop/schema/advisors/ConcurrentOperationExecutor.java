@@ -6,11 +6,12 @@ import org.springframework.core.Ordered;
 /**
  * 执行
  *
- * @author zc 2017-01-18
+ * 视频：5-7 Advisors
+ * 单元测试类: TestAOPSchemaAdvisors
  */
 public class ConcurrentOperationExecutor implements Ordered {
 
-    private static final int DEFAULT_MAX_RETRIES = 2;
+    private static final int DEFAULT_MAX_RETRIES = 2; //默认值是2
 
     private int maxRetries = DEFAULT_MAX_RETRIES;
 
@@ -34,14 +35,17 @@ public class ConcurrentOperationExecutor implements Ordered {
         RuntimeException exception;
         do {
             numAttempts++;
-            System.out.println("Try times : " + numAttempts);
+            System.out.println("Try times : " + numAttempts); //打印尝试次数
             try {
+                // 环绕通知前
                 return pjp.proceed();
             } catch (RuntimeException ex) {
+                //捕获到 RuntimeException,将 异常赋值给 exception,只要 numAttempts <= this.maxRetries 继续尝试
                 exception = ex;
             }
+            // 环绕通知后
         } while (numAttempts <= this.maxRetries);
-        System.out.println("Try error : " + numAttempts);
-        throw exception;
+        System.out.println("Try error : " + numAttempts); //打印最后尝试的总次数
+        throw exception; // 尝试失败后,抛出异常
     }
 }

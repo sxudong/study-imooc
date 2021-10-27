@@ -2,16 +2,9 @@ package com.myimooc.spring.simple.aop.api;
 
 /**
  * 业务逻辑接口
- *
- * @author zc 2017-01-18
+ * 视频：6-1 Spring AOP API的Pointcut、advice概念及应用
+ * 单元测试类：TestAOPAPI
  */
 public interface BizLogic {
-
-    /**
-     * 保存
-     *
-     * @return 结果
-     */
     String save();
-
 }

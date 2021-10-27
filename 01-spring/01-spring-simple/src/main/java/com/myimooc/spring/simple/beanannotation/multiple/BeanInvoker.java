@@ -10,7 +10,8 @@ import java.util.Map;
 /**
  * 执行
  *
- * @author zc 2017-01-18
+ * 视频：4-3 Spring Bean装配之 Autowired 注解说明-2
+ * 单元测试类：TestInjection.java
  */
 @Component
 public class BeanInvoker {
@@ -20,6 +21,10 @@ public class BeanInvoker {
     @Autowired
     private Map<String, BeanInterface> map;
 
+    /**
+     * 使用 @Qualifier 注解指定具体使用哪个类
+     * 视频：4-4 Spring Bean装配之 Autowired 注解说明-3
+     */
     @Autowired
     @Qualifier("beanImplTwo")
     private BeanInterface beanInterface;
@@ -51,7 +56,5 @@ public class BeanInvoker {
         } else {
             System.out.println("beanInterface is null...");
         }
-
     }
-
 }

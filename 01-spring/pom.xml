@@ -16,6 +16,7 @@
 
     <modules>
         <module>01-spring-simple</module>
+		<module>01-spring-tx</module>
     </modules>
 
     <dependencyManagement>

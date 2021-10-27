@@ -10,9 +10,10 @@
     </parent>
 
     <artifactId>01-spring-simple</artifactId>
-
+    <description>《Spring 入门篇》 https://www.imooc.com/video/3665</description>
     <dependencies>
         <!-- 使用Spring Boot环境学习Spring -->
+        <!-- 从父类的 dependencyManagement 中继承jar包，如果打开jar包报错，Maven reload一下 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -35,17 +36,21 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+        <!-- 包含junit -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.4.0</version>
+        </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>1</version>
         </dependency>
-
     </dependencies>
 
 </project>

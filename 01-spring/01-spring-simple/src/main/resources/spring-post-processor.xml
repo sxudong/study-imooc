@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 定义一个bean -->
+    <bean id="injectionDao" class="com.myimooc.spring.simple.ioc.injection.dao.InjectionDaoImpl">
+    </bean>
+
+    <bean id="user" class="com.myimooc.spring.simple.postprocessor.User"
+          init-method="start"
+          destroy-method="stop">
+        <property name="name" value="张三"></property>
+        <property name="sex" value="男"></property>
+    </bean>
+
+    <!-- Spring后置处理器 -->
+    <bean id="postProcessor" class="com.myimooc.spring.simple.postprocessor.PostProcessorDemo"/>
+
+</beans>

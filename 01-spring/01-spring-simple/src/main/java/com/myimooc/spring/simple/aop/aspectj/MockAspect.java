@@ -37,10 +37,10 @@ public class MockAspect {
         System.out.println("BeforeWithParam." + arg);
     }
 
-    @Before("pointcut() && @annotation(mockMethod)")
-    public void beforeWithAnnotation(MockMethod mockMethod) {
-        System.out.println("BeforeWithAnnotation." + mockMethod.value());
-    }
+//    @Before("pointcut() && @annotation(mockMethod)")
+//    public void beforeWithAnnotation(MockMethod mockMethod) {
+//        System.out.println("BeforeWithAnnotation." + mockMethod.value());
+//    }
 
     @AfterReturning(pointcut = "bizPointcut()", returning = "returnValue")
     public void afterReturning(Object returnValue) {

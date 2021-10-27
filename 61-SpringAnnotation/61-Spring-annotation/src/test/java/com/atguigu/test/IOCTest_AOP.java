@@ -81,10 +81,10 @@ public class IOCTest_AOP {
 		applicationContext.close();
 	} /*
 		正常测试：
-			div运行。。。@Before:参数列表是：{[1, 1]}
-			MathCalculator...div...
-			div结束。。。@After
-			div正常返回。。。@AfterReturning:运行结果：{1}
+			div运行。。。@Before:参数列表是：{[1, 1]}        //前通知
+			MathCalculator...div...                      //执行MathCalculator类方法
+			div结束。。。@After                            //最终通知
+			div正常返回。。。@AfterReturning:运行结果：{1}    //后通知
 
 		测试异常通知:
 			div运行。。。@Before:参数列表是：{[1, 0]}

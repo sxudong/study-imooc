@@ -6,7 +6,17 @@ import org.springframework.stereotype.Component;
 /**
  * 使用@Component
  *
- * @author zc 2017-01-18
+ * 视频：4-1 Spring Bean装配之Bean的定义及作用域的注解实现
+ * 单元测试类：BeanAnnotationTest.java
+ *
+ * Bean管理的注解实现及例子:
+ *   - Classpath扫描与组件管理
+ *   - 类的自动检测与注册Bean
+ *   - <context:annotation-config/>
+ *   - @Component, @Repository, @Service, @Controller
+ *   - @Required
+ *   - @Autowired. @Qualifier
+ *   - @Resource
  */
 @Scope
 @Component

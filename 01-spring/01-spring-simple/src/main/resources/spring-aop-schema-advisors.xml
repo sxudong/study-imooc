@@ -12,20 +12,24 @@
 
     <context:component-scan base-package="com.myimooc.spring.simple.aop.schema"/>
 
+    <!-- 视频：5-7 Advisors -->
     <aop:config>
         <aop:aspect id="concurrentOperationRetry" ref="concurrentOperationExecutor">
+            <!-- 执行这个包下的所有方法都会被匹配到 -->
             <aop:pointcut id="idempotentOperation"
                           expression="execution(* com.myimooc.spring.simple.aop.schema.advisors.service.*.*(..)) "/>
             <!--            expression="execution(* com.myimooc.spring.simple.aop.schema.service.*.*(..)) and-->
             <!--            @annotation(com.myimooc.spring.simple.aop.schema.Idempotent)" />-->
+
+            <!-- 引用上面的pointcut的id -->
             <aop:around pointcut-ref="idempotentOperation" method="doConcurrentOperation"/>
         </aop:aspect>
     </aop:config>
 
     <bean id="concurrentOperationExecutor"
           class="com.myimooc.spring.simple.aop.schema.advisors.ConcurrentOperationExecutor">
-        <property name="maxRetries" value="3"/>
-        <property name="order" value="100"/>
+        <property name="maxRetries" value="3"/> <!-- 给属性设置尝试次数 -->
+        <property name="order" value="100"/>    <!-- 给属性设置定义循序 -->
     </bean>
 
 </beans>

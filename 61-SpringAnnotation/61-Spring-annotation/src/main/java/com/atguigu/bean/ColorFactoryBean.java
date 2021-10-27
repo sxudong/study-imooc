@@ -5,7 +5,8 @@ import org.springframework.beans.factory.FactoryBean;
 /**
  * 创建一个Spring定义的FactoryBean
  *
- * 在 IOCTest类中测试FactoryBean使用
+ * 配置文件：MainConfig2
+ * 在 IOCTest 类中测试 FactoryBean 使用
  */
 public class ColorFactoryBean implements FactoryBean<Color> {
 

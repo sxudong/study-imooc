@@ -7,6 +7,9 @@ import org.springframework.core.type.AnnotationMetadata;
 
 import com.atguigu.bean.RainBow;
 
+/**
+ * 单元测试类：com.atguigu.test.IOCTest.test02()
+ */
 public class MyImportBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
 	/**

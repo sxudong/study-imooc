@@ -5,7 +5,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 /**
  * Mock 切面
  *
- * @author zc 2017-01-18
+ * 视频：5-4 Advice应用（上）
  */
 public class MockAspect {
 

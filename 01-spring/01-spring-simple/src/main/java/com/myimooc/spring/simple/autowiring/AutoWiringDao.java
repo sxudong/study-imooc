@@ -3,7 +3,8 @@ package com.myimooc.spring.simple.autowiring;
 /**
  * DAO
  *
- * @author zc 2017-01-18
+ * 视频：3-4 Spring Bean 装配之自动装配
+ * 单元测试类：AutoWiringTest.java
  */
 public class AutoWiringDao {
 

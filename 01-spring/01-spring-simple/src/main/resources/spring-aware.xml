@@ -5,8 +5,8 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="mockApplicationContext"
-          class="com.myimooc.spring.simple.aware.MockApplicationContext"/>
+          class="com.myimooc.spring.simple.aware.ApplicationContextAwareDemo"/>
 
-    <bean id="mockBeanName" class="com.myimooc.spring.simple.aware.MockBeanName"/>
+    <bean id="mockBeanName" class="com.myimooc.spring.simple.aware.BeanNameAwareDemo"/>
 
 </beans>

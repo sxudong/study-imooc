@@ -3,10 +3,13 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd"
-       default-autowire="constructor">
+       default-autowire="constructor"> <!-- 自动装配 -->
+       <!-- default-autowire="byName"> -->
+       <!-- default-autowire="byType"> -->
 
     <bean id="autoWiringService" class="com.myimooc.spring.simple.autowiring.AutoWiringService"/>
+    <!-- <bean id="autoWiringService" class="com.myimooc.spring.simple.autowiring.AutoWiringService" autowire="constructor"/> -->
 
     <bean class="com.myimooc.spring.simple.autowiring.AutoWiringDao"/>
 
-</beans>
+ </beans>

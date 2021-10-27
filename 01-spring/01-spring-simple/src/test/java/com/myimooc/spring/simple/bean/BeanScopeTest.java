@@ -1,6 +1,6 @@
 package com.myimooc.spring.simple.bean;
 
-import com.myimooc.spring.simple.AbstractTestSupport;
+import com.myimooc.spring.simple.base.UnitTestBase;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,11 +8,10 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 
 /**
  * Bean作用域测试
- *
- * @author zc 2017-01-18
+ * 视频：3-1 Spring Bean装配之Bean的配置项及作用域
  */
 @RunWith(BlockJUnit4ClassRunner.class)
-public class BeanScopeTest extends AbstractTestSupport {
+public class BeanScopeTest extends UnitTestBase {
 
     public BeanScopeTest() {
         super("spring-beanscope.xml");

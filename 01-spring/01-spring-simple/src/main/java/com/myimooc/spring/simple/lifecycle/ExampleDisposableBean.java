@@ -5,7 +5,8 @@ import org.springframework.beans.factory.DisposableBean;
 /**
  * Bean销毁时执行
  *
- * @author zc 2017-01-18
+ * 视频：3-2 Spring Bean装配之Bean的生命周期
+ * 在 BeanLifecycleTest 中单元测试
  */
 public class ExampleDisposableBean implements DisposableBean {
 

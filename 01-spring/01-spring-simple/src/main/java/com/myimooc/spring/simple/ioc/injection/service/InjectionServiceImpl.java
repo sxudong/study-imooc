@@ -5,7 +5,7 @@ import com.myimooc.spring.simple.ioc.injection.dao.InjectionDao;
 /**
  * 服务接口实现
  *
- * @author zc 2017-01-18
+ * 视频：2-2 Spring注入方式
  */
 public class InjectionServiceImpl implements InjectionService {
 

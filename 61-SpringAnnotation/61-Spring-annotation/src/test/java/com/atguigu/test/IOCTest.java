@@ -41,7 +41,24 @@ public class IOCTest {
 		Object bean = applicationContext.getBean("person");
 		Object bean2 = applicationContext.getBean("person");
 		System.out.println(bean == bean2);
-	}
+
+		System.out.println(applicationContext.getBean("rainBow"));
+	} /* Output:
+		当前类的注解信息com.atguigu.config.MainConfig2
+		当前bean的名字：com.atguigu.bean.Red
+		解析的字符串：你好 Windows 10 我是 360
+		传入的ioc：org.springframework.context.annotation.AnnotationConfigApplicationContext@38cccef: startup date [Tue Oct 19 17:07:45 CST 2021]; root of context hierarchy
+		blue...constructor
+		当前类的注解信息com.atguigu.config.MainConfig2
+		当前bean的名字：com.atguigu.bean.Red
+		解析的字符串：你好 Windows 10 我是 360
+		传入的ioc：org.springframework.context.annotation.AnnotationConfigApplicationContext@39529185: startup date [Tue Oct 19 17:07:45 CST 2021]; root of context hierarchy
+		blue...constructor
+		ioc容器创建完成....
+		给容器中添加Person....
+		true
+		com.atguigu.bean.RainBow@50eac852        //MyImportBeanDefinitionRegistrar中注入的bean
+	*///~
 
 
 	// VM arguments: -Dos.name=linux  // 把系统变成linux
@@ -83,7 +100,7 @@ public class IOCTest {
 		System.out.println("bean的类型：" + bean2.getClass()); // bean的类型：class com.atguigu.bean.Color
 		System.out.println(bean2 == bean3); // false
 
-		// 加一个前缀"&"，根据id获取BeanFactory本身的实例
+		// 加一个前缀"&"，根据id获取BeanFactory本身的实例 《Spring源码深度解析 第一版》P85也有说到加“&”前缀
 		Object bean4 = applicationContext.getBean("&colorFactoryBean");
 		System.out.println(bean4.getClass()); // class com.atguigu.bean.ColorFactoryBean
 

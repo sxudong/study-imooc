@@ -4,10 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!--<bean id="injectionService" class="com.myimooc.spring.simple.ioc.injection.service.InjectionServiceImpl">-->
-    <!--<property name="injectionDao" ref="injectionDao"/>-->
-    <!--</bean>-->
+        <!-- 设置值注入 -->
+<!--    <bean id="injectionService" class="com.myimooc.spring.simple.ioc.injection.service.InjectionServiceImpl">-->
+<!--        <property name="injectionDao" ref="injectionDao"/>-->
+<!--    </bean>-->
 
+    <!-- 设置值注入 -->
     <bean id="injectionService" class="com.myimooc.spring.simple.ioc.injection.service.InjectionServiceImpl">
         <constructor-arg name="injectionDao" ref="injectionDao"/>
     </bean>

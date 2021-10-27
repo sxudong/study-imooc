@@ -4,16 +4,21 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!-- 前置通知 -->
     <bean id="mockBeforeAdvice" class="com.myimooc.spring.simple.aop.api.MockBeforeAdvice"/>
 
+    <!-- 返回后通知 -->
     <bean id="mockAfterReturningAdvice"
           class="com.myimooc.spring.simple.aop.api.MockAfterReturningAdvice"/>
 
+    <!-- 环绕通知 -->
     <bean id="mockMethodInterceptor"
           class="com.myimooc.spring.simple.aop.api.MockMethodInterceptor"/>
 
+    <!-- 抛异常后通知 -->
     <bean id="mockThrowsAdvice" class="com.myimooc.spring.simple.aop.api.MockThrowsAdvice"/>
 
+    <!-- 被通知对象 -->
     <bean id="bizLogicImplTarget" class="com.myimooc.spring.simple.aop.api.BizLogicImpl"/>
 
     <!--    <bean id="pointcutBean" class="org.springframework.aop.support.NameMatchMethodPointcut">-->
@@ -60,6 +65,7 @@
     <bean id="baseProxyBean" class="org.springframework.aop.framework.ProxyFactoryBean"
           lazy-init="true" abstract="true"/>
 
+    <!-- 给被代理对象指定父类 -->
     <bean id="bizLogicImpl" parent="baseProxyBean">
         <property name="target">
             <bean class="com.myimooc.spring.simple.aop.api.BizLogicImpl"/>
@@ -67,10 +73,10 @@
         <property name="proxyInterfaces" value="com.myimooc.spring.simple.aop.api.BizLogic"/>
         <property name="interceptorNames">
             <list>
-                <value>mockBeforeAdvice</value>
-                <value>mockAfterReturningAdvice</value>
-                <value>mockMethodInterceptor</value>
-                <value>mockThrowsAdvice</value>
+                <value>mockBeforeAdvice</value>           <!-- 前置通知 -->
+                <value>mockAfterReturningAdvice</value>   <!-- 返回后通知 -->
+                <value>mockMethodInterceptor</value>      <!-- 环绕通知 -->
+                <value>mockThrowsAdvice</value>           <!-- 抛异常后通知 -->
             </list>
         </property>
     </bean>

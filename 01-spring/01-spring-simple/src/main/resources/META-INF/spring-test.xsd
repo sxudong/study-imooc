@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.lexueba.com/schema/user"
+        xmlns:tns="http://www.lexueba.com/schema/user"
+        elementFormDefault="qualified">
+
+    <!--  XSD 文件中描述了一个新的 targetNamespace，并在这个空间中定义了一个 name 为
+    user 的 element， user 有 3 个属性 id、 userName 和 email，其中 email 的类型为 string。这 3 个类主
+    要用于验证 Spring 配置文件中自定义格式。 XSD 文件是 XML DTD 的替代者，使用 XML Schema语言进行编写 -->
+    <element name="user">
+        <complexType>
+            <attribute name="id" type="string"/>
+            <attribute name="userName" type="string"/>
+            <attribute name="email" type="string"/>
+        </complexType>
+    </element>
+</schema>

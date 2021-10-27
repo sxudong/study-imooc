@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.sue.sc.com/schema/mytag"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.sue.sc.com/schema/mytag"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xsd:element name="user">
+        <xsd:complexType>
+            <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
+            <xsd:attribute name="name" type="xsd:string"></xsd:attribute>
+            <xsd:attribute name="password" type="xsd:string"></xsd:attribute>
+            <xsd:attribute name="age" type="xsd:int"></xsd:attribute>
+            <xsd:attribute name="sex" type="xsd:byte"></xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

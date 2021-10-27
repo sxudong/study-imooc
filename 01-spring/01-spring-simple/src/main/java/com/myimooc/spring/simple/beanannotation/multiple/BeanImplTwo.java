@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 /**
  * 接口实现
  *
- * @author zc 2017-01-18
+ * 视频：4-3 Spring Bean装配之 Autowired 注解说明-2
+ * 单元测试类：TestInjection.java
  */
 @Order(1)
 @Component

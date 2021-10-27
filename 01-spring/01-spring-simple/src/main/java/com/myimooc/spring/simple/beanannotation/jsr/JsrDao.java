@@ -5,7 +5,8 @@ import org.springframework.stereotype.Repository;
 /**
  * 使用@Repository
  *
- * @author zc 2017-01-18
+ * 视频：4-9 Spring Bean装配之Spring对 JSR 支持的说明
+ * 单元测试类：JsrTest.java
  */
 @Repository
 public class JsrDao {
