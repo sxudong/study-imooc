@@ -13,7 +13,10 @@ import org.springframework.cglib.proxy.Enhancer;
  * https://blog.csdn.net/qq_18297675/article/details/87957540
  *
  * 在 bean 实例化前后做一些事情。注意，是先实例化才到初始化方法的！
- * InstantiationAwareBeanPostProcessor 的方法 postProcessBeforeInstantiation ，从名字就可以看出 在创建Bean 时候调用(而且是 创建之前)。
+ * InstantiationAwareBeanPostProcessor 的方法 postProcessBeforeInstantiation ，从名字就可以看出 在创建 Bean 时候调用(而且是 创建之前)。
+ * 打断点看源码，是在 AbstractAutowireCapableBeanFactory#createBean() 中执行了“实例化前解决”方法 resolveBeforeInstantiation(),该方法
+ * 中调用了 applyBeanPostProcessorsBeforeInstantiation()和 applyBeanPostProcessAfterInstantiation()，这里面调用了 BeanPostProcessor接口 方法。
+ * 是在 doCreateBean() 实例化之前执行的，返回了一个代理。
  */
 public class MyInstantiationAwareBeanPostProcessor implements InstantiationAwareBeanPostProcessor {
 

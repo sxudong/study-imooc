@@ -1,6 +1,6 @@
 package com.SpringSource;
 
-import com.SpringSource.ch06.test.Dog;
+import com.SpringSource.ch06.applicationContext.test.Dog;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,6 +74,11 @@ public class BeanPostProcessorTest {
 
     ========测试方法结束=======
      *///~
+
+    /**
+     * 使用自定义 BeanFactoryPostProcessor
+     * 《Spring源码深度解析》6.6.1 激活注册的BeanFactoryPostProcessor p148
+     */
     @Test
     public void test3(){
         ConfigurableListableBeanFactory bf = new XmlBeanFactory(new ClassPathResource("META-INF/BeanFactory.xml"));
@@ -82,6 +87,6 @@ public class BeanPostProcessorTest {
         System.out.println(bf.getBean("simpleBean"));
     }
     /* Output:
-    SimplePostProcessor{connectionString='*****', password='imaginecup', username='*****'}
+    SimplePostProcessor{connectionString='*****', username='*****', password='imaginecup'}
     *///~
 }

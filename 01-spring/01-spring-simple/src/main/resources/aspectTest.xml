@@ -12,7 +12,7 @@
 
     <aop:aspectj-autoproxy/>
 
-    <bean id="test" class="com.SpringSource.ch07.dynamicAOP.TestBean" />
-    <bean class="com.SpringSource.ch07.dynamicAOP.AspectJTest"/>
+    <bean id="test" class="com.SpringSource.ch07.aop.dynamicAOP.TestBean" />
+    <bean class="com.SpringSource.ch07.aop.dynamicAOP.AspectJTest"/>
 
 </beans>

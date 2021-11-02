@@ -5,7 +5,7 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd" profile="dev">
 
-	<bean id="dog" class="com.SpringSource.ch06.test.Dog">
+	<bean id="dog" class="com.SpringSource.ch06.applicationContext.test.Dog">
 		<!-- 指定构造器参数 index对应构造器中参数的位置 -->
 		<!-- 也可以通过指定参数类型，指定参数名称来注入属性-->
 		<constructor-arg index="0" value="小明"/>
@@ -18,8 +18,8 @@
 
 	<!-- =====beanFactoryPostProcessor配置 =====-->
 	<!--注册第一个后置工厂处理器-->
-	<bean id="myBeanFactoryPostProcessorOne" class="com.SpringSource.ch06.test.MyBeanFactoryPostProcessorOne"/>
+	<bean id="myBeanFactoryPostProcessorOne" class="com.SpringSource.ch06.applicationContext.test.MyBeanFactoryPostProcessorOne"/>
 	<!--注册第二个后置工厂处理器-->
-	<bean id="myBeanFactoryPostProcessorTwo" class="com.SpringSource.ch06.test.MyBeanFactoryPostProcessorTwo"/>
+	<bean id="myBeanFactoryPostProcessorTwo" class="com.SpringSource.ch06.applicationContext.test.MyBeanFactoryPostProcessorTwo"/>
 
 </beans>

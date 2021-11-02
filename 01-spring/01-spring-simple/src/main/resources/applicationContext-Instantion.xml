@@ -10,6 +10,6 @@
     <bean id="myInstantiationAwareBeanPostProcessor"
           class="com.myimooc.spring.simple.postprocessor.MyInstantiationAwareBeanPostProcessor"/>
 
-    <bean id="bean" class="com.myimooc.spring.simple.postprocessor.BeanTest" />
+    <bean id="beanTest" class="com.myimooc.spring.simple.postprocessor.BeanTest" />
 
 </beans>

@@ -6,9 +6,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class TestInstantiationAwareBeanPostProcessor {
     public static void main(String[] args) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-Instantion.xml");
-        BeanTest bean = ctx.getBean("bean", BeanTest.class) ;
+        BeanTest beanTest = ctx.getBean("beanTest", BeanTest.class) ;
         //bean.setName("原始值");
-        String name = bean.getName(); //getName()方法会进入到方法拦截里面去
+        String name = beanTest.getName(); //getName()方法会进入到方法拦截里面去
         System.out.println(name);
     }
 }
