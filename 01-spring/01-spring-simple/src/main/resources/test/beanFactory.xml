@@ -4,6 +4,6 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="myTestBean" class="com.SpringSource.ch02.basic.MyTestBean"/>
+	<bean id="myTestBean" class="com.SpringSourceAnalysis.ch02.basic.MyTestBean"/>
 
 </beans>

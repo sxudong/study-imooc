@@ -28,13 +28,13 @@
 <!--		<property name="password" value="${jdbc.password}" />-->
 <!--	</bean>-->
 
-	<bean id="message" class="com.SpringSource.ch06.applicationContext.distConfig.HelloMessage">
+	<bean id="message" class="com.SpringSourceAnalysis.ch06.applicationContext.distConfig.HelloMessage">
 		<property name="mes">
 			<value>${bean.message}</value>
 		</property>
 	</bean>
 
-	<bean id="bfpp" class="com.SpringSource.ch06.applicationContext.ObscenityRemovingBeanFactoryPostProcessor">
+	<bean id="bfpp" class="com.SpringSourceAnalysis.ch06.applicationContext.ObscenityRemovingBeanFactoryPostProcessor">
 		<property name="obscenties">
 			<set>
 				<value>bollocks</value>
@@ -45,7 +45,7 @@
 		</property>
 	</bean>
 
-	<bean id="simpleBean" class="com.SpringSource.ch06.applicationContext.SimplePostProcessor">
+	<bean id="simpleBean" class="com.SpringSourceAnalysis.ch06.applicationContext.SimplePostProcessor">
 		<property name="connectionString" value="bollocks"/>
 		<property name="password" value="imaginecup"/>
 		<property name="username" value="Microsoft"/>

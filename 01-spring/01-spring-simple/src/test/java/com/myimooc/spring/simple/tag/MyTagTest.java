@@ -1,6 +1,6 @@
 package com.myimooc.spring.simple.tag;
 
-import com.SpringSource.ch04.customtag.test.User;
+import com.SpringSourceAnalysis.ch04.customtag.test.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;

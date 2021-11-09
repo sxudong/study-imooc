@@ -4,10 +4,10 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="testChangeMethod" class="com.myimooc.spring.simple.replacemethod.TestChangeMethod">
+	<bean id="testChangeMethod" class="com.SpringSourceAnalysis.ch03.replacemethod.TestChangeMethod">
 		<replaced-method name="changeMe" replacer="replacer"/>
 	</bean>
 
-	<bean id="replacer" class="com.myimooc.spring.simple.replacemethod.TestMethodReplacer"/>
+	<bean id="replacer" class="com.SpringSourceAnalysis.ch03.replacemethod.TestMethodReplacer"/>
 
 </beans>

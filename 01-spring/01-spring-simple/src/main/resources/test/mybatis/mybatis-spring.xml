@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- spring整合mybatis -->
+<configuration>
+  <typeAliases>
+	<typeAlias alias="User" type="com.SpringSourceAnalysis.ch09.mybatis.User" />
+  </typeAliases>
+  <!-- 映射器 -->
+  <mappers>
+  <!-- 注册映射文件 -->
+    <mapper resource="test/mybatis/mapper/UserMapper.xml"/>
+  </mappers>
+</configuration>

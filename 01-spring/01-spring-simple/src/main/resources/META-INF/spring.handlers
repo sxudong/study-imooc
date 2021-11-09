@@ -1,2 +1,2 @@
-http\://www.lexueba.com/schema/user=com.SpringSource.ch04.customtag.MyNamespaceHandler
-http\://www.sue.sc.com/schema/mytag=com.SpringSource.ch04.customtag.test.MyTagHandler
+http\://www.lexueba.com/schema/user=com.SpringSourceAnalysis.ch04.customtag.MyNamespaceHandler
+http\://www.sue.sc.com/schema/mytag=com.SpringSourceAnalysis.ch04.customtag.test.MyTagHandler

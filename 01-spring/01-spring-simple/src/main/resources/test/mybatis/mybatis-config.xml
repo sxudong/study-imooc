@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- 单独使用mybatis -->
+<configuration>
+  <!-- 注册属性文件 -->
+  <properties resource="test/mybatis/jdbc.properties" />
+  <settings>
+  	<!--缓存配置的全局开关：如果这里设置成false，那么即便在映射器中配置开启也无济于事 -->
+	<setting name="cacheEnabled" value="false" />
+	<!-- 允许JDBC自动生成主键，需要驱动兼容。如果设置为true，则这个设置强制使用自动生成主键，尽管一些驱动不能兼容但仍能正常工作 -->
+	<setting name="useGeneratedKeys" value="true" />
+	<!-- 配置默认的执行器：SIMPLE是普通的执行器；REUSE会重用预处理语句；BATCH会重用语句并执行批量更新 -->
+	<setting name="defaultExecutorType" value="REUSE" />
+  </settings>
+  <typeAliases>
+	<typeAlias alias="User" type="com.SpringSourceAnalysis.ch09.mybatis.User" />
+  </typeAliases>
+  <!-- 配置mybatis运行环境 -->
+  <environments default="development">
+  <!-- 配置开发环境 -->
+    <environment id="development">
+      <!-- jdbc事务管理器 -->
+      <transactionManager type="JDBC"/>
+      <!-- 数据源
+       UNPOOLED 不适用连接池 即 每次请求都会为其创建一个DB连接，适用完毕后，会马上将连接关闭
+       POOLED 数据库连接池来维护连接
+       JNDI 数据源可以定义到应用的外部，通过JDNI容器来获取数据库连接
+       -->
+      <dataSource type="POOLED">
+        <property name="driver" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+      </dataSource>
+    </environment>
+    <!-- 可以多个环境切换。配置上线环境 -->
+    <environment id="online">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+      </dataSource>
+    </environment>
+
+  </environments>
+  <!-- 映射器 -->
+  <mappers>
+  <!-- 注册映射文件 -->
+    <mapper resource="test/mybatis/mapper/UserMapper.xml"/>
+  </mappers>
+</configuration>

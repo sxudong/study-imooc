@@ -21,14 +21,14 @@ public class Client {
     }
 }
 /* Output:
-beans = {accountService=com.myimooc.spring.simple.aop.example.general.services.AccountServiceImpl@448139f0, accountDao=com.myimooc.spring.simple.aop.example.general.dao.AccountDaoImpl@7cca494b}
-com.myimooc.spring.simple.aop.example.general.services.AccountServiceImpl@448139f0
+beans = {accountService=com.myimooc.spring.simple.ioc.example.services.AccountServiceImpl@b4c966a, accountDao=com.myimooc.spring.simple.ioc.example.dao.AccountDaoImpl@2f4d3709}
+com.myimooc.spring.simple.ioc.example.services.AccountServiceImpl@b4c966a
 保存了账户
 1
-com.myimooc.spring.simple.aop.example.general.services.AccountServiceImpl@448139f0
+com.myimooc.spring.simple.ioc.example.services.AccountServiceImpl@b4c966a
 保存了账户
 1
-com.myimooc.spring.simple.aop.example.general.services.AccountServiceImpl@448139f0
+com.myimooc.spring.simple.ioc.example.services.AccountServiceImpl@b4c966a
 保存了账户
 1
 *///~
