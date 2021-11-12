@@ -39,7 +39,7 @@
     </bean>
 
     <!-- 配置业务层类 -->
-    <bean id="userService" class="com.SpringSourceAnalysis.ch10.transactional.UserServiceImpl">
+    <bean id="userService" class="com.SpringSourceAnalysis.ch10.transactional.xml.UserServiceImpl">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 

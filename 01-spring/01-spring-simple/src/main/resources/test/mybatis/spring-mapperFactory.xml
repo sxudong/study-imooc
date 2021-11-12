@@ -34,7 +34,7 @@
 	
 	<!-- MapperFactoryBean：根据 mapper 接口生成的代理对象 -->
 	<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-	    <property name="mapperInterface" value="com.SpringSourceAnalysis.ch09.mybatis.UserMapper"/>
+	    <property name="mapperInterface" value="com.SpringSourceAnalysis.ch09.mybatis.mapper.UserMapper"/>
 	    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 

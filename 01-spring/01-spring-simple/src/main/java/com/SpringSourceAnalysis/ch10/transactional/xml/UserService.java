@@ -1,4 +1,4 @@
-package com.SpringSourceAnalysis.ch10.transactional;
+package com.SpringSourceAnalysis.ch10.transactional.xml;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

@@ -15,7 +15,7 @@
 	<setting name="defaultExecutorType" value="REUSE" />
   </settings>
   <typeAliases>
-	<typeAlias alias="User" type="com.SpringSourceAnalysis.ch09.mybatis.User" />
+	<typeAlias alias="User" type="com.SpringSourceAnalysis.ch09.mybatis.pojo.User" />
   </typeAliases>
   <!-- 配置mybatis运行环境 -->
   <environments default="development">

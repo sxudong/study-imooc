@@ -1,8 +1,8 @@
 package com.SpringSourceAnalysis.mybatis;
 
 import com.SpringSourceAnalysis.ch09.mybatis.MyBatisUtil;
-import com.SpringSourceAnalysis.ch09.mybatis.UserMapper;
-import com.SpringSourceAnalysis.ch09.mybatis.User;
+import com.SpringSourceAnalysis.ch09.mybatis.mapper.UserMapper;
+import com.SpringSourceAnalysis.ch09.mybatis.pojo.User;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;

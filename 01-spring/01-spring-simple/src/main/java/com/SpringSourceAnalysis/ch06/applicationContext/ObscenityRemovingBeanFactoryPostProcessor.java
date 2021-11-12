@@ -13,6 +13,9 @@ import java.util.Set;
 /**
  * 使用自定义 BeanFactoryPostProcessor
  * 《Spring源码深度解析》6.6.1 激活注册的 BeanFactoryPostProcessor p148
+ *
+ * 正是通过实现 BeanFactoryPostProcessor 接口，BeanFactory 会在实例化
+ * 任何 bean 之前获得配置信息，从而能够正确解析 bean 描述文件中的变量引用。
  */
 public class ObscenityRemovingBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
     private Set<String> obscenties;

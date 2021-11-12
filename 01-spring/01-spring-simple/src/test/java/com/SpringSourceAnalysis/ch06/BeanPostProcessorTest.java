@@ -72,7 +72,7 @@ public class BeanPostProcessorTest {
      * 《Spring源码深度解析》6.6.1 激活注册的BeanFactoryPostProcessor p148
      */
     @Test
-    public void testPropertyConfigurer(){
+    public void testPropertyConfigurer1(){
         ConfigurableListableBeanFactory bf = new XmlBeanFactory(new ClassPathResource("META-INF/BeanFactory.xml"));
         BeanFactoryPostProcessor bfpp = (BeanFactoryPostProcessor) bf.getBean("bfpp");
         bfpp.postProcessBeanFactory(bf);
@@ -81,4 +81,10 @@ public class BeanPostProcessorTest {
     /* Output:
     SimplePostProcessor{connectionString='*****', username='*****', password='imaginecup'}
     *///~
+
+    @Test
+    public void testPropertyConfigurer2(){
+        ApplicationContext context = new ClassPathXmlApplicationContext("META-INF/BeanFactory.xml");
+        System.out.println(context.getBean("simpleBean"));
+    }
 }

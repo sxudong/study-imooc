@@ -1,4 +1,4 @@
-package com.SpringSourceAnalysis.ch09.mybatis;
+package com.SpringSourceAnalysis.ch10.transactional.xml;
 
 /**
  * 《Spring源码深度解析》第9章 整合Mybatis
@@ -8,13 +8,14 @@ public class User {
 	private String name;
 	private Integer age;
 	private String sex;
-	
-	public User(String name, Integer age) {
-		super();
+
+	public User(Integer id, String name, Integer age, String sex) {
+		this.id = id;
 		this.name = name;
 		this.age = age;
+		this.sex = sex;
 	}
-	
+
 	public User() {
 		super();
 	}

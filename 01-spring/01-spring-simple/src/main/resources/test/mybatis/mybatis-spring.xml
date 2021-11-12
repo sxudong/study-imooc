@@ -5,7 +5,7 @@
 <!-- spring整合mybatis -->
 <configuration>
   <typeAliases>
-	<typeAlias alias="User" type="com.SpringSourceAnalysis.ch09.mybatis.User" />
+	<typeAlias alias="User" type="com.SpringSourceAnalysis.ch09.mybatis.pojo.User" />
   </typeAliases>
   <!-- 映射器 -->
   <mappers>

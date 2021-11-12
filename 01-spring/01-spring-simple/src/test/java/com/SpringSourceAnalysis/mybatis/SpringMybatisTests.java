@@ -1,7 +1,7 @@
 package com.SpringSourceAnalysis.mybatis;
 
-import com.SpringSourceAnalysis.ch09.mybatis.User;
-import com.SpringSourceAnalysis.ch09.mybatis.UserMapper;
+import com.SpringSourceAnalysis.ch09.mybatis.pojo.User;
+import com.SpringSourceAnalysis.ch09.mybatis.mapper.UserMapper;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
