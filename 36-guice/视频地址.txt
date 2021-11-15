@@ -1,0 +1,8 @@
+《使用Google Guice实现依赖注入》
+https://www.imooc.com/learn/901
+
+简介：本课程将带领大家通过Google Guice来系统的学习DI思想中的绑定，
+注入，生命周期，aop等方面的技巧。并示范Guice和Spring Boot如何协作。
+对于熟悉Spring的同学，学完本课后可以了解两者异同，加深对DI和Spring
+的理解。不只是为了单纯教授Gucie的用法，而是以Guice为媒介，希望使同
+学们在编程能力上能有所提高。

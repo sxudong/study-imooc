@@ -1,0 +1,9 @@
+《HBase 存储原理剖析》
+https://www.imooc.com/learn/996
+
+简介：
+本课程由浅到深的对 HBase 的存取数据原理进行分析介绍，从基础存储数据到元数据，
+再到数据在系统中的组织形式依次进行详细的分析，理清整个 HBase 系统的运行原理，
+老师的新实战课《基于 SpringCloud 微服务架构下的广告系统设计与实现》也已经
+火热上线啦，有兴趣的小伙伴千万不要错过：
+https://coding.imooc.com/class/310.html

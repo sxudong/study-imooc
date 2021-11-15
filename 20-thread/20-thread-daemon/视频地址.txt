@@ -1,0 +1,7 @@
+《细说多线程之Thread VS Runnable》
+https://www.imooc.com/learn/312
+
+简介：
+本课程将带领大家更加深入地学习Java多线程的机制，深入理解创建线程的两种
+方式 Thread 和 Runnable 之间的差异，掌握线程的生命周期和守护线程的
+概念，以及如何使用 jstack 生成线程快照。

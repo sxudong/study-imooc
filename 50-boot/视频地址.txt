@@ -1,0 +1,11 @@
+《Spring Boot 2.0深度实践之系列总览》
+https://www.imooc.com/learn/1058
+
+简介：
+本课程是 Spring Boot2.0 深度实践系列课程的总览部分，会向大家揭示如何深度学习
+Spring Boot2.0，以及介绍 Spring Boot2.0 深度实践系列课程中的各类议题。
+
+Spring Boot2.0 深度实践系列课程分上下两篇，上篇核心技术篇已经上线：
+https://coding.imooc.com/class/252.html
+
+下篇生态整合篇敬请期待。

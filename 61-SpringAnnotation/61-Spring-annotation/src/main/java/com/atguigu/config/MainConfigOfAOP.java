@@ -151,8 +151,8 @@ bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
  * 			1）、获取所有增强器（通知方法）
  * 			2）、保存到proxyFactory
  * 			3）、创建代理对象：Spring自动决定
- * 				JdkDynamicAopProxy(config);jdk动态代理；
- * 				ObjenesisCglibAopProxy(config);cglib的动态代理；
+ * 				JdkDynamicAopProxy(config); jdk动态代理；
+ * 				ObjenesisCglibAopProxy(config); cglib的动态代理；
  * 		4）、给容器中返回当前组件使用cglib增强了的代理对象；
  * 		5）、以后容器中获取到的就是这个组件的代理对象，执行目标方法的时候，代理对象就会执行通知方法的流程；
  *
@@ -200,9 +200,6 @@ bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
  * 				3）、效果：
  * 					正常执行：前置通知-》目标方法-》后置通知-》返回通知
  * 					出现异常：前置通知-》目标方法-》后置通知-》异常通知
- *
- *
- *
  */
 @EnableAspectJAutoProxy
 @Configuration

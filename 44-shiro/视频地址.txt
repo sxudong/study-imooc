@@ -1,0 +1,8 @@
+《Shiro安全框架入门》
+https://www.imooc.com/learn/977
+
+简介：
+本课程通过从shiro和spring Security对比入手，进而讲解Shiro整体架构以及认证，
+授权的过程，通过结合代码带同学更深刻的认识Shiro。同时课程会讲解Shiro其他特性，
+比如：Session管理，缓存管理等，以及集成Spring在实际项目中应用Shiro，使同学
+能在未来自己做的项目中更加熟练的使用Shiro。

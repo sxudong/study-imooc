@@ -1,0 +1,7 @@
+《Spring Boot 发送邮件》
+https://www.imooc.com/learn/1036
+
+简介：
+本课程为大家详细介绍了发送邮件的相关知识和原理，介绍了 Spring Boot 的基础使用，
+最后为大家演示了如何通过 Spring Boot 发送各种类型的邮件，掌握如何去设计一个邮
+件系统。

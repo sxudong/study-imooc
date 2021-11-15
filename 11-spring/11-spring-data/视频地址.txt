@@ -1,0 +1,8 @@
+《轻松愉快之玩转SpringData》
+https://www.imooc.com/learn/821
+
+简介：在企业级 JavaEE 应用开发中，对数据库的访问和操作是必须的。Spring Data 作为 SpringSource
+的其中一个子项目，旨在统一和简化对各类型持久化存储和访问，而不拘泥于是关系型数据库还是 NoSQL 数据存储，
+使得对数据库的访问变得方便快捷，并支持 MapReduce 框架及云计算服务；对于拥有海量数据的项目，可以用
+Spring Data 来简化项目的开发，就如 Spring Framework 对 JDBC、ORM 的支持一样，Spring Data 会让
+数据的访问变得更加方便，极大提高开发效率、提升程序员的幸福指数！

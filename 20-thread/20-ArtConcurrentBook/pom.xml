@@ -11,7 +11,7 @@
 
     <artifactId>20-ArtConcurrentBook</artifactId>
     <packaging>jar</packaging>
-	<description>Java并发编程的艺术</description>
+	<description>《Java并发编程的艺术》书</description>
 
 	<properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

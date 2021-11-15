@@ -13,10 +13,9 @@ import com.atguigu.bean.RainBow;
 public class MyImportBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
 	/**
-	 * AnnotationMetadata：当前类的注解信息
-	 * BeanDefinitionRegistry:BeanDefinition注册类；
-	 * 		把所有需要添加到容器中的bean；调用
-	 * 		BeanDefinitionRegistry.registerBeanDefinition手工注册进来
+	 * 把所有需要添加到容器中的bean；调用 BeanDefinitionRegistry.registerBeanDefinition手 工注册进来
+	 * @param importingClassMetadata 当前类的注解信息
+	 * @param registry BeanDefinition注册类
 	 */
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {

@@ -1,0 +1,7 @@
+《Java模板引擎之Freemarker》
+https://www.imooc.com/learn/801
+
+简介：
+在web开发框架中，MVC模式是最常用的设计模式。企业web应用基本都会用到。Freemarker的
+设计可以用来生成HTML。它语法简单、功能强大、灵活，宏模板可复用，是互联网前端很常用的
+技术。而且Spring对Freemarker的整合也很nice。所以是web开发人员必要掌握的技术之一。

@@ -1,0 +1,10 @@
+《ElasticSearch入门》
+https://www.imooc.com/learn/889
+
+简介：ElasticSearch是一个分布式、可扩展、实时的搜索与数据分析引擎，
+它能从项目一开始就赋予你的数据以搜索、分析和探索的能力。通过本课程的
+学习，你可以了解到，ElasticSearch在互联网行业里的火热程度，也可以
+了解到它的实际应用场景。本课程会通过理论与实践相结合的方式，带领你一
+步一步走进ElasticSearch的世界，使你轻松掌握ElasticSearch的基本
+概念，学习ElasticSearch的服务搭建，了解ElasticSearch的常用技巧，
+并通过案例项目让你拥有实际的应用能力。

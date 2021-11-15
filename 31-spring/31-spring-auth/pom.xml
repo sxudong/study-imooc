@@ -10,6 +10,7 @@
 
     <artifactId>31-spring-auth</artifactId>
     <packaging>war</packaging>
+    <description>慕课网《Java实现权限管理》</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

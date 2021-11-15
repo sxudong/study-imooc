@@ -1,0 +1,8 @@
+《SpringMVC数据绑定入门》
+https://www.imooc.com/learn/558
+
+简介：
+数据绑定是将用户输入绑定到领域模型的一种特性。在本次课程中，将重点介绍 SpringMVC 中
+Controller 控制层对数据绑定入门的相关知识。@Geely_Wu 将带你深入剖析 SpringMVC
+数据绑定在实际工作中容易踩到的各种坑，学习相关注解的使用，认识格式化工具和类型转换器
+以及 RESTful 扩展。

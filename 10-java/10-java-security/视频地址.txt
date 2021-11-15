@@ -1,0 +1,7 @@
+《Java实现Base64加密》：<https://www.imooc.com/learn/285>
+
+《Java实现消息摘要算法加密》：https://www.imooc.com/learn/286
+
+《JAVA实现对称加密》：https://www.imooc.com/learn/287
+
+《JAVA实现非对称加密》：https://www.imooc.com/learn/288

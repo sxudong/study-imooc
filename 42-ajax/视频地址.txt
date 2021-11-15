@@ -1,0 +1,11 @@
+《Ajax跨域完全讲解》
+https://www.imooc.com/learn/947
+
+简介：通过讲解什么是跨域问题，从系统最常见的部署结构上分析跨域解决的思路，
+详细讲解jsonp的工作机制，http协议如何支持跨域，以及http服务器nginx和
+apache的2种不同解决思路，让大家知其然并知其所以然，快速掌握问题本质和分
+析问题的方法。
+
+老师的实战课《SpringBoot2.0不容错过的新特性 WebFlux响应式编程》已上线，
+喜欢老师的小伙伴可以来支持下~
+地址：https://coding.imooc.com/class/209.html
