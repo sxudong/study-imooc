@@ -6,11 +6,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Insert title here</title>
 </head>
-<h2>This is SpringMVC demo page</h2>
-<body>
-<c:forEach items="${users}" var="user" >
-    <c:out value="${user.username}"/><br/>
-    <c:out value="${user.age}"/><br/>
-</c:forEach>
-</body>
+    <h2>This is SpringMVC demo page</h2>
+    <body>
+        <c:forEach items="${users}" var="user" >
+            <c:out value="${user.username}"/><br/>
+            <c:out value="${user.age}"/><br/>
+        </c:forEach>
+    </body>
 </html>

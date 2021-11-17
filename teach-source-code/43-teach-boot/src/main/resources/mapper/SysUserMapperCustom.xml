@@ -3,7 +3,7 @@
 <mapper namespace="com.imooc.mapper.SysUserMapperCustom" >
   
   <!-- 查询简单的用户信息 -->
-	<select id="queryUserSimplyInfoById" resultType="com.imooc.pojo.SysUser" 
+	<select id="queryUserSimplyInfoById" resultType="com.imooc.com.learn.pojo.SysUser"
 										 parameterType="java.lang.String" >
 	    select 
 	    	*

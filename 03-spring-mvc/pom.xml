@@ -16,8 +16,8 @@
 
     <modules>
         <module>03-spring-mvc-simple</module>
-        <module>03-HandWrittenSpringMVC</module>
-        <module>03-first-springmvc</module>
+<!--        <module>03-handwritten-springmvc</module>-->
+<!--        <module>03-first-springmvc</module>-->
     </modules>
 
     <dependencyManagement>
