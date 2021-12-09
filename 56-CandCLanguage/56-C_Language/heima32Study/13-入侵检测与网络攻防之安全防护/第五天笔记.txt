@@ -1,0 +1,85 @@
+1 关注两个文件:/etc/profile .bashrc
+  这两个文件在开机后也会执行脚本文件中的shell命令或者脚本
+  profi1e是系统的配置文件,.bashrc是用户的配置文件
+  .bashrc会在当前用户登录的时候执行．
+  profile会在被所有用户登录解析执行．
+  所以:普通用户登录的时候会读取系统的配置文件和用户的配置文件.
+
+历史命令:
+  history:
+  说明:若发现有一些异常的命令，或者频繁操作的命令，就需要关注一些。
+  将export HISTTIMEFORMAT="%F %T"
+  可以在配置文件 .bashrc 文件中添加如下环境变量:
+    export HISTSIZE=1000          #执行history命令显示的命令数
+    export HISTFILESIZE=2000      #.bash_history文件中记录执行过的命令行数
+	export HISTTIMEFORMAT="%F %T" #history命令可以显示日期和时间
+
+系统日志:
+  查看系统是否有非法接入或者非法外联，如非法接入u盘，或者非法插入网线。
+  系统是不允许随便断网或者插入U盘到服务器上的.
+  例如:当在虚拟机上插入u盘后，会在/var/log/kern.log文件中有日志产生。
+  测试过程:先tail -f /var/log/kern.log，然后插入u盘，则有日志产生。
+
+可疑进程:
+  1 使用 ps命令 和 top命令 查看是否有非法进程在系统中运行。
+    如果发现某个进程占用较多的系统资源，需要格外注意。
+  2 还可以使用 netstat -anp 查看是否有非法的网络服务(对外提供服务)。
+    关注某个端口,看这个端口是不是可疑,需要重点关注。
+  
+  
+shel1的初始化:
+用户在登录系统的时候，对于普通用户来说，会读取系统的配置文件和用户的配置文件;
+	/etc/profile $HOME /.bashrc $HOME/.bash_profile $HOME/.profile
+对于root用户来说，会读取系统的配置文件:/etc/profile
+
+需要注意的是：如果在系统级别的配置文件或者是用户级别的配置文件中出现了未曾自己配置过的
+一些命令就需要格外关注。
+
+历史命令:历史命令记录了曾经执行过的操作，如果发现历史命令当中多了一些自己没有执行过的命令记录;
+或者是自己执行过的命令历史记录不存在了，则要引起注意．
+
+和history命令相关有几个环境变量，需要我们特别关注，详情可通过man bash 查看
+HISTFILE: 保存历史命令的文件， 默认是 ~/.bash_history
+HISTFILESIZE: 历史文件中包含的最大行数。
+HISTSIZE: 命令历史中保存的命令数量行数。
+HISTTIMEFORMAT: 保存历史命令的时间格式。
+
+系统日志：
+登录相关信息
+  查看每个用户最近的登录时间和ip: lastlog
+  查看每个用户的登录记录: last
+  查看每个用户的登录尝试(包括失败的)记录: lastb
+  查看当前登录的用户,ip以及正在执行的命令: w
+
+一些常见的系统日志介绍如下：
+  /var/log/messages: 一般的系统日志
+  /var/log/kern.log: 系统内核日志
+      例如:插入U盘,在kern.log文件中会留下记录.
+  /var/log/boot.log: 系统启动日志
+  /var/log/auth.log: 登录相关的日志, 比如ssh/sudo成功失败的日志都在这里
+      例如:使用sudo su ssh都有输入用户名和密码的操作，会用到pam_unix的鉴权模块
+  /var/log/cron.d: cron计划任务的执行日志
+  
+审计， 审计日志由auditd产生，/etc/audit/auditd.conf为审计配置文件，/etc/audit/audit.rules 为审计规则文件。
+  /var/log/audit/* ： 为审计记录，可以进一步分析，也许可以发现一些意想不到的痕迹(如果有的话)。
+
+进程:
+1 ps命令
+2 top命令:使用top命令重点关注哪些进程占用的系统资源较多，需要重点关注。
+3 netstat命令查看哪些端口是非法占用的，占用端口的进程都是网络服务进程。
+	
+在kaili-linux上设置某个服务自动启动:
+
+  查看开机的时候都会启动哪些服务:
+    sudo systemctl list-unit-files
+	sudo systemctl list-unit-files | grep enabled
+
+  启动-停止-查看状态--开启自启动--关闭自启动
+    sudo systemctl start sshd. service
+    sudo systemctl stop sshd.service
+    sudo systemctl status sshd. service
+    sudo systemctl enable ssh.service  //自动启动
+    sudo systemct1 disable ssh.service
+  
+    sudo /etc/init.d/vsftpd start stop restart
+  

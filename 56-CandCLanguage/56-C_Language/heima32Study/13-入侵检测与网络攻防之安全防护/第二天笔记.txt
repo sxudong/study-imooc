@@ -1,0 +1,121 @@
+ssh服务登录系统:
+远程登录:
+	客户端工具   用户名+密码    由系统进行用户名和密码的校验工作    登录到字符界面
+								校验方式: 密码校验  指纹   刷脸
+
+	图形解码登录  用户名+密码   由系统进行用户名和密码的校验工作    登录到图形界面的系统
+								校验方式: 密码校验  指纹   刷脸
+
+PAM实验:
+实验-:
+1 su切换的时候输入密码错误几次就锁定账户一定的时间
+方法: 在/etc/pam.d/su 文件的最前面添加:
+       auth required pam_tally.so unlock_time=20 deny=3
+     或者:
+       auth required pam_tally2.so unlock_time=20 deny=3
+
+   参数说明:
+	deny----设置普通用户和root用户连续错误登录的最大次数，超过最大次数，则锁定该用户
+	unlock_time------设定普通用户锁定后，多少时间后解锁，单位是秒；
+
+测试: 在itcast用户下, su切换的时候输入密码的时候输错, 连续3次就会被锁定
+
+实验二:
+	验证修改用户密码实验:
+	在/etc/pam.d/passwd文件中添加:
+	password    required    pam_cracklib.so     minlen=8 retry=3
+
+	正常情况下, root用户不受这个配置的限制, 如果想让root也受这个配置限制, 可以
+	使用enforce_for_root选项.
+
+	查看帮助手册: man pam_cracklib
+
+
+实验三:
+	限制只允许xiaohong用户通过ssh服务远程登录服务器:
+	第一步: 在/etc/pam.d/sshd文件的最前面添加:
+		auth       required     pam_listfile.so item=user sense=allow file=/etc/sshdusers onerr=succeed
+    第二步: 在/etc/sshdusers文件中添加xiaohong用户:
+        echo "xiaohong" >/etc/sshdusers
+
+    测试过程:
+    	先使用小红用户远程登录:
+    		ssh xiaohong@localhost ----->可以正常登录
+        再用mytest用户登录:
+    		ssh mytest@localhost  ------>登录不上
+
+关于PAM相关的参考网站:
+	https://www.cnblogs.com/ilinuxer/p/5087447.html
+	http://www.cnblogs.com/kevingrace/p/8671964.html
+
+总结: pam模块和服务模块是分开的, 其中pam模块本质上就是一堆动态库API, 用户使用的时候
+只需修改相关的配置文件就可以使用, 无需重启服务, 无需修改源代码.
+
+实验一: 授权普通用户可以用/bin/chown程序更改任意文件的owner,如下:
+使用能力---->CAP_CHOWN(允许改变文件的所有权)
+1 sudo setcap cap_chown=eip /bin/chown
+2 查看/bin/chown程序的能力值,如下:
+  执行命令: getcap /bin/chown
+  结果显示: /bin/chown = cap_chown+eip
+切换到test用户,将/bin/ls程序的owner改为test,如下:
+su - mytest
+chown mytest.mytest /bin/ls
+ls -l /bin/ls
+-rwxr-xr-x. 1 mytest mytest 118736 Jun 14  2010 /bin/ls
+注:
+1)cap_chown=eip是将chown的能力以cap_effective(e),cap_inheritable(i),cap_permitted(p)三种位图的方式授权给相关的程序文件.
+2)如果改变文件名,则能力保留到新文件.
+3)用setcap -r /bin/chown可以删除掉文件的能力.
+4)重新用setcap授权将覆盖之前的能力.
+给当前用户添加操作/home/mytest/my.log的所有权限
+sudo setcap "all+ep" /home/mytest/my.log
+
+实验二:
+让用户编写的网络服务可以使用1024以下的端口:
+端口有没有占用，vi /etc/services 查看
+步骤:
+1 sudo setcap 'cap_net_bind_service=+ep'  ./select
+
+2 查询: getcap ./select
+  结果显示: ./select = cap_net_bind_service+ep
+
+3 执行./select程序, 可以看到select已经在88端口上监听了.
+
+实验三:
+让cat查看文件跳过文件权限检查:
+sudo setcap cap_dac_override=eip /bin/cat
+测试:
+	给cat命令设置权限之前, cat /etc/shadow 是没有权限查看的
+	给cat命令设置了cap_dac_override权限之后, cat /etc/shadow就可以了
+
+总结:
+	关于权限的理解: 由于root用户的权限太大, 若是root用户的权限赋给了普通用户会
+	导致普通用户的权限过大, 比如sudo, 为了避免让普通用户不再拥有过大的权限, 将root用户
+	的大权限进行细分, 这样就将root用户的大权限细分成了很多小的权限, 这样可以使系统的安全
+	得到一定程度的保证.
+
+关于能力相关的网站学习资料:
+	https://blog.csdn.net/substitute_coder/article/details/54692354
+
+sudo auditctl -1: 列出配置的审计规则
+sudo auditctl -W /home/itcast/0909/ls.txt -p rwa -k key_ls.txt :临时设置审计规则
+多用于测试，确认无误后，再添加到audit. rules文件中;
+由于是临时设置，所以若审计服务重启后就会消失.
+
+
+审计日志查找:
+	审计日志关心的是:谁在什么时间做了什么事情
+	sudo ausearch -f aa.log: 查找和文件名相关的审计日志
+	sudo ausearch -k key_ aaa:根据关键字查找审计日志.
+	date-d“@时间字符串”
+
+审计报告:
+	sudo aureport -au : 关于鉴权(鉴别)，相关的记录
+		通过使用该命令，可以查看sshd登录服务的情况，如暴力破解
+	sudo aureport -m : 关注和用户修改相关的记录
+		如:使用passwd命令修改用户密码，就可以留下审计日志，可以通过这个命令查看。
+
+通过manauditd查看有关帮助手册
+
+关于审计网站学习资料:
+linux审计功能auditd https://blog.csdn.net/yongyong169/article/details/79035680

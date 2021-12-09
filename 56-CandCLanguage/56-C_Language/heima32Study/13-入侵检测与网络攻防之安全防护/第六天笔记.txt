@@ -1,0 +1,88 @@
+
+查看系统版本:
+lsb_release -a
+uname -v
+
+traceroute：跟踪包经过的节点的IP
+原理: traceroute发送探测包，先将TTL设置为1，当TTL减小到0的时候，包会被某个路由器丢弃，同时这个路由器
+会应答一个数据包「ICMP time exceeded」 ,这个包中包含了该路由器的IP...
+    然后将TTL设置为n,如此反复上述操作，会获得所有节点上的IP地址。
+    若最后获得「ICMP port unreachable]这个包，则认为到达目标主机了。
+
+nslookup itcast.cn：查看工P地址
+
+nslookup命令用于查询DNS的记录，查看域名解析是否正常，在网络故障的时候用来诊断网络问题。
+
+
+dnsnum：搜集网站的IP地址信息.
+dnsenum --enum itcast.cn ---->查看主机和域名服务器的IP地址信息,右键服务器地址
+
+
+whois itcast.cn ：查看域名相关信息
+
+ping命令：探测某个主机是否在线
+参数:
+    -c：指定发包的个数
+    -s：指定发包的大小
+    -I interface：指定发包的时候使用的网卡
+注意:通过ping命令探测主机的时候若没有ping通，不能认为没有在线存活;
+     若是ping通了,则一定是在线存活。
+
+nmap -sP 192.168.0.0/24：使用ping的方式探测某个主机是否在线存活，一般用于局域网
+nmap -o 192.168.8.13 ：通过指纹信息获取系统的版本信息。
+                                     然后再跟指纹库做比较，收集的指纹不一定能真正探测出准确的系统版本信息
+
+nmap -sS 192.168.8.105：扫描对方的host开启了哪些服务。
+nmap -sT 192.168.0.105：
+nmap -sV 192.168.0.105：
+
+nmap探测端口：nmap -p 21-23 IP地址
+
+关于nmap网络学习资源：
+  扫描工具 —— Nmap用法详解 https://www.cnblogs.com/weihua2616/p/6599629.html
+  https://blog.csdn.net/code_ac/article/details/74131967
+  https://ljingyan.baidu.com/article/47a29f24312010c0142399f1.html
+
+
+pef:pef是一款被动探测工具，通过分析网络数据包来判断操作系统类型。
+   https://www.cnblogs.com/xuanhun/p/3494608.html
+   https://www.fujieace.com/kali-linux/courses/p0f-2.html
+   pOf详细说明文档请查看:
+   https://www.fujieace.com/hacker/tools/p0f.html
+侧试:先执行pef命令，然后打开浏览器输入:ftp://localhost:21
+
+CNVD: 国家公共信息安全漏洞平台:http://www.cnvd.org.cn/
+CVE: 公共漏洞和威胁平台: http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-11776
+NVD: 美国过滤安全漏洞数据库。https://nvd.nist.gov/vuln/detail/CVE-2018-11776
+
+nessus安装包下载
+  安装和启动:
+    sudo dpkg -i Nessus-7.2.0-debian6_amd64.deb
+	/etc/init.d/nessusd start | stop | restart
+
+
+https://www.tenable.com/downloads/nessusnessus
+软件安装说明手册:
+https://blog.csdn.net/ue12318074/article/details/72354387?locationNum=13&fps=1
+http://www.cnblogs.com/lsdb/p/98e3692.html
+
+
+小结:先扫描有哪些主机在线存活，然后在扫描有哪些服务开启(扫描端口)，然后在获取
+系统或者服务的指纹信息.
+
+
+口令暴力破解:
+  口令哈希值: tail -n 2 /etc/shadow > itcast.hash #在/etc/shadow文件里
+  口令的加密算法查询:man crypt
+
+  典型口令碰撞:
+    hashcat -m 1806 --force itcast.hash passwd.txt
+    hashcat -m 1800 --force itcast.hash passwd.txt --show
+    passwd.txt:字典文件，
+
+  常用的字典:/usr/share/wordlists/rockyou.txt
+
+ man crypt：可以查看加密相关信息
+ shadow：文件中保存的是秘钥信息
+ man hashcat：可以查看哈希相关算法
+ wget -c http://xxXXx:下载网页到本地
