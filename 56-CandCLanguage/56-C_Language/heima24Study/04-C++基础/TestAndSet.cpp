@@ -16,6 +16,9 @@ void append_number(int x) {
 
 /*
 * 操作系统原理-清华 第9章 同步
+* public member function
+* <atomic>
+* std::atomic_flag::test_and_set
 * http://www.cplusplus.com/reference/atomic/atomic_flag/test_and_set/
 */
 int main()

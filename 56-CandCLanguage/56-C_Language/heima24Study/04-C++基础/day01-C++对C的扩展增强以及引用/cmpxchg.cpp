@@ -4,6 +4,7 @@ using namespace std;
 /*
 * cpu cmpxchg 指令理解 (CAS)
 * https://blog.csdn.net/xiuye2015/article/details/53406432
+* https://blog.csdn.net/xiuye2015/article/details/117737027
 *
 * 格式：CMPXCHG 目的操作数 源操作数
 * 作用：比较并交换操作数

@@ -18,6 +18,7 @@
         <module>15-java-timer</module>
         <module>15-webserver-tutorial</module>
         <module>15-java-base</module>
+        <module>15-java-native_demo</module>
     </modules>
 
     <properties>
