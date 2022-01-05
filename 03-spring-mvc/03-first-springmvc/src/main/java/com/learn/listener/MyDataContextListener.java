@@ -14,6 +14,9 @@ public class MyDataContextListener implements ServletContextListener {
 
     }
 
+    /**
+     * 一旦 Web 应用启动的时候，我们就能在任意的 Servlet 或者 JSP 中通过下面的方式获取我们初始化的参数。
+     */
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         this.context = servletContextEvent.getServletContext();

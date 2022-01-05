@@ -1,11 +1,11 @@
-package com.panda.annotation;
+package com.learn.annotation;
 
 import java.lang.annotation.*;
 
 
-@Target({ElementType.TYPE})
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface MyService {
+public @interface MyRequestMapping {
     String value() default "";
 }

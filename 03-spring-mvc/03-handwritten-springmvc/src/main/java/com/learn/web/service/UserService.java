@@ -1,4 +1,4 @@
-package com.panda.web.service;
+package com.learn.web.service;
 
 
 public interface UserService {

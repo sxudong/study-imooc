@@ -27,9 +27,9 @@ public class AppTomcat {
         // 创建Tomcat容器
         Tomcat tomcatServer = new Tomcat();
         // 端口号设置
-        tomcatServer.setPort(9091);
+        tomcatServer.setPort(9090);
         // 读取项目路径 加载静态资源
-        StandardContext ctx = (StandardContext) tomcatServer.addWebapp("/", new File("src/main").getAbsolutePath());
+        StandardContext ctx = (StandardContext) tomcatServer.addWebapp("/", new File("05-boot/05-copy-springboot/src/main").getAbsolutePath());
         // 禁止重新载入
         ctx.setReloadable(false);
         // class文件读取地址

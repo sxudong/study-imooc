@@ -21,6 +21,10 @@ public class HelloController implements Controller{
 	 */
 	public ModelAndView handleRequest(HttpServletRequest req, HttpServletResponse res)
 			throws Exception {
+		// 获取自定义监听器中设置的值
+		String myData = (String) req.getServletContext().getAttribute("myData");
+		System.out.println(myData);
+
 		System.out.println("handleRequest()");
 		return new ModelAndView("hello");
 	}

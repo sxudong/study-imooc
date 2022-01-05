@@ -11,30 +11,34 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 
-/**
- * @Auther: 洺润Star
- * @Date: 2020/5/1 19:07
- * @Description:
- */
 @Controller
 public class IndexController {
 
     @Autowired
     private UserService userService;
 
+    /**
+     * http://localhost:9090/index
+     */
     @RequestMapping(value = "/index",produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String index(){
         return "纯手写Java语言实现SpringBoot注解启动SpringMVC容器";
     }
 
-    // 如果类上面用的是@Controller，这里返回的就是一个pageIndex.jsp页面。如果是@RestController，则返回字符。
+    /**
+     * 如果类上面用的是 @Controller，这里返回的就是一个 pageIndex.jsp 页面。如果是 @RestController，则返回字符。
+     * http://localhost:9090/pageIndex
+     */
     @RequestMapping("/pageIndex")
     public String pageIndex() {
         return "pageIndex";
     }
 
-    // 如果类上面用的是@Controller，这里返回的就是一个springboot.jsp页面。如果是@RestController，则返回字符。
+    /**
+     * 如果类上面用的是 @Controller，这里返回的就是一个 springboot.jsp 页面。如果是 @RestController，则返回字符。
+     * http://localhost:9090/index2
+     */
     @RequestMapping(value = "/index2", produces = "text/html;charset=UTF-8")
     public String index2(Model model) {
         String str = userService.index();

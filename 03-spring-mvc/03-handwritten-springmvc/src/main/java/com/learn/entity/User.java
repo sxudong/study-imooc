@@ -1,4 +1,4 @@
-package com.panda.entity;
+package com.learn.entity;
 
 
 public class User {

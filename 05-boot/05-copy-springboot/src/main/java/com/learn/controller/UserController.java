@@ -30,7 +30,7 @@ public class UserController {
     }
 
     /**
-     * http://localhost:9090/sayHello
+     * http://localhost:9090/sayHello?age=17&name=张三
      */
     @RequestMapping("sayHello")
     @ResponseBody

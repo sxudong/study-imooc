@@ -1,10 +1,7 @@
-package com.panda.web.service.impl;
+package com.learn.web.service.impl;
 
-import com.panda.annotation.MyService;
-import com.panda.entity.User;
-import com.panda.web.service.UserService;
-
-import java.util.List;
+import com.learn.annotation.MyService;
+import com.learn.web.service.UserService;
 
 
 @MyService("userService")

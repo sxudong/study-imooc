@@ -7,7 +7,7 @@
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <!--定义MyDispatcherServlet类-->
-        <servlet-class>com.panda.servlet.MyDispatcherServlet</servlet-class>
+        <servlet-class>com.learn.servlet.MyDispatcherServlet</servlet-class>
         <!--设置为1后,httpServlet初始化调用init方法-->
         <load-on-startup>1</load-on-startup>
     </servlet>

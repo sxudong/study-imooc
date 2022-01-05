@@ -1,11 +1,11 @@
-package com.panda.annotation;
+package com.learn.annotation;
 
 import java.lang.annotation.*;
 
 
-@Target({ElementType.PARAMETER})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface MyRequestParam {
+public @interface MyService {
     String value() default "";
 }

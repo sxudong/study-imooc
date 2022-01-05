@@ -42,7 +42,7 @@ int main()
 	//监听listen
 	Listen(lfd, 128);
 	
-	//创建一棵epoll树
+	//创建一棵epoll树句柄（红黑树）
 	int epfd = epoll_create(1024);
 	if(epfd<0)
 	{
@@ -51,12 +51,14 @@ int main()
 	}
 	
 	//将lfd上epoll树
-	ev.data.fd = lfd;
+	ev.data.fd = lfd; //lfd是Socket，ev是epoll_event 结构体
 	ev.events = EPOLLIN;
-	epoll_ctl(epfd, EPOLL_CTL_ADD, lfd, &ev);
+	epoll_ctl(epfd, EPOLL_CTL_ADD, lfd, &ev); //将socket上到epfd树上
 	
 	while(1)
 	{
+	    // epfd: epoll_create()创建的一棵epoll树句柄
+	    // events: epoll_event 结构体
 		nready = epoll_wait(epfd, events, 1024, -1);
 		if(nready<0)
 		{

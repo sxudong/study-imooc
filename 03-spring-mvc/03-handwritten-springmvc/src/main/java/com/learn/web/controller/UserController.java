@@ -1,10 +1,10 @@
-package com.panda.web.controller;
+package com.learn.web.controller;
 
-import com.panda.annotation.MyAutowired;
-import com.panda.annotation.MyController;
-import com.panda.annotation.MyRequestMapping;
-import com.panda.annotation.MyRequestParam;
-import com.panda.web.service.UserService;
+import com.learn.annotation.MyAutowired;
+import com.learn.annotation.MyController;
+import com.learn.annotation.MyRequestMapping;
+import com.learn.annotation.MyRequestParam;
+import com.learn.web.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

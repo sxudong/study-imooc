@@ -1,4 +1,4 @@
-package com.panda.annotation;
+package com.learn.annotation;
 
 import java.lang.annotation.*;
 

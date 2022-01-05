@@ -8,6 +8,7 @@
 
 <!--    <servlet>-->
 <!--        <servlet-name>springmvc</servlet-name>-->
+<!--        &lt;!&ndash; DispatcherServlet -> FrameworkServlet -> HttpServletBean -> HttpServlet -> Servlet &ndash;&gt;-->
 <!--        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>-->
 <!--        &lt;!&ndash;-->
 <!--            DispatcherServlet在初始化方法里面，会读取该初始化参数的值来获取spring配置文件的位置，然后启动spring容器。-->
@@ -23,13 +24,24 @@
 <!--        <url-pattern>*.do</url-pattern>-->
 <!--    </servlet-mapping>-->
 
-    <!-- 测试Servlet -->
-    <!-- 1.声明Servlet的类型，并给它承一个别名（小名） -->
+    <!-- 测试 Servlet -->
+    <!-- 1.声明 Servlet 的类型，并给它承一个别名（小名） -->
+    <servlet>
+        <servlet-name>myservlet</servlet-name>
+        <servlet-class>com.learn.servlet.MyServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <!-- 2.通过别名引用 Servlet，并给它取一个网名（访问路径） http://localhost:8080/03_first_springmvc_war/myservlet.htm -->
+    <servlet-mapping>
+        <servlet-name>myservlet</servlet-name>
+        <url-pattern>*.htm</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>time</servlet-name>
         <servlet-class>com.learn.servlet.TimeServlet</servlet-class>
     </servlet>
-    <!-- 2.通过别名引用Servlet，并给它取一个网名（访问路径） http://localhost:8080/springmvc/ts -->
+    <!-- http://localhost:8080/03_first_springmvc_war/ts -->
     <servlet-mapping>
         <servlet-name>time</servlet-name>
         <!-- 网名以/开头 -->

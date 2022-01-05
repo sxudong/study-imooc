@@ -21,6 +21,8 @@
 	<!-- 配置处理器 -->
 	<bean id="helloController" class="com.learn.controller.HelloController"/>
 	<bean id="userController" class="com.learn.controller.UserController"/>
+	<!-- 异常处理类 -->
+	<bean id="myExceptionHandler" class="com.learn.exception.MyExceptionHandler"/>
 
 	<!-- ViewResolver 配置视图解析器 -->
 	<bean 
