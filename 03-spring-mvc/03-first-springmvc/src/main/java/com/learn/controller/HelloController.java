@@ -9,6 +9,9 @@ import org.springframework.web.servlet.mvc.Controller;
 /**
  * 处理器类
  *	负责处理业务逻辑。
+ *  http://localhost:8080/springmvc/hello.do
+ *
+ * 达内 spring_day01
  */
 public class HelloController implements Controller{
 
@@ -17,14 +20,14 @@ public class HelloController implements Controller{
 	 * 第一个, ModelAndView(String viewName),viewName是视图名。
 	 * 第二个，ModelAndView(String viewName,Map data),data是处理结果。
 	 *
-	 * http://localhost:8080/spring_day01/hello.do
+	 * http://localhost:8080/springmvc/hello.do
 	 */
 	public ModelAndView handleRequest(HttpServletRequest req, HttpServletResponse res)
 			throws Exception {
 		// 获取自定义监听器中设置的值
 		String myData = (String) req.getServletContext().getAttribute("myData");
 		System.out.println(myData);
-
+		// int i = 10/0; // 测试异常处理解析器MyExceptionHandler
 		System.out.println("handleRequest()");
 		return new ModelAndView("hello");
 	}

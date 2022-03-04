@@ -13,6 +13,8 @@ import java.util.List;
 /**
  * 处理器类
  *	负责处理业务逻辑。
+ *  http://localhost:8080/springmvc/userList.do
+ *
  * 	达内 spring day01
  */
 // AbstractController extends WebContentGenerator implements Controller {

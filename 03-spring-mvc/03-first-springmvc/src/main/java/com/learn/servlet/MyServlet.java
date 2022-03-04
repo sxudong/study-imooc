@@ -11,6 +11,7 @@ import java.io.IOException;
 /**
  * 《Spring源码深度解析》P301 Servlet的使用
  *  JSP 的本质就是 Servlet.
+ *  要测试这个servlet，需要注释web.xml中的DispatcherServlet，打开TimeServlet
  */
 public class MyServlet extends HttpServlet {
     @Override

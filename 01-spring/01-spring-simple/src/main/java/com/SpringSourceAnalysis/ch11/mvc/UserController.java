@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * 示例在 03-first-springmvc
+ * SimpleUrlHandlerMapping 示例在: study-imooc/03-first-springmvc
  */
 @RestController
 public class UserController {
