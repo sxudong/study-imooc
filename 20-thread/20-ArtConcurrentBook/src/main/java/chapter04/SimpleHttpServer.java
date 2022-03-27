@@ -18,7 +18,8 @@ import java.net.Socket;
  * 代码清单 4-21
  * 4.4.4 一个基于线程池技术的简单Web服务器
  *
- *  Tomcat容器 && Apache24并行压力测试工具
+ *  Tomcat容器 && Apache24 并行压力测试工具
+ *  参见载图：压力测试.jpg
  */
 public class SimpleHttpServer {
     // 处理HttpRequest的线程池
