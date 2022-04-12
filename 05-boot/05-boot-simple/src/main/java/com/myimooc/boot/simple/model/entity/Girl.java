@@ -7,6 +7,14 @@ import javax.persistence.Id;
 /**
  * 实体
  *
+ * JPA 会自动建表
+ * CREATE TABLE `girl`(
+ *   `id` int (11) NOT NULL,
+ *   `age` int (11) DEFAULT NULL,
+ *   `cup_size` varchar (255) DEFAULT NULL,
+ *   PRIMARY KEY (`id`)
+ * )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ *
  * @author zc 2017-02-18
  */
 @Entity

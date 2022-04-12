@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * 资源层
  *
+ * ORM 使用的是：spring-boot-starter-data-jpa
  * @author zc 2017-02-18
  */
 public interface GirlRepository extends JpaRepository<Girl, Integer> {

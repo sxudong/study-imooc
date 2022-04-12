@@ -26,6 +26,7 @@ public class GirlControllerTest extends AbstractTestSupport {
 
     /**
      * 查询所有女生列表
+     * GirlController 类中第一个方法
      */
     @Test
     public void listGirl() throws Exception {
