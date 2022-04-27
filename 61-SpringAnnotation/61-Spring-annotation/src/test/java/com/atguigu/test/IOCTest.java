@@ -2,6 +2,7 @@ package com.atguigu.test;
 
 import java.util.Map;
 
+import com.atguigu.config.sequence.TestSequenceConfig;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -108,6 +109,16 @@ public class IOCTest {
 	}
 
 	private void printBeans(AnnotationConfigApplicationContext applicationContext){
+		String[] definitionNames = applicationContext.getBeanDefinitionNames();
+		for (String name : definitionNames) {
+			System.out.println(name);
+		}
+	}
+
+	@SuppressWarnings("resource")
+	@Test
+	public void test10(){
+		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(TestSequenceConfig.class);
 		String[] definitionNames = applicationContext.getBeanDefinitionNames();
 		for (String name : definitionNames) {
 			System.out.println(name);
