@@ -23,6 +23,8 @@ import java.util.Date;
  */
 @WebServlet("/cookieTest")
 public class CookieTest extends HttpServlet {
+
+    // http://localhost:8080/day16/cookieTest
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

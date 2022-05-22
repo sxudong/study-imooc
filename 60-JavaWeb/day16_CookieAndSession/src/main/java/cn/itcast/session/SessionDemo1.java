@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+// http://localhost:8080/day16/sessionDemo1
 @WebServlet("/sessionDemo1")
 public class SessionDemo1 extends HttpServlet {
     @Override

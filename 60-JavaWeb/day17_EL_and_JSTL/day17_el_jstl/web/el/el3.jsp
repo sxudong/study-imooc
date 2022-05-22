@@ -1,3 +1,4 @@
+<%-- http://localhost:8080/day17/el/el3.jsp --%>
 <%@ page import="cn.itcast.domain.User" %>
 <%@ page import="java.util.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

@@ -17,15 +17,19 @@ import java.util.List;
  */
 @WebServlet("/userListServlet")
 public class UserListServlet extends HttpServlet {
+
+    // 测试：http://localhost:8080/58_EL_JSTL_war_exploded/userListServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //1.调用UserService完成查询
+        //1.调用 UserService 完成查询
         UserService service = new UserServiceImpl();
         List<User> users = service.findAll();
-        //2.将list存入request域
+        /**
+         * 2.将 list 存入 request 域
+         */
         request.setAttribute("users",users);
-        //3.转发到list.jsp
-        request.getRequestDispatcher("/list.jsp").forward(request,response);
+        //3.转发到 list.jsp
+        request.getRequestDispatcher("/list.jsp").forward(request, response);
     }
 
     @Override

@@ -13,7 +13,8 @@
   <body>
 
 
-
+      <!--在tomcat启动时控制台中打印的 Using CATALINA_BASE:   "C:\Users\Aaron\AppData\Local\JetBrains\IntelliJIdea2021.2\tomcat\17324711-1c5b-4283-9093-e855f6613e05"
+      \work\Catalina\localhost\ 目录下查看 转换后的 index_jsp.java-->
       <%
         System.out.println("hello jsp");
         int i = 5;

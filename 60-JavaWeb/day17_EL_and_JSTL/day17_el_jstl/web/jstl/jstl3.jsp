@@ -32,18 +32,17 @@
             }
 
             * 属性：
-                items:容器对象
-                var:容器中元素的临时变量
-                varStatus:循环状态对象
-                    index:容器中元素的索引，从0开始
-                    count:循环次数，从1开始
+                items: 容器对象
+                var: 容器中元素的临时变量
+                varStatus: 循环状态对象
+                    index: 容器中元素的索引，从 0 开始
+                    count: 循环次数，从 1 开始
 
 
 --%>
 
 <c:forEach begin="1" end="10" var="i" step="2" varStatus="s">
     ${i} <h3>${s.index}<h3> <h4> ${s.count} </h4><br>
-
 </c:forEach>
 
     <hr>
@@ -54,17 +53,12 @@
         list.add("bbb");
         list.add("ccc");
 
-        request.setAttribute("list",list);
-
-
+        request.setAttribute("list", list);
     %>
 
     <c:forEach items="${list}" var="str" varStatus="s">
-
-            ${s.index} ${s.count} ${str}<br>
-
+        ${s.index} ${s.count} ${str}<br>
     </c:forEach>
-
 
 </body>
 </html>

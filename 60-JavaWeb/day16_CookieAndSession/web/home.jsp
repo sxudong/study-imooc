@@ -47,20 +47,15 @@
                 //URL解码：
                 value = URLDecoder.decode(value,"utf-8");
                 System.out.println("解码后："+value);
-                %>
+%>
             <h1>欢迎回来，您上次访问时间为:<%=value%></h1>
             <input>
-
 <%
-
-
-
                 break;
 
             }
         }
     }
-
 
     if(cookies == null || cookies.length == 0 || flag == false){
         //没有，第一次访问
@@ -87,7 +82,6 @@
 
 <%
     }
-
 %>
 
 <input>

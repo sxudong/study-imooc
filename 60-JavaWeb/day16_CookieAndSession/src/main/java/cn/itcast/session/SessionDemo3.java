@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
+// http://localhost:8080/day16/sessionDemo3
 @WebServlet("/sessionDemo3")
 public class SessionDemo3 extends HttpServlet {
     @Override

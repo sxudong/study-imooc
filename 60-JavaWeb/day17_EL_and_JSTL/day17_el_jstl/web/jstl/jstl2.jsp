@@ -11,13 +11,14 @@
     <%--
         完成数字编号对应星期几案例
             1.域中存储一数字
-            2.使用choose标签取出数字         相当于switch声明
-            3.使用when标签做数字判断         相当于case
-            4.otherwise标签做其他情况的声明  相当于default
+            2.使用 choose 标签取出数字         相当于 switch 声明
+            3.使用 when 标签做数字判断         相当于 case
+            4.otherwise 标签做其他情况的声明   相当于 default
     --%>
 
     <%
-        request.setAttribute("number",51);
+        <%-- request.setAttribute("number", 3); --%>
+        request.setAttribute("number", 51);
     %>
 
     <c:choose>
@@ -31,7 +32,6 @@
 
         <c:otherwise>数字输入有误</c:otherwise>
     </c:choose>
-
 
 </body>
 </html>

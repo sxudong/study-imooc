@@ -18,7 +18,6 @@ public class UserDaoImpl implements UserDao {
         //1.定义sql
         String sql = "select * from user";
         List<User> users = template.query(sql, new BeanPropertyRowMapper<User>(User.class));
-
         return users;
     }
 }

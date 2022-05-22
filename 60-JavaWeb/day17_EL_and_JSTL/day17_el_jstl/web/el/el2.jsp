@@ -1,3 +1,4 @@
+<%-- http://localhost:8080/day17/el/el2.jsp --%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -16,7 +17,6 @@
         session.setAttribute("age","23");
 
         request.setAttribute("str","");
-
     %>
 
 <h3>el获取值</h3>

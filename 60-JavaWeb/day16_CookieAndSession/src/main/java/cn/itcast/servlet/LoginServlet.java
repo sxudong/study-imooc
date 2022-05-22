@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
             if("zhangsan".equals(username) && "123".equals(password)){//需要调用UserDao查询数据库
                 //登录成功
                 //存储信息，用户信息
-                session.setAttribute("user",username);
+                session.setAttribute("user", username);
                 //重定向到success.jsp
                 response.sendRedirect(request.getContextPath()+"/success.jsp");
             }else{
@@ -45,14 +45,14 @@ public class LoginServlet extends HttpServlet {
                 //存储提示信息到request
                 request.setAttribute("login_error","用户名或密码错误");
                 //转发到登录页面
-                request.getRequestDispatcher("/login.jsp").forward(request,response);
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
             }
         }else{
             //验证码不一致
             //存储提示信息到request
             request.setAttribute("cc_error","验证码错误");
             //转发到登录页面
-            request.getRequestDispatcher("/login.jsp").forward(request,response);
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
 
         }
     }

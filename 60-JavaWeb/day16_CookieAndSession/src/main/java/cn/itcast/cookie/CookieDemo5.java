@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  *
  * Cookie快速入门
- *
+ * http://localhost:8080/day16/cookieDemo5
  */
 @WebServlet("/cookieDemo5")
 public class CookieDemo5 extends HttpServlet {
