@@ -40,8 +40,11 @@ public class JDBCDemo10 {
         try {
             // 1.获取连接对象
             conn = JDBCUtils.getConnection();
-            // 开启事务,即将自动提交事务关闭
-            conn.setAutoCommit(false);
+
+            /**
+             * 开启事务,即将自动提交事务关闭
+             */
+            conn.setAutoCommit(false); // 设置事务为手动提交（即取消自动提交）
 
             // 2.定义sql
             // 2.1 张三 - 500
