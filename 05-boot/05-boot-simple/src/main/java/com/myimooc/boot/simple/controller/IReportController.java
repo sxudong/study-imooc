@@ -20,11 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * iReport 5.6.0 安装包下载 & 安装
  * http://t.zoukankan.com/miracle-luna-p-10560294.html
+ *
+ * 示例教程 https://www.jb51.net/article/226205.htm
  */
 @RestController
 public class IReportController {
     /**
      * 导入为 PDF
+     * http://127.0.0.1:8080//exportPdf
      */
     @RequestMapping(value = "/exportPdf")
     public ResponseEntity<byte[]> exportPdf() throws Exception {
