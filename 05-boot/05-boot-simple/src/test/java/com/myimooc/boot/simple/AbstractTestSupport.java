@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -74,6 +75,7 @@ import org.springframework.web.context.WebApplicationContext;
 // WebEnvironment.RANDOM_PORT 创建一个 web 应用程序上下文。它将随机起一个端口并监听。
 // WebEnvironment.MOCK 使用模拟 servlet 环境创建 WebApplicationContext。
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {"spring.profiles.active=dev"}) // 开启 Spring 上下文测试
+//@ActiveProfiles("dev")
 public abstract class AbstractTestSupport {
 
     // Spring 的 Mock MVC 框架 模拟 Spring MVC
