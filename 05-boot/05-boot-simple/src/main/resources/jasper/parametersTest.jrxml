@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="parametersTest" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e235d01-c27f-4cd9-8177-4a4b8d5bb1a7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="zh_CN" mode="Opaque"/>
+	<parameter name="mobile" class="java.lang.String"/>
+	<parameter name="title" class="java.lang.String"/>
+	<parameter name="username" class="java.lang.String"/>
+	<parameter name="companyName" class="java.lang.String"/>
+	<parameter name="departmentName" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="44" splitType="Stretch">
+			<textField>
+				<reportElement x="346" y="13" width="100" height="20" uuid="d0f5a157-0d42-4576-a754-7c19a2c04e9d"/>
+				<textElement>
+					<font fontName="宋体" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="75" splitType="Stretch">
+			<rectangle>
+				<reportElement x="184" y="15" width="100" height="20" uuid="94616571-f907-4dc7-8b52-cabcddff3ce5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="284" y="15" width="100" height="20" uuid="3a7e4ef3-8cdb-4bb8-afc6-2c29814f500f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="384" y="15" width="100" height="20" uuid="9084a466-2984-4373-9a44-3a7a2b271e43"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="484" y="15" width="100" height="20" uuid="238ce654-d959-4d47-8a75-1f199b4901f1"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="184" y="35" width="100" height="20" uuid="0abd2c7e-e74d-4577-a5b3-10da597ba81b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="284" y="35" width="100" height="20" uuid="5fbde0e3-1706-4c9a-b87b-2e890d0859b9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="384" y="35" width="100" height="20" uuid="4a37db51-8296-4163-b73e-882af59ce89d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="484" y="35" width="100" height="20" uuid="7da82023-73a1-4798-a368-bd281fd8e95b"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="208" y="17" width="76" height="20" uuid="9cd8c273-c51f-40b4-948d-1640a8312118"/>
+				<textElement>
+					<font fontName="宋体" size="12"/>
+				</textElement>
+				<text><![CDATA[用户名：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="208" y="37" width="76" height="20" uuid="e24e00a6-015d-4bbc-9144-70a43cee66ee"/>
+				<textElement>
+					<font fontName="宋体" size="12"/>
+				</textElement>
+				<text><![CDATA[所属公司：]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="301" y="35" width="117" height="20" uuid="6a987266-d7a2-4ec4-8fe5-132127b86af3"/>
+				<textElement>
+					<font fontName="宋体" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{companyName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="301" y="15" width="100" height="20" uuid="113db3b9-dedc-41a4-ae5b-9163bdab9cd5"/>
+				<textElement>
+					<font fontName="宋体" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{username}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="401" y="17" width="100" height="20" uuid="77e65883-cfd3-4d3f-92e8-e131f5e41d9b"/>
+				<textElement>
+					<font fontName="宋体" size="12"/>
+				</textElement>
+				<text><![CDATA[手机号：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="401" y="37" width="100" height="20" uuid="c3d98188-aa11-4f25-ae80-1dc53491e34a"/>
+				<textElement>
+					<font fontName="宋体" size="12"/>
+				</textElement>
+				<text><![CDATA[所属部门：]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="501" y="19" width="100" height="20" uuid="6dddef1e-7f02-4c9f-8b52-7c7428a16267"/>
+				<textFieldExpression><![CDATA[$P{mobile}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="501" y="37" width="125" height="20" uuid="75b3c1ae-22b1-475d-b77f-6fc16c979de4"/>
+				<textElement>
+					<font fontName="宋体" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{departmentName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
