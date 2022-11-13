@@ -25,18 +25,18 @@ public class WebInitConfig implements WebApplicationInitializer {
     public void onStartup(ServletContext servletContext) {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 
-        // 注册SpringMVC的配置类
+        // 注册 SpringMVC 的配置类
         context.register(SpringMvcConfig.class);
 
-        // 新建WebApplication，注册配置类，并将其和当前servletContext关联。
+        // 新建 WebApplication，注册配置类，并将其和当前 servletContext 关联。
         context.setServletContext(servletContext);
 
-        // 注册SpringMVC的DispatcherServlet。
+        // 注册 SpringMVC 的 DispatcherServlet。
         ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcher", new DispatcherServlet(context));
         servlet.addMapping("/");
         servlet.setLoadOnStartup(1);
 
-        // 注册SpringMVC的字符过滤器
+        // 注册 SpringMVC 的字符过滤器
         FilterRegistration.Dynamic encodingFilter = servletContext.addFilter("encoding", new CharacterEncodingFilter());
         EnumSet<DispatcherType> dispatcherTypes = EnumSet.allOf(DispatcherType.class);
         dispatcherTypes.add(DispatcherType.REQUEST);

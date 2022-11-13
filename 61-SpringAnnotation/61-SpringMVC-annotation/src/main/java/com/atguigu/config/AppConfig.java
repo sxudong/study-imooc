@@ -36,7 +36,7 @@ import com.atguigu.controller.MyFirstInterceptor;
 }, useDefaultFilters = false)
 // 开启 SpringMVC 定制配置功能
 @EnableWebMvc
-// WebMvc-4中WebMvcConfigurer接口 都需要实现，WebMvc-5中 WebMvcConfigurer接口 中的方法是default的不需要实现
+// WebMvc-4 中 WebMvcConfigurer 接口都需要实现，WebMvc-5中 WebMvcConfigurer 接口中的方法是 default 的不需要实现
 public class AppConfig extends WebMvcConfigurerAdapter {
 
     //定制
@@ -51,7 +51,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         //自定义路径
         //registry.jsp("/WEB-INF/views/", ".jsp");
 
-        //为了熟悉SpringBoot的页面放置习惯，SpringBoot的页面就是放在src/main/resources
+        //为了熟悉 SpringBoot 的页面放置习惯，SpringBoot 的页面就是放在 src/main/resources
         //在src/main/resources 下创建views目录，并在此目录下新建 index.jsp
         registry.jsp("/WEB-INF/classes/views/", ".jsp");
     }
