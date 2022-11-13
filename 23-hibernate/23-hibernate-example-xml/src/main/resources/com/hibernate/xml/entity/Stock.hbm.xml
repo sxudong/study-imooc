@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.hibernate.xml.entity.Stock"
+		table="stock">
+		<id name="stockId" type="int">
+			<column name="stock_id" />
+			<generator class="identity" />
+		</id>
+		<one-to-one name="stockDetail" cascade="save-update"
+			class="com.hibernate.xml.entity.StockDetail"></one-to-one>
+
+		<property name="stockCode" type="string">
+			<column name="stock_code" length="10" unique="false" not-null="true" />
+		</property>
+		<property name="stockName" type="string">
+			<column name="stock_name" length="20" unique="false" not-null="true" />
+		</property>
+	</class>
+</hibernate-mapping>

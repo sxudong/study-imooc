@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.hibernate.xml.entity.Student"
+		table="student">
+		<id name="id" type="int">
+			<column name="id" />
+			<generator class="identity" />
+		</id>
+
+		<property name="studentName" type="string">
+			<column name="student_name" length="20" unique="true"
+				not-null="true" />
+		</property>
+
+		<set name="teachers" inverse="true" lazy="true" table="teacher_student">
+			<key>
+				<column name="student_id" not-null="true" />
+			</key>
+			<many-to-many
+				class="com.hibernate.xml.entity.Teacher">
+				<column name="teacher_id" not-null="true" />
+			</many-to-many>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.hibernate.xml.entity.StockDetail"
+		table="stock_detail">
+		<id name="stockId" type="int">
+			<column name="stock_id" />
+			<generator class="foreign">
+				<param name="property">stock</param>
+			</generator>
+		</id>
+		<one-to-one name="stock" constrained="true"
+			class="com.hibernate.xml.entity.Stock" />
+
+		<property name="compName" type="string">
+			<column name="comp_name" length="20" unique="true" not-null="true" />
+		</property>
+		<property name="compDesc" type="string">
+			<column name="comp_desc" length="200" />
+		</property>
+		<property name="remark" type="string">
+			<column name="remark" length="200" />
+		</property>
+		<property name="listedDate" type="date">
+			<column name="listed_date" length="10" not-null="true" />
+		</property>
+	</class>
+</hibernate-mapping>

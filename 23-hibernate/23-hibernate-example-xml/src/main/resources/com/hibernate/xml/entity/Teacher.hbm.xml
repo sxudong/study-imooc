@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.hibernate.xml.entity.Teacher"
+		table="teacher">
+		<id name="id" type="int">
+			<column name="id" />
+			<generator class="identity" />
+		</id>
+
+		<property name="teacherName" type="string">
+			<column name="teacher_name" length="20" unique="true"
+				not-null="true" />
+		</property>
+
+		<set name="students" lazy="true" table="teacher_student" cascade="save-update">
+			<key>
+				<column name="teacher_id" not-null="true" />
+			</key>
+			<many-to-many order-by="studentName asc"
+				class="com.hibernate.xml.entity.Student">
+				<column name="student_id" not-null="true" />
+			</many-to-many>
+		</set>
+	</class>
+</hibernate-mapping>
