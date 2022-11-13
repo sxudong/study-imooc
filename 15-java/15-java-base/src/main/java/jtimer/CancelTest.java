@@ -33,7 +33,7 @@ public class CancelTest {
         ScheduledFuture<?> scheduledFuture = executorService.scheduleWithFixedDelay(task1, 3, 2, TimeUnit.SECONDS);
         scheduledFuture.cancel(true);
 
-        // task1首次执行是距离现在时间1秒后执行，之后每隔2秒执行一次
+        // task2首次执行是距离现在时间1秒后执行，之后每隔2秒执行一次
         executorService.scheduleWithFixedDelay(task2, 1, 2, TimeUnit.SECONDS);
 
         // 主线程休眠20秒，让定时任务线程池执行，以方便查看运行效果

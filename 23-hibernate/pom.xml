@@ -16,6 +16,11 @@
 
     <modules>
         <module>23-hibernate-mtm</module>
+		<module>23-hibernate-anno-aa</module>
+        <module>23-hibernate-anno-ca</module>
+        <module>23-hibernate-anno-ra</module>
+        <module>23-hibernate-example-xml</module>
+        <module>23-hibernate-example-annotation</module>
     </modules>
 
     <properties>
@@ -23,6 +28,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <hibernate-version>3.6.3.Final</hibernate-version>
+        <hibernate-c3p0-version>3.6.3.Final</hibernate-c3p0-version>
     </properties>
 
 </project>

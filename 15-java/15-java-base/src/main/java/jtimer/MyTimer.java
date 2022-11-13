@@ -6,12 +6,15 @@ import java.util.Timer;
 /**
  * 定时调度类
  * <p> Timer 已经过时，如想要查看运行效果，放开下面注释即可 </p>
+ * 可以用 java.util.concurrent.ScheduledExecutorService 来实现定时任务
  *
  * @author zc 2017-05-24
  */
 public class MyTimer {
 
     public static void main(String[] args) {
+        System.out.println(System.getProperty("java.class.path"));
+        // C:\Java\jdk1.8.0_172\jre\lib\charsets.jar;C:\Java\jdk1.8.0_172\jre\lib\deploy.jar;C:\Java\jdk1.8.0_172\jre\lib\ext\access-bridge-64.jar;C:\Java\jdk1.8.0_172\jre\lib\ext\cldrdata.jar;C:\Java\jdk1.8.0_172\jre\lib\ext\dnsns.jar;C:\Java\jdk1.8.0_172\jre\lib\ext\jaccess.jar;C:\Java\jdk1.8.0_172\jre\lib\ext\jfxrt.jar;C:\Java\jdk1.8.0_172\jre\lib\ext\localedata.jar;C:\Java\jdk1.8.0_172\jre\lib\ext\nashorn.jar;C:\Java\jdk1.8.0_172\jre\lib\ext\sunec.jar;C:\Java\jdk1.8.0_172\jre\lib\ext\sunjce_provider.jar;C:\Java\jdk1.8.0_172\jre\lib\ext\sunmscapi.jar;C:\Java\jdk1.8.0_172\jre\lib\ext\sunpkcs11.jar;C:\Java\jdk1.8.0_172\jre\lib\ext\zipfs.jar;C:\Java\jdk1.8.0_172\jre\lib\javaws.jar;C:\Java\jdk1.8.0_172\jre\lib\jce.jar;C:\Java\jdk1.8.0_172\jre\lib\jfr.jar;C:\Java\jdk1.8.0_172\jre\lib\jfxswt.jar;C:\Java\jdk1.8.0_172\jre\lib\jsse.jar;C:\Java\jdk1.8.0_172\jre\lib\management-agent.jar;C:\Java\jdk1.8.0_172\jre\lib\plugin.jar;C:\Java\jdk1.8.0_172\jre\lib\resources.jar;C:\Java\jdk1.8.0_172\jre\lib\rt.jar;G:\IDworkspace\study-imooc\15-java\15-java-base\target\classes;D:\software\Maven\repository\org\apache\commons\commons-lang3\3.8.1\commons-lang3-3.8.1.jar;D:\Program Files\JetBrains\IntelliJ IDEA 2021.2.3\lib\idea_rt.jar
 /*
 
         // 创建一个 Timer 实例

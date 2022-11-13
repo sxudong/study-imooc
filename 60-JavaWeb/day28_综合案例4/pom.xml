@@ -11,7 +11,7 @@
 
     <packaging>pom</packaging>
     <modules>
-        <module>travel</module>
+        <module>day28-travel</module>
     </modules>
 
     <properties>
