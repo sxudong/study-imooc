@@ -17,6 +17,9 @@
     <modules>
         <module>01-spring-simple</module>
 		<module>01-spring-tx</module>
+        <module>01-spring-data</module>
+        <module>01-spring-auth</module>
+        <module>01-spring-seckill</module>
     </modules>
 
     <dependencyManagement>

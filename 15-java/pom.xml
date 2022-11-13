@@ -19,6 +19,12 @@
         <module>15-webserver-tutorial</module>
         <module>15-java-base</module>
         <module>15-java-native_demo</module>
+        <module>15-java-security</module>
+        <module>15-java-thumbnail</module>
+        <module>15-java-watermark</module>
+        <module>15-java-sync</module>
+        <module>15-java-lock</module>
+        <module>15-java-image-code</module>
     </modules>
 
     <properties>
@@ -27,5 +33,39 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+
+
+    <!-- 主要用于 15-java-thumbnail、15-java-watermark、15-java-image-code 引用 -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <pluginManagement>
+            <!-- 父模块需要声明Spring Boot打包插件 -->
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring.boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+    <!-- 主要用于 15-java-thumbnail、15-java-watermark、15-java-image-code 引用 -->
 
 </project>
