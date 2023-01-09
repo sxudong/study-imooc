@@ -13,6 +13,10 @@ public class UserServiceImpl {
 
     private JdbcQueryManager jdbcQueryManager;
 
+    private int pleaseTest(int a, int b) {
+        return a * 2 + b;
+    }
+
     public User findById(Long id) {
         User user = new User();
         user.setId(id);

@@ -7,6 +7,7 @@ import com.demo.model.UserDTO;
 import com.google.common.collect.Lists;
 import junit.framework.TestCase;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +15,7 @@ import org.mockito.*;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -178,6 +180,16 @@ public class PowerMockTest {
         TestCase.assertEquals("35174", userServiceImpl.testStaticMethodMethod(str));
     }
 
+    /**
+     * Whitebox 反射调用
+     * @throws Exception
+     */
+    @Test
+    public void testPrivateMethod() throws Exception {
+        Integer ret = Whitebox.invokeMethod(userServiceImpl, "pleaseTest", 10, 2);
+        System.out.println(ret);
+        Assert.assertEquals(22, (int) ret);
+    }
 }
 
 
