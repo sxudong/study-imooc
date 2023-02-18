@@ -1,9 +1,8 @@
-package com.objectmentor.utilities.args.v1;
+package com.objectmentor.utilities.args;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import static com.objectmentor.utilities.args.v1.ArgsException.ErrorCode.*;
+import static com.objectmentor.utilities.args.ArgsException.ErrorCode.*;
 
 /**
  * 代码清单 14-6 IntegerArgumentMarshaler.java
@@ -29,5 +28,9 @@ public class IntegerArgumentMarshaler implements ArgumentMarshaler {
             return ((IntegerArgumentMarshaler) am).intValue;
         else
             return 0;
+    }
+
+    public Object get() {
+        return intValue;
     }
 }

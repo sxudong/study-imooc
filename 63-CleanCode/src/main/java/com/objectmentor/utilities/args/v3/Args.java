@@ -3,7 +3,7 @@ package com.objectmentor.utilities.args.v3;
 import java.util.*;
 
 /**
- * 代码清单 14-9 Args.java （只支付布尔类型）
+ * 代码清单 14-9 Args.java （更早期的一个版本，只支付布尔类型）
  */
 public class Args {
 

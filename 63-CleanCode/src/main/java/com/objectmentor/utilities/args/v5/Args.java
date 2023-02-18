@@ -4,25 +4,25 @@ import java.text.ParseException;
 import java.util.*;
 
 /**
- * 基本上算完成的代码
+ * 14.2.2 渐进
  */
 public class Args {
     private String schema;
     private String[] args;
     private boolean valid = true;
     private Set<Character> unexpectedArguments = new TreeSet<Character>();
-    private Map<Character, ArgumentMarshaler> argumentMarshaler = new HashMap<>();
+    // ########### update ########### start
     private Map<Character, ArgumentMarshaler> booleanArgs = new HashMap<>();
+    // ########### update ########### end
     private Map<Character, String> stringArgs = new HashMap<Character, String>();
     private Set<Character> argsFound = new HashSet<Character>();
     private int currentArgument;
     private char errorArgument = '\0';
+    private ErrorCode errorCode = ErrorCode.OK;
 
     enum ErrorCode {
         OK, MISSING_STRING
     }
-
-    private com.objectmentor.utilities.args.v5.Args.ErrorCode errorCode = com.objectmentor.utilities.args.v5.Args.ErrorCode.OK;
 
     public Args(String schema, String[] args) throws ParseException {
         this.schema = schema;
@@ -79,6 +79,7 @@ public class Args {
     }
 
     private void parseBooleanSchemaElement(char elementId) {
+        // ########### update ###########
         booleanArgs.put(elementId, new BooleanArgumentMarshaler());
     }
 
@@ -128,7 +129,7 @@ public class Args {
         } catch (ArrayIndexOutOfBoundsException e) {
             valid = false;
             errorArgument = argChar;
-            errorCode = com.objectmentor.utilities.args.v5.Args.ErrorCode.MISSING_STRING;
+            errorCode = ErrorCode.MISSING_STRING;
         }
     }
 
@@ -137,7 +138,9 @@ public class Args {
     }
 
     private void setBooleanArg(char argChar, boolean value) {
+        // ########### update ###########
         booleanArgs.get(argChar).setBoolean(value);
+        // ##############################
     }
 
     private boolean isBoolean(char argChar) {
@@ -161,7 +164,7 @@ public class Args {
         } else
             switch (errorCode) {
                 case MISSING_STRING:
-                    return String.format("Could not find string parameter for - % c.", errorArgument);
+                    return String.format("Could not find string parameter for - %c.", errorArgument);
                 case OK:
                     throw new Exception("TILT:Should not get here.");
             }
@@ -178,8 +181,16 @@ public class Args {
         return message.toString();
     }
 
+    // ########### update ###########
     public boolean getBoolean(char arg) {
-        return booleanArgs.get(arg).getBoolean();
+        Args.ArgumentMarshaler am = booleanArgs.get(arg);
+        // 放入检测 null 值逻辑
+        return am != null && am.getBoolean();
+    }
+    // ##############################
+
+    private boolean falseIfNull(Boolean b) {
+        return b == null ? false : b;
     }
 
     public String getString(char arg) {
@@ -198,6 +209,7 @@ public class Args {
         return valid;
     }
 
+    // ####################### 14.2.2 渐近添加 #######################
     private class ArgumentMarshaler {
         private boolean booleanValue = false;
 
@@ -219,6 +231,5 @@ public class Args {
 
     private class IntegerArgumentMarshaler extends ArgumentMarshaler {
     }
-
+    // #################################################
 }
-

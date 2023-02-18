@@ -1,20 +1,20 @@
-package com.objectmentor.utilities.args.v4;
+package com.objectmentor.utilities.args.v6;
 
 import java.text.ParseException;
 import java.util.*;
 
 /**
- * 代码清单 14-10 Args.java (Boolean and String)
- *
- * 在 代码清单 14-9 的基础上逐步添加了对这两种参数类型的支持，代码从可维护之物变成了满是缺陷的东西。
+ * 14.3 添加字符串类型参数 p199
  */
 public class Args {
     private String schema;
     private String[] args;
     private boolean valid = true;
     private Set<Character> unexpectedArguments = new TreeSet<Character>();
-    private Map<Character, Boolean> booleanArgs = new HashMap<Character, Boolean>();
-    private Map<Character, String> stringArgs = new HashMap<Character, String>();
+    private Map<Character, ArgumentMarshaler> booleanArgs = new HashMap<>();
+    // ########### update ########### start
+    private Map<Character, ArgumentMarshaler> stringArgs = new HashMap<>();
+    // ########### update ########### end
     private Set<Character> argsFound = new HashSet<Character>();
     private int currentArgument;
     private char errorArgument = '\0';
@@ -65,11 +65,6 @@ public class Args {
         }
     }
 
-    private void parseStringSchemaElement(char elementId) {
-        stringArgs.put(elementId, "");
-    }
-
-
     private boolean isStringSchemaElement(String elementTail) {
         return elementTail.equals("*");
     }
@@ -79,7 +74,13 @@ public class Args {
     }
 
     private void parseBooleanSchemaElement(char elementId) {
-        booleanArgs.put(elementId, false);
+        booleanArgs.put(elementId, new BooleanArgumentMarshaler());
+    }
+
+    private void parseStringSchemaElement(char elementId) {
+        // ########### update ###########
+        stringArgs.put(elementId, new StringArgumentMarshaler());
+        // ##############################
     }
 
     private boolean parseArguments() {
@@ -121,27 +122,27 @@ public class Args {
         return set;
     }
 
-    private void setStringArg(char argChar, String s) {
-        currentArgument++;
-        try {
-            stringArgs.put(argChar, args[currentArgument]);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            valid = false;
-            errorArgument = argChar;
-            errorCode = ErrorCode.MISSING_STRING;
-        }
+    private boolean isBoolean(char argChar) {
+        return booleanArgs.containsKey(argChar);
+    }
+
+    private void setBooleanArg(char argChar, boolean value) {
+        booleanArgs.get(argChar).setBoolean(value);
     }
 
     private boolean isString(char argChar) {
         return stringArgs.containsKey(argChar);
     }
 
-    private void setBooleanArg(char argChar, boolean value) {
-        booleanArgs.put(argChar, value);
-    }
-
-    private boolean isBoolean(char argChar) {
-        return booleanArgs.containsKey(argChar);
+    private void setStringArg(char argChar, String s) {
+        currentArgument++;
+        try {
+            stringArgs.get(argChar).setString(args[currentArgument]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            valid = false;
+            errorArgument = argChar;
+            errorCode = ErrorCode.MISSING_STRING;
+        }
     }
 
     public int cardinality() {
@@ -179,19 +180,16 @@ public class Args {
     }
 
     public boolean getBoolean(char arg) {
-        return falseIfNull(booleanArgs.get(arg));
-    }
-
-    private boolean falseIfNull(Boolean b) {
-        return b == null ? false : b;
+        ArgumentMarshaler am = booleanArgs.get(arg);
+        // 放入检测 null 值逻辑
+        return am != null && am.getBoolean();
     }
 
     public String getString(char arg) {
-        return blankIfNull(stringArgs.get(arg));
-    }
-
-    private String blankIfNull(String s) {
-        return s == null ? "" : s;
+        // ########### update ###########
+        ArgumentMarshaler am = stringArgs.get(arg);
+        return am == null ? "" : am.getString();
+        // ##############################
     }
 
     public boolean has(char arg) {
@@ -201,4 +199,39 @@ public class Args {
     public boolean isValid() {
         return valid;
     }
+
+    private class ArgumentMarshaler {
+        private boolean booleanValue = false;
+        // ########### update ###########
+        private String stringValue;
+        // ##############################
+
+        public void setBoolean(boolean value) {
+            booleanValue = value;
+        }
+
+        public boolean getBoolean() {
+            return booleanValue;
+        }
+
+        // ########### update ###########
+        public void setString(String s) {
+            stringValue = s;
+        }
+
+        public String getString() {
+            return stringValue == null ? "" : stringValue;
+        }
+        // ##############################
+    }
+
+    private class BooleanArgumentMarshaler extends ArgumentMarshaler {
+    }
+
+    private class StringArgumentMarshaler extends ArgumentMarshaler {
+    }
+
+    private class IntegerArgumentMarshaler extends ArgumentMarshaler {
+    }
+
 }

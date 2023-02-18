@@ -1,4 +1,4 @@
-package com.objectmentor.utilities.args.v1;
+package com.objectmentor.utilities.args;
 
 import java.util.Iterator;
 
@@ -19,4 +19,9 @@ public class BooleanArgumentMarshaler implements ArgumentMarshaler {
     else
       return false;
   }
+
+  public Object get() {
+    return booleanValue;
+  }
+
 }

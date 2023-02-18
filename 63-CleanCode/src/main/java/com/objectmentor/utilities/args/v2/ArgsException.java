@@ -1,6 +1,6 @@
-package com.objectmentor.utilities.args.v1;
+package com.objectmentor.utilities.args.v2;
 
-import static com.objectmentor.utilities.args.v1.ArgsException.ErrorCode.*;
+import static com.objectmentor.utilities.args.v2.ArgsException.ErrorCode.OK;
 
 /**
  * 代码清单 14-7 ArgsException.java

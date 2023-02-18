@@ -1,9 +1,10 @@
-package com.objectmentor.utilities.args.v1;
+package com.objectmentor.utilities.args;
 
-import static com.objectmentor.utilities.args.v1.ArgsException.ErrorCode.*;
+import static com.objectmentor.utilities.args.ArgsException.ErrorCode.OK;
 
 /**
  * 代码清单 14-7 ArgsException.java
+ * 代码清单 14-15 ArgsException.java
  */
 public class ArgsException extends Exception {
     private char errorArgumentId = '\0';
@@ -61,21 +62,21 @@ public class ArgsException extends Exception {
             case OK:
                 return "TILT: not get here.";
             case UNEXPECTED_ARGUMENT:
-                return String.format("Argument - %c unexpected.", errorArgumentId);
+                return String.format("Argument -%c unexpected.", errorArgumentId);
             case MISSING_STRING:
-                return String.format("Could not find string parameter for - %c.", errorArgumentId);
+                return String.format("Could not find string parameter for -%c.", errorArgumentId);
             case INVALID_INTEGER:
-                return String.format("Argument - %c expects an integer but was ’%s’.", errorArgumentId, errorParameter);
+                return String.format("Argument -%c expects an integer but was '%s'.", errorArgumentId, errorParameter);
             case MISSING_INTEGER:
-                return String.format("Could not find integer parameter for - %c.", errorArgumentId);
+                return String.format("Could not find integer parameter for -%c.", errorArgumentId);
             case INVALID_DOUBLE:
-                return String.format("Argument - %c expects a double but was ’%s’.", errorArgumentId, errorParameter);
+                return String.format("Argument -%c expects a double but was '%s'.", errorArgumentId, errorParameter);
             case MISSING_DOUBLE:
-                return String.format("Could not find double parameter for - %c.", errorArgumentId);
+                return String.format("Could not find double parameter for -%c.", errorArgumentId);
             case INVALID_ARGUMENT_NAME:
                 return String.format("'%c' is not a valid argument name.", errorArgumentId);
             case INVALID_ARGUMENT_FORMAT:
-                return String.format("'%s'is not a valid argument format.", errorParameter);
+                return String.format("'%s' is not a valid argument format.", errorParameter);
         }
         return "";
     }
@@ -84,6 +85,7 @@ public class ArgsException extends Exception {
         OK, INVALID_ARGUMENT_FORMAT, UNEXPECTED_ARGUMENT, INVALID_ARGUMENT_NAME,
         MISSING_STRING,
         MISSING_INTEGER, INVALID_INTEGER,
-        MISSING_DOUBLE, INVALID_DOUBLE
+        MISSING_DOUBLE, INVALID_DOUBLE,
+        INVALID_FORMAT;
     }
 }

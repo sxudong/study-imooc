@@ -1,27 +1,33 @@
-package com.objectmentor.utilities.args.v4;
+package com.objectmentor.utilities.args.v7;
 
 import java.text.ParseException;
 import java.util.*;
 
 /**
- * 代码清单 14-10 Args.java (Boolean and String)
- *
- * 在 代码清单 14-9 的基础上逐步添加了对这两种参数类型的支持，代码从可维护之物变成了满是缺陷的东西。
+ * 14.3 添加 int 类型参数  p200-p201
  */
 public class Args {
     private String schema;
     private String[] args;
     private boolean valid = true;
     private Set<Character> unexpectedArguments = new TreeSet<Character>();
-    private Map<Character, Boolean> booleanArgs = new HashMap<Character, Boolean>();
-    private Map<Character, String> stringArgs = new HashMap<Character, String>();
+    private Map<Character, ArgumentMarshaler> booleanArgs = new HashMap<>();
+    private Map<Character, ArgumentMarshaler> stringArgs = new HashMap<>();
+    // ########### update ###########
+    private Map<Character, ArgumentMarshaler> intArgs = new HashMap<>();
+    private char errorArgumentId;
+    private String errorParameter;
+    // ##############################
     private Set<Character> argsFound = new HashSet<Character>();
     private int currentArgument;
     private char errorArgument = '\0';
     private ErrorCode errorCode = ErrorCode.OK;
 
     enum ErrorCode {
-        OK, MISSING_STRING
+        OK, MISSING_STRING,
+        // ########### update ###########
+        MISSING_INTEGER, INVALID_INTEGER ;
+        // ##############################
     }
 
     public Args(String schema, String[] args) throws ParseException {
@@ -56,6 +62,11 @@ public class Args {
             parseBooleanSchemaElement(elementId);
         else if (isStringSchemaElement(elementTail))
             parseStringSchemaElement(elementId);
+        // ########### update ###########
+        else if (isIntegerSchemaElement(elementTail))
+            parseIntegerSchemaElement(elementId);
+        // ##############################
+
     }
 
     private void validateSchemaElementId(char elementId) throws ParseException {
@@ -65,11 +76,6 @@ public class Args {
         }
     }
 
-    private void parseStringSchemaElement(char elementId) {
-        stringArgs.put(elementId, "");
-    }
-
-
     private boolean isStringSchemaElement(String elementTail) {
         return elementTail.equals("*");
     }
@@ -78,9 +84,25 @@ public class Args {
         return elementTail.length() == 0;
     }
 
-    private void parseBooleanSchemaElement(char elementId) {
-        booleanArgs.put(elementId, false);
+    // ########### update ###########
+    private boolean isIntegerSchemaElement(String elementTail) {
+        return elementTail.equals("#");
     }
+    // ##############################
+
+    private void parseBooleanSchemaElement(char elementId) {
+        booleanArgs.put(elementId, new BooleanArgumentMarshaler());
+    }
+
+    private void parseStringSchemaElement(char elementId) {
+        stringArgs.put(elementId, new StringArgumentMarshaler());
+    }
+
+    // ########### update ###########
+    private void parseIntegerSchemaElement(char elementId) {
+        intArgs.put(elementId, new IntegerArgumentMarshaler());
+    }
+    // ##############################
 
     private boolean parseArguments() {
         for (currentArgument = 0; currentArgument < args.length; currentArgument++) {
@@ -121,10 +143,23 @@ public class Args {
         return set;
     }
 
+
+    private boolean isBoolean(char argChar) {
+        return booleanArgs.containsKey(argChar);
+    }
+
+    private void setBooleanArg(char argChar, boolean value) {
+        booleanArgs.get(argChar).setBoolean(value);
+    }
+
+    private boolean isString(char argChar) {
+        return stringArgs.containsKey(argChar);
+    }
+
     private void setStringArg(char argChar, String s) {
         currentArgument++;
         try {
-            stringArgs.put(argChar, args[currentArgument]);
+            stringArgs.get(argChar).setString(args[currentArgument]);
         } catch (ArrayIndexOutOfBoundsException e) {
             valid = false;
             errorArgument = argChar;
@@ -132,17 +167,27 @@ public class Args {
         }
     }
 
-    private boolean isString(char argChar) {
-        return stringArgs.containsKey(argChar);
+    // ########### update ###########
+    private void setIntArg(char argChar) throws ArgsException {
+        currentArgument++;
+        String parameter = null;
+        try {
+            parameter = args[currentArgument];
+            intArgs.get(argChar).setInteger(Integer.parseInt(parameter));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            valid = false;
+            errorArgumentId = argChar;
+            errorCode = ErrorCode.MISSING_INTEGER;
+            throw new ArgsException();
+        } catch (NumberFormatException e) {
+            valid = false;
+            errorArgumentId = argChar;
+            errorParameter = parameter;
+            errorCode = ErrorCode.INVALID_INTEGER;
+            throw new ArgsException();
+        }
     }
-
-    private void setBooleanArg(char argChar, boolean value) {
-        booleanArgs.put(argChar, value);
-    }
-
-    private boolean isBoolean(char argChar) {
-        return booleanArgs.containsKey(argChar);
-    }
+    // ##############################
 
     public int cardinality() {
         return argsFound.size();
@@ -179,20 +224,22 @@ public class Args {
     }
 
     public boolean getBoolean(char arg) {
-        return falseIfNull(booleanArgs.get(arg));
-    }
-
-    private boolean falseIfNull(Boolean b) {
-        return b == null ? false : b;
+        ArgumentMarshaler am = booleanArgs.get(arg);
+        // 放入检测 null 值逻辑
+        return am != null && am.getBoolean();
     }
 
     public String getString(char arg) {
-        return blankIfNull(stringArgs.get(arg));
+        ArgumentMarshaler am = stringArgs.get(arg);
+        return am == null ? "" : am.getString();
     }
 
-    private String blankIfNull(String s) {
-        return s == null ? "" : s;
+    // ########### update ###########
+    public int getInt(char arg) {
+        ArgumentMarshaler am = intArgs.get(arg);
+        return am == null ? 0 : am.getInteger();
     }
+    // ##############################
 
     public boolean has(char arg) {
         return argsFound.contains(arg);
@@ -201,4 +248,52 @@ public class Args {
     public boolean isValid() {
         return valid;
     }
+
+    class ArgsException extends Exception {
+    }
+
+    private class ArgumentMarshaler {
+        private boolean booleanValue = false;
+        private String stringValue;
+        // ########### update ###########
+        private int integerValue;
+        // ##############################
+
+        public void setBoolean(boolean value) {
+            booleanValue = value;
+        }
+
+        public boolean getBoolean() {
+            return booleanValue;
+        }
+
+        public void setString(String s) {
+            stringValue = s;
+        }
+
+        public String getString() {
+            return stringValue == null ? "" : stringValue;
+        }
+
+        // ########### update ###########
+        public void setInteger(int i) {
+            integerValue = i;
+        }
+
+        public int getInteger() {
+            return integerValue;
+        }
+        // ##############################
+
+    }
+
+    private class BooleanArgumentMarshaler extends ArgumentMarshaler {
+    }
+
+    private class StringArgumentMarshaler extends ArgumentMarshaler {
+    }
+
+    private class IntegerArgumentMarshaler extends ArgumentMarshaler {
+    }
+
 }

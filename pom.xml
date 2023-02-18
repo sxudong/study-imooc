@@ -32,9 +32,6 @@
         <module>07-boot</module>
         <module>08-freemarker</module>
         <module>09-sso</module>
-        <module>10-java</module>
-
-        <module>11-spring</module>
         <module>12-gradle</module>
         <module>13-json</module>
         <module>14-redis</module>
@@ -45,21 +42,11 @@
         <module>18-quartz</module>
         <module>19-excel</module>
         <module>20-thread</module>
-
-        <module>21-java</module>
-        <module>22-java</module>
         <module>23-hibernate</module>
-        <module>25-java</module>
-
-        <module>26-java</module>
         <module>27-activemq</module>
         <module>28-small</module>
         <module>29-amap</module>
         <module>30-ssh</module>
-
-        <module>31-spring</module>
-        <module>32-spring</module>
-        <module>33-java</module>
         <module>34-spring-aop</module>
         <module>35-boot-es</module>
 
@@ -92,6 +79,7 @@
         <module>59-Servlet</module>
 		<module>60-JavaWeb</module>
 		<module>61-SpringAnnotation</module>
+        <module>63-CleanCode</module>
     </modules>
 
     <properties>

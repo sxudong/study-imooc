@@ -5,7 +5,8 @@ import static com.objectmentor.utilities.args.v1.ArgsException.ErrorCode.*;
 import java.util.*;
 
 /**
- * 代码清单 14-2 Args.java
+ * 代码清单 14-2 Args.java p178
+ * https://github.com/glen9527/Clean-Code-zh
  */
 public class Args {
     private Map<Character, ArgumentMarshaler> marshalers;
@@ -45,7 +46,7 @@ public class Args {
     }
 
     private void validateSchemaElementId(char elementId) throws ArgsException {
-        if (!Character.isLetter(elementId))
+        if (!Character.isLetter(elementId)) // 要测试的字符。 返回值 如果字符为字母,则返回 true; 否则返回 false。
             throw new ArgsException(INVALID_ARGUMENT_NAME, elementId, null);
     }
 
@@ -107,24 +108,5 @@ public class Args {
 
     public String[] getStringArray(char arg) {
         return StringArrayArgumentMarshaler.getValue(marshalers.get(arg));
-    }
-
-    /**
-     * 代码清单 14-1 Args的简单用法
-     */
-    public static void main(String[] args) {
-        try {
-            Args arg = new Args("l,p#,d*", args);
-            boolean logging = arg.getBoolean('l');
-            int port = arg.getInt('p');
-            String directory = arg.getString('d');
-            executeApplication(logging, port, directory);
-        } catch (ArgsException e) {
-            System.out.printf("Argument error: %s\n", e.errorMessage());
-        }
-    }
-
-    private static void executeApplication(boolean logging, int port, String directory) {
-
     }
 }
