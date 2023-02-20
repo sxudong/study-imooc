@@ -80,6 +80,7 @@
 		<module>60-JavaWeb</module>
 		<module>61-SpringAnnotation</module>
         <module>63-CleanCode</module>
+        <module>64-Refactoring</module>
     </modules>
 
     <properties>
