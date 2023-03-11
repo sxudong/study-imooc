@@ -28,14 +28,14 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
         assertEquals(TUESDAY, stringToWeekdayCode("Tuesday"));
         assertEquals(TUESDAY, stringToWeekdayCode("Tue"));
 //        assertEquals(TUESDAY, stringToWeekdayCode("tuesday"));
-//        assertEquals (TUESDAY, stringToWeekdaycode("TUBSDAY"));
+//        assertEquals (TUESDAY, stringToWeekdayCode("TUESDAY"));
 //        assertEquals (TUESDAY, stringToWeekdayCode("tue"));
 //        assertEquals (TUESDAY, stringToWeekdayCode ("tues"));
 
         assertEquals(WEDNESDAY, stringToWeekdayCode("wednesday"));
         assertEquals(WEDNESDAY, stringToWeekdayCode("wed"));
-//        assertEquals(WEDNESDAY, stringToWeekdaycode("wednesday"));
-//        assertEquals(WEDNESDAY, stringToweekdaycode("WEDNESDAY"));
+//        assertEquals(WEDNESDAY, stringToWeekdayCode("wednesday"));
+//        assertEquals(WEDNESDAY, stringToWeekdayCode("WEDNESDAY"));
 //        assertEquals(WEDNESDAY, stringToWeekdayCode("wed")) ;
 
         assertEquals(THURSDAY, stringToWeekdayCode("Thursday"));
@@ -47,7 +47,7 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
 
         assertEquals(FRIDAY, stringToWeekdayCode("Friday"));
         assertEquals(FRIDAY, stringToWeekdayCode("Fri"));
-//        assertEquals(FRIDAY, stringToWeekdayCode("friday")) ;
+//        assertEquals(FRIDAY, stringToWeekdayCode("friday"));
 //        assertEquals(FRIDAY, stringToWeekdayCode("FRIDAY"));
 //        assertEquals(FRIDAY, stringToWeekdayCode("fri"));
 
@@ -60,7 +60,7 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
         assertEquals(SUNDAY, stringToWeekdayCode("sunday"));
         assertEquals(SUNDAY, stringToWeekdayCode("Sun"));
 //        assertEquals(SUNDAY, stringToWeekdayCode("sunday"));
-//        assertEquals(SUNDAY, stringToWeekdayCode("SONDAY"));
+//        assertEquals(SUNDAY, stringToWeekdayCode("SUNDAY"));
 //        assertEquals(SUNDAY, stringToWeekdayCode("sun"));
     }
 
@@ -352,7 +352,7 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
         assertEquals(d(18, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(21, APRIL, 2006)));
         assertEquals(d(25, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(22, APRIL, 2006)));
 
-        assertEquals(d (19,APRIL,2006), getNearestDayOfWeek(WEDNESDAY, d(16,APRIL,2006)));
+        assertEquals(d (19,APRIL,2006), getNearestDayOfWeek(WEDNESDAY, d(16, APRIL,2006)));
         assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(17, APRIL, 2006)));
         assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(18, APRIL, 2006)));
         assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(19, APRIL, 2006)));

@@ -1,11 +1,10 @@
-package com.demo.service;
-
-import com.demo.PrimeNumberGenerator;
+import chapter4.PrimeNumberGenerator;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Junit测试用例来测试我们的 Eratosthenes Sieve 算法

@@ -47,7 +47,7 @@ public class PowerMockTest {
      * Mockito测试，实现类逻辑的测试是重点之一
      */
     @Test
-    public void test10() {
+    public void testMockito() {
         long id = 9527;
         User user = new User();
         user.setId(id);
@@ -63,7 +63,7 @@ public class PowerMockTest {
      * mock 静态方法1 （使用 PowerMockito.mockStatic(class) mock 静态方法）
      */
     @Test
-    public void test11() {
+    public void testMockStaticMethod1() {
         User user = new User();
         user.setName("白玉京");
         UserDTO dto = new UserDTO();
@@ -77,10 +77,25 @@ public class PowerMockTest {
     }
 
     /**
+     * mock 静态方法2
+     * 使用 PowerMockito.spy（class）mock 静态方法
+     */
+    @Test
+    public void testMockStaticMethod2() throws Exception {
+        String str = "白玉京";
+        PowerMockito.spy(UserServiceImpl.class);
+
+        // 模拟 userServiceImpl#staticMethod(String str) 返回 "35174"
+        PowerMockito.when(userServiceImpl, "staticMethod", str).thenReturn("35174");
+        // 测试 userServiceImpl.testStaticMethodMethod(String str) 方法
+        TestCase.assertEquals("35174", userServiceImpl.testStaticMethodMethod(str));
+    }
+
+    /**
      * 函数类型参数匹配。 精确匹配我没找到该怎么匹配
      */
     @Test
-    public void test12() {
+    public void testFunctionTypeParameterMatching1() {
         User user = new User();
         user.setId(9527L);
 
@@ -94,7 +109,7 @@ public class PowerMockTest {
      * 函数类型参数匹配。 类型匹配
      */
     @Test
-    public void test13() {
+    public void testFunctionTypeParameterMatching2() {
         User user = new User();
         user.setId(9527L);
 
@@ -109,7 +124,7 @@ public class PowerMockTest {
      * 引用类型参数，未重写 equals 方法, 解决方法
      */
     @Test
-    public void test14() {
+    public void testReferenceTypeParameter() {
         long pageNo = 1;
         long pageSize = 20;
         String name = "白玉京";
@@ -140,7 +155,7 @@ public class PowerMockTest {
      * 使用 PowerMockito.spy（object）mock 私有方法
      */
     @Test
-    public void test15() throws Exception {
+    public void testMockPrivateMethod() throws Exception {
         String str = "白玉京";
         // 模拟代理 UserServiceImpl
         UserServiceImpl spyObj = PowerMockito.spy(userServiceImpl);
@@ -156,28 +171,13 @@ public class PowerMockTest {
      * 使用 PowerMockito.method（...）通过反射调用私有方法
      */
     @Test
-    public void test16() throws Exception {
+    public void testCallPrivateMethod() throws Exception {
         String str = "白玉京";
         String result = "I am private method. " + str;
 
         Method method = PowerMockito.method(UserServiceImpl.class, "privateMethod", String.class);
         // 测试反射调用 UserServiceImpl#privateMethod()方法
         TestCase.assertEquals(result, method.invoke(userServiceImpl, str));
-    }
-
-    /**
-     * mock 静态方法2
-     * 使用 PowerMockito.spy（class）mock 静态方法
-     */
-    @Test
-    public void test17() throws Exception {
-        String str = "白玉京";
-        PowerMockito.spy(UserServiceImpl.class);
-
-        // 模拟 userServiceImpl#staticMethod(String str) 返回 "35174"
-        PowerMockito.when(userServiceImpl, "staticMethod", str).thenReturn("35174");
-        // 测试 userServiceImpl.testStaticMethodMethod(String str) 方法
-        TestCase.assertEquals("35174", userServiceImpl.testStaticMethodMethod(str));
     }
 
     /**
