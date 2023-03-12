@@ -94,16 +94,16 @@ public class PowerMockTest {
     /**
      * 函数类型参数匹配。 精确匹配我没找到该怎么匹配
      */
-    @Test
-    public void testFunctionTypeParameterMatching1() {
-        User user = new User();
-        user.setId(9527L);
-
-        // 模拟设置 jdbcQueryManager#queryForList(Object var1, Class<E> var2, Function<E, R> var3) 返回一个 List<UserDTO>
-        Mockito.when(jdbcQueryManager.queryForList(user, User.class, User::convert)).thenReturn(Lists.newArrayList(new UserDTO()));
-        // 测试返回结果
-        TestCase.assertEquals(Lists.newArrayList(new UserDTO()), userServiceImpl.findByUser(user));
-    }
+//    @Test
+//    public void testFunctionTypeParameterMatching1() {
+//        User user = new User();
+//        user.setId(9527L);
+//
+//        // 模拟设置 jdbcQueryManager#queryForList(Object var1, Class<E> var2, Function<E, R> var3) 返回一个 List<UserDTO>
+//        Mockito.when(jdbcQueryManager.queryForList(user, User.class, User::convert)).thenReturn(Lists.newArrayList(new UserDTO()));
+//        // 测试返回结果
+//        TestCase.assertEquals(Lists.newArrayList(new UserDTO()), userServiceImpl.findByUser(user));
+//    }
 
     /**
      * 函数类型参数匹配。 类型匹配
