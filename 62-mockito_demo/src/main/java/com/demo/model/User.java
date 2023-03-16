@@ -9,6 +9,12 @@ public class User {
     private Integer age;
     private String idCard;
 
+    public User() {
+    }
+    public User(Long id) {
+        this.id = id;
+    }
+
     public static UserDTO convert(User var) {
         UserDTO dto = new UserDTO();
         dto.setName(var.getName());

@@ -5,9 +5,7 @@ import com.demo.model.PageParam;
 import com.demo.model.User;
 import com.demo.model.UserDTO;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class UserServiceImpl {
 
@@ -17,14 +15,16 @@ public class UserServiceImpl {
         return a * 2 + b;
     }
 
-    /**
-     * ddddddd
-     * @param id
-     * @return
-     */
     public User findById(Long id) {
-        User user = new User();
-        user.setId(id);
+        User user = new User(id);
+
+        ArrayList<User> list = new ArrayList<>();
+        list.add(user);
+        list.add(new User(1L));
+        list.add(new User(2L));
+
+        Optional<User> u = list.stream().filter(i -> i.getId() == 9527L).findFirst();
+        System.out.println("ID: " + user.getId());
         return jdbcQueryManager.queryForObject(user, User.class).orElse(null);
     }
 

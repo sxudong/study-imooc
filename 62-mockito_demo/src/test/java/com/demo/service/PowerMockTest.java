@@ -54,6 +54,8 @@ public class PowerMockTest {
 
         // 测试 userServiceImpl.findById() 方法中逻辑实现有没问题。
         // 模拟设置 jdbcQueryManager#queryForObject(Object var1, Class<E> var2) 将返回一个 user。
+        //Mockito.when(jdbcQueryManager.queryForObject(Mockito.eq(user), Mockito.eq(User.class))).thenReturn(Optional.of(user));
+        //Mockito.when(jdbcQueryManager.queryForObject(Mockito.any(), Mockito.any())).thenReturn(Optional.of(user));
         Mockito.when(jdbcQueryManager.queryForObject(user, User.class)).thenReturn(Optional.of(user));
         // 测试返回结果
         TestCase.assertEquals(user, userServiceImpl.findById(id));
