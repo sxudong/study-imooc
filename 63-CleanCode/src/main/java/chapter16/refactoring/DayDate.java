@@ -38,7 +38,6 @@ package chapter16.refactoring;
 
 import java.io.Serializable;
 import java.util.*;
-
 /**
  * 代码清单 B-1 https://github.com/jfree/jcommon
  * An abstract class that represents immutable dates with a precision of
@@ -61,20 +60,16 @@ import java.util.*;
 public abstract class DayDate implements Comparable, Serializable {
 
     public abstract int getOrdinalDay();
-
     public abstract int getYear();
-
     public abstract Month getMonth();
-
     public abstract int getDayOfMonth();
+    protected abstract Day getDayOfWeekForOrdinalZero(); // 创建 getDayOfWeekForOrdinalZero 抽象方法，在 SpreadsheetDate 中实现它。 《代码整洁之道》P266
 
-    protected abstract Day getDayOfWeekForOrdinalZero();
-
-    public DayDate plusDays(int days) {
-        return DayDateFactory.makeDate(getOrdinalDay() + days);
+    public DayDate plusDays(int days) { // SerialDate.addDays()
+        return DayDateFactory.makeDate(getOrdinalDay() + days); // 名称改为 getOrdinalDay()  《代码整洁之道》P266
     }
 
-    public DayDate plusMonths(int months) {
+    public DayDate plusMonths(int months) { // SerialDate.addMonths()
         int thisMonthAsOrdinal = getMonth().toInt() - Month.JANUARY.toInt();
         int thisMonthAndYearAsordinal = 12 * getYear() + thisMonthAsOrdinal;
         int resultMonthAndYearAs0rdinal = thisMonthAndYearAsordinal + months;
@@ -85,6 +80,12 @@ public abstract class DayDate implements Comparable, Serializable {
         return DayDateFactory.makeDate(resultDay, resultMonth, resultYear);
     }
 
+    public DayDate plusYears(int years) { // SerialDate.addYears()
+        int resultYear = getYear() + years;
+        int resultDay = correctLastDayOfMonth(getDayOfMonth(), getMonth(), resultYear);
+        return DayDateFactory.makeDate(resultDay, getMonth(), resultYear);
+    }
+
     private int correctLastDayOfMonth(int day, Month month, int year) {
         int lastDayOfMonth = DateUtil.lastDayOfMonth(month, year);
         if (day > lastDayOfMonth)
@@ -92,58 +93,59 @@ public abstract class DayDate implements Comparable, Serializable {
         return day;
     }
 
-
-    public DayDate getPreviousDayofweek(Day targetDayOfWeek) {
-        int offsetToTarget = targetDayOfWeek.toInt() - getDayOfWeek().toInt();
+    public DayDate getPreviousDayOfWeek(Day targetDayOfWeek) { // SerialDate.getPreviousDayOfWeek() 《代码整洁之道》P264~P265
+        int offsetToTarget = targetDayOfWeek.toInt() - getDayOfWeek().toInt(); // 0
         if (offsetToTarget >= 0)
             offsetToTarget -= 7;
         return plusDays(offsetToTarget);
     }
 
+    public DayDate getFollowingDayOfWeek(Day targetDayOfWeek) { // SerialDate.getFollowingDayOfWeek() 《代码整洁之道》P265
+        int offsetToTarget = targetDayOfWeek.toInt() - getDayOfWeek().toInt();
+        if(offsetToTarget <= 0)
+            offsetToTarget += 7;
+        return plusDays(offsetToTarget);
+    }
 
-    public DayDate getNearestDayOfWeek(Day targetDayOfWeek) {
+    public DayDate getNearestDayOfWeek(Day targetDayOfWeek) { // SerialDate.getNearestDayOfWeek() 《代码整洁之道》P265
         int offsetToThisWeeksTarget =  targetDayOfWeek.toInt() - getDayOfWeek().toInt();
         int offsetToFutureTarget = (offsetToThisWeeksTarget + 7) % 7;
         int offsetToPreviousTarget = offsetToFutureTarget - 7;
+
         if (offsetToFutureTarget > 3)
             return plusDays(offsetToPreviousTarget);
         else
             return plusDays(offsetToFutureTarget);
     }
 
-
-    public DayDate getEndOfMonth() {
+    public DayDate getEndOfMonth() { // SerialDate.getEndOfMonth() 《代码整洁之道》P265
         Month month = getMonth();
         int year = getYear();
         int lastDay = DateUtil.lastDayOfMonth(month, year);
         return DayDateFactory.makeDate(lastDay, month, year);
     }
 
-    public Date toDate() {
+    public Date toDate() { // 在 SerialDate 中定义的是抽象方法，取消抽象方法上推到父类 DayDate 中。 《代码整洁之道》P266
         final Calendar calendar = Calendar.getInstance();
         int ordinalMonth = getMonth().toInt() - Month.JANUARY.toInt();
         calendar.set(getYear(), ordinalMonth, getDayOfMonth(), 0, 0, 0);
         return calendar.getTime();
     }
 
-
     public String toString() {
         return String.format("%02d-%s-%d", getDayOfMonth(), getMonth(), getYear());
     }
-
-
-    public Day getDayOfWeek() {
-        Day startingDay = getDayOfWeekForOrdinalZero();
-        int startingOffset = startingDay.toInt() - Day.SUNDAY.toInt();
-        int ordinalOfDayOfWeek = (getOrdinalDay() + startingOffset) % 7;
-        return Day.fromInt(ordinalOfDayOfWeek + Day.SUNDAY.toInt());
+    // SpreadsheetDate.getDayOfWeek() { return (this.serial + 6) % 7 + 1;} // 第0天的星期日数，星期日 0，星期一 1，星期二 2，星期三 3，星期四 4，星期五 5，星期六 6，到 7 变 0。
+    public Day getDayOfWeek() { // SerialDate.getDayOfWeek() 抽象方法上移在 DayDate 父类实现。 《代码整洁之道》P266
+        Day startingDay = getDayOfWeekForOrdinalZero(); // 算法本身也应该有一小部分依赖实现
+        int startingOffset = startingDay.toInt() - Day.SUNDAY.toInt(); // 7-1
+        int ordinalOfDayOfWeek = (getOrdinalDay() + startingOffset) % 7; // 相当于 (this.serial + 6) % 7
+        return Day.fromInt(ordinalOfDayOfWeek + Day.SUNDAY.toInt()); // + 1
     }
-
 
     public int daysSince(DayDate date) {
         return getOrdinalDay() - date.getOrdinalDay();
     }
-
 
     public boolean isOn(DayDate other) {
         return getOrdinalDay() == other.getOrdinalDay();
@@ -164,7 +166,6 @@ public abstract class DayDate implements Comparable, Serializable {
     public boolean isOnOrAfter(DayDate other) {
         return getOrdinalDay() >= other.getOrdinalDay();
     }
-
 
     public boolean isInRange(DayDate d1, DayDate d2) {
         return isInRange(d1, d2, DateInterval.CLOSED);

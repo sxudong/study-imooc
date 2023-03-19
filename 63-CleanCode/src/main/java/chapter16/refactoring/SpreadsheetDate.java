@@ -54,9 +54,11 @@
 
 package chapter16.refactoring;
 
-import static chapter16.refactoring.Month.FEBRUARY;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
-import java.util.*;
+import static chapter16.refactoring.Month.FEBRUARY;
 
 /** 代码清单 B-5 P363-P372
  * Represents a date using an integer, in a similar fashion to the
@@ -167,7 +169,7 @@ public class SpreadsheetDate extends DayDate { // 代码清单 B-16 (最终版�
 
 
     private void calcDayMonthYear() {
-        int days = ordinalDay-EARLIEST_DATE_ORDINAL;
+        int days = ordinalDay - EARLIEST_DATE_ORDINAL;
         int overestimatedYear = MINIMUM_YEAR_SUPPORTED + days / 365;
         int nonleapdays = days - DateUtil.leapYearCount(overestimatedYear);
         int underestimatedYear = MINIMUM_YEAR_SUPPORTED + nonleapdays / 365;

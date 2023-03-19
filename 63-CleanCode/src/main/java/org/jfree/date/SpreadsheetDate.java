@@ -86,7 +86,7 @@ public class SpreadsheetDate extends SerialDate { // 代码清单 B-5 P363
      * The day number (1-Jan-1900 = 2, 2-Jan-1900 = 3, ..., 31-Dec-9999 =
      * 2958465).
      */
-    private int serial;
+    private int serial; // 序列号
 
     /** The day of the month (1 to 28, 29, 30 or 31 depending on the month). */
     private int day;
@@ -135,7 +135,7 @@ public class SpreadsheetDate extends SerialDate { // 代码清单 B-5 P363
             throw new IllegalArgumentException("Invalid 'day' argument.");
         }
 
-        // the serial number needs to be synchronised with the day-month-year...
+        // the serial number needs to be synchronised with the day-month-year... 序列号需要与日-月-年同步
         this.serial = calcSerial(day, month, year);
 
         this.description = null;
@@ -200,7 +200,7 @@ public class SpreadsheetDate extends SerialDate { // 代码清单 B-5 P363
      *
      * @return The date.
      */
-    public Date toDate() {
+    public Date toDate() { // 该函数在父类中定义是抽象方法，取消抽象方法，上推到父类中。 《代码整洁之道》P266
         final Calendar calendar = Calendar.getInstance();
         calendar.set(getYYYY(), getMonth() - 1, getDayOfMonth(), 0, 0, 0);
         return calendar.getTime();
@@ -244,7 +244,7 @@ public class SpreadsheetDate extends SerialDate { // 代码清单 B-5 P363
      * @return A code representing the day of the week.
      */
     public int getDayOfWeek() {
-        return (this.serial + 6) % 7 + 1;
+        return (this.serial + 6) % 7 + 1; // 第0天的星期日数，星期日 0，星期一 1，星期二 2，星期三 3，星期四 4，星期五 5，星期六 6，到 7 变 0。
     }
 
     /**
@@ -369,7 +369,7 @@ public class SpreadsheetDate extends SerialDate { // 代码清单 B-5 P363
         return (this.serial >= other.toSerial());
     }
 
-    /**
+    /** 在范围内
      * Returns <code>true</code> if this {@link SerialDate} is within the
      * specified range (INCLUSIVE).  The date order of d1 and d2 is not
      * important.
@@ -430,15 +430,15 @@ public class SpreadsheetDate extends SerialDate { // 代码清单 B-5 P363
      * @return the serial number from the day, month and year.
      */
     private int calcSerial(final int d, final int m, final int y) {
-        final int yy = ((y - 1900) * 365) + SerialDate.leapYearCount(y - 1);
-        int mm = SerialDate.AGGREGATE_DAYS_TO_END_OF_PRECEDING_MONTH[m];
-        if (m > MonthConstants.FEBRUARY) {
+        final int yy = ((y - 1900) * 365) + SerialDate.leapYearCount(y - 1); // 38716
+        int mm = SerialDate.AGGREGATE_DAYS_TO_END_OF_PRECEDING_MONTH[m]; // 59
+        if (m > MonthConstants.FEBRUARY) { // 大于 2 月
             if (SerialDate.isLeapYear(y)) {
                 mm = mm + 1;
             }
         }
-        final int dd = d;
-        return yy + mm + dd + 1;
+        final int dd = d; // 1
+        return yy + mm + dd + 1; // 38777
     }
 
     /**

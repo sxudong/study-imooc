@@ -5,10 +5,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.jdbc.ReturningWork;
+import org.hibernate.jdbc.Work;
 import org.hibernate.service.ServiceRegistry;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.*;
 import java.util.Date;
 
 /**
@@ -64,4 +67,59 @@ public class StudentsTest {
         session.save(s);
         tx.commit();
     }
+
+
+    /**
+     * 使用 JDBC 执行 sql 语句
+     */
+    @Test
+    public void testJDBC() throws SQLException {
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+        ResultSet resultSet = session.doReturningWork(
+                new ReturningWork<ResultSet>() {
+                    @Override
+                    public ResultSet execute(Connection connection) throws SQLException {
+                        String sql = "select * from t_students";
+                        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                        ResultSet resultSet = preparedStatement.executeQuery();
+                        return resultSet;
+                    }
+                }
+        );
+        while (resultSet.next()) {
+            System.out.println("rs:" + resultSet.getString("studentName"));
+        }
+    }
+
+    /**
+     * Hibernate 使用 JDBC
+     * 使用 JDBC 操作
+     *
+     * 调用 session.doWork() 方法
+     * 重写 Work 接口的方法
+     */
+    @Test
+    public void findALLByJDBC(){
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+        session.doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                //1.获得操作对象
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery("SELECT * FROM t_students");
+                while(rs.next()){
+                    System.out.println("客户名 ："+rs.getString("studentName"));
+                }
+                rs.close();
+                statement.close();
+                //注意，不能在里面关闭连接，必须由session关闭
+
+            }
+        });
+        session.close();
+    }
+
+
 }

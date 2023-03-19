@@ -1,27 +1,26 @@
 package org.jfree.date;
 
-import org.jfree.date.SpreadsheetDate;
 import junit.framework.TestCase;
+
+import java.util.GregorianCalendar;
 
 import static org.jfree.date.SerialDate.*;
 
-import java.util.*;
-
 public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
 
-    public void testIsValidWeekdayCode() throws Exception {
+    public void testIsValidWeekdayCode() throws Exception { // 死代码，删除 SerialDate 中函数，无需测试。
         for (int day = 1; day <= 7; day++)
             assertTrue(isValidWeekdayCode(day));
         assertFalse(isValidWeekdayCode(0));
         assertFalse(isValidWeekdayCode(8));
     }
 
-    public void testStringToWeekdayCode() throws Exception {
-
+    public void testStringToWeekdayCode() throws Exception { // => DayTest
+        // stringToWeekdayCode() 不该是区分大小写的
         assertEquals(-1, stringToWeekdayCode("Hello"));
         assertEquals(MONDAY, stringToWeekdayCode("Monday"));
         assertEquals(MONDAY, stringToWeekdayCode("Mon"));
-//Todo  assertEquals(MONDAY, stringToWeekdayCode("monday"));
+//Todo  assertEquals(MONDAY, stringToWeekdayCode("monday")); // 忽略大小写，可以注释掉了
 //      assertEquals(MONDAY, stringToWeekdayCode("MONDAY"));
 //      assertEquals(MONDAY, stringToWeekdayCode("mon"));
 
@@ -30,10 +29,10 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
 //        assertEquals(TUESDAY, stringToWeekdayCode("tuesday"));
 //        assertEquals (TUESDAY, stringToWeekdayCode("TUESDAY"));
 //        assertEquals (TUESDAY, stringToWeekdayCode("tue"));
-//        assertEquals (TUESDAY, stringToWeekdayCode ("tues"));
+//        assertEquals (TUESDAY, stringToWeekdayCode ("tues")); // 注释掉了，因为不明白是否应该支持 tues
 
-        assertEquals(WEDNESDAY, stringToWeekdayCode("wednesday"));
-        assertEquals(WEDNESDAY, stringToWeekdayCode("wed"));
+        assertEquals(WEDNESDAY, stringToWeekdayCode("Wednesday"));
+        assertEquals(WEDNESDAY, stringToWeekdayCode("Wed"));
 //        assertEquals(WEDNESDAY, stringToWeekdayCode("wednesday"));
 //        assertEquals(WEDNESDAY, stringToWeekdayCode("WEDNESDAY"));
 //        assertEquals(WEDNESDAY, stringToWeekdayCode("wed")) ;
@@ -43,7 +42,7 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
 //        assertEquals (THURSDAY, stringToWeekdayCode("thursday"));
 //        assertEquals(THURSDAY, stringToWeekdayCode("THURSDAY"));
 //        assertEquals (THURSDAY, stringToWeekdayCode("thu"));
-//        assertEquals(THURSDAY, stringToWeekdayCode ("thurs"));
+//        assertEquals(THURSDAY, stringToWeekdayCode ("thurs")); // 注释掉了，因为不明白是否应该支持 thurs
 
         assertEquals(FRIDAY, stringToWeekdayCode("Friday"));
         assertEquals(FRIDAY, stringToWeekdayCode("Fri"));
@@ -52,19 +51,19 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
 //        assertEquals(FRIDAY, stringToWeekdayCode("fri"));
 
         assertEquals(SATURDAY, stringToWeekdayCode("Saturday"));
-        assertEquals(SATURDAY, stringToWeekdayCode("sat"));
+        assertEquals(SATURDAY, stringToWeekdayCode("Sat"));
 //        assertEquals(SATURDAY, stringToWeekdayCode("saturday"));
 //        assertEquals(SATURDAY, stringToWeekdayCode("SATURDAY"));
 //        assertEquals(SATURDAY, stringToWeekdayCode("sat"));
 
-        assertEquals(SUNDAY, stringToWeekdayCode("sunday"));
+        assertEquals(SUNDAY, stringToWeekdayCode("Sunday"));
         assertEquals(SUNDAY, stringToWeekdayCode("Sun"));
 //        assertEquals(SUNDAY, stringToWeekdayCode("sunday"));
 //        assertEquals(SUNDAY, stringToWeekdayCode("SUNDAY"));
 //        assertEquals(SUNDAY, stringToWeekdayCode("sun"));
     }
 
-    public void testweekdaycodeTostring() throws Exception {
+    public void testWeekdayCodeToString() throws Exception { // => DayTest
         assertEquals("Sunday", weekdayCodeToString(SUNDAY));
         assertEquals("Monday", weekdayCodeToString(MONDAY));
         assertEquals("Tuesday", weekdayCodeToString(TUESDAY));
@@ -74,14 +73,14 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
         assertEquals("Saturday", weekdayCodeToString(SATURDAY));
     }
 
-    public void testIsValidMonthCode() throws Exception {
+    public void testIsValidMonthCode() throws Exception { // 死代码，删除 SerialDate 中函数，无需测试。
         for (int i = 1; i <= 12; i++)
             assertTrue(isValidMonthCode(i));
         assertFalse(isValidMonthCode(0));
         assertFalse(isValidMonthCode(13));
     }
 
-    public void testMonthToQuarter() throws Exception {
+    public void testMonthToQuarter() throws Exception { // => MonthTest
         assertEquals(1, monthCodeToQuarter(JANUARY));
         assertEquals(1, monthCodeToQuarter(FEBRUARY));
         assertEquals(1, monthCodeToQuarter(MARCH));
@@ -104,7 +103,7 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
 
     public void testMonthCodeToString() throws Exception {
         assertEquals("January", monthCodeToString(JANUARY));
-        assertEquals("Eebruary", monthCodeToString(FEBRUARY));
+        assertEquals("February", monthCodeToString(FEBRUARY));
         assertEquals("March", monthCodeToString(MARCH));
         assertEquals("April", monthCodeToString(APRIL));
         assertEquals("May", monthCodeToString(MAY));
@@ -150,7 +149,7 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
         assertEquals(OCTOBER, stringToMonthCode("10"));
         assertEquals(NOVEMBER, stringToMonthCode("11"));
         assertEquals(DECEMBER, stringToMonthCode("12"));
-
+        // 测试不能通过。显然，它们本该通过。我们可以轻易的修正，只要对 stringToMonthCode() 使用 equalsIgnoreCase
 //Todo    assertEquals(-1, stringToMonthCode("0"));
 //        assertEquals(-1, stringToMonthCode("13"));
 
@@ -304,9 +303,9 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
 
     public void testGetPreviousDayOfWeek() throws Exception {
 //        assertEquals(d(24, FEBRUARY, 2006), getPreviousDayOfWeek(FRIDAY, d(1, MARCH, 2006)));
-        assertEquals(d(22, FEBRUARY, 2006), getPreviousDayOfWeek(WEDNESDAY, d(1, MARCH, 2006)));
-        assertEquals(d(29, FEBRUARY, 2004), getPreviousDayOfWeek(SUNDAY, d(3, MARCH, 2004)));
-        assertEquals(d(29, DECEMBER, 2004), getPreviousDayOfWeek(WEDNESDAY, d(5, JANUARY, 2005)));
+        assertEquals(d(22, FEBRUARY, 2006), getPreviousDayOfWeek(WEDNESDAY, d(1, MARCH, 2006))); // 2006年3月1日 星期三 的上个星期的星期三日期是：2006年2月22日
+        assertEquals(d(29, FEBRUARY, 2004), getPreviousDayOfWeek(SUNDAY, d(3, MARCH, 2004))); // 2004年3月3日 星期三 的上个星期的星期六日期是：2004年2月22日
+        assertEquals(d(29, DECEMBER, 2004), getPreviousDayOfWeek(WEDNESDAY, d(5, JANUARY, 2005))); // 2005年1月5日 星期三 的上个星期的星期三是：2004年12月29日
 
         try {
             getPreviousDayOfWeek(-1, d(1, JANUARY, 2006));
@@ -314,19 +313,19 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
         } catch (IllegalArgumentException e) {
         }
     }
-
+    // 一周的下一天
     public void testGetFollowingDayOfWeek() throws Exception {
-        assertEquals(d(1, JANUARY, 2005), getPreviousDayOfWeek(SATURDAY, d(25, DECEMBER, 2004)));
-        assertEquals(d(1, JANUARY, 2005), getPreviousDayOfWeek(SATURDAY, d(26, DECEMBER, 2004)));
-        assertEquals(d(3, MARCH, 2004), getPreviousDayOfWeek(WEDNESDAY, d(28, FEBRUARY, 2004)));
+        assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(25, DECEMBER, 2004))); // 2004年12月25日 周六，下一周的周六应该是 2005年1月1日
+        assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(26, DECEMBER, 2004)));
+        assertEquals(d(3, MARCH, 2004), getFollowingDayOfWeek(WEDNESDAY, d(28, FEBRUARY, 2004)));
 
         try {
-            getPreviousDayOfWeek(-1, d(1, JANUARY, 2006));
+            getFollowingDayOfWeek(-1, d(1, JANUARY, 2006));
             fail("Invalid day of week code should throw exception");
         } catch (IllegalArgumentException e) {
         }
     }
-
+    // 测试失败算法错误 p254
     public void testGetNearestDayOfWeek() throws Exception {
         assertEquals(d(16, APRIL, 2006), getNearestDayOfWeek(SUNDAY, d(16, APRIL, 2006)));
         assertEquals(d(16, APRIL, 2006), getNearestDayOfWeek(SUNDAY, d(17, APRIL, 2006)));
@@ -352,7 +351,7 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
         assertEquals(d(18, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(21, APRIL, 2006)));
         assertEquals(d(25, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(22, APRIL, 2006)));
 
-        assertEquals(d (19,APRIL,2006), getNearestDayOfWeek(WEDNESDAY, d(16, APRIL,2006)));
+        assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(16, APRIL, 2006))); // 算法错误，所以测试不过
         assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(17, APRIL, 2006)));
         assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(18, APRIL, 2006)));
         assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(19, APRIL, 2006)));
@@ -407,7 +406,7 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
         assertEquals(d(31, DECEMBER, 2006), d.getEndOfCurrentMonth(d(1, DECEMBER, 2006)));
         assertEquals(d(29, FEBRUARY, 2008), d.getEndOfCurrentMonth(d(1, FEBRUARY, 2008)));
     }
-
+    // default 改成 throw new IllegalArgumentException(); 就可以测试通过
     public void testWeekInMonthToString() throws Exception {
         assertEquals("First", weekInMonthToString(FIRST_WEEK_IN_MONTH));
         assertEquals("Second", weekInMonthToString(SECOND_WEEK_IN_MONTH));
@@ -415,19 +414,19 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
         assertEquals("Fourth", weekInMonthToString(FOURTH_WEEK_IN_MONTH));
         assertEquals("Last", weekInMonthToString(LAST_WEEK_IN_MONTH));
 
-//TODO    try {
+//TODO        try {
 //            weekInMonthToString(-1);
 //            fail("Invalid week code should throw exception");
 //        } catch (IllegalArgumentException e) {
 //        }
     }
-
+    // default 改成 throw new IllegalArgumentException(); 就可以测试通过
     public void testRelativeToString() throws Exception {
         assertEquals("Preceding", relativeToString(PRECEDING));
-        assertEquals("Nearest ", relativeToString(NEAREST));
-        assertEquals("ro1lowing", relativeToString(FOLLOWING));
+        assertEquals("Nearest", relativeToString(NEAREST));
+        assertEquals("Following", relativeToString(FOLLOWING));
 
-//TODO    try {
+//TODO        try {
 //            relativeToString(-1000) ;
 //            fail("Invalid relative code should throw exception") ;
 //        } catch (IllegalArgumentException e) {
