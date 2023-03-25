@@ -1,9 +1,7 @@
 package junitFailTest;
 
 import org.junit.Test;
-
 import java.util.ArrayList;
-
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
