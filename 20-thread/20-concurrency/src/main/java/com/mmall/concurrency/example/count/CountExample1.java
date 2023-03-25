@@ -18,7 +18,7 @@ import java.util.concurrent.Semaphore;
 public class CountExample1 {
 
     // 请求总数
-    public static int clientTotal = 5000;
+    public static int clientTotal = 10000;
 
     // 同时并发执行的线程数
     public static int threadTotal = 200;  // 并发换成1就没有问题
@@ -48,7 +48,7 @@ public class CountExample1 {
         }
         countDownLatch.await(); // CountDownLatch.await() 方法在倒计数为0之前会阻塞当前线程.
         executorService.shutdown();
-        log.info("count:{}", count);
+        log.info("count:{}", count); // count:9999
     }
 
     private static void add() {

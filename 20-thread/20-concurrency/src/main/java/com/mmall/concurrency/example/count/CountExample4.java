@@ -16,7 +16,7 @@ import java.util.concurrent.Semaphore;
 public class CountExample4 {
 
     // 请求总数
-    public static int clientTotal = 5000;
+    public static int clientTotal = 10000;
 
     // 同时并发执行的线程数
     public static int threadTotal = 200;
@@ -42,7 +42,7 @@ public class CountExample4 {
         }
         countDownLatch.await();
         executorService.shutdown();
-        log.info("count:{}", count); // count:4999
+        log.info("count:{}", count); // count:9996
     }
 
     private static void add() {
