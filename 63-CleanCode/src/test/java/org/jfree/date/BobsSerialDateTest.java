@@ -96,7 +96,7 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
 
         try {
             monthCodeToQuarter(-1);
-            fail("Invalid Month code should throw exception");
+            fail("Invalid Month code should throw exception"); // 如果测试通过就不会执行
         } catch (IllegalArgumentException e) {
         }
     }
@@ -313,9 +313,9 @@ public class BobsSerialDateTest extends TestCase { // 代码清单 B-4 P353
         } catch (IllegalArgumentException e) {
         }
     }
-    // 一周的下一天
+    // 测试失败，原因是 getFollowingDayOfWeek() 里面边界条件错误
     public void testGetFollowingDayOfWeek() throws Exception {
-        assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(25, DECEMBER, 2004))); // 2004年12月25日 周六，下一周的周六应该是 2005年1月1日
+        assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(25, DECEMBER, 2004))); // 期望2004年12月25日的下一周六 是 2005年1月1日
         assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(26, DECEMBER, 2004)));
         assertEquals(d(3, MARCH, 2004), getFollowingDayOfWeek(WEDNESDAY, d(28, FEBRUARY, 2004)));
 
