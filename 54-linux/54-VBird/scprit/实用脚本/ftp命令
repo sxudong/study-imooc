@@ -1,0 +1,147 @@
+1.ftp命令
+
+使用格式：ftp [-v] [-d] [-i] [-n] [-g] [-s:filename] [-a] [-w:windowsize] [computer]
+
+-v：禁止显示远程服务器响应信息
+
+-n：禁止自动登录
+
+-i：多文件传输过程中关闭交互提示
+
+-d：启用调试，显示所有客户端与服务器端传递的命令
+
+-g：禁用文件名通配符，允许在本地文件和路径名中使用
+
+实例：ftp 122.122.122.122 2222
+
+输入用户名、密码，即可完成登录。
+
+2.目录操作
+
+FTP命令可以列出、移动、创建文件夹。
+
+ls -- 打印目录列表
+
+!ls -- 查看本地目录
+
+cd -- 改变目录
+
+mkdir -- 创建文件夹
+
+3.使用FTP下载文件
+
+在下载一个文件之前，首先需要使用lcd命令设定本地接收目录位置。
+
+lcd -- 指定下载目录
+
+get file.txt [file_new.txt] -- 下载文件 支持更改名字
+
+mget *.txt -- 使用mget + 通配符下载多个文件
+
+4.使用FTP上传文件
+
+put file.txt [file_new.txt] -- 上传文件 支持更改名字
+
+put /home/data/cwh/file.txt -- 绝对路径
+
+mput *.txt -- 上传多个文件
+
+5.关闭FTP连接
+
+完成FTP工作后，为了安全起见需要关闭连接。有3个命令可以关闭连接：
+
+bye -- 关闭连接
+
+exit -- 关闭连接
+
+quit -- 关闭连接
+
+close -- 关闭连接
+
+6.其他命令
+
+? -- 查询ftp命令
+
+help -- 查询ftp命令
+
+open [ftp server name] -- 和指定的远程Linux FTP服务器连接
+
+user [user name] [password] -- 使用指定远程Linux FTP服务器的用户登录
+
+pwd -- 显示当前路径
+
+ls -- 列出目录和文件
+
+dir -- 列出目录和文件(同上)
+
+mkdir [foldname] -- 创建指定目录
+
+rmdir [foldname] -- 删除指定目录
+
+cd -- 切换目录
+
+delete [filename] -- 删除文件
+
+rename [filename] [newfilename] -- 重命名
+
+close -- 关闭连接 但保留FTP命令参数提示
+
+disconnect -- 关闭连接 但保留FTP命令参数提示(同上)
+
+bye -- 结束连接
+
+quit -- 结束连接
+
+! -- 直接从远程Linux FTP进入到本地Shell中
+
+exit -- (接上步)从本地Shell环境返回远程Linux FTP中
+
+!ls -- 列出本地机器目录和文件
+
+lcd [foldname] -- 更改本地工作目录
+
+binary -- 使用二进制传输文件
+
+prompt -- 切换提示(使用mput或mget上传下载多个文件时避免提示)
+
+case -- 在使用mget时，将远程主机文件名的大写转换为小写字母
+
+cdup -- 进入远程主机目录的父目录
+
+system -- 显示远程主机的操作系统类型
+
+hash  -- 每传输1024字节，显示一个hash符号(#)
+
+status -- 显示当前ftp状态
+
+Connected to122.122.122.122.
+No proxy connection.
+Mode: stream; Type: binary; Form: non-print; Structure: file
+Verbose: on; Bell: off; Prompting: off; Globbing: on
+Store unique: off; Receive unique: off
+Case: off; CR stripping: on
+Ntrans: off
+Nmap: off
+Hash mark printing: off; Use of PORT cmds: on
+Tick counter printing: off
+
+7、一个完整的例子
+1 “开始”→“运行”→输入“FTP” 
+2 open 122.122.122.122 2222 
+3 用户名 
+4 密码 
+5 查看目录 
+6-- dir 文件及目录 
+7-- ls 只查看文件 
+8 mkdir xxx 新建目录 
+9 cd xxx 切换目录
+10 binary 采用二进制传输
+11 lcd /home/data 定位本地目录
+12 !dir 查看本地目录及文件
+13 put xyz.txt 上传文件(mput)
+14 get xyz.txt 下载文件(mget)
+15 delete *.txt 删除文件
+16 cd.. 返回上一级
+17 rmdir xxx 删除空文件夹
+18 bye 退出ftp服务器
+19 pwd 查看当前目录

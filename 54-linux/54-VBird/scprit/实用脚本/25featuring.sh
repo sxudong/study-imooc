@@ -32,8 +32,8 @@ ftp -n 10.83.29.213 <<***000-FTP-sTart-Server
 	user fuj "fujisawa"
 	cd oc/java131
 	bin
-    get java.zip
-    cd ../l91
+  get java.zip
+  cd ../l91
 	lcd ../l91
 	prom
 	mget *
