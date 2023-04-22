@@ -23,6 +23,10 @@ public class newCachedThreadPool {
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newCachedThreadPool();
 
+        // 为了更好的模拟，动态修改为1纳秒
+//        ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executorService;
+//        threadPoolExecutor.setKeepAliveTime(1, TimeUnit.NANOSECONDS);
+
         for (int i = 0; i < 10; i++) {
             final int index = i;
             // executorService.execute(() -> log.info("task:{}", index));
@@ -33,6 +37,7 @@ public class newCachedThreadPool {
                 }
             });
         }
+        // CachedThreadPool 的线程 keepAliveTime 默认为 60s ，核心线程数量为 0 ，所以不会有核心线程存活阻止线程池自动关闭。
         executorService.shutdown();
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executorService;
         System.out.println(threadPoolExecutor.getTaskCount());

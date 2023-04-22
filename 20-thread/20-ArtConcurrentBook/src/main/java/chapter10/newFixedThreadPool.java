@@ -32,6 +32,8 @@ public class newFixedThreadPool {
                 }
             });
         }
+        // FixedThreadPool 的核心线程没有超时策略，所以并不会自动关闭。
+        // 所以我们在使用 FixedThreadPool 核心线程时需要适当调用 Shutdown 方法，防止内存溢出。
         executorService.shutdown();
     }
 }
