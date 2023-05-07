@@ -18,20 +18,20 @@ public class PrimeNumberGeneratorTest {
     @Test
     public void testPrimes() {
         // 0和1不被认为是素数
-        int[] primeUptoZero = PrimeNumberGenerator.generatePrimeNumbersUpto(0);
+        int[] primeUptoZero = PrimeNumberGenerator.generatePrimeNumbersUpto(0); // nullArray
         assertEquals(0, primeUptoZero.length);
 
-        int[] primeUptoTwo = PrimeNumberGenerator.generatePrimeNumbersUpto(2);
+        int[] primeUptoTwo = PrimeNumberGenerator.generatePrimeNumbersUpto(2); // minArray
         Arrays.stream(primeUptoTwo).forEach(i -> System.out.println(i)); // 2
         assertEquals(1, primeUptoTwo.length);
         assertEquals(2, primeUptoTwo[0]);
 
-        int[] primeUptoThree = PrimeNumberGenerator.generatePrimeNumbersUpto(3);
+        int[] primeUptoThree = PrimeNumberGenerator.generatePrimeNumbersUpto(3); // threeArray
         assertEquals(2, primeUptoThree.length);
         assertEquals(2, primeUptoThree[0]);
         assertEquals(3, primeUptoThree[1]);
 
-        int[] primeUptoHundred = PrimeNumberGenerator.generatePrimeNumbersUpto(100);
+        int[] primeUptoHundred = PrimeNumberGenerator.generatePrimeNumbersUpto(100); // centArray
         assertEquals(25, primeUptoHundred.length);
         assertEquals(97, primeUptoHundred[24]);
     }
