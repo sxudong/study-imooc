@@ -2,7 +2,6 @@ package com.payroll.payrollApplication;
 
 import com.payroll.abstractTransaction.AddEmployeeTransaction;
 import com.payroll.payrollDatabase.PayrollDatabase;
-import com.payroll.payrollDatabaseImpl.PayrollDatabaseImpl;
 import com.payroll.payrollDomain.Employee;
 import com.payroll.payrollFactory.PayrollFactory;
 import com.payroll.payrollImpl.PayrollFactoryImpl;
@@ -25,7 +24,7 @@ public class PayrollApplication extends TransactionApplication {
 
     private static PayrollDatabase payrollDatabase = new PayrollDatabase();
     private static TransactionFactory transactionFactory = TransactionFactoryImpl.getInstance();
-    private static PayrollFactory payrollFactory = new PayrollFactoryImpl();
+    private static PayrollFactory payrollFactory = PayrollFactoryImpl.getInstance();
 
     public static void main(String[] args) {
         Date payDate = new Date("2018/6/22"); // 星期五

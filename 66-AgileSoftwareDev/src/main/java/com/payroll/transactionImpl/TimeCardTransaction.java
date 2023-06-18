@@ -30,7 +30,7 @@ public class TimeCardTransaction implements Transaction {
         }
         HourlyClassification hc = (HourlyClassification) employee.getItsClassification();
         // hc.addTimeCard(new TimeCard(date, hours));
-        hc.addTimeCard(date, hours); // 为保护 TimeCard 的私有性对 TimeCardTransaction 做的修改
+        hc.addTimeCard(date, hours); // 为保护 TimeCard 的私有性对 TimeCardTransaction 做的修改 P249 图22.6
     }
 
     public Date getDate() {

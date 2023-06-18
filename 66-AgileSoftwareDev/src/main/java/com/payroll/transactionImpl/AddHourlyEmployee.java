@@ -1,10 +1,9 @@
 package com.payroll.transactionImpl;
 
 import com.payroll.abstractTransaction.AddEmployeeTransaction;
-import com.payroll.payrollImpl.HourlyClassification;
 import com.payroll.payrollDomain.PaymentClassification;
 import com.payroll.payrollDomain.PaymentSchedule;
-import com.payroll.payrollImpl.WeeklySchedule;
+import com.payroll.payrollImpl.PayrollFactoryImpl;
 
 /**
  * 添加按钟点工
@@ -21,11 +20,13 @@ public class AddHourlyEmployee extends AddEmployeeTransaction {
 
     @Override
     protected PaymentSchedule getPaymentSchedule() {
-        return new WeeklySchedule(); // 每周五支付薪水
+        //return new WeeklySchedule(); // 每周五支付薪水
+        return PayrollFactoryImpl.getInstance().makeWeeklySchedule();
     }
 
     @Override
     protected PaymentClassification getPaymentClassification() {
-        return new HourlyClassification(hourlyRate);
+        //return new HourlyClassification(hourlyRate);
+        return PayrollFactoryImpl.getInstance().makeHourlyClassification(hourlyRate);
     }
 }

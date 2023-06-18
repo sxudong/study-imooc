@@ -1,10 +1,9 @@
 package com.payroll.transactionImpl;
 
 import com.payroll.abstractTransaction.AddEmployeeTransaction;
-import com.payroll.payrollImpl.CommissionedClassification;
 import com.payroll.payrollDomain.PaymentClassification;
-import com.payroll.payrollImpl.BiweeklySchedule;
 import com.payroll.payrollDomain.PaymentSchedule;
+import com.payroll.payrollImpl.PayrollFactoryImpl;
 
 /**
  * 添加带提成的雇员
@@ -24,11 +23,13 @@ public class AddCommissionedEmployee extends AddEmployeeTransaction {
 
     @Override
     protected PaymentSchedule getPaymentSchedule() {
-        return new BiweeklySchedule(); // 每两周一次支付
+        //return new BiweeklySchedule(); // 每两周一次支付
+        return PayrollFactoryImpl.getInstance().makeBiweeklySchedule(); // 每两周一次支付
     }
 
     @Override
     protected PaymentClassification getPaymentClassification() {
-        return new CommissionedClassification(salary, commissionRate);
+        //return new CommissionedClassification(salary, commissionRate);
+        return PayrollFactoryImpl.getInstance().makeCommissionedClassification(salary, commissionRate);
     }
 }

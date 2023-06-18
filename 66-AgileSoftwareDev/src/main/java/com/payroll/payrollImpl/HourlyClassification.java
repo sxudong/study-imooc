@@ -30,7 +30,8 @@ public class HourlyClassification extends PaymentClassification {
 
     //public void addTimeCard(TimeCard timeCard) {
     public void addTimeCard(Date date, double hours) {
-        TimeCard timeCard = new TimeCard(date, hours);
+        //TimeCard timeCard = new TimeCard(date, hours);
+        TimeCard timeCard = PayrollFactoryImpl.getInstance().makeTimeCard(date, hours);
         this.timeCards.put(timeCard.getDate(), timeCard);
     }
 

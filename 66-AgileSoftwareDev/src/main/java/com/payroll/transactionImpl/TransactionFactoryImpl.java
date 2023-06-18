@@ -8,12 +8,12 @@ import java.util.Date;
  * P253 ~ P254 图22.8 Transaction 对象工厂
  */
 public class TransactionFactoryImpl implements TransactionFactory {
-    private static TransactionFactoryImpl instance = new TransactionFactoryImpl();
+    private static TransactionFactory instance = new TransactionFactoryImpl();
 
     private TransactionFactoryImpl() {
     }
 
-    public static TransactionFactoryImpl getInstance() {
+    public static TransactionFactory getInstance() {
         return instance;
     }
 

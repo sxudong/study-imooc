@@ -2,7 +2,7 @@ package com.payroll.transactionImpl;
 
 import com.payroll.abstractTransaction.ChangeAffiliationTransaction;
 import com.payroll.payrollDomain.Affiliation;
-import com.payroll.payrollImpl.NoAffiliation;
+import com.payroll.payrollImpl.PayrollFactoryImpl;
 import com.payroll.payrollImpl.UnionAffiliation;
 import com.payroll.payrollDatabase.PayrollDatabase;
 import com.payroll.payrollDomain.Employee;
@@ -31,6 +31,7 @@ public class ChangeUnaffiliatedTransaction extends ChangeAffiliationTransaction 
 
     @Override
     protected Affiliation getAffiliation() {
-        return new NoAffiliation();
+        //return new NoAffiliation();
+        return PayrollFactoryImpl.getInstance().makeNoAffiliation();
     }
 }

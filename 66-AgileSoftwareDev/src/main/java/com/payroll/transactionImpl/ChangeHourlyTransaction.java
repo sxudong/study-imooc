@@ -1,10 +1,9 @@
 package com.payroll.transactionImpl;
 
 import com.payroll.abstractTransaction.ChangeClassificationTransaction;
-import com.payroll.payrollImpl.HourlyClassification;
 import com.payroll.payrollDomain.PaymentClassification;
 import com.payroll.payrollDomain.PaymentSchedule;
-import com.payroll.payrollImpl.WeeklySchedule;
+import com.payroll.payrollImpl.PayrollFactoryImpl;
 
 /**
  * 程序19.27 P202
@@ -24,11 +23,13 @@ public class ChangeHourlyTransaction extends ChangeClassificationTransaction {
 
     @Override
     protected PaymentClassification getClassification() {
-        return new HourlyClassification(hourlyRate);
+        //return new HourlyClassification(hourlyRate);
+        return PayrollFactoryImpl.getInstance().makeHourlyClassification(hourlyRate);
     }
 
     @Override
     protected PaymentSchedule getSchedule() {
-        return new WeeklySchedule();
+        //return new WeeklySchedule();
+        return PayrollFactoryImpl.getInstance().makeWeeklySchedule();
     }
 }

@@ -1,8 +1,8 @@
 package com.payroll.transactionImpl;
 
 import com.payroll.abstractTransaction.ChangeMethodTransaction;
-import com.payroll.payrollImpl.DirectMethod;
 import com.payroll.payrollDomain.PaymentMethod;
+import com.payroll.payrollImpl.PayrollFactoryImpl;
 
 public class ChangeDirectTransaction extends ChangeMethodTransaction {
 
@@ -12,6 +12,7 @@ public class ChangeDirectTransaction extends ChangeMethodTransaction {
 
     @Override
     protected PaymentMethod getMethod() {
-        return new DirectMethod();
+        //return new DirectMethod();
+        return PayrollFactoryImpl.getInstance().makeDirectMethod();
     }
 }

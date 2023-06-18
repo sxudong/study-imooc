@@ -37,7 +37,10 @@ public class CommissionedClassification extends PaymentClassification {
         return salary + salesAmount * commissionRate;
     }
 
-    public void addSalesReceipt(SalesReceipt salesReceipt){
+    //public void addSalesReceipt(SalesReceipt salesReceipt){
+    public void addSalesReceipt(Date date, Double amount){
+        SalesReceipt salesReceipt = PayrollFactoryImpl.getInstance().makeSalesReceipt(date, amount);
+        //salesReceipts.put(salesReceipt.getDate(), salesReceipt);
         salesReceipts.put(salesReceipt.getDate(), salesReceipt);
     }
 

@@ -8,6 +8,14 @@ import java.util.Date;
  * 图22.10 新增的 PayrollFactory，书中没有说这个类具体用来做什么。P254
  */
 public class PayrollFactoryImpl implements PayrollFactory {
+	private static PayrollFactory instance = new PayrollFactoryImpl();
+
+	private PayrollFactoryImpl() {
+	}
+
+	public static PayrollFactory getInstance() {
+		return instance;
+	}
 
 	@Override
 	public BiweeklySchedule makeBiweeklySchedule() {
@@ -45,11 +53,6 @@ public class PayrollFactoryImpl implements PayrollFactory {
 	}
 
 	@Override
-	public NoAffiliation makeNoAffiliation() {
-		return new NoAffiliation();
-	}
-
-	@Override
 	public SalariedClassification makeSalariedClassification(Double salary) {
 		return new SalariedClassification(salary);
 	}
@@ -70,13 +73,18 @@ public class PayrollFactoryImpl implements PayrollFactory {
 	}
 
 	@Override
-	public UnionAffiliation makeUnionAffiliation(Integer memberId, Double charge) {
-		return new UnionAffiliation(memberId, charge);
+	public WeeklySchedule makeWeeklySchedule() {
+		return new WeeklySchedule();
 	}
 
 	@Override
-	public WeeklySchedule makeWeeklySchedule() {
-		return new WeeklySchedule();
+	public NoAffiliation makeNoAffiliation() {
+		return new NoAffiliation();
+	}
+
+	@Override
+	public UnionAffiliation makeUnionAffiliation(Integer memberId, Double charge) {
+		return new UnionAffiliation(memberId, charge);
 	}
 
 }

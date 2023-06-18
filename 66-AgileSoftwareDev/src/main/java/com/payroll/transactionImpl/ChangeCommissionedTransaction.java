@@ -1,10 +1,9 @@
 package com.payroll.transactionImpl;
 
 import com.payroll.abstractTransaction.ChangeClassificationTransaction;
-import com.payroll.payrollImpl.CommissionedClassification;
 import com.payroll.payrollDomain.PaymentClassification;
-import com.payroll.payrollImpl.BiweeklySchedule;
 import com.payroll.payrollDomain.PaymentSchedule;
+import com.payroll.payrollImpl.PayrollFactoryImpl;
 
 /**
  * P203
@@ -22,11 +21,13 @@ public class ChangeCommissionedTransaction extends ChangeClassificationTransacti
 
     @Override
     protected PaymentClassification getClassification() {
-        return new CommissionedClassification(salary, commissionRate);
+        //return new CommissionedClassification(salary, commissionRate);
+        return PayrollFactoryImpl.getInstance().makeCommissionedClassification(salary, commissionRate);
     }
 
     @Override
     protected PaymentSchedule getSchedule() {
-        return new BiweeklySchedule();
+        //return new BiweeklySchedule();
+        return PayrollFactoryImpl.getInstance().makeBiweeklySchedule();
     }
 }
