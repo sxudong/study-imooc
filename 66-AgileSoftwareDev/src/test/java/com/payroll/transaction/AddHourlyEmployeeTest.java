@@ -1,10 +1,11 @@
 package com.payroll.transaction;
 
-import com.payroll.database.PayrollDatabase;
-import com.payroll.emp.Employee;
-import com.payroll.paymentClassification.HourlyClassification;
-import com.payroll.paymentMethod.HoldMethod;
-import com.payroll.paymentSchedule.WeeklySchedule;
+import com.payroll.payrollDatabase.PayrollDatabase;
+import com.payroll.payrollDomain.Employee;
+import com.payroll.payrollImpl.HourlyClassification;
+import com.payroll.payrollImpl.HoldMethod;
+import com.payroll.payrollImpl.WeeklySchedule;
+import com.payroll.transactionImpl.AddHourlyEmployee;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,19 +15,17 @@ public class AddHourlyEmployeeTest extends BaseTest {
     @Test
     public void addTest() {
         int empId = 1;
-        String name = "Bob";
-        String address = "Home";
         double hourlyRate = 88.8;
-        AddHourlyEmployee hourlyEmployee = new AddHourlyEmployee(empId, name, address, hourlyRate);
+        AddHourlyEmployee hourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", hourlyRate);
         hourlyEmployee.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);
-        Assert.assertEquals(name, employee.getEmpName());
+        Assert.assertEquals("Bob", employee.getItsName());
 
-        Assert.assertTrue(employee.getPaymentClassification() instanceof HourlyClassification);
-        Assert.assertEquals(hourlyRate, ((HourlyClassification) employee.getPaymentClassification()).getHourlyRate(), 0.01D);
-        Assert.assertTrue(employee.getPaymentSchedule() instanceof WeeklySchedule);
-        Assert.assertTrue(employee.getPaymentMethod() instanceof HoldMethod);
+        Assert.assertTrue(employee.getItsClassification() instanceof HourlyClassification);
+        Assert.assertEquals(hourlyRate, ((HourlyClassification) employee.getItsClassification()).getHourlyRate(), 0.01D);
+        Assert.assertTrue(employee.getItsPaymentSchedule() instanceof WeeklySchedule);
+        Assert.assertTrue(employee.getItsPaymentMethod() instanceof HoldMethod);
     }
 
 }

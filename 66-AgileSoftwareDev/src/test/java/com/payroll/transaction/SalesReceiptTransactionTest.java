@@ -1,9 +1,11 @@
 package com.payroll.transaction;
 
-import com.payroll.database.PayrollDatabase;
-import com.payroll.emp.Employee;
-import com.payroll.paymentClassification.CommissionedClassification;
-import com.payroll.paymentClassification.SalesReceipt;
+import com.payroll.payrollDatabase.PayrollDatabase;
+import com.payroll.payrollDomain.Employee;
+import com.payroll.payrollImpl.CommissionedClassification;
+import com.payroll.payrollImpl.SalesReceipt;
+import com.payroll.transactionImpl.AddCommissionedEmployee;
+import com.payroll.transactionImpl.SalesReceiptTransaction;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,11 +16,9 @@ public class SalesReceiptTransactionTest extends BaseTest {
     @Test
     public void salesReceiptTest() {
         int empId = 1;
-        String name = "Bob";
-        String address = "Home";
         double salary = 1000.00;
         double commissionRate = 88.8;
-        AddCommissionedEmployee commissionedEmployee = new AddCommissionedEmployee(empId, name, address, salary, commissionRate);
+        AddCommissionedEmployee commissionedEmployee = new AddCommissionedEmployee(empId, "Bob", "Home", salary, commissionRate);
         commissionedEmployee.execute();
 
         Date today = new Date();
@@ -28,8 +28,8 @@ public class SalesReceiptTransactionTest extends BaseTest {
 
         Employee employee = PayrollDatabase.getEmployee(empId);
         Assert.assertNotNull(employee);
-        Assert.assertTrue(employee.getPaymentClassification() instanceof CommissionedClassification);
-        SalesReceipt sr = ((CommissionedClassification) employee.getPaymentClassification()).getSalesReceipt(today);
+        Assert.assertTrue(employee.getItsClassification() instanceof CommissionedClassification);
+        SalesReceipt sr = ((CommissionedClassification) employee.getItsClassification()).getSalesReceipt(today);
         Assert.assertNotNull(sr);
         Assert.assertEquals(amount, sr.getAmount(), 0.01D);
     }

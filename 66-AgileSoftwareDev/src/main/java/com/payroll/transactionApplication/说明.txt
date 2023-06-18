@@ -1,0 +1,1 @@
+transactionApplication 包中这3个类形成了一个可重用的单元。

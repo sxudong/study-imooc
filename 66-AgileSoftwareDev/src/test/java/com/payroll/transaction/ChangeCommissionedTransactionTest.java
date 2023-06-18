@@ -1,10 +1,12 @@
 package com.payroll.transaction;
 
-import com.payroll.database.PayrollDatabase;
-import com.payroll.emp.Employee;
-import com.payroll.paymentClassification.CommissionedClassification;
-import com.payroll.paymentClassification.PaymentClassification;
-import com.payroll.paymentSchedule.BiweeklySchedule;
+import com.payroll.payrollDatabase.PayrollDatabase;
+import com.payroll.payrollDomain.Employee;
+import com.payroll.payrollImpl.CommissionedClassification;
+import com.payroll.payrollDomain.PaymentClassification;
+import com.payroll.payrollImpl.BiweeklySchedule;
+import com.payroll.transactionImpl.AddHourlyEmployee;
+import com.payroll.transactionImpl.ChangeCommissionedTransaction;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,10 +15,8 @@ public class ChangeCommissionedTransactionTest extends BaseTest {
     @Test
     public void changeTest() {
         int empId = 1;
-        String name = "Bob";
-        String address = "Home";
         double hourlyRate = 88.8;
-        AddHourlyEmployee hourlyEmployee = new AddHourlyEmployee(empId, name, address, hourlyRate);
+        AddHourlyEmployee hourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", hourlyRate);
         hourlyEmployee.execute();
 
         double salary = 1000.00;
@@ -26,11 +26,11 @@ public class ChangeCommissionedTransactionTest extends BaseTest {
 
         Employee employee = PayrollDatabase.getEmployee(empId);
         Assert.assertNotNull(employee);
-        PaymentClassification pcf = employee.getPaymentClassification();
+        PaymentClassification pcf = employee.getItsClassification();
         Assert.assertNotNull(pcf);
         Assert.assertTrue(pcf instanceof CommissionedClassification);
         Assert.assertEquals(salary, ((CommissionedClassification) pcf).getSalary(), 0.01);
         Assert.assertEquals(commissionRate, ((CommissionedClassification) pcf).getCommissionRate(), 0.01);
-        Assert.assertTrue(employee.getPaymentSchedule() instanceof BiweeklySchedule);
+        Assert.assertTrue(employee.getItsPaymentSchedule() instanceof BiweeklySchedule);
     }
 }

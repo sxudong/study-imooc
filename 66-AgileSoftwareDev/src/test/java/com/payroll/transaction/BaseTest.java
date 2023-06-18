@@ -1,6 +1,6 @@
 package com.payroll.transaction;
 
-import com.payroll.database.PayrollDatabase;
+import com.payroll.payrollDatabase.PayrollDatabase;
 import org.junit.After;
 
 /**

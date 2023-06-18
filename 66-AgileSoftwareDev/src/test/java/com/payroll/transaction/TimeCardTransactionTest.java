@@ -1,36 +1,37 @@
 package com.payroll.transaction;
 
-import com.payroll.database.PayrollDatabase;
-import com.payroll.emp.Employee;
-import com.payroll.paymentClassification.HourlyClassification;
-import com.payroll.paymentClassification.TimeCard;
+import com.payroll.payrollDatabase.PayrollDatabase;
+import com.payroll.payrollDomain.Employee;
+import com.payroll.payrollImpl.HourlyClassification;
+import com.payroll.payrollImpl.TimeCard;
+import com.payroll.transactionImpl.AddHourlyEmployee;
+import com.payroll.transactionImpl.TimeCardTransaction;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Date;
 
+/**
+ * 程序19.12 testTimeCardTransaction P190
+ */
 public class TimeCardTransactionTest extends BaseTest {
 
     @Test
     public void timeCardTest() {
         int empId = 1;
-        String name = "Bob";
-        String address = "Home";
-        double hourlyRate = 88.8;
-        AddHourlyEmployee hourlyEmployee = new AddHourlyEmployee(empId, name, address, hourlyRate);
+        AddHourlyEmployee hourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 15.25);
         hourlyEmployee.execute();
 
-        Date today = new Date();
-        double hours = 8.25;
-        TimeCardTransaction tct = new TimeCardTransaction(today, hours, empId);
+        TimeCardTransaction tct = new TimeCardTransaction(new Date("2023/05/23"), 8.25, empId);
         tct.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);
         Assert.assertNotNull(employee);
-        Assert.assertTrue(employee.getPaymentClassification() instanceof HourlyClassification);
-        TimeCard tc = ((HourlyClassification) employee.getPaymentClassification()).getTimeCard(today);
+        Assert.assertTrue(employee.getItsClassification() instanceof HourlyClassification);
+
+        TimeCard tc = ((HourlyClassification) employee.getItsClassification()).getTimeCard(new Date("2023/05/23"));
         Assert.assertNotNull(tc);
-        Assert.assertEquals(hours, tc.getHours(), 0.01D);
+        Assert.assertEquals(8.25, tc.getHours(), 0.01D);
     }
 
 }

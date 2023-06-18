@@ -1,7 +1,9 @@
 package com.payroll.transaction;
 
-import com.payroll.database.PayrollDatabase;
-import com.payroll.emp.Employee;
+import com.payroll.payrollDatabase.PayrollDatabase;
+import com.payroll.payrollDomain.Employee;
+import com.payroll.transactionImpl.AddHourlyEmployee;
+import com.payroll.transactionImpl.ChangeAddressTransaction;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,10 +12,8 @@ public class ChangeAddressTransactionTest extends BaseTest {
     @Test
     public void changeTest() {
         int empId = 1;
-        String name = "Bob";
-        String address = "Home";
         double hourlyRate = 88.8;
-        AddHourlyEmployee hourlyEmployee = new AddHourlyEmployee(empId, name, address, hourlyRate);
+        AddHourlyEmployee hourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", hourlyRate);
         hourlyEmployee.execute();
 
         String newAddress = "School";
@@ -21,7 +21,7 @@ public class ChangeAddressTransactionTest extends BaseTest {
         ct.execute();
         Employee employee = PayrollDatabase.getEmployee(empId);
         Assert.assertNotNull(employee);
-        Assert.assertEquals(newAddress, employee.getEmpAddress());
+        Assert.assertEquals(newAddress, employee.getItsAddress());
 
     }
 }

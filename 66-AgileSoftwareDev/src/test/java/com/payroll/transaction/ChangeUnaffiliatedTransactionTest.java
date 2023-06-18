@@ -1,10 +1,13 @@
 package com.payroll.transaction;
 
-import com.payroll.affiliation.Affiliation;
-import com.payroll.affiliation.NoAffiliation;
-import com.payroll.affiliation.UnionAffiliation;
-import com.payroll.database.PayrollDatabase;
-import com.payroll.emp.Employee;
+import com.payroll.payrollDomain.Affiliation;
+import com.payroll.payrollImpl.NoAffiliation;
+import com.payroll.payrollImpl.UnionAffiliation;
+import com.payroll.payrollDatabase.PayrollDatabase;
+import com.payroll.payrollDomain.Employee;
+import com.payroll.transactionImpl.AddHourlyEmployee;
+import com.payroll.transactionImpl.ChangeMemberTransaction;
+import com.payroll.transactionImpl.ChangeUnaffiliatedTransaction;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,10 +16,8 @@ public class ChangeUnaffiliatedTransactionTest extends BaseTest {
     @Test
     public void changeTest() {
         int empId = 1;
-        String name = "Bob";
-        String address = "Home";
         double hourlyRate = 88.8;
-        AddHourlyEmployee hourlyEmployee = new AddHourlyEmployee(empId, name, address, hourlyRate);
+        AddHourlyEmployee hourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", hourlyRate);
         hourlyEmployee.execute();
 
         int memberId = 1000;
@@ -30,7 +31,7 @@ public class ChangeUnaffiliatedTransactionTest extends BaseTest {
         Affiliation af = employee.getAffiliation();
         Assert.assertNotNull(af);
         Assert.assertTrue(af instanceof UnionAffiliation);
-        Assert.assertEquals(charge, ((UnionAffiliation) af).getCharge(), 0.01);
+        Assert.assertEquals(charge, ((UnionAffiliation) af).getDues(), 0.01);
 
         ChangeUnaffiliatedTransaction cut = new ChangeUnaffiliatedTransaction(empId);
         cut.execute();

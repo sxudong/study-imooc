@@ -1,10 +1,11 @@
 package com.payroll.transaction;
 
-import com.payroll.database.PayrollDatabase;
-import com.payroll.emp.Employee;
-import com.payroll.paymentClassification.SalariedClassification;
-import com.payroll.paymentMethod.HoldMethod;
-import com.payroll.paymentSchedule.MonthlySchedule;
+import com.payroll.payrollDatabase.PayrollDatabase;
+import com.payroll.payrollDomain.Employee;
+import com.payroll.payrollImpl.SalariedClassification;
+import com.payroll.payrollImpl.HoldMethod;
+import com.payroll.payrollImpl.MonthlySchedule;
+import com.payroll.transactionImpl.AddSalariedEmployee;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,18 +15,16 @@ public class AddSalariedEmployeeTest extends BaseTest {
     @Test
     public void addTest() {
         int empId = 1;
-        String name = "Bob";
-        String address = "Home";
-        AddSalariedEmployee addSalariedEmployee = new AddSalariedEmployee(empId, name, address, 1000.0D);
+        AddSalariedEmployee addSalariedEmployee = new AddSalariedEmployee(empId, "Bob", "Home", 1000.0D);
         addSalariedEmployee.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);
-        Assert.assertEquals(name, employee.getEmpName());
+        Assert.assertEquals("Bob", employee.getItsName());
 
-        Assert.assertTrue(employee.getPaymentClassification() instanceof SalariedClassification);
-        Assert.assertEquals(1000.00, ((SalariedClassification) employee.getPaymentClassification()).getSalary(), 0.01);
-        Assert.assertTrue(employee.getPaymentSchedule() instanceof MonthlySchedule);
-        Assert.assertTrue(employee.getPaymentMethod() instanceof HoldMethod);
+        Assert.assertTrue(employee.getItsClassification() instanceof SalariedClassification);
+        Assert.assertEquals(1000.00, ((SalariedClassification) employee.getItsClassification()).getSalary(), 0.01);
+        Assert.assertTrue(employee.getItsPaymentSchedule() instanceof MonthlySchedule);
+        Assert.assertTrue(employee.getItsPaymentMethod() instanceof HoldMethod);
     }
 
 }

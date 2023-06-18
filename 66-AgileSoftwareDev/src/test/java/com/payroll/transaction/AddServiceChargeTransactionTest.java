@@ -1,9 +1,11 @@
 package com.payroll.transaction;
 
-import com.payroll.affiliation.ServiceCharge;
-import com.payroll.affiliation.UnionAffiliation;
-import com.payroll.database.PayrollDatabase;
-import com.payroll.emp.Employee;
+import com.payroll.payrollImpl.ServiceCharge;
+import com.payroll.payrollImpl.UnionAffiliation;
+import com.payroll.payrollDatabase.PayrollDatabase;
+import com.payroll.payrollDomain.Employee;
+import com.payroll.transactionImpl.AddHourlyEmployee;
+import com.payroll.transactionImpl.ServiceChargeTransaction;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,10 +16,8 @@ public class AddServiceChargeTransactionTest extends BaseTest {
     @Test
     public void addTest() {
         int empId = 1;
-        String name = "Bob";
-        String address = "Home";
         double hourlyRate = 88.8;
-        AddHourlyEmployee hourlyEmployee = new AddHourlyEmployee(empId, name, address, hourlyRate);
+        AddHourlyEmployee hourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", hourlyRate);
         hourlyEmployee.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);

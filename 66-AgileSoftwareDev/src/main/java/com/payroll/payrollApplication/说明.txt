@@ -1,0 +1,8 @@
+payrollApplication 包现在成了一个总的统一体。
+它包含了主程序以及 TransactionApplication 的一个名为 PayrollApplication 的派生类，
+该类把 TextParserTransactionSource 绑定到 TransactionApplication 上。
+
+这些处理还给设计增加了另外一层抽象。
+任何从 TransactionSource 获取 Transaction 然后执行它们的应用程序都可以重用 transactionApplication 包。
+payrollApplication 包不再是可重用的，因为它极度地依赖于其他包。不过 transactionApplication 包取代了它的
+位置，变得更加通用。现在，我们可以独立于任何 Transaction 来重用 payrollDomain 。

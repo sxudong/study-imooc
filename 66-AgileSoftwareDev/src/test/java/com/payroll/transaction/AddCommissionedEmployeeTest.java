@@ -1,10 +1,11 @@
 package com.payroll.transaction;
 
-import com.payroll.database.PayrollDatabase;
-import com.payroll.emp.Employee;
-import com.payroll.paymentClassification.CommissionedClassification;
-import com.payroll.paymentMethod.HoldMethod;
-import com.payroll.paymentSchedule.BiweeklySchedule;
+import com.payroll.payrollDatabase.PayrollDatabase;
+import com.payroll.payrollDomain.Employee;
+import com.payroll.payrollImpl.CommissionedClassification;
+import com.payroll.payrollImpl.HoldMethod;
+import com.payroll.payrollImpl.BiweeklySchedule;
+import com.payroll.transactionImpl.AddCommissionedEmployee;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,21 +15,19 @@ public class AddCommissionedEmployeeTest extends BaseTest {
     @Test
     public void addTest() {
         int empId = 1;
-        String name = "Bob";
-        String address = "Home";
         double salary = 1000.00;
         double commissionRate = 88.8;
-        AddCommissionedEmployee commissionedEmployee = new AddCommissionedEmployee(empId, name, address, salary, commissionRate);
+        AddCommissionedEmployee commissionedEmployee = new AddCommissionedEmployee(empId, "Bob", "Home", salary, commissionRate);
         commissionedEmployee.execute();
 
         Employee employee = PayrollDatabase.getEmployee(empId);
-        Assert.assertEquals(name, employee.getEmpName());
+        Assert.assertEquals("Bob", employee.getItsName());
 
-        Assert.assertTrue(employee.getPaymentClassification() instanceof CommissionedClassification);
-        Assert.assertEquals(salary, ((CommissionedClassification) employee.getPaymentClassification()).getSalary(), 0.01D);
-        Assert.assertEquals(commissionRate, ((CommissionedClassification) employee.getPaymentClassification()).getCommissionRate(), 0.01D);
-        Assert.assertTrue(employee.getPaymentSchedule() instanceof BiweeklySchedule);
-        Assert.assertTrue(employee.getPaymentMethod() instanceof HoldMethod);
+        Assert.assertTrue(employee.getItsClassification() instanceof CommissionedClassification);
+        Assert.assertEquals(salary, ((CommissionedClassification) employee.getItsClassification()).getSalary(), 0.01D);
+        Assert.assertEquals(commissionRate, ((CommissionedClassification) employee.getItsClassification()).getCommissionRate(), 0.01D);
+        Assert.assertTrue(employee.getItsPaymentSchedule() instanceof BiweeklySchedule);
+        Assert.assertTrue(employee.getItsPaymentMethod() instanceof HoldMethod);
     }
 
 }
