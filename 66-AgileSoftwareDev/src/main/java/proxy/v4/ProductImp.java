@@ -2,6 +2,7 @@ package proxy.v4;
 
 /**
  * 程序26.12 P294
+ * 给 ProductProxy 用的，最终代码里没有使用。
  */
 public class ProductImp implements Product {
     private int itsPrice;

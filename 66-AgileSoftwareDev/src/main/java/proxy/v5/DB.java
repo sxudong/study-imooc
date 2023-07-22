@@ -102,8 +102,15 @@ public class DB {
 
     /**
      * 程序26.17 P297
+     *
+     * 现在我们需要编写 DB 的 newOrder 方法。请注意，我们在程序 26.14 中调用它时，
+     * 给它提供了拥有它的客户的ID，却没有提供 orderId 。每个 Order 都需要一个 orderId
+     * 来充当安的键值。此外，在关系模式中，每个 Item 都引用到该 orderId 来表明它和 Order
+     * 之间的联系。显然，orderId 必须是唯一的。如何产生它呢？我们编写一个测试来展示我们的意思。
      */
     public static OrderData newOrder(String customerId) throws Exception {
+        // 每创建一个新 Order 时，orderId都会以某种方式自动加 1。
+        // 只要查询数据库获得当前正在使用的 orderId 的最大值，并在其上加 1 即可。
         int newMaxOrder1 = getMaxOrderId() + 1;
         PreparedStatement s = con.prepareStatement("INSERT INTO Orders(orderId, custId) VALUES(?, ?)");
         s.setInt(1, newMaxOrder1);

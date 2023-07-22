@@ -5,6 +5,7 @@ import java.sql.*;
 
 /**
  * 程序26.9 P291
+ * 代理会用这个连接去操作数据库。
  */
 public class DB {
     private static Connection con;
