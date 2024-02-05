@@ -9,6 +9,11 @@ import java.sql.Statement;
  * 《达内培训 06-JDBC》oneNote笔记
  */
 public class JDBCDemo3 {
+
+	/**
+	 * 工作目录：
+	 * G:\IDworkspace\study-imooc\57-JDBC\57-JDBC_demo
+	 */
 	public static void main(String[] args) {
 		try{
 			Connection conn = DBUtil.getConnection();

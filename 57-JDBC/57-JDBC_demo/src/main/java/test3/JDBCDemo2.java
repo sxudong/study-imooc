@@ -9,6 +9,10 @@ import java.util.Properties;
  */
 public class JDBCDemo2 {
 
+	/**
+	 * 工作目录：
+	 * G:\IDworkspace\study-imooc\57-JDBC\57-JDBC_demo
+	 */
 	public static void main(String[] args) {
 		try{
 			//java.util.Properties
