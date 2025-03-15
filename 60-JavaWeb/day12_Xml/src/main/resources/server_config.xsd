@@ -1,0 +1,20 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="ServerConfig">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="ServerInfo">
+                    <xs:complexType>
+                        <xs:attribute name="serverId" type="xs:string"/>
+                        <xs:attribute name="protocol" type="xs:string"/>
+                        <xs:attribute name="port" type="xs:int"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="BadiduInfo">
+                    <xs:complexType>
+                        <xs:attribute name="url" type="xs:string" />
+                    </xs:complexType>
+                </xs:element>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
