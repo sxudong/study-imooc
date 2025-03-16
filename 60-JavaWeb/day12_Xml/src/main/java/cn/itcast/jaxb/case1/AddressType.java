@@ -47,7 +47,7 @@ public class AddressType {
     protected String country;
 
     /**
-     * 获取city属性的值。
+     * 获取 city 属性的值。
      * 
      * @return
      *     possible object is
@@ -59,7 +59,7 @@ public class AddressType {
     }
 
     /**
-     * 设置city属性的值。
+     * 设置 city 属性的值。
      * 
      * @param value
      *     allowed object is
@@ -71,7 +71,7 @@ public class AddressType {
     }
 
     /**
-     * 获取country属性的值。
+     * 获取 country 属性的值。
      * 
      * @return
      *     possible object is
@@ -83,7 +83,7 @@ public class AddressType {
     }
 
     /**
-     * 设置country属性的值。
+     * 设置 country 属性的值。
      * 
      * @param value
      *     allowed object is

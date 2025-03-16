@@ -64,5 +64,28 @@ public class ObjectFactory {
     public JAXBElement<PersonType> createPerson(PersonType value) {
         return new JAXBElement<PersonType>(_Person_QNAME, PersonType.class, null, value);
     }
-
+//
+//    /**
+//     * Create an instance of {@link ServerConfig }
+//     *
+//     */
+//    public ServerConfig createServerConfig() {
+//        return new ServerConfig();
+//    }
+//
+//    /**
+//     * Create an instance of {@link ServerConfig.ServerInfo }
+//     *
+//     */
+//    public ServerConfig.ServerInfo createServerConfigServerInfo() {
+//        return new ServerConfig.ServerInfo();
+//    }
+//
+//    /**
+//     * Create an instance of {@link ServerConfig.BadiduInfo }
+//     *
+//     */
+//    public ServerConfig.BadiduInfo createServerConfigBadiduInfo() {
+//        return new ServerConfig.BadiduInfo();
+//    }
 }
