@@ -17,6 +17,7 @@ public class OrderServiceCgLib implements MethodInterceptor {
 
     /**
      * 创建代理对象
+     *
      * @param target
      * @return
      */
@@ -36,7 +37,7 @@ public class OrderServiceCgLib implements MethodInterceptor {
     @Override
     public Object intercept(Object obj, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
         Object result;
-        // 获取Order对象
+        // 获取 Order 对象
         Object argObject = objects[0];
         beforeMethod(argObject); // 反射方法前调用.
 
@@ -50,22 +51,22 @@ public class OrderServiceCgLib implements MethodInterceptor {
     }
 
     // 方法前执行
-    private void beforeMethod(Object obj){
+    private void beforeMethod(Object obj) {
         int userId = 0;
-        System.out.println("动态代理 before code");
-        if(obj instanceof Order){
+        System.out.println("Cglib 动态代理 before code");
+        if (obj instanceof Order) {
             Order order = (Order) obj;
             userId = order.getUserId();
         }
         int dbRouter = userId % 2;
-        System.out.println("动态代理分配到【db"+dbRouter+"】处理数据");
+        System.out.println("Cglib 动态代理分配到【db" + dbRouter + "】处理数据");
 
         //todo 设置dataSource;
-        DataSourceContextHolder.setDBType("db"+String.valueOf(dbRouter));
+        DataSourceContextHolder.setDBType("db" + String.valueOf(dbRouter));
     }
 
     // 方法后执行
-    private void afterMethod(){
-        System.out.println("动态代理 after code");
+    private void afterMethod() {
+        System.out.println("Cglib 动态代理 after code");
     }
 }
