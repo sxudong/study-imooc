@@ -9,18 +9,18 @@
 
 struct stu2
 {
-    //成员列表
+    // 成员列表
     //char name[21];
     char * name;
     float * scores;
 };
 
 
-// windows用下划线命令方式int _role_level  int i_role_level。
-// java用驼峰式命名方式bubbleSort
+// windows 用下划线命令方式 int _role_level  int i_role_level。
+// java 用驼峰式命名方式 bubbleSort
 void BubbleSort(struct stu2 * p,int len)
 {
-    //冒泡排序
+    // 冒泡排序
     for (int i = 0; i < len - 1; i++){
         for (int j = 0; j < len - i - 1; j++){
             float sum1 = p[j].scores[0] + p[j].scores[1] + p[j].scores[2];
@@ -39,7 +39,7 @@ int main()
 {
     struct stu2 *p = (struct stu2 *)malloc(sizeof(struct stu2) * 3);
     for (int i = 0; i < 3; i++){
-        //开辟名字和分数的堆空间
+        // 开辟名字和分数的堆空间
         p[i].name = (char *)malloc(sizeof(char) * 21);
         p[i].scores = (float *)malloc(sizeof(float) * 3);
         //(p+i)->name
@@ -57,13 +57,13 @@ int main()
         printf("成绩: %.1f   %.1f   %.1f\n", p[i].scores[0], p[i].scores[1], p[i].scores[2]);
     }
 
-    //释放名字和分数的堆空间
+    // 释放名字和分数的堆空间
     for (int i = 0; i < 3; i++){
         free(p[i].name);
         free(p[i].scores);
     }
 
-    //释放结构体堆空间
+    // 释放结构体堆空间
     free(p);
 
     system("pause");

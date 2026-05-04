@@ -16,14 +16,14 @@ int main1()
     if (!fp1 || !fp2)
         return -1;
 
-    //读源文件内容  直到EOF
+    // 读源文件内容  直到 EOF
     char ch;
     while ((ch = fgetc(fp1)) != EOF){
-        ch++; //以++的方式加密
+        ch++; // 以 ++ 的方式加密
         fputc(ch, fp2);
     }
 
-    //关闭文件
+    // 关闭文件
     fclose(fp1);
     fclose(fp2);
 
@@ -44,7 +44,7 @@ int main(void)
 
     char ch;
     while ((ch = fgetc(fp1)) != EOF){
-        ch--; //以--的方式加密
+        ch--; // 以 -- 的方式加密
         fputc(ch, fp2);
     }
 

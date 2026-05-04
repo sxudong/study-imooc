@@ -3,15 +3,15 @@
 #include<string.h>
 #include<stdlib.h>
 
-//在字符串arr后追加字符串s1
+// 在字符串 arr 后追加字符串 s1
 void mystrcat(char * arr, char * s1)
 {
-    //方法一：
+    // 方法一：
     //while (*arr)
     //	arr++;
     //while (*arr++ = *s1++);
 
-    //方法二：
+    // 方法二：
     while (*arr)
         arr++;
 
@@ -21,7 +21,7 @@ void mystrcat(char * arr, char * s1)
         arr++;
         s1++;
     }
-    *arr = '\0'; //给数组加结束符'\0'
+    *arr = '\0'; // 给数组加结束符'\0'
 }
 
 int main()
@@ -29,7 +29,7 @@ int main()
     char arr[100] = "hello";
     char * s1 = "world";
     mystrcat(arr, s1);
-    printf("%s\n", arr); //helloworld
+    printf("%s\n", arr); // helloworld
 
     //system("pause");
     return EXIT_SUCCESS;

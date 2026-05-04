@@ -29,9 +29,9 @@ int main05(int argc,char * argv[])
 		return -2;
 	}
 
-	//获取文件属性
+	// 获取文件属性
 	struct stat *s = NULL;
-	//获取源文件
+	// 获取源文件
 	stat(argv[1],s);
 	char * ch;
 	int maxSize=0;
@@ -50,11 +50,11 @@ int main05(int argc,char * argv[])
 		fwrite(ch,1,len,fp2);	
 	}	
 
-    //关闭文件
+    // 关闭文件
 	fclose(fp1);
 	fclose(fp2);
 
-	free(ch); //释放堆内存
+	free(ch); // 释放堆内存
 	unsigned int end_time=time(NULL);
 	
 	printf("花费时间：%d(s)\n",end_time-start_time);

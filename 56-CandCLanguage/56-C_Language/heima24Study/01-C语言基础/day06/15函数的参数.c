@@ -3,10 +3,10 @@
 #include<string.h>
 #include<stdlib.h>
 
-int fun01(int a, int b)//a=10 b=20
+int fun01(int a, int b) // a=10 b=20
 {
-	a++;//11
-	b++;//21
+	a++; // 11
+	b++; // 21
 	printf("%d\n", a);
 	printf("%d\n", b);
 	printf("%p\n", &a);

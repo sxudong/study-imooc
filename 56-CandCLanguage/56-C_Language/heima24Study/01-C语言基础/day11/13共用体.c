@@ -33,10 +33,10 @@ int main()
     var.b = 3.14;
     var.c = 66;
 
-    //共用体“最后一个赋值”一定是准确的，“其它的值”都会发生变化。
-    printf("%f\n", var.a); //100.000000
-    printf("%f\n", var.b); //0.000000
-    printf("%d\n", var.c); //66
+    // 共用体“最后一个赋值”一定是准确的，“其它的值”都会发生变化。
+    printf("%f\n", var.a); // 100.000000
+    printf("%f\n", var.b); // 0.000000
+    printf("%d\n", var.c); // 66
 
     system("pause");
     return EXIT_SUCCESS;

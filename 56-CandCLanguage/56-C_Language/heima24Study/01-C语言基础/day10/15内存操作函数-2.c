@@ -4,31 +4,31 @@
 #include<stdlib.h>
 
 /*
-8.2.3 �洢�����ܽ��ڴ��������
+8.2.3 存储类型总结内存操作函数
 
  void *memcpy(void *dest, const void *src, size_t n);
 
- ���ܣ�����src��ָ���ڴ����ݵ�ǰn���ֽڵ�dest��ֵ���ڴ��ַ�ϡ�
- ������
-    dest��Ŀ���ڴ��׵�ַ
-    src�� Դ�ڴ��׵�ַ��ע�⣺dest��src��ָ���ڴ�ռ䲻���ص�
-    n��   ��Ҫ�������ֽ���
- ����ֵ��dest���׵�ַ
+ 功能：拷贝 src 所指的内存内容的前 n 个字节到 dest 所值的内存地址上。
+ 参数：
+    dest：目的内存首地址
+    src： 源内存首地址，注意：dest 和 src 所指的内存空间不可重叠
+    n：   需要拷贝的字节数
+ 返回值：dest 的首地址
  */
 int main()
 {
     int arr[10] = { 1,2,3,4,5,6,7,8,9,10 };
-    int *p = malloc(sizeof(int) * 10); //����40���ֽڶѿռ�
+    int *p = malloc(sizeof(int) * 10); // 开辟 40 个字节堆空间
 
     memcpy(p, arr, 40);
     for (int i = 0; i < 10; i++){
         printf("%d\n", p[i]);
     }
 
-    free(p); //�ͷŶѿռ�
+    free(p); //释放堆空间
 
-    //������Ŀ���ַ��Դ��ַ�����ܵĲ�Ҫ��ͻ�����ܻ���ִ���
-    //�������±�2��ʼ����
+    // 拷贝的目标地址和源地址尽可能的不要冲突，可能会出现错误。
+    // 从数组下标2开始覆盖
     memcpy(&arr[2], arr, 20);
     for (int i = 0; i < 10; i++){
         printf("%d\n", arr[i]);
@@ -38,14 +38,14 @@ int main()
     char * b = malloc(100);
 
     memset(b, 0, 100);
-    //1������������ͬ
-    //2��strcpy�����ַ�����memcpy����һ���ڴ档
-    //3������������־��ͬ strcpy��'\0'��β��memcpy�Ը���Ϊ��β
-    //strcpy(b, arr1);  //hello���루�������޻ᱨ����
-    memcpy(b, arr1, 5); //hello ���������޻ᱨ���Ϳ����ظ��ĵ�ַ�ᱨ����
+    // 1、函数参数不同
+    // 2、strcpy 拷贝字符串，memcpy 拷贝一块内存。
+    // 3、拷贝结束标志不同 strcpy 以'\0'结尾，memcpy以个数为结尾
+    // trcpy(b, arr1);  // hello乱码（超出界限会报错）
+    memcpy(b, arr1, 5);  // hello （超出界限会报错和拷贝重复的地址会报错）
     printf("%s\n", b);
 
-    free(b); //�ͷŶѿռ�
+    free(b); // 释放堆空间
     return 0;
 }
 /* Output:

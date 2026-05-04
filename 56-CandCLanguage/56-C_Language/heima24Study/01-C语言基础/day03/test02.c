@@ -9,7 +9,7 @@ int main02(void)
 	//a = 10;
 	//b = 20;
 	//c = a + b;
-	//汇编代码
+	// 汇编代码
 	__asm
 	{
 		mov a, 3

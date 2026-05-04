@@ -4,23 +4,23 @@
 #include<stdlib.h>
 
 
-//定义结构体格式
+// 定义结构体格式
 /*
 struct 结构体名称
 {
     结构体成员列表
 };
 
- //定义结构体变量
- struct 结构体名称 结构体变量名   //这就是定义了一个结构体变量
- //给结构体的变量赋值
+ // 定义结构体变量
+ struct 结构体名称 结构体变量名   // 这就是定义了一个结构体变量
+ // 给结构体的变量赋值
  结构体变量名.结构体成员列表 = 值
- 如果是字符串类型，需要使用strcpy()
+ 如果是字符串类型，需要使用 strcpy()
 */
 
 struct students
 {
-    //成员列表
+    // 成员列表
     char name[21];
     unsigned int age;
     char tel[16];
@@ -30,7 +30,7 @@ struct students
 
 int main()
 {
-    //方式三：结构体 赋值
+    // 方式三：结构体 赋值
     struct students stu;
     //stu.name = "谢广坤";
     strcpy(stu.name, "谢广坤");

@@ -9,14 +9,14 @@
 int main1()
 {
     char * p = "hello world\n";
-    //w 以"写"的方式打开文件 文件不存在会创建新文件 如果文件里面有内容会覆盖原始内容
+    // w 以"写"的方式打开文件 文件不存在会创建新文件 如果文件里面有内容会覆盖原始内容
     FILE * fp = fopen("../../d.txt", "w");
     if (!fp)
         return -1;
 
     fputs(p, fp);
 
-    //关闭文件
+    // 关闭文件
     fclose(fp);
 
     system("pause");
@@ -32,17 +32,17 @@ int main1()
  */
 int main2()
 {
-    //r 以只读形式打开文件 不会创建新文件，如果文件不存在会报错
+    // r 以只读形式打开文件 不会创建新文件，如果文件不存在会报错
     FILE * fp = fopen("../../d.txt", "r");
     if (!fp)
         return -1;
 
-    //块读取
+    // 块读取
     //char buf[1024]; //1KB
     char buf[5]; //5个字节
     fgets(buf, 5, fp);
     printf("第一次读取结果：%s\n", buf);
-    memset(buf, 0, 5); //内存清0 将buf的内存区域的前5个字节以参数0填入
+    memset(buf, 0, 5); // 内存清0 将 buf 的内存区域的前 5 个字节以参数0填入
 
     fgets(buf, 5, fp);
     printf("第二次读取结果：%s\n", buf);
@@ -63,7 +63,7 @@ int main2()
 第二次读取结果：o wo
 第三次读取结果：rld
 
-第四次读取结果：rld  //上一步没有清除，数据已经读完，把上一次的数据打印出来了。
+第四次读取结果：rld  // 上一步没有清除，数据已经读完，把上一次的数据打印出来了。
 */
 
 /**
@@ -71,23 +71,23 @@ int main2()
  */
 int main()
 {
-    //r 以只读形式打开文件 不会创建新文件，如果文件不存在会报错
+    // r 以只读形式打开文件 不会创建新文件，如果文件不存在会报错
     FILE * fp = fopen("../../d.txt", "r");
     if (!fp)
         return -1;
 
     //char buf[1024*1024]; //1M
-    char * buf = malloc(sizeof(char) * 1024); //开辟1024个字节堆空间
+    char * buf = malloc(sizeof(char) * 1024); // 开辟 1024 个字节堆空间
 
-    //feof()判断文件流是否到结尾  EOF 判断字符是否到结尾
+    // feof() 判断文件流是否到结尾  EOF 判断字符是否到结尾
     while (feof(fp) == 0){
         memset(buf, 0, 1024);
         fgets(buf, 1024, fp);
         printf("%s", buf);
     }
 
-    free(buf);  //释放堆空间
-    fclose(fp); //关闭文件
+    free(buf);  // 释放堆空间
+    fclose(fp); // 关闭文件
 }
 /* Output:
 hello world

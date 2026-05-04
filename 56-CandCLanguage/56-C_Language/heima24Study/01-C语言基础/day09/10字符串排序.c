@@ -4,30 +4,30 @@
 #include<stdlib.h>
 
 
-//字符串排序 —— 根据字符串首字符，按照a-z的顺序排序。
-//例如“student tree new bee”排序后得“bee new student tree”
+// 字符串排序 —— 根据字符串首字符，按照a-z的顺序排序。
+// 例如“student tree new bee”排序后得“bee new student tree”
 
 void bubble(char** arr, int len)
 {
-    //冒泡排序
+    // 冒泡排序
     for (int i = 0; i < len - 1; i++){ // 数组下标0~3
         for (int j = 0; j < len - i - 1; j++){
-            //比对两个字符串的首字母
-            //1、指针判断
+            // 比对两个字符串的首字母
+            // 1、指针判断
             //if (**(arr + j) < **(arr + j + 1)){
             //	char * temp = *(arr+j);
             //	*(arr + j) = *(arr + j + 1);
             //	*(arr + j + 1) = temp;
             //}
 
-            //2、数组判断
+            // 2、数组判断
             //if (arr[j][0] > arr[j+1][0]){
             //	char * temp = arr[j];
             //	arr[j] = arr[j+1];
             //	arr[j + 1] = temp;
             //}
 
-            //3、混合判断
+            // 3、混合判断
             if (*arr[j] > *arr[j + 1]){
                 char * temp = arr[j];
                 arr[j] = arr[j+1];

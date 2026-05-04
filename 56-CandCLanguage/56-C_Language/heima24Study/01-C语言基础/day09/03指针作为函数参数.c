@@ -3,8 +3,8 @@
 #include<string.h>
 #include<stdlib.h>
 
-//1、“数组”作为函数参数可以退化为“指针”
-//2、在传递数组时需要加上“数组的个数”
+// 1、“数组”作为函数参数可以退化为“指针”
+// 2、在传递数组时需要加上“数组的个数”
 
 void print01(int * arr,int len)
 {
@@ -30,7 +30,7 @@ void print01(int * arr,int len)
 
 void print2(char * arr)
 {
-    //两种方式可以求出字符串长度 \0
+    // 两种方式可以求出字符串长度 \0
     int len = strlen(arr); //11
     int i = 0;
     while (arr[i] != '\0')

@@ -9,12 +9,12 @@ extern int mlt(int a, int b);
 extern int dive(int a, int b);
 
 
-//1、函数的返回值
-//2、函数的参数列表
-//3、return 和exit(0)
+// 1、函数的返回值
+// 2、函数的参数列表
+// 3、return 和exit(0)
 int main14()
 {
-	//1+2  3 3*4 12 3/0  0 不能作为被除数 4/5 =0
+	// 1+2  3 3*4 12 3/0  0 不能作为被除数 4/5 =0
 
 	int a, b;
 	char c;
@@ -57,7 +57,7 @@ int main14()
 	return EXIT_SUCCESS;
 }
 
-//函数的定义
+// 函数的定义
 int add(int a, int b)
 {
 	return a + b;
@@ -75,7 +75,7 @@ int dive(int a, int b)
 	if (a)
 	{
 		//return a;
-		//代表程序结束
+		// 代表程序结束
 		exit(0);
 	}
 	return a / b;

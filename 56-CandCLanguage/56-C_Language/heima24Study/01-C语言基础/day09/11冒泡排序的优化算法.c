@@ -3,11 +3,11 @@
 #include<string.h>
 #include<stdlib.h>
 
-//排序算法分：时间广度优化 和 空间广度优化
+// 排序算法分：时间广度优化 和 空间广度优化
 void bubble(int *arr, int len)
 {
 	int flag = 1;
-	//时间广度优化
+	// 时间广度优化
 	for (int i = 0; i < len - 1; i++){
 		for (int j = 0; j < len - i - 1; j++){
 			if (arr[j] < arr[j + 1]){

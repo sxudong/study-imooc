@@ -5,15 +5,15 @@
 
 int main()
 {
-    //开辟10个int类型40个字节的堆空间
+    // 开辟 10 个 int 类型 40 个字节的堆空间
     int * p = (int *)malloc(sizeof(int) * 10);
 
-    //将一块内存区域重置为0
-    //void *memset(void *s, int c, size_t n);
-    //将s的内存区域的前n个字节以参数c填入
-    //s：需要操作内存s的首地址
-    //c：填充的字符，c虽然参数为int，但必须是unsigned char , 范围为0~255
-    //n：指定需要设置的大小
+    // 将一块内存区域重置为0
+    // void *memset(void *s, int c, size_t n);
+    // 将s的内存区域的前n个字节以参数c填入
+    // s：需要操作内存s的首地址
+    // c：填充的字符，c 虽然参数为 int，但必须是 unsigned char , 范围为 0~255
+    // n：指定需要设置的大小
     memset(p, 0, 40);
     for (int i = 0; i < 10; i++){
         printf("%d\n", p[i]); //0
@@ -31,14 +31,14 @@ int main()
     0
     */
 
-    //重置为A
+    // 重置为 A
     char * b = malloc(sizeof(char) * 10);
     memset(b, 65, 10);
-    //直到打印到'\0'为止
-    printf("%s\n", b); //AAAAAAAAAA\Arron?憕蕟
+    // 直到打印到'\0'为止
+    printf("%s\n", b); // AAAAAAAAAA
 
 
-    //重置数组
+    // 重置数组
     int arr[10] = { 1,2,3,4,5,6,7,8,9,10 };
     memset(arr, 0, 40);
     for (int i = 0; i < 10; i++){

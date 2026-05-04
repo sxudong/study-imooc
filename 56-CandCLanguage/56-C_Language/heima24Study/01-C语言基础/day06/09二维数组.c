@@ -6,7 +6,7 @@
 int main09()
 {
 
-	//二维数组定义
+	// 二维数组定义
 	int arr[3][3];
 	//arr[0][0]; arr[0][1]; arr[0][2];
 	//arr[1][0]; arr[1][1]; arr[1][2];
@@ -25,7 +25,7 @@ int main09()
 	}
 
 
-	//打印数据
+	// 打印数据
 	for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
 	{
 		for (int j = 0; j < sizeof(arr[0]) / sizeof(arr[0][0]); j++)
@@ -35,7 +35,7 @@ int main09()
 	}
 
 
-	//二维数组的内存模型
+	// 二维数组的内存模型
 	printf("二维数组的内存首地址：%p\n", arr);
 	printf("二维数组的内存首行地址：%p\n", arr[0]);
 	printf("二维数组的内存第二行首行地址：%p\n", arr[1]);

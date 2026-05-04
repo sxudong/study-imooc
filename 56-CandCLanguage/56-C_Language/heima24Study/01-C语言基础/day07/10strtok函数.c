@@ -13,7 +13,7 @@ int main10()
 		printf("%s\n", p);
 		p = strtok(NULL, ".");
 	}
-	//将切割点用\0表示ʾ
+	// 将切割点用 \0 表示ʾ
 	//printf("%s\n", p);
 	//printf("%s\n", arr);
 

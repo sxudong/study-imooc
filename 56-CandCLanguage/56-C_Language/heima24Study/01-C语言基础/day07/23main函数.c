@@ -5,8 +5,8 @@
 
 int main(int argc,char *argv[])
 {
-	//argc接收传递参数的个数
-	//argv接受传递参数的内容
+	// argc 接收传递参数的个数
+	// argv 接受传递参数的内容
 	if(argc<=1)
 	{	
 		printf("缺少参数\n");

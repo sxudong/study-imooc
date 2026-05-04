@@ -15,13 +15,13 @@
 */
 int main()
 {
-    //r+ 以可读、可写的方式打开文件(不创建新文件)
+    // r+ 以可读、可写的方式打开文件(不创建新文件)
     FILE * fp = fopen("../../c.txt", "r+"); //读取"06四则运算.c"生成的c.txt文件
     if (!fp)
         return -1;
 
-    //二级指针
-    //开辟100个char*,400字节堆空间,由于char*是一线指针，所以要用二给指针接收
+    // 二级指针
+    // 开辟 100 个 char*,400 字节堆空间,由于 char* 是一线指针，所以要用二给指针接收
     char ** buf = (char **)malloc(sizeof(char *) * 100);
     //printf("%d\n",sizeof(char*)); //4
 
@@ -31,10 +31,10 @@ int main()
     for (int i = 0; i < 100; i++){
         buf[i] = (char *)malloc(sizeof(char) * 20);
 
-        //格式化读取 a c b 的值
+        // 格式化读取 a c b 的值
         fscanf(fp, "%d%c%d=\n", &a, &c, &b);
 
-        //计算
+        // 计算
         switch (c){
             case '+':
                 value = a + b;
@@ -49,13 +49,13 @@ int main()
                 value = a * 1.0 / b;
                 break;
         }
-        //计算完之后，将格式化的数据写入字符串
+        // 计算完之后，将格式化的数据写入字符串
         sprintf(buf[i], "%d%c%d=%.2f\n", a, c, b, value);
         //fgets(buf[i], 20, fp);
 
     }
 
-    //关闭文件
+    // 关闭文件
     fclose(fp);
 
 
@@ -64,18 +64,18 @@ int main()
     //	printf("%s", buf[i]);
     //}
 
-    //将结果重新写入c.txt
-    fp = fopen("../../c.txt", "r+"); //r+ 以可读、可写的方式打开文件(不创建新文件)
+    // 将结果重新写入 c.txt
+    fp = fopen("../../c.txt", "r+"); // r+ 以可读、可写的方式打开文件(不创建新文件)
     if (!fp)
         return -1;
 
     for (int i = 0; i < 100; i++)
         fputs(buf[i], fp);
-    //关闭文件
+    // 关闭文件
     fclose(fp);
 
 
-    //内存释放
+    // 内存释放
     for (int i = 0; i < 100; i++){
         free(buf[i]);
         buf[i] = NULL;

@@ -5,26 +5,26 @@
 
 struct stra
 {
-    int a;       //4   4
-    float b;     //4   8
-    char c;      //1   12  9
-    char arr[7]; //16
-    double h;    //24
+    int a;       // 4   4
+    float b;     // 4   8
+    char c;      // 1   12  9
+    char arr[7]; // 16
+    double h;    // 24
 }abc;
 
 struct  strb
 {
-    //结构体嵌套
-    struct stra abc; //12  16
-    short f;         //2
-    char * e;        //4
+    // 结构体嵌套
+    struct stra abc; // 12  16
+    short f;         // 2
+    char * e;        // 4
     short g;
-    //double d;        //8
+    //double d;      // 8
 };
 
 
 /*
-    技能cd：
+    技能 cd：
     skill01 10
     skill02 3
     skill03 7
@@ -41,12 +41,12 @@ int main()
     struct strb  strbb;
     strbb.abc.h = 10.0f;
     strbb.abc.a = 100;
-    printf("%d\n", strbb.abc.a); //100
+    printf("%d\n", strbb.abc.a);   // 100
 
-    printf("%d\n", sizeof(strbb)); //40
+    printf("%d\n", sizeof(strbb)); // 40
 
     struct stra stra;
-    printf("%d\n", sizeof(stra)); //24
+    printf("%d\n", sizeof(stra));  // 24
 
     system("pause");
     return EXIT_SUCCESS;

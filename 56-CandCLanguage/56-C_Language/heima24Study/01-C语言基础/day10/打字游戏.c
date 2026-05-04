@@ -27,7 +27,7 @@ void rand_ch(char *arr)
 
 void start_game(char *arr)
 {
-	//计时器
+	// 计时器
 	char ch;
 	int start_time;
 	int end_time;
@@ -37,7 +37,7 @@ void start_game(char *arr)
 		ch = _getch();
 		if (i == 0)
 		{
-			//记录时间 单位是秒 1970 1 1
+			// 记录时间 单位是秒 1970 1 1
 			start_time = time(NULL);
 		}
 		if (ch == arr[i])
@@ -60,9 +60,9 @@ void start_game(char *arr)
 int main(void)
 {
 	char arr[51] = {0};
-	//1、提示
-	//2、随机字符串
-	//3、时间 正确率
+	// 1、提示
+	// 2、随机字符串
+	// 3、时间 正确率
 	while (1)
 	{
 		tips();

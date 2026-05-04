@@ -3,7 +3,7 @@
 #include<string.h>
 #include<stdlib.h>
 
-extern void fun04(); //实现在08test.c
+extern void fun04(); // 实现在 08test.c
 
 int main()
 {

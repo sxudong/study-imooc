@@ -8,7 +8,7 @@ int main()
 
 	int arr[10] = { 7,4,2,3,5,8,9,6,1,10 };
 	int len = sizeof(arr) / sizeof(arr[0]) - 1;
-	//冒泡排序   从小到大
+	// 冒泡排序   从小到大
 	for (int i = 0; i <= len; i++)
 	{
 		for (int j = 0; j < len - i; j++)

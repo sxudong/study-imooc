@@ -11,7 +11,7 @@ int main()
 	{
 		scanf("%d", &fits[i]);
 	}
-	//小猪成体重
+	// 小猪成体重
 	//int max = 0;
 	//for (int i = 0; i < 10; i++)
 	//{

@@ -9,10 +9,10 @@ int main08()
 	while (index <= 100)
 	{
 		index++;
-		//条件： 1、带7  2、7的倍数  35
+		// 条件： 1、带 7  2、7 的倍数  35
 		if (index % 7 == 0 || index % 10 == 7 || index / 10 == 7)
 		{
-			//跳出
+			// 跳出
 			continue;
 		}
 		printf("数字：%d\n", index);

@@ -10,17 +10,17 @@
 4、如果匹配的被匹配字符串的结尾  匹配个数 不等于 字符串长度
 */
 
-//dest：目标字符串
-//src:  要匹配的字符串
+// dest：目标字符串
+// src:  要匹配的字符串
 char * mystrstr(char * dest, char *src)
 {
     char * p = NULL;
-    char * temp = src; //要匹配的字符串的临时值
+    char * temp = src; // 要匹配的字符串的临时值
 
-    //*dest：代表一个值，"\0"是假，代表不能运行了。
+    // *dest：代表一个值，"\0"是假，代表不能运行了。
     while (*dest){
         p = dest;
-        //匹配个数 = 字符串长度,第一次匹配成功：l l，第二次匹配不成功：l o
+        // 匹配个数 = 字符串长度,第一次匹配成功：l l，第二次匹配不成功：l o
         //while (*dest == *temp && *dest != '\0') {
         while (*dest == *temp && *dest){ // "\0"是假(false)
             dest++;
@@ -30,9 +30,9 @@ char * mystrstr(char * dest, char *src)
         if (!*temp) // '\0' false
             return p;
         else
-            temp = src; //要查询的字符串归位，这里的重置也没有意义
-        dest = p;   //重置到while进来时位置的值，这个重置没有意义
-        dest++;     //目标字符串加加，进行一下轮的比对
+            temp = src; // 要查询的字符串归位，这里的重置也没有意义
+        dest = p;   // 重置到 while 进来时位置的值，这个重置没有意义
+        dest++;     // 目标字符串加加，进行一下轮的比对
     }
 
     //返回值结果

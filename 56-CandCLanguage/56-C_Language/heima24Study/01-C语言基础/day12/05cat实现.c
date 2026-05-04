@@ -20,24 +20,24 @@
  */
 int main()
 {
-    //1、指定一个文件名
-    char fileName[256]; //文件名最长到255个字节，最后一个字符为结束符'\0'
+    // 1、指定一个文件名
+    char fileName[256]; // 文件名最长到 255 个字节，最后一个字符为结束符'\0'
 
     printf("请输入您查看的文件：\n");
-    scanf("%s", fileName); //从键盘获取
-    getchar(); //getchar函数默认从此终端获得数据
+    scanf("%s", fileName); // 从键盘获取
+    getchar();             // getchar 函数默认从此终端获得数据
 
-    //打开文件
+    // 打开文件
     FILE * fp = fopen(fileName, "r");
     if (!fp)
         return -1;
 
-    //文件的结束标志  EOF -1
+    // 文件的结束标志  EOF -1
     char ch;
-    while ((ch = fgetc(fp)) != EOF) //fgetc()读取文件
+    while ((ch = fgetc(fp)) != EOF) // fgetc() 读取文件
         printf("%c", ch);
 
-    //关闭文件
+    // 关闭文件
     fclose(fp);
     system("pause");
     return EXIT_SUCCESS;

@@ -6,11 +6,11 @@
 
 int main15()
 {
-	//加入随机数种子
+	// 加入随机数种子
 	srand((unsigned int)time(NULL));
-	int num = rand()%100+1;//1-100
+	int num = rand()%100+1;  // 1-100
 	int value;
-	while (1)//for(;;)
+	while (1)                // for(;;)
 	{
 		scanf("%d", &value);
 		if (value > num)

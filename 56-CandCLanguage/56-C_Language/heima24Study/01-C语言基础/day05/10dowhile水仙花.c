@@ -5,10 +5,10 @@
 
 int main()
 {
-	//定义二维数组
+	// 定义二维数组
 	int scores[5][3];
 	//int stuSum[5] = 0;
-	//录入学生成绩
+	// 录入学生成绩
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 3; j++)
@@ -31,7 +31,7 @@ int main()
 			}
 		}
 	}
-	//求出学生的平均成绩
+	// 求出学生的平均成绩
 	int stuSum = 0;
 	///int stuAvg = 0;
 	for (int i = 0; i < 5; i++)
@@ -46,7 +46,7 @@ int main()
 		printf("第%d名学生的平均成绩为：%d\n", i + 1, stuSum / 3);
 	}
 
-	//学科平均成绩
+	// 学科平均成绩
 	int cSum = 0, mSum = 0, eSum = 0;
 	for (int i = 0; i < 5; i++)
 	{

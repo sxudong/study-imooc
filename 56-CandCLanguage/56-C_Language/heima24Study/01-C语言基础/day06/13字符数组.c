@@ -5,14 +5,14 @@
 
 int main13()
 {
-	//字符数组
+	// 字符数组
 	//char arr[10] = { 'H','e','l','l','o' };
 	//char arr[] = { 'H','e','\','0','o' };
 	//char arr[] = "h\n\0e\nllo";
 	char arr[100];
 	scanf("%[^\n]", arr);
 
-	//%s会接收字符串结束标志【'\0'】之前的所有字符 在ASCII中就是数字0
+	// %s 会接收字符串结束标志【'\0'】之前的所有字符 在 ASCII 中就是数字 0
 	printf("%s", arr);
 
 	//for (int i = 0; i < 10; i++)

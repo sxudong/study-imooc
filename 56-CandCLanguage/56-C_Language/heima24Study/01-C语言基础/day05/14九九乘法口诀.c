@@ -6,7 +6,7 @@
 int main14()
 {
 
-	//linux 无法编译程序  -std=c90  c99   gcc -o .exe .c -std=c99
+	// linux 无法编译程序  -std=c90  c99   gcc -o .exe .c -std=c99
 	int i, j;
 	for (i = 1; i <= 9; i++)
 	{

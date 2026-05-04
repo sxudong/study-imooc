@@ -14,14 +14,14 @@
 /**
  * 一行一行拷贝
  *    1.使用缓存
- *    2.二进制函数fread()和fwrite()方法
+ *    2.二进制函数 fread() 和 fwrite() 方法
  *    3.根据文件大小来开辟堆空间
  */
 //gcc -o mycp main.c
-//mycp 生日快乐.mp4 wow.mp4
+// mycp 生日快乐.mp4 wow.mp4
 int main(int argc,char * argv[])
 {
-    unsigned int start_time= time(NULL); //开始时间
+    unsigned int start_time= time(NULL); // 开始时间
 
 //    if(argc < 3){
 //        printf("缺少参数\n");
@@ -32,8 +32,8 @@ int main(int argc,char * argv[])
      * mycp     wow.2.mp4  wow.3.mp4
      * argv[0]  argv[1]    arr[2]
      */
-//    FILE * fp1 = fopen(argv[1], "rb"); //打开文件
-//    FILE * fp2 = fopen(argv[2], "wb"); //打开文件
+//    FILE * fp1 = fopen(argv[1], "rb"); // 打开文件
+//    FILE * fp2 = fopen(argv[2], "wb"); // 打开文件
     FILE * fp1 = fopen("D:\\tmp\\test.mp4", "rb");
     FILE * fp2 = fopen("D:\\tmp\\test2.mp4", "wb");
 
@@ -42,14 +42,14 @@ int main(int argc,char * argv[])
         return -2;
     }
 
-    //char ch[1024]; //1KB
-    //char * ch = malloc(sizeof(char)*MAXSIZE); //开辟10M堆空间
+    //char ch[1024];                            // 1KB
+    //char * ch = malloc(sizeof(char)*MAXSIZE); // 开辟 10M 堆空间
 
-    //根据文件大小来开辟堆空间
+    // 根据文件大小来开辟堆空间
 
-    //获取文件属性
+    // 获取文件属性
     struct stat s;
-    //获取源文件
+    // 获取源文件
     //stat(argv[1], &s);
     stat("D:\\tmp\\test.mp4", &s);
     char * ch;
@@ -68,7 +68,7 @@ int main(int argc,char * argv[])
 //        fputc(ch, fp1);
 //        fread(ch,1024,1,fp1);
 //        fwrite(ch, 1024, 1, fp2);
-        int len = fread(ch,1,MAXSIZE,fp1); //返回读取到的大小
+        int len = fread(ch,1,MAXSIZE,fp1); // 返回读取到的大小
         fwrite(ch,1,len,fp2);
     }
 
@@ -76,7 +76,7 @@ int main(int argc,char * argv[])
     fclose(fp1);
     fclose(fp2);
 
-    unsigned int end_time=time(NULL); //结束时间
+    unsigned int end_time=time(NULL); // 结束时间
 
     printf("花费时间：%d(s)\n", end_time-start_time);
 

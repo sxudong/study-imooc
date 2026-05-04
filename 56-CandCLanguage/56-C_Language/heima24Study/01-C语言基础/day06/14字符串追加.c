@@ -5,16 +5,16 @@
 
 int main14()
 {
-	char arr1[] = "hello";//01234
+	char arr1[] = "hello"; // 01234
 	char arr2[] = "world";
-	char arrBuf[100];//'\0'
+	char arrBuf[100];      // '\0'
 	
 	int index = 0;
 	while (arr1[index] != '\0')
 	{
-		//1、将非\0的字符添加到arrbuf
+		// 1、将非\0的字符添加到 arrbuf
 		arrBuf[index] = arr1[index];
-		//2、计数器增长
+		// 2、计数器增长
 		index++;
 	}
 	while (arr2[index - 5] != '\0')
@@ -24,7 +24,7 @@ int main14()
 	}
 
 	// 添加字符串结束标志
-	arrBuf[index] = '\0';  // helloworld请按任意键继续. . .
+	arrBuf[index] = '\0';  // helloworld 请按任意键继续. . .
 	printf("%s", arrBuf);
 	system("pause");
 	return EXIT_SUCCESS;

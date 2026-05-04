@@ -4,7 +4,7 @@
 int main(void)
 {
 	int a;
-	//键盘输入赋值
+	// 键盘输入赋值
 	scanf("%d", &a);
 	printf("%d\n", a);
 	return 0;

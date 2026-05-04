@@ -23,26 +23,26 @@ int main()
     scanf("%s", fileName);
     getchar();
 
-    FILE * fp = fopen(fileName, "w"); //打开文件
+    FILE * fp = fopen(fileName, "w"); // 打开文件
     if (!fp)
         return -1;
 
     char buf[1024];
     while (1){
-        //读取文件
+        // 读取文件
         fgets(buf, 1024, stdin);
-        //往文件中写入"comm=exit"代表退出
+        // 往文件中写入 "comm=exit" 代表退出
         if (!strncmp(buf, "comm=exit", 9))
             break;
 
-        //写入文件
+        // 写入文件
         fputs(buf, fp);
 
-        //更新缓冲区，让缓冲区的数据“立马”写到文件中
-        fflush(fp); //参见：10.8.3更新缓冲区
+        // 更新缓冲区，让缓冲区的数据“立马”写到文件中
+        fflush(fp); // 参见：10.8.3更新缓冲区
     }
 
-    //关闭文件
+    // 关闭文件
     fclose(fp);
 
     //FILE * p = _popen()

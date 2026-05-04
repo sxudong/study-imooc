@@ -7,14 +7,14 @@ int main09()
 {
 //    char arr[] = "hello";
 //    char ch = 'l';
-//    char *p = strchr(arr, 'l'); //这个p接收的是一个地址，返回'l'以后的字符串
+//    char *p = strchr(arr, 'l'); // 这个 p 接收的是一个地址，返回 'l' 以后的字符串
 //    printf("%s", p);
 
 
     char arr[] = "hee哈eello world";
     char ch = 'l';
-    char ha[] = "哈哈哈哈"; //加末尾0，共9个字符
-    char * p = strchr(arr, '哈');//"哈" == 哈\0
+    char ha[] = "哈哈哈哈";        // 加末尾 0，共 9 个字符
+    char * p = strchr(arr, '哈'); //"哈" == 哈\0
     if (strchr(arr, 104) != NULL)
     {
         printf("找到了！");

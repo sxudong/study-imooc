@@ -32,7 +32,7 @@ enum MyEnum
 
 int main()
 {
-    srand((unsigned int)time(NULL)); //随机种子
+    srand((unsigned int)time(NULL)); // 随机种子
 
 //    char fileName[256];
 //    printf("请输入文件名：\n");
@@ -40,17 +40,17 @@ int main()
 //    getchar();
 //    FILE * fp = fopen(fileName, "w");
 
-    //1、以"写"方式打开文件 判断文件
+    // 1、以"写"方式打开文件 判断文件
     FILE * fp = fopen("../../c.txt", "w");
     if (!fp)
         return -1;
 
-    //2、定义 三个变量
+    // 2、定义 三个变量
     int a, b;
     char c;
-    char buf[20]; //20个字节缓冲buffer
+    char buf[20]; // 20 个字节缓冲 buffer
 
-    //3、循环100次
+    // 3、循环 100 次
     for (int i = 0; i < 100; i++){
         switch (rand()%4){
             case add:
@@ -66,18 +66,18 @@ int main()
                 c = '/';
                 break;
         }
-        a = rand() % 10 + 1; //2
-        b = rand() % 10 + 1; //3
-        memset(buf, 0, 20);  //清零（参见8.2.3 存储类型总结内存操作函数）
-        //4、格式化字符串
+        a = rand() % 10 + 1; // 2
+        b = rand() % 10 + 1; // 3
+        memset(buf, 0, 20);  // 清零（参见8.2.3 存储类型总结内存操作函数）
+        // 4、格式化字符串
         sprintf(buf, "%d%c%d=\n", a, c, b); //2*3=\n
 
-        //5、录入内容
+        // 5、录入内容
         int j = 0;
         while (buf[j])
             fputc(buf[j++], fp);
     }
-    //6、关闭文件
+    // 6、关闭文件
     fclose(fp);
 
     system("pause");

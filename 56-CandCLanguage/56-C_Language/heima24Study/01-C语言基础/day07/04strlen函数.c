@@ -9,7 +9,7 @@ int main04()
     //char arr[] = "\0he\nsfds\0llo";
     //char arr[] = "hello";
 
-    //char arr[] = { 'h','e','l','l','o' }; //字符串的有效长度：6
+    //char arr[] = { 'h','e','l','l','o' }; // 字符串的有效长度：6
     int len = strlen(arr);
     printf("字符串的有效长度：%d\n", len);
     //printf("字符串的长度：%d", sizeof(arr));

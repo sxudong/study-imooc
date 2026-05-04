@@ -5,7 +5,7 @@
 
 struct stu2
 {
-    //成员列表
+    // 成员列表
     //char name[21];
     char * name;
     float * scores;
@@ -14,11 +14,11 @@ struct stu2
 
 int main()
 {
-    //开辟3个stu2结构体对象堆空间
+    // 开辟 3 个 stu2 结构体对象堆空间
     struct stu2 *p = (struct stu2 *)malloc(sizeof(struct stu2) * 3);
     for (int i = 0; i < 3; i++){
-        p[i].name = (char *)malloc(sizeof(char) * 21);    //开辟堆空间存储名字
-        p[i].scores = (float *)malloc(sizeof(float) * 3); //开辟堆空间存储分数
+        p[i].name = (char *)malloc(sizeof(char) * 21);    // 开辟堆空间存储名字
+        p[i].scores = (float *)malloc(sizeof(float) * 3); // 开辟堆空间存储分数
         //(p+i)->name
 
         printf("请您输入学生 姓名   成绩 ：\n");
@@ -26,13 +26,13 @@ int main()
 
     }
 
-    //冒泡排序
+    // 冒泡排序
     for (int i = 0; i < 3 - 1; i++){
         for (int j = 0; j < 3 - i - 1; j++){
-            //学生总成绩
+            // 学生总成绩
             float sum1 = p[j].scores[0] + p[j].scores[1] + p[j].scores[2];
             float sum2 = p[j + 1].scores[0] + p[j + 1].scores[1] + p[j + 1].scores[2];
-            //成绩大的学生放在后面
+            // 成绩大的学生放在后面
             if (sum1 > sum2){
                 struct stu2 temp = p[j];
                 p[j] = p[j + 1];
@@ -41,20 +41,20 @@ int main()
         }
     }
 
-    //打印学生成绩
+    // 打印学生成绩
     for (int i = 0; i < 3; i++){
         printf("姓名：%s\n", p[i].name);
         printf("成绩: %.1f   %.1f   %.1f\n", p[i].scores[0], p[i].scores[1], p[i].scores[2]);
     }
 
 
-    //释放堆空间
+    // 释放堆空间
     for (int i = 0; i < 3; i++){
         free(p[i].name);
         free(p[i].scores);
     }
 
-    //释放结构体堆空间
+    // 释放结构体堆空间
     free(p);
 
     system("pause");

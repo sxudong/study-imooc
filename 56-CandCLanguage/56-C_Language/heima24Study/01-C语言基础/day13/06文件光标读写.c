@@ -5,14 +5,14 @@
 
 
 /*
-fseek(文件流，移动字节，模式)  移动光标位置
-模式：SEEK_SET 以文件开头为标准
+  fseek(文件流，移动字节，模式)  移动光标位置
+  模式：SEEK_SET 以文件开头为标准
       SEEK_CUR 以光标当前位置为标准
       SEEK_END 以文件结尾为标准
 
-ftell(文件流)  获取光标当前位置  返回值是long  -1代表失败
+  ftell(文件流)  获取光标当前位置  返回值是long  -1代表失败
 
-rewind(文件流)  重置光标到文件开始位置
+  rewind(文件流)  重置光标到文件开始位置
 
 */
 
@@ -40,29 +40,29 @@ int main1()
  */
 int main2()
 {
-    //以只读的方式开打一个文件
+    // 以只读的方式开打一个文件
     FILE * fp = fopen("../../d.txt", "r"); //"hello world"
     if (!fp)
         return -1;
 
-    //SEEK_SET 文件起始位置 0
-    //SEEK_END 文件结尾位置
+    // SEEK_SET 文件起始位置 0
+    // SEEK_END 文件结尾位置
 
-    //在读之前改变光标位置,从6之后开始读取
+    // 在读之前改变光标位置,从 6之 后开始读取
 //    fseek(fp, 6, SEEK_SET);
 //    char ch;
 //    while ((ch = getc(fp)) != EOF){
 //        printf("%c", ch); //world
 //    }
 
-    //在读之前改变光标位置,从后往前读5个字符，不包含结束符'\0'
+    // 在读之前改变光标位置,从后往前读 5 个字符，不包含结束符'\0'
 //    fseek(fp, -5, SEEK_END);
 //    char ch;
 //    while ((ch = getc(fp)) != EOF){
 //        printf("%c", ch); //world
 //    }
 
-    //读取一个值，往后跳5个字符
+    // 读取一个值，往后跳 5 个字符
 //    char ch;
 //    while ((ch = getc(fp)) != EOF){
 //        fseek(fp, 5, SEEK_CUR);
@@ -70,9 +70,9 @@ int main2()
 //    }
 
     char ch;
-    int len = ftell(fp); //光标从0开始
+    int len = ftell(fp); // 光标从0开始
     printf("%d\n", len);
-    //读一个移动一个位置
+    // 读一个移动一个位置
     while ((ch = getc(fp)) != EOF){
         int len = ftell(fp);
         printf("%c", ch);

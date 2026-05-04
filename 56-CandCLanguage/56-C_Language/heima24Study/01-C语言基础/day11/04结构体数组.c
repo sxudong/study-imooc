@@ -5,11 +5,11 @@
 
 struct stu
 {
-    //成员列表
+    // 成员列表
     char name[21];
     unsigned int age;
     char tel[16];
-    float scores[3]; //scores[0]
+    float scores[3]; // scores[0]
     char sex;
 };
 

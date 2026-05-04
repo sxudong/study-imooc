@@ -13,8 +13,8 @@ void tips()
     printf("==================打字游戏================\n");
     printf("================按任意键继续==============\n");
     printf("===============按Esc 退出游戏=============\n");
-    char ch = _getch(); //接收字符
-    if (ch == 27){ //ASCII码27是ESC键
+    char ch = _getch(); // 接收字符
+    if (ch == 27) {      // ASCII 码 27 是 ESC 键
         exit(0);
     }
 }
@@ -39,14 +39,14 @@ void rand_ch(char * arr)
  */
 void print_ch(char * arr)
 {
-    //变量  计时器  开始 结束   计数器  val
+    // 变量  计时器  开始 结束   计数器  val
     unsigned int start_time;
     unsigned int end_time;
-    int val = 0; //正解率
+    int val = 0; // 正解率
     for (int i = 0; i < 50; i++){
-        char ch = _getch(); //接收字符
+        char ch = _getch(); // 接收字符
         if (i == 0){
-            start_time = time(NULL); //相当于于1970年1月1号到现在的毫秒数
+            start_time = time(NULL); // 相当于于1970年1月1号到现在的毫秒数
         }
         if (ch == arr[i]){
             printf("%c", ch);
@@ -68,17 +68,17 @@ void print_ch(char * arr)
 
 int main()
 {
-    //字库
+    // 字库
     char arr[51];
-    memset(arr, 0, 51); //将arr的内存区域的前51个字节以参数0填入
+    memset(arr, 0, 51); // 将 arr 的内存区域的前 51 个字节以参数 0 填入
 
     while (1){
-        //1、提示
+        // 1、提示
         tips();
-        //2、随机字符
+        // 2、随机字符
         rand_ch(arr);
         printf("%s\n", arr);
-        //3、输入字符
+        // 3、输入字符
         print_ch(arr);
     }
     return EXIT_SUCCESS;

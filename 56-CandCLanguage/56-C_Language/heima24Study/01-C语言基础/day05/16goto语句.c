@@ -25,7 +25,7 @@ int main()
 	return EXIT_SUCCESS;
 Here:
 
-	//语句
+	// 语句
 	printf("hello world7\n");
 
 }
