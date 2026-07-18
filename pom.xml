@@ -82,6 +82,8 @@
         <module>63-CleanCode</module>
         <module>64-Refactoring</module>
         <module>65-TestUnitCoverage</module>
+        <!-- 敏捷软件开发 -->
+        <module>66-AgileSoftwareDev</module>
     </modules>
 
     <properties>
